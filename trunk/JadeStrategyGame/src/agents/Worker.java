@@ -1,4 +1,4 @@
-package logic;
+package agents;
 
 import jade.core.behaviours.CyclicBehaviour;
 import jade.core.behaviours.OneShotBehaviour;
@@ -14,9 +14,7 @@ public class Worker extends Unit {
 	 */
 	private static final long serialVersionUID = 7202575787943066263L;
 
-	public Worker(){
-		
-	}
+	public Worker(){}
 		
 	protected void setup(){
 		Integer[] args = (Integer[]) getArguments();
