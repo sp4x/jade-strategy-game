@@ -10,6 +10,8 @@ import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.UnreadableException;
+import jade.wrapper.AgentController;
+import jade.wrapper.PlatformController;
 import logic.Cell;
 import logic.Floor;
 import messages.CreateWorker;
@@ -32,6 +34,25 @@ public class WorldManager extends Agent{
 		if (args != null && args.length == 2) {
 			System.out.println("Set size");
 			floor = new Floor(Integer.parseInt(args[0]), Integer.parseInt(args[1]));
+			
+			//test behaviour
+			addBehaviour(new OneShotBehaviour() {
+				
+				@Override
+				public void action() {
+					PlatformController container = getContainerController(); // get a container controller for creating new agents
+					try {
+						AgentController factory = container.createNewAgent("worker-factory", "agents.WorkerFactory", null);
+						factory.start();
+						AgentController master = container.createNewAgent("master", "agents.MasterAi", null);
+						master.start();
+					} catch (Exception e) {
+						e.printStackTrace();
+						System.out.println("error creating agents");
+						System.exit(1);
+					}
+				}
+			});
 			
 			addBehaviour(new CyclicBehaviour(this) {
 				
@@ -62,6 +83,8 @@ public class WorldManager extends Agent{
 				throw new Exception("Error in world creation");
 			} catch (Exception e) {
 				e.printStackTrace();
+			} finally {
+				System.exit(1);
 			}
 		}
 		
