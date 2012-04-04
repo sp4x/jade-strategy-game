@@ -26,7 +26,7 @@ public class WorkerFactory extends UnitFactory {
 	 */
 	private static final long serialVersionUID = 7364332872627866474L;
 
-	private static final String CREATE_WORKER = "CREATE WORKER";
+	public static final String CREATE_WORKER = "CREATE WORKER";
 
 	int workerCount = 0;
 
