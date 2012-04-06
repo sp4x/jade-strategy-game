@@ -18,6 +18,7 @@ import logic.Cell;
 import logic.Direction;
 import logic.Floor;
 import messages.CreateWorker;
+import messages.MoveThere;
 
 public class WorldManager extends Agent{
 	
@@ -93,13 +94,46 @@ public class WorldManager extends Agent{
 							}
 						}
 						if(msg.getPerformative()== ACLMessage.PROPOSE){
+							MoveThere cm = null;
 							try {
-								Direction dir = (Direction) msg.getContentObject();
+								cm = (MoveThere) msg.getContentObject();
 							} catch (UnreadableException e) {
 								System.out.println("Error: movement propose not valid");
 								return;
 							}
-							
+							if(floor.get(cm.getSourceRow(), cm.getSourceCol()) != Cell.UNKNOWN){
+								//TODO check the movement
+								System.out.println("WM:Check movement");
+								int dstRow = cm.getSourceRow() + cm.getDir().rowVar();
+								int dstCol = cm.getSourceCol() + cm.getDir().colVar();
+								if(floor.get(dstRow, dstCol) == Cell.FREE){
+									//Correct Movement
+									System.out.println("WM:Accept Movement");
+									ACLMessage reply = msg.createReply();
+									reply.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
+									reply.setLanguage("movement-language");
+									send(reply);
+									//Update world info
+									floor.set(cm.getSourceRow(), cm.getSourceCol(),Cell.FREE);
+									floor.set(dstRow, dstCol,Cell.UNIT);
+									mainFrame.update();
+								}
+								else{
+									//Destination cell isn't free
+									System.out.println("WM:Reject Movement");
+									ACLMessage reply = msg.createReply();
+									reply.setLanguage("movement-language");
+									reply.setPerformative(ACLMessage.REJECT_PROPOSAL);
+									send(reply);
+								}
+							}
+							else{
+								//bad indexes
+								ACLMessage reply = msg.createReply();
+								reply.setPerformative(ACLMessage.REFUSE);
+								reply.setContent("Error bad indexes");
+								send(reply);
+							}
 						}
 					}
 				}

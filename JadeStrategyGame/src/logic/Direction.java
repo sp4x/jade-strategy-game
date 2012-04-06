@@ -18,11 +18,11 @@ public enum Direction {
 		this.colVar = colVar;
 	}
 	
-	private int rowVar(){
+	public int rowVar(){
 		return rowVar;
 	}
 	
-	private int colVar(){
+	public int colVar(){
 		return colVar;
 	}
 }
