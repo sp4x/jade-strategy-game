@@ -1,5 +1,7 @@
 package agents;
 
+import java.io.IOException;
+
 import gui.MainFrame;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
@@ -18,10 +20,12 @@ import messages.CreateWorker;
 
 public class WorldManager extends Agent{
 	
-	/**
+	/** 
 	 * 
 	 */
 	private static final long serialVersionUID = -6382920635049200303L;
+
+	public static final String COMPLETE_WORLD_VIEW = "COMPLETE WORLD VIEW";
 	
 	Floor floor;
 
@@ -72,6 +76,19 @@ public class WorldManager extends Agent{
 							floor.set(cw.getX(),cw.getY(), Cell.UNIT);
 							mainFrame.update();
 						}
+						if(msg.getPerformative()== ACLMessage.REQUEST)
+							if(msg.getContent().equalsIgnoreCase(WorldManager.COMPLETE_WORLD_VIEW)){
+								System.out.println("REQUEST " +  WorldManager.COMPLETE_WORLD_VIEW);
+								ACLMessage reply = msg.createReply();
+								reply.setPerformative(ACLMessage.INFORM);
+								try {
+									reply.setContentObject(floor.getCopy());
+								} catch (IOException e) {
+									System.out.println("Error in creating of a copied floor");
+									e.printStackTrace();
+								}
+								send(reply);
+							}
 					}
 				}
 			});

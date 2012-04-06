@@ -1,4 +1,4 @@
-package config;
+package common;
 
 public class GameConfig {
 	public static int WORKER_LIFE = 10;

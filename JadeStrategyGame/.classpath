@@ -8,5 +8,6 @@
 			<attribute name="javadoc_location" value="file:/home/andrea/Dropbox/private/didattica/laurea_magistrale/aaa_sistemi_intelligenti/JadeTutorial/doc/api/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="lib/jgrapht-jdk1.6.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
