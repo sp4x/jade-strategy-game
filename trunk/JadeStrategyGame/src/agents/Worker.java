@@ -1,11 +1,12 @@
 package agents;
 
+import common.GameConfig;
+
 import jade.core.behaviours.CyclicBehaviour;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
-import config.GameConfig;
 
 public class Worker extends Unit {
 	
@@ -47,5 +48,7 @@ public class Worker extends Unit {
 				System.out.println("I'm a worker in pos(" + getX() + "," + getY() + ")");
 			}
 		});
+		
+		goThere(9,7);
 	}
 }

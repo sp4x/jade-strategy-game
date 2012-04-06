@@ -1,11 +1,14 @@
 package logic;
+
+import java.io.Serializable;
+
 /**
  *  This class implement a Floor built of a Cell matrix where the agent acts.
  * 
  * @see Cell	 
  *
  */
-public class Floor {
+public class Floor implements Serializable{
 
 	public int rows;
 
@@ -78,5 +81,13 @@ public class Floor {
 
 	public void setCols(int cols) {
 		this.cols = cols;
+	}
+
+	public Floor getCopy() {
+		Floor newFloor = new Floor(rows, cols);
+		for (int i = 0; i < rows; i++)
+			for (int j = 0; j < cols; j++)
+				newFloor.set(i, j, floor[i][j]);
+		return newFloor;
 	}
 }

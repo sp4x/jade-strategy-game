@@ -1,6 +1,19 @@
 package agents;
 
+import java.util.List;
+
+import org.jgrapht.GraphPath;
+import org.jgrapht.graph.DefaultWeightedEdge;
+
+import common.Utils;
+
+import jade.core.AID;
 import jade.core.Agent;
+import jade.lang.acl.ACLMessage;
+import jade.lang.acl.MessageTemplate;
+import jade.lang.acl.UnreadableException;
+import logic.Floor;
+import logic.PositionGoal;
 
 public abstract class Unit extends Agent{
 	
@@ -17,8 +30,36 @@ public abstract class Unit extends Agent{
 	
 	int team;
 	
+	PositionGoal positionGoal;
+	
 	public void goThere(int x, int y){
-		//TODO
+		System.out.println("I go to " + x + "," + y);
+		positionGoal = new PositionGoal(x, y);
+		Floor floor = getWorldInfo();
+		System.out.println("MY FLOOR IS");
+		List<DefaultWeightedEdge> path = Utils.calculatePath(floor, this.x, this.y, x, y);
+		System.out.println("MY PATH: " + path);
+		
+	}
+
+	private Floor getWorldInfo() {
+		ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
+		msg.setSender(getAID());
+		msg.addReceiver(new AID("worldManager", AID.ISLOCALNAME));
+		msg.setContent(WorldManager.COMPLETE_WORLD_VIEW);
+		send(msg);
+		
+		//wait the answer in blocking mode
+		ACLMessage reply = blockingReceive(MessageTemplate.MatchPerformative(ACLMessage.INFORM));
+		Floor floor = null;
+		try {
+			floor = (Floor) reply.getContentObject();
+		} catch (UnreadableException e) {
+			System.out.println("Error: answer doesn't contain a floor");
+			return null;
+		}
+		return floor;
+		
 	}
 
 	public int getX() {
