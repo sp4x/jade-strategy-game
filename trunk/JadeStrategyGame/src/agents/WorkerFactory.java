@@ -48,7 +48,7 @@ public class WorkerFactory extends UnitFactory {
 					if (msg != null) {
 						if (CREATE_WORKER.equalsIgnoreCase( msg.getContent() )) {
 							Random r = new Random();
-							createUnit(r.nextInt(10), r.nextInt(10));//TODO
+							createUnit(2,5);//TODO
 							System.out.println("Created worker");
 						}
 						else {
@@ -124,7 +124,7 @@ public class WorkerFactory extends UnitFactory {
 							msg.setSender(getAID());
 							msg.addReceiver(wm);
 							try {
-								msg.setContentObject(new CreateWorker(workersList.get(workersList.size()-1), x, y));
+								msg.setContentObject(new CreateWorker(x, y));
 							} catch (IOException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
