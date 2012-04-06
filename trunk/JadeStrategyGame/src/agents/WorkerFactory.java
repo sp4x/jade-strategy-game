@@ -28,8 +28,6 @@ public class WorkerFactory extends UnitFactory {
 
 	public static final String CREATE_WORKER = "CREATE WORKER";
 
-	int workerCount = 0;
-
 	ArrayList<AID> workersList = new ArrayList<AID>();
 
 	protected void setup() {
@@ -82,13 +80,12 @@ public class WorkerFactory extends UnitFactory {
 			Object[] pos = new Integer[2];
 			pos[0] = x;
 			pos[1] = y;
-			AgentController worker = container.createNewAgent("worker"+workerCount, "agents.Worker", pos);
+			AgentController worker = container.createNewAgent("worker"+workersList.size(), "agents.Worker", pos);
 			worker.start();
 			System.out.println("Worker started");
 
 			// keep the worker's ID on a local list
-			workersList.add( new AID("worker"+workerCount, AID.ISLOCALNAME) );
-			workerCount++;
+			workersList.add( new AID("worker"+workersList.size(), AID.ISLOCALNAME) );
 		}
 		catch (Exception e) {
 			System.err.println( "Exception while adding worker: " + e );
@@ -127,7 +124,7 @@ public class WorkerFactory extends UnitFactory {
 							msg.setSender(getAID());
 							msg.addReceiver(wm);
 							try {
-								msg.setContentObject(new CreateWorker(x, y));
+								msg.setContentObject(new CreateWorker(workersList.get(workersList.size()-1), x, y));
 							} catch (IOException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();

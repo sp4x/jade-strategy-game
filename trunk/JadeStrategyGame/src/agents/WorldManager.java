@@ -15,6 +15,7 @@ import jade.lang.acl.UnreadableException;
 import jade.wrapper.AgentController;
 import jade.wrapper.PlatformController;
 import logic.Cell;
+import logic.Direction;
 import logic.Floor;
 import messages.CreateWorker;
 
@@ -74,9 +75,10 @@ public class WorldManager extends Agent{
 							}
 							System.out.println("Creazione in " + cw.getX() + " " + cw.getY());
 							floor.set(cw.getX(),cw.getY(), Cell.UNIT);
+							
 							mainFrame.update();
 						}
-						if(msg.getPerformative()== ACLMessage.REQUEST)
+						if(msg.getPerformative()== ACLMessage.REQUEST){
 							if(msg.getContent().equalsIgnoreCase(WorldManager.COMPLETE_WORLD_VIEW)){
 								System.out.println("REQUEST " +  WorldManager.COMPLETE_WORLD_VIEW);
 								ACLMessage reply = msg.createReply();
@@ -89,6 +91,16 @@ public class WorldManager extends Agent{
 								}
 								send(reply);
 							}
+						}
+						if(msg.getPerformative()== ACLMessage.PROPOSE){
+							try {
+								Direction dir = (Direction) msg.getContentObject();
+							} catch (UnreadableException e) {
+								System.out.println("Error: movement propose not valid");
+								return;
+							}
+							
+						}
 					}
 				}
 			});
