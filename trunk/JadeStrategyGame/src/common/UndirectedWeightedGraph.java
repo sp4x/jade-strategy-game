@@ -1,7 +1,5 @@
 package common;
 
-import java.util.Iterator;
-
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.SimpleWeightedGraph;
 

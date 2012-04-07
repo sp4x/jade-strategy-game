@@ -4,12 +4,11 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridLayout;
-import javax.swing.ImageIcon;
+
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import logic.Cell;
-
 import agents.WorldManager;
 
 /**

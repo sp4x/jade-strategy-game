@@ -1,22 +1,25 @@
 package agents;
 
-import java.io.IOException;
-import java.util.List;
-
-import org.jgrapht.GraphPath;
-import org.jgrapht.graph.DefaultWeightedEdge;
-
-import common.Utils;
-
 import jade.core.AID;
 import jade.core.Agent;
+import jade.core.behaviours.Behaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.UnreadableException;
+
+import java.io.IOException;
+import java.util.List;
+
 import logic.Direction;
 import logic.Floor;
 import logic.PositionGoal;
 import messages.MoveThere;
+
+import org.jgrapht.graph.DefaultWeightedEdge;
+
+import behaviours.FollowPathBehaviour;
+
+import common.Utils;
 
 public abstract class Unit extends Agent{
 	
@@ -40,8 +43,10 @@ public abstract class Unit extends Agent{
 		positionGoal = new PositionGoal(x, y);
 		Floor floor = getWorldInfo();
 		System.out.println("MY FLOOR IS");
-		List<DefaultWeightedEdge> path = Utils.calculatePath(floor, this.row, this.col, x, y);
-		System.out.println("MY PATH: " + path);
+		List<Direction> list = Utils.calculatePath(floor, this.row, this.col, x, y);
+		System.out.println(list);
+		
+		addBehaviour(new FollowPathBehaviour(this, list));
 	}
 
 	public void move(Direction dir){

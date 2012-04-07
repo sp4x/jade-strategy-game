@@ -1,16 +1,17 @@
 package agents;
 
-import java.util.Random;
-
-import common.GameConfig;
-
-import jade.core.behaviours.CyclicBehaviour;
-import jade.core.behaviours.OneShotBehaviour;
+import jade.core.Service;
 import jade.core.behaviours.TickerBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
+import jade.domain.FIPAAgentManagement.ServiceDescription;
+
+import java.util.Random;
+
 import logic.Direction;
+
+import common.GameConfig;
 
 public class Worker extends Unit {
 	
@@ -38,6 +39,10 @@ public class Worker extends Unit {
 			// create the agent description of itself
 			DFAgentDescription dfd = new DFAgentDescription();
 			dfd.setName(getAID());
+			ServiceDescription sd = new ServiceDescription();
+	  		sd.setName(getAID().getName());
+	  		sd.setType("worker");
+	  		dfd.addServices(sd);
 			// register the description with the DF
 			DFService.register(this, dfd);
 			System.out.println(getLocalName()+" REGISTERED WITH THE DF");
@@ -50,17 +55,21 @@ public class Worker extends Unit {
 			@Override
 			protected void onTick() {
 				System.out.println("I'm a worker in pos(" + getRow() + "," + getCol() + ")");
-				Random r = new Random();
-				int newDir = r.nextInt(4);
-				switch (newDir){
-					case 0: move(Direction.RIGHT);break;
-					case 1: move(Direction.LEFT);break;
-					case 2: move(Direction.UP);break;
-					case 3: move(Direction.DOWN);break;
-				}
+//				Random r = new Random();
+//				int newDir = r.nextInt(8);
+//				switch (newDir){
+//					case 0: move(Direction.RIGHT);break;
+//					case 1: move(Direction.LEFT);break;
+//					case 2: move(Direction.UP);break;
+//					case 3: move(Direction.DOWN);break;
+//					case 4: move(Direction.RIGHT_UP);break;
+//					case 5: move(Direction.LEFT_UP);break;
+//					case 6: move(Direction.RIGHT_DOWN);break;
+//					case 7: move(Direction.LEFT_DOWN);break;
+//				}
 			}
 		});
 		
-		goThere(9,7);
+		goThere(45,28);
 	}
 }
