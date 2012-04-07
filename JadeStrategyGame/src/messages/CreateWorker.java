@@ -1,6 +1,5 @@
 package messages;
 
-import jade.core.AID;
 import jade.util.leap.Serializable;
 
 public class CreateWorker implements Serializable {

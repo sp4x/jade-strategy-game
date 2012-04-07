@@ -1,7 +1,5 @@
 package agents;
 
-import java.io.IOException;
-
 import gui.MainFrame;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
@@ -14,8 +12,10 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.UnreadableException;
 import jade.wrapper.AgentController;
 import jade.wrapper.PlatformController;
+
+import java.io.IOException;
+
 import logic.Cell;
-import logic.Direction;
 import logic.Floor;
 import messages.CreateWorker;
 import messages.MoveThere;
