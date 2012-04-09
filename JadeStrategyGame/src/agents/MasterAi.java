@@ -20,6 +20,8 @@ public class MasterAi extends Agent {
 				msg.setContent(WorkerFactory.CREATE_WORKER);
 				msg.addReceiver(new AID("worker-factory", AID.ISLOCALNAME));
 				send(msg);
+				send(msg);
+				send(msg);
 			}
 		});
 	}

@@ -31,8 +31,6 @@ public class WorldManager extends Agent{
 	
 	Floor floor;
 
-	private MainFrame mainFrame;
-	
 	public WorldManager() {}
 
 	protected void setup(){
@@ -76,8 +74,6 @@ public class WorldManager extends Agent{
 							}
 							System.out.println("Creazione in " + cw.getX() + " " + cw.getY());
 							floor.set(cw.getX(),cw.getY(), Cell.UNIT);
-							
-							mainFrame.update();
 						}
 						if(msg.getPerformative()== ACLMessage.REQUEST){
 							if(msg.getContent().equalsIgnoreCase(WorldManager.COMPLETE_WORLD_VIEW)){
@@ -116,7 +112,6 @@ public class WorldManager extends Agent{
 									//Update world info
 									floor.set(cm.getSourceRow(), cm.getSourceCol(),Cell.FREE);
 									floor.set(dstRow, dstCol,Cell.UNIT);
-									mainFrame.update();
 								}
 								else{
 									//Destination cell isn't free
@@ -139,7 +134,7 @@ public class WorldManager extends Agent{
 				}
 			});
 			
-			mainFrame = new MainFrame(this);
+			new MainFrame(this);
 		}
 		else{
 			try {

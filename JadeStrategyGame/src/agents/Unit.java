@@ -147,4 +147,12 @@ public abstract class Unit extends Agent{
 	private void setTeam(int team) {
 		this.team = team;
 	}
+
+	public void spendTime() {
+		try {
+			Thread.sleep(5000/getSpeed());
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
 }
