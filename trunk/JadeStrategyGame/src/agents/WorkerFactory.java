@@ -48,7 +48,7 @@ public class WorkerFactory extends UnitFactory {
 					if (msg != null) {
 						if (CREATE_WORKER.equalsIgnoreCase( msg.getContent() )) {
 							Random r = new Random();
-							createUnit(1,1);//TODO
+							createUnit(r.nextInt(25),r.nextInt(25));//TODO
 							System.out.println("Created worker");
 						}
 						else {

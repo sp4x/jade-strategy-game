@@ -20,6 +20,7 @@ public class FollowPathBehaviour extends Behaviour {
 	@Override
 	public void action() {
 		unit.move(list.remove(0));
+		unit.spendTime();
 	}
 
 	@Override

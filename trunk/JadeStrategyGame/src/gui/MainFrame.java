@@ -14,26 +14,38 @@ import agents.WorldManager;
 public class MainFrame extends javax.swing.JFrame {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	public GridPanel gridPanel;
-//	public SettingsPanel settingsPanel;
-	
+	//	public SettingsPanel settingsPanel;
+
 	public MainFrame(WorldManager wm) {
 		super();
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		getContentPane().setLayout(new BorderLayout());
-//		setResizable(false);
-		
-//		settingsPanel = new SettingsPanel(this);
-//		getContentPane().add(settingsPanel, BorderLayout.WEST);
-//		
+		//		setResizable(false);
+
+		//		settingsPanel = new SettingsPanel(this);
+		//		getContentPane().add(settingsPanel, BorderLayout.WEST);
+		//		
 		gridPanel = new GridPanel(wm);
 		getContentPane().add(gridPanel, BorderLayout.EAST);
-		
+
 		pack();
 		this.setVisible(true);
+
+		class RefreshGUI implements Runnable{
+			@Override
+			public void run() {
+				while(true){
+					System.out.println("Update GUI");
+					MainFrame.this.update();
+				}
+			}
+		}
+
+		new Thread(new RefreshGUI()).start();
 	}
-	
+
 	public void update(){
 		gridPanel.update();
 	}
