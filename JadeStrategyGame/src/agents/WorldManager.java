@@ -14,21 +14,27 @@ import jade.wrapper.AgentController;
 import jade.wrapper.PlatformController;
 
 import java.io.IOException;
+import java.io.Serializable;
+import java.util.List;
 
 import logic.Cell;
+import logic.Direction;
 import logic.Floor;
 import messages.CreateWorker;
+import messages.GetPath;
 import messages.MoveThere;
 
+import common.Utils;
+
 public class WorldManager extends Agent{
-	
+
 	/** 
 	 * 
 	 */
 	private static final long serialVersionUID = -6382920635049200303L;
 
 	public static final String COMPLETE_WORLD_VIEW = "COMPLETE WORLD VIEW";
-	
+
 	Floor floor;
 
 	public WorldManager() {}
@@ -38,10 +44,11 @@ public class WorldManager extends Agent{
 		if (args != null && args.length == 2) {
 			System.out.println("Set size");
 			floor = new Floor(Integer.parseInt(args[0]), Integer.parseInt(args[1]));
-			
+			floor.generateObject(1000, Cell.WOOD);
+
 			//test behaviour
 			addBehaviour(new OneShotBehaviour() {
-				
+
 				@Override
 				public void action() {
 					PlatformController container = getContainerController(); // get a container controller for creating new agents
@@ -57,36 +64,48 @@ public class WorldManager extends Agent{
 					}
 				}
 			});
-			
+
 			addBehaviour(new CyclicBehaviour(this) {
-				
+
 				@Override
 				public void action() {
 					ACLMessage  msg = myAgent.receive();
 					if(msg != null){
 						if(msg.getPerformative()== ACLMessage.INFORM){
-							CreateWorker cw = null;
+							System.out.println("WM:Received MSG");
 							try {
-								cw = (CreateWorker) msg.getContentObject();
+								if(msg.getContentObject() instanceof CreateWorker){
+									CreateWorker cw = (CreateWorker) msg.getContentObject();
+									System.out.println("Creazione in " + cw.getX() + " " + cw.getY());
+									floor.set(cw.getX(),cw.getY(), Cell.UNIT);
+								}
 							} catch (UnreadableException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
-							System.out.println("Creazione in " + cw.getX() + " " + cw.getY());
-							floor.set(cw.getX(),cw.getY(), Cell.UNIT);
 						}
 						if(msg.getPerformative()== ACLMessage.REQUEST){
-							if(msg.getContent().equalsIgnoreCase(WorldManager.COMPLETE_WORLD_VIEW)){
-								System.out.println("REQUEST " +  WorldManager.COMPLETE_WORLD_VIEW);
-								ACLMessage reply = msg.createReply();
-								reply.setPerformative(ACLMessage.INFORM);
-								try {
-									reply.setContentObject(floor.getCopy());
-								} catch (IOException e) {
-									System.out.println("Error in creating of a copied floor");
-									e.printStackTrace();
+							try {
+								if(msg.getContentObject() instanceof GetPath){
+									GetPath getPath = (GetPath) msg.getContentObject();
+									System.out.print("Richiesta path da (" + getPath.getSrcRow() + "," + getPath.getSrcCol() + ") ");
+									System.out.println("a (" + getPath.getDstRow() + "," + getPath.getDstCol() + ")");
+									
+									List<Direction> list = Utils.calculatePath(floor, getPath.getSrcRow(), getPath.getSrcCol(), getPath.getDstRow(), getPath.getDstCol());
+									System.out.println(list);
+									ACLMessage reply = msg.createReply();
+									reply.setLanguage("info-language");
+									reply.setPerformative(ACLMessage.INFORM);
+									try {
+										reply.setContentObject((Serializable) list);
+									} catch (IOException e) {
+										e.printStackTrace();
+									}
+									send(reply);
 								}
-								send(reply);
+							} catch (UnreadableException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
 							}
 						}
 						if(msg.getPerformative()== ACLMessage.PROPOSE){
@@ -133,7 +152,7 @@ public class WorldManager extends Agent{
 					}
 				}
 			});
-			
+
 			new MainFrame(this);
 		}
 		else{
@@ -145,16 +164,16 @@ public class WorldManager extends Agent{
 				System.exit(1);
 			}
 		}
-		
+
 		//registration
 		try {
 			// create the agent description of itself
 			DFAgentDescription dfd = new DFAgentDescription();
 			dfd.setName(getAID());
 			ServiceDescription sd = new ServiceDescription();
-	  		sd.setName("worldManager");
-	  		sd.setType("world-manager");
-	  		dfd.addServices(sd);
+			sd.setName("worldManager");
+			sd.setType("world-manager");
+			dfd.addServices(sd);
 			// register the description with the DF
 			DFService.register(this, dfd);
 			System.out.println(getLocalName()+" REGISTERED WITH THE DF");

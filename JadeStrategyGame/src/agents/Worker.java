@@ -1,15 +1,10 @@
 package agents;
 
-import jade.core.Service;
 import jade.core.behaviours.TickerBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
-
-import java.util.Random;
-
-import logic.Direction;
 
 import common.GameConfig;
 
@@ -54,22 +49,10 @@ public class Worker extends Unit {
 
 			@Override
 			protected void onTick() {
-				System.out.println("I'm a worker in pos(" + getRow() + "," + getCol() + ")");
-//				Random r = new Random();
-//				int newDir = r.nextInt(8);
-//				switch (newDir){
-//					case 0: move(Direction.RIGHT);break;
-//					case 1: move(Direction.LEFT);break;
-//					case 2: move(Direction.UP);break;
-//					case 3: move(Direction.DOWN);break;
-//					case 4: move(Direction.RIGHT_UP);break;
-//					case 5: move(Direction.LEFT_UP);break;
-//					case 6: move(Direction.RIGHT_DOWN);break;
-//					case 7: move(Direction.LEFT_DOWN);break;
-//				}
+//				System.out.println("Worker Pos(" + getRow() + "," + getCol() + ") Changed: " + isPositionChanged());
 			}
 		});
 		
-		goThere(45,28);
+		goThere(49,49);
 	}
 }

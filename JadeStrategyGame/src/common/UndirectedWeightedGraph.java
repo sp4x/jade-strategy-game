@@ -16,9 +16,12 @@ public class UndirectedWeightedGraph extends SimpleWeightedGraph<String, Default
 			addVertex(v1);
 		if (!containsVertex(v2))
 			addVertex(v2);
-		DefaultWeightedEdge e = new DefaultWeightedEdge();
-		addEdge(v1, v2, e);
-		setEdgeWeight(e, weight);
+		DefaultWeightedEdge e1 = new DefaultWeightedEdge();
+		DefaultWeightedEdge e2 = new DefaultWeightedEdge();
+		addEdge(v1, v2, e1);
+		addEdge(v2, v1, e2);
+		setEdgeWeight(e1, weight);
+		setEdgeWeight(e2, weight);
 	}
 	
 	@Override
