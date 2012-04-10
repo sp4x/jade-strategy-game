@@ -17,20 +17,60 @@ public class Utils {
 		for (int i = 0; i < floor.getRows(); i++)
 			for (int j = 0; j < floor.getCols(); j++){
 				//NB La cella di partenza anche se occupata dall'unita' fa parte del grafo
-				if(floor.get(i, j) == Cell.FREE || (i==x1 && j==y1)){
-					if( i-1 >= 0 && floor.get(i-1, j) == Cell.FREE ){
+				if(floor.get(i, j) == Cell.FREE){
+					// A
+					// |
+					if( i-1 >= 0 && (floor.get(i-1, j) == Cell.FREE || (i-1==x1 && j==y1)) ){
 						String v1 = i + "," + j;
 						String v2 = (i-1) + "," + j;
 						walkableGraph.addWeightedEdge(v1, v2, 1);
 					}
-					if( j-1 >= 0 && floor.get(i, j-1) == Cell.FREE ){
+					// |
+					// v
+					if( i+1 < floor.getRows() && (floor.get(i+1, j) == Cell.FREE || (i+1==x1 && j==y1)) ){
+						String v1 = i + "," + j;
+						String v2 = (i+1) + "," + j;
+						walkableGraph.addWeightedEdge(v1, v2, 1);
+					}
+					// <-
+					if( j-1 >= 0 && (floor.get(i, j-1) == Cell.FREE || (i==x1 && j-1==y1)) ){
 						String v1 = i + "," + j;
 						String v2 = i + "," + (j-1);
 						walkableGraph.addWeightedEdge(v1, v2, 1);
 					}
-					if( j-1 >= 0 && i-1 >= 0 && floor.get(i-1, j-1) == Cell.FREE){
+					// ->
+					if( j+1 <= floor.getCols() && (floor.get(i, j+1) == Cell.FREE || (i==x1 && j+1==y1)) ){
+						String v1 = i + "," + j;
+						String v2 = i + "," + (j+1);
+						walkableGraph.addWeightedEdge(v1, v2, 1);
+					}
+					// A
+					//  \
+					if( j-1 >= 0 && i-1 >= 0 && (floor.get(i-1, j-1) == Cell.FREE || (i-1==x1 && j-1==y1)) ){
 						String v1 = i + "," + j;
 						String v2 = (i-1) + "," + (j-1);
+						walkableGraph.addWeightedEdge(v1, v2, 1);
+					}
+					
+					//   A
+					//  /
+					if( j+1 < floor.getCols() && i-1 >= 0 && (floor.get(i-1, j+1) == Cell.FREE || (i-1==x1 && j+1==y1)) ){
+						String v1 = i + "," + j;
+						String v2 = (i-1) + "," + (j+1);
+						walkableGraph.addWeightedEdge(v1, v2, 1);
+					}
+					//  /
+					// v
+					if( j-1 >= 0 && i+1 < floor.getRows() && (floor.get(i+1, j-1) == Cell.FREE || (i+1==x1 && j-1==y1)) ){
+						String v1 = i + "," + j;
+						String v2 = (i+1) + "," + (j-1);
+						walkableGraph.addWeightedEdge(v1, v2, 1);
+					}
+					//  \
+					//   v
+					if( j+1 < floor.getCols() && i+1 < floor.getRows() && (floor.get(i+1, j+1) == Cell.FREE || (i+1==x1 && j+1==y1)) ){
+						String v1 = i + "," + j;
+						String v2 = (i+1) + "," + (j+1);
 						walkableGraph.addWeightedEdge(v1, v2, 1);
 					}
 				}
@@ -40,6 +80,10 @@ public class Utils {
 		//calculate path on the graph
 		String sourceNode = x1 + "," + y1;
 		String destNode = x2 + "," + y2;
+		if(!walkableGraph.containsVertex(destNode)){
+			System.out.println("Dest Node not reachable");
+			return new ArrayList<Direction>();
+		}
 		List<DefaultWeightedEdge> list = new DijkstraShortestPath<String, DefaultWeightedEdge>
 											(walkableGraph, sourceNode, destNode).getPathEdgeList();
 //		System.out.println("List Edges:" + list);
@@ -53,6 +97,8 @@ public class Utils {
 		ArrayList<String> cellList = new ArrayList<String>();
 		cellList.add(src);
 		String curr = src;
+		if(list == null)
+			return cellList;
 		for (int i = 0; i < list.size(); i++) {
 			String source = walkableGraph.getEdgeSource(list.get(i));
 			String target = walkableGraph.getEdgeTarget(list.get(i));

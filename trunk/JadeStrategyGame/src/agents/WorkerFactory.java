@@ -9,13 +9,13 @@ import jade.domain.FIPAAgentManagement.SearchConstraints;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
+import jade.lang.acl.UnreadableException;
 import jade.util.leap.Iterator;
 import jade.wrapper.AgentController;
 import jade.wrapper.PlatformController;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Random;
 
 import messages.CreateWorker;
 
@@ -25,8 +25,6 @@ public class WorkerFactory extends UnitFactory {
 	 * 
 	 */
 	private static final long serialVersionUID = 7364332872627866474L;
-
-	public static final String CREATE_WORKER = "CREATE WORKER";
 
 	ArrayList<AID> workersList = new ArrayList<AID>();
 
@@ -46,9 +44,15 @@ public class WorkerFactory extends UnitFactory {
 					ACLMessage msg = myAgent.receive(mt);
 
 					if (msg != null) {
-						if (CREATE_WORKER.equalsIgnoreCase( msg.getContent() )) {
-							Random r = new Random();
-							createUnit(r.nextInt(25),r.nextInt(25));//TODO
+						Object obj = null;
+						try {
+							obj = msg.getContentObject();
+						} catch (UnreadableException e) {
+							e.printStackTrace();
+						}
+						if (obj instanceof CreateWorker) {
+							CreateWorker createWorker = (CreateWorker) obj;
+							createUnit(createWorker.getX(), createWorker.getY());
 							System.out.println("Created worker");
 						}
 						else {

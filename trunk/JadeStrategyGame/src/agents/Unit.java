@@ -2,7 +2,6 @@ package agents;
 
 import jade.core.AID;
 import jade.core.Agent;
-import jade.core.behaviours.Behaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.UnreadableException;
@@ -13,13 +12,9 @@ import java.util.List;
 import logic.Direction;
 import logic.Floor;
 import logic.PositionGoal;
+import messages.GetPath;
 import messages.MoveThere;
-
-import org.jgrapht.graph.DefaultWeightedEdge;
-
 import behaviours.FollowPathBehaviour;
-
-import common.Utils;
 
 public abstract class Unit extends Agent{
 	
@@ -34,19 +29,39 @@ public abstract class Unit extends Agent{
 	int speed;
 	int forceOfAttack;
 	
+	int oldRow;
+	int oldCol;
+	
 	int team;
 	
 	PositionGoal positionGoal;
 	
 	public void goThere(int x, int y){
-		System.out.println("I go to " + x + "," + y);
-		positionGoal = new PositionGoal(x, y);
-		Floor floor = getWorldInfo();
-		System.out.println("MY FLOOR IS");
-		List<Direction> list = Utils.calculatePath(floor, this.row, this.col, x, y);
-		System.out.println(list);
-		
-		addBehaviour(new FollowPathBehaviour(this, list));
+		ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
+		msg.setLanguage("info-language");
+		msg.setSender(getAID());
+		msg.addReceiver(new AID("worldManager", AID.ISLOCALNAME));
+		try {
+			msg.setContentObject(new GetPath(getRow(), getCol(), x, y));
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		send(msg);
+		System.out.println(getLocalName() + ":Sent get path to WM");
+		//wait the answer in blocking mode
+		ACLMessage reply = blockingReceive(MessageTemplate.MatchLanguage("info-language"));
+		System.out.println(getLocalName() + ":Received reply to get path request");
+		if(reply.getPerformative() == ACLMessage.INFORM){
+			System.out.println(getLocalName() + ":WM send me a path");
+			try {
+				if(reply.getContentObject() instanceof List<?>){
+					List<Direction> path = (List<Direction>) reply.getContentObject();
+					addBehaviour(new FollowPathBehaviour(this, path, x, y));
+				}
+			} catch (UnreadableException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	public void move(Direction dir){
@@ -57,24 +72,24 @@ public abstract class Unit extends Agent{
 		try {
 			msg.setContentObject(new MoveThere(getRow(), getCol(), dir));
 		} catch (IOException e) {
-			System.out.println("Error in MoveThere creation");
+			System.out.println(getLocalName() + ":Error in MoveThere creation");
 			e.printStackTrace();
 		}
-		System.out.println("U:Propose movement");
+//		System.out.println("U:Propose movement");
 		send(msg);
 		
 		//wait the answer in blocking mode
 		ACLMessage reply = blockingReceive(MessageTemplate.MatchLanguage("movement-language"));
 		if(reply.getPerformative() == ACLMessage.ACCEPT_PROPOSAL){
-			System.out.println("U:WM accepts my movement");
+			System.out.println(getLocalName() + ":WM accepts my movement");
 			setRow(row + dir.rowVar());
 			setCol(col + dir.colVar());
 		}
 		else if(reply.getPerformative() == ACLMessage.REJECT_PROPOSAL){
-			System.out.println("U:WM rejects my movement");
+			System.out.println(getLocalName() + ":WM rejects my movement");
 		}
 		else if(reply.getPerformative() == ACLMessage.REFUSE){
-			System.out.println("U:Received detected error message format");
+			System.out.println(getLocalName() + ":Received detected error message format");
 		}
 	}
 	
@@ -95,6 +110,17 @@ public abstract class Unit extends Agent{
 			return null;
 		}
 		return floor;
+	}
+	
+	public boolean isPositionChanged(){
+		if(getOldRow() == getRow() && getOldCol() == getCol()){
+			setOldRow(getRow());
+			setOldCol(getCol());
+			return false;
+		}
+		setOldRow(getRow());
+		setOldCol(getCol());
+		return true;
 	}
 
 	public int getRow() {
@@ -146,6 +172,22 @@ public abstract class Unit extends Agent{
 
 	private void setTeam(int team) {
 		this.team = team;
+	}
+
+	public int getOldRow() {
+		return oldRow;
+	}
+
+	public void setOldRow(int oldRow) {
+		this.oldRow = oldRow;
+	}
+
+	public int getOldCol() {
+		return oldCol;
+	}
+
+	public void setOldCol(int oldCol) {
+		this.oldCol = oldCol;
 	}
 
 	public void spendTime() {

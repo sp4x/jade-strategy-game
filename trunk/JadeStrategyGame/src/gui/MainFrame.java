@@ -37,7 +37,7 @@ public class MainFrame extends javax.swing.JFrame {
 			@Override
 			public void run() {
 				while(true){
-					System.out.println("Update GUI");
+//					System.out.println("Update GUI");
 					MainFrame.this.update();
 				}
 			}

@@ -1,6 +1,9 @@
 package logic;
 
 import java.io.Serializable;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.Random;
 
 /**
  *  This class implement a Floor built of a Cell matrix where the agent acts.
@@ -28,6 +31,47 @@ public class Floor implements Serializable{
 		for (int i = 0; i < rows; i++)
 			for (int j = 0; j < cols; j++)
 				this.floor[i][j] = Cell.FREE;
+	}
+	
+	/**
+	 * Generates randomly a floor scenario
+	 * 
+	 * @param numDirtySquares	quantity of dirty squares
+	 * @param numObstacles		quantity of obstacles
+	 */
+	public void generateObject(int numObjects, Cell objectsType){
+
+		class Square {
+			int x, y;
+			public Square(int x, int y){
+				this.x = x;
+				this.y = y;
+			}
+		}
+
+		LinkedList<Square> cells = new LinkedList<Square>();
+
+		for (int i = 0; i < getRows(); i++)
+			for (int j = 0; j < getCols(); j++)
+				if(floor[i][j] == Cell.FREE)
+					cells.add(new Square(i, j));
+
+		Collections.shuffle(cells);
+		Random randomGen = new Random();
+		int size = cells.size();
+
+		if (numObjects > size)
+			numObjects = size;
+		
+		if (numObjects < 0)
+			numObjects = 0;
+		
+
+		for (int i = 0; i < numObjects; i++) {
+			int random = Math.abs(randomGen.nextInt()) % cells.size();
+			Square myCell = cells.remove(random);
+			floor[myCell.x][myCell.y] = objectsType;
+		}
 	}
 
 	public void clear(){

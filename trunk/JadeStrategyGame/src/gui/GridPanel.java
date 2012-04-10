@@ -4,8 +4,11 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridLayout;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import logic.Cell;
@@ -51,6 +54,31 @@ public class GridPanel extends JPanel {
 				label.setPreferredSize(new Dimension(ImageLoader.iconSize,ImageLoader.iconSize));
 				//				label.addMouseListener(new ClickHandler(label,i,j));
 				labelMatrix[i][j] = label;
+				class InfoListener implements MouseListener{
+					
+					int i, j;
+					
+					public InfoListener(int i, int j) {
+						super();
+						this.i = i;
+						this.j = j;
+					}
+
+					@Override
+					public void mouseClicked(MouseEvent e) {
+						JOptionPane.showMessageDialog(null, i + "," + j);
+					}
+
+					@Override
+					public void mouseEntered(MouseEvent e) {}
+					@Override
+					public void mouseExited(MouseEvent e) {}
+					@Override
+					public void mousePressed(MouseEvent e) {}
+					@Override
+					public void mouseReleased(MouseEvent e) {}
+				}
+				label.addMouseListener(new InfoListener(i, j));
 				flowPanel.add(label, constraints);
 			}
 	}
@@ -65,6 +93,8 @@ public class GridPanel extends JPanel {
 			for(int j=0; j<wm.getFloor().getCols(); j++){
 				if(wm.getFloor().get(i,j) == Cell.FREE)
 					labelMatrix[i][j].setIcon(ImageLoader.freeIcon);
+				if(wm.getFloor().get(i,j) == Cell.WOOD)
+					labelMatrix[i][j].setIcon(ImageLoader.treeIcon);
 				if(wm.getFloor().get(i,j) == Cell.UNIT)
 					labelMatrix[i][j].setIcon(ImageLoader.workerIcon);
 			}
