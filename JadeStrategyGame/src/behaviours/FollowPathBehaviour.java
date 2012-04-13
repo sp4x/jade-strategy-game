@@ -24,8 +24,7 @@ public class FollowPathBehaviour extends Behaviour {
 	public void action() {
 		if(list.isEmpty())
 			return;
-		unit.move(list.remove(0));
-		if(!unit.isPositionChanged()){
+		if (!unit.move(list.remove(0))) {
 			System.out.println("Need path recalculation");
 			list.clear();
 			unit.goThere(goalRow, goalCol);

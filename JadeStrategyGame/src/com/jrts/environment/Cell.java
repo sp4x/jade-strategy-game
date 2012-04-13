@@ -1,4 +1,4 @@
-package logic;
+package com.jrts.environment;
 
 import jade.core.AID;
 

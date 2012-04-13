@@ -1,4 +1,4 @@
-package logic;
+package com.jrts.environment;
 
 import java.io.Serializable;
 import java.util.Collections;

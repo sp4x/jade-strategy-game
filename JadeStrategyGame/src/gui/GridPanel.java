@@ -11,7 +11,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import logic.Cell;
+import com.jrts.environment.Cell;
+
 import agents.WorldManager;
 
 /**
