@@ -17,9 +17,10 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 
-import logic.Cell;
+import com.jrts.environment.Cell;
+import com.jrts.environment.Floor;
+
 import logic.Direction;
-import logic.Floor;
 import messages.CreateWorker;
 import messages.GetPath;
 import messages.MoveThere;

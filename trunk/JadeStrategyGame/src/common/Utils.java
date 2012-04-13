@@ -3,12 +3,13 @@ package common;
 import java.util.ArrayList;
 import java.util.List;
 
-import logic.Cell;
 import logic.Direction;
-import logic.Floor;
 
 import org.jgrapht.alg.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultWeightedEdge;
+
+import com.jrts.environment.Cell;
+import com.jrts.environment.Floor;
 
 public class Utils {
 	public static ArrayList<Direction> calculatePath(Floor floor, int x1, int y1, int x2, int y2){
