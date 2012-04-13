@@ -2,7 +2,8 @@ package messages;
 
 import java.io.Serializable;
 
-import logic.Direction;
+import com.jrts.environment.Direction;
+
 
 public class MoveThere implements Serializable {
 	int sourceRow;

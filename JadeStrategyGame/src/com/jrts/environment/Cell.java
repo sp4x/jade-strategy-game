@@ -1,14 +1,13 @@
 package com.jrts.environment;
 
-import jade.core.AID;
 
 public enum Cell {
 	FREE,
 	WOOD,
 	FOOD,
-	GOLD,
 	UNIT,
+	BUILDING,
 	UNKNOWN;
 	
-	AID aid;
+	String id;
 }

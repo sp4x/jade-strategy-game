@@ -3,7 +3,8 @@ import java.awt.BorderLayout;
 
 import javax.swing.WindowConstants;
 
-import agents.WorldManager;
+import com.jrts.environment.Floor;
+import com.jrts.environment.World;
 
 
 /**
@@ -18,7 +19,7 @@ public class MainFrame extends javax.swing.JFrame {
 	public GridPanel gridPanel;
 	//	public SettingsPanel settingsPanel;
 
-	public MainFrame(WorldManager wm) {
+	public MainFrame(Floor floor) {
 		super();
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		getContentPane().setLayout(new BorderLayout());
@@ -27,7 +28,7 @@ public class MainFrame extends javax.swing.JFrame {
 		//		settingsPanel = new SettingsPanel(this);
 		//		getContentPane().add(settingsPanel, BorderLayout.WEST);
 		//		
-		gridPanel = new GridPanel(wm);
+		gridPanel = new GridPanel(floor);
 		getContentPane().add(gridPanel, BorderLayout.EAST);
 
 		pack();

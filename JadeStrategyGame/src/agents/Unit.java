@@ -1,21 +1,15 @@
 package agents;
 
-import jade.core.AID;
 import jade.core.Agent;
-import jade.lang.acl.ACLMessage;
-import jade.lang.acl.MessageTemplate;
-import jade.lang.acl.UnreadableException;
 
-import java.io.IOException;
 import java.util.List;
 
-import com.jrts.environment.Floor;
-
-import logic.Direction;
 import logic.PositionGoal;
-import messages.GetPath;
-import messages.MoveThere;
 import behaviours.FollowPathBehaviour;
+
+import com.jrts.environment.Direction;
+import com.jrts.environment.Position;
+import com.jrts.environment.World;
 
 public abstract class Unit extends Agent{
 	
@@ -24,8 +18,7 @@ public abstract class Unit extends Agent{
 	 */
 	private static final long serialVersionUID = -6755184651108394854L;
 
-	int row;
-	int col;
+	private Position position = null;
 	int life;
 	int speed;
 	int forceOfAttack;
@@ -34,98 +27,31 @@ public abstract class Unit extends Agent{
 	
 	PositionGoal positionGoal;
 	
-	public void goThere(int x, int y){
-		ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
-		msg.setLanguage("info-language");
-		msg.setSender(getAID());
-		msg.addReceiver(new AID("worldManager", AID.ISLOCALNAME));
-		try {
-			msg.setContentObject(new GetPath(getRow(), getCol(), x, y));
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
-		send(msg);
-		System.out.println(getLocalName() + ":Sent get path to WM");
-		//wait the answer in blocking mode
-		ACLMessage reply = blockingReceive(MessageTemplate.MatchLanguage("info-language"));
-		System.out.println(getLocalName() + ":Received reply to get path request");
-		if(reply.getPerformative() == ACLMessage.INFORM){
-			System.out.println(getLocalName() + ":WM send me a path");
-			try {
-				if(reply.getContentObject() instanceof List<?>){
-					List<Direction> path = (List<Direction>) reply.getContentObject();
-					addBehaviour(new FollowPathBehaviour(this, path, x, y));
-				}
-			} catch (UnreadableException e) {
-				e.printStackTrace();
-			}
-		}
+	public Unit() {}
+	
+	Unit(Position position) {
+		super();
+		this.position = position;
+	}
+
+
+
+	public void goThere(int x, int y) {
+		List<Direction> path = World.getInstance().getPath(this.position, x, y);
+		addBehaviour(new FollowPathBehaviour(this, path, x, y));
 	}
 
 	public boolean move(Direction dir){
-		ACLMessage msg = new ACLMessage(ACLMessage.PROPOSE);
-		msg.setSender(getAID());
-		msg.setLanguage("movement-language");
-		msg.addReceiver(new AID("worldManager", AID.ISLOCALNAME));
-		try {
-			msg.setContentObject(new MoveThere(getRow(), getCol(), dir));
-		} catch (IOException e) {
-			System.out.println(getLocalName() + ":Error in MoveThere creation");
-			e.printStackTrace();
-		}
-//		System.out.println("U:Propose movement");
-		send(msg);
-		
-		//wait the answer in blocking mode
-		ACLMessage reply = blockingReceive(MessageTemplate.MatchLanguage("movement-language"));
-		if(reply.getPerformative() == ACLMessage.ACCEPT_PROPOSAL){
-			System.out.println(getLocalName() + ":WM accepts my movement");
-			setRow(row + dir.rowVar());
-			setCol(col + dir.colVar()); 
-			return true;
-		}
-		else if(reply.getPerformative() == ACLMessage.REJECT_PROPOSAL){
-			System.out.println(getLocalName() + ":WM rejects my movement");
-		}
-		else if(reply.getPerformative() == ACLMessage.REFUSE){
-			System.out.println(getLocalName() + ":Received detected error message format");
-		}
-		return false;
+		return World.getInstance().move(this.position, dir);
 	}
 	
-	private Floor getWorldInfo() {
-		ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
-		msg.setSender(getAID());
-		msg.addReceiver(new AID("worldManager", AID.ISLOCALNAME));
-		msg.setContent(WorldManager.COMPLETE_WORLD_VIEW);
-		send(msg);
-		
-		//wait the answer in blocking mode
-		ACLMessage reply = blockingReceive(MessageTemplate.MatchPerformative(ACLMessage.INFORM));
-		Floor floor = null;
-		try {
-			floor = (Floor) reply.getContentObject();
-		} catch (UnreadableException e) {
-			System.out.println("Error: answer doesn't contain a floor");
-			return null;
-		}
-		return floor;
-	}
-	
-	public int getRow() {
-		return row;
+	public Position getPosition() {
+		return position;
 	}
 
-	protected void setRow(int row) {
-		this.row = row;
-	}
-
-	public int getCol() {
-		return col;
-	}
-
-	protected void setCol(int col) {
-		this.col = col;
+	protected void setPosition(Position position) {
+		if (this.position == null)
+			this.position = position;
 	}
 
 	public int getLife() {
@@ -159,20 +85,11 @@ public abstract class Unit extends Agent{
 		return team;
 	}
 
-	private void setTeam(int team) {
-		this.team = team;
-	}
-
 	public void spendTime() {
 		try {
 			Thread.sleep(5000/getSpeed());
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-	}
-	
-	public void setPosition(int row, int col) {
-		this.row = row;
-		this.col = col;
 	}
 }

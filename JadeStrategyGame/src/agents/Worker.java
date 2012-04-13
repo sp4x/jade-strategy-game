@@ -1,5 +1,7 @@
 package agents;
 
+import com.jrts.environment.Position;
+
 import jade.core.behaviours.TickerBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
@@ -17,12 +19,15 @@ public class Worker extends Unit {
 
 	public Worker(){}
 		
+	public Worker(Position position) {
+		super(position);
+	}
+
 	protected void setup(){
-		Integer[] args = (Integer[]) getArguments();
-		if (args != null && args.length == 2) {
+		Object[] args = getArguments();
+		if (args != null && args[0] instanceof Position) {
 			System.out.println("Set position");
-			setRow(args[0]);
-			setCol(args[1]);
+			setPosition((Position) args[0]);
 		}
 		setLife(GameConfig.WORKER_LIFE);
 		setSpeed(GameConfig.WORKER_SPEED);
@@ -46,6 +51,11 @@ public class Worker extends Unit {
 		}
 		
 		addBehaviour(new TickerBehaviour(this, 1000) {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onTick() {

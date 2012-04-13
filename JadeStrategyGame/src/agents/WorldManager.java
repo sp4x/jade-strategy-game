@@ -18,9 +18,9 @@ import java.io.Serializable;
 import java.util.List;
 
 import com.jrts.environment.Cell;
+import com.jrts.environment.Direction;
 import com.jrts.environment.Floor;
 
-import logic.Direction;
 import messages.CreateWorker;
 import messages.GetPath;
 import messages.MoveThere;
@@ -154,7 +154,7 @@ public class WorldManager extends Agent{
 				}
 			});
 
-			new MainFrame(this);
+			//new MainFrame(this);
 		}
 		else{
 			try {
