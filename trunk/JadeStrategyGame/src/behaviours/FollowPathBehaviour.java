@@ -4,11 +4,17 @@ import jade.core.behaviours.Behaviour;
 
 import java.util.List;
 
-import logic.Direction;
+import com.jrts.environment.Direction;
+
 import agents.Unit;
 
 public class FollowPathBehaviour extends Behaviour {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	List<Direction> list;
 	Unit unit;
 	private int goalRow, goalCol;

@@ -13,6 +13,11 @@ import java.util.Random;
  */
 public class Floor implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public int rows;
 
 	public int cols;

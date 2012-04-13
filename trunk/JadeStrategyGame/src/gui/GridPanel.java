@@ -12,8 +12,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import com.jrts.environment.Cell;
-
-import agents.WorldManager;
+import com.jrts.environment.Floor;
 
 /**
  * Implement a JPanel to represent the environment and the agent
@@ -21,10 +20,10 @@ import agents.WorldManager;
  */
 public class GridPanel extends JPanel {
 
-	private WorldManager wm;
+	private Floor floor;
 
-	public GridPanel(WorldManager wm) {
-		this.wm = wm;
+	public GridPanel(Floor wm) {
+		this.floor = wm;
 		init();
 		update();
 	}
@@ -41,12 +40,12 @@ public class GridPanel extends JPanel {
 
 		JPanel flowPanel = new JPanel();
 		add(flowPanel);
-		flowPanel.setLayout(new GridLayout(wm.getFloor().getRows(), wm.getFloor().getCols()));
+		flowPanel.setLayout(new GridLayout(floor.getRows(), floor.getCols()));
 
-		labelMatrix = new JLabel[wm.getFloor().getRows()][wm.getFloor().getCols()];
+		labelMatrix = new JLabel[floor.getRows()][floor.getCols()];
 
-		for(int i=0; i<wm.getFloor().getRows(); i++)
-			for(int j=0; j<wm.getFloor().getCols(); j++){
+		for(int i=0; i<floor.getRows(); i++)
+			for(int j=0; j<floor.getCols(); j++){
 				GridBagConstraints constraints = new GridBagConstraints();
 				constraints.fill = GridBagConstraints.BOTH;
 				constraints.gridx = i;
@@ -90,13 +89,13 @@ public class GridPanel extends JPanel {
 	 * and the position of the agent
 	 */
 	public void update() {
-		for(int i=0; i<wm.getFloor().getRows(); i++)
-			for(int j=0; j<wm.getFloor().getCols(); j++){
-				if(wm.getFloor().get(i,j) == Cell.FREE)
+		for(int i=0; i<floor.getRows(); i++)
+			for(int j=0; j<floor.getCols(); j++){
+				if(floor.get(i,j) == Cell.FREE)
 					labelMatrix[i][j].setIcon(ImageLoader.freeIcon);
-				if(wm.getFloor().get(i,j) == Cell.WOOD)
+				if(floor.get(i,j) == Cell.WOOD)
 					labelMatrix[i][j].setIcon(ImageLoader.treeIcon);
-				if(wm.getFloor().get(i,j) == Cell.UNIT)
+				if(floor.get(i,j) == Cell.UNIT)
 					labelMatrix[i][j].setIcon(ImageLoader.workerIcon);
 			}
 		try {

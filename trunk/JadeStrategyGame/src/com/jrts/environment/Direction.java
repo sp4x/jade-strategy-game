@@ -1,4 +1,4 @@
-package logic;
+package com.jrts.environment;
 
 public enum Direction{
 	RIGHT(0,1),
