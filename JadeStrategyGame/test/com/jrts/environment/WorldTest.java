@@ -1,7 +1,6 @@
 package com.jrts.environment;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 import org.junit.Test;
 
@@ -54,8 +53,17 @@ public class WorldTest {
 	
 	
 	@Test
-	public void nextTo() {
-		
+	public void perception() {
+		World.create(10, 10, 0);
+		Position centre = new Position(5, 5);
+		Floor floor = World.getInstance().getPerception(centre, 1);
+		int seen = 0;
+		for (int row = 0; row < floor.rows; row++) {
+			for (int col = 0; col < floor.cols; col++) {
+				seen += floor.get(row, col) == Cell.UNKNOWN ? 0 : 1;
+			}
+		}
+		assertEquals(5, seen);
 	}
 
 }
