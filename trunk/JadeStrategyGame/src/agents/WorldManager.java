@@ -1,6 +1,5 @@
 package agents;
 
-import gui.MainFrame;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.core.behaviours.OneShotBehaviour;
@@ -17,14 +16,13 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 
-import com.jrts.environment.Cell;
-import com.jrts.environment.Direction;
-import com.jrts.environment.Floor;
-
 import messages.CreateWorker;
 import messages.GetPath;
 import messages.MoveThere;
 
+import com.jrts.environment.Cell;
+import com.jrts.environment.Direction;
+import com.jrts.environment.Floor;
 import common.Utils;
 
 public class WorldManager extends Agent{

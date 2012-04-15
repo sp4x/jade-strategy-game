@@ -4,9 +4,9 @@ import jade.core.behaviours.Behaviour;
 
 import java.util.List;
 
-import com.jrts.environment.Direction;
-
 import agents.Unit;
+
+import com.jrts.environment.Direction;
 
 public class FollowPathBehaviour extends Behaviour {
 

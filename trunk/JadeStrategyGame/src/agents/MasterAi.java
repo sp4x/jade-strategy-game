@@ -1,10 +1,9 @@
 package agents;
 
 import gui.MainFrame;
+import jade.core.Agent;
 
 import com.jrts.environment.World;
-
-import jade.core.Agent;
 
 public class MasterAi extends Agent {
 	
@@ -17,6 +16,10 @@ public class MasterAi extends Agent {
 		String[] args = (String[]) getArguments();
 		if (args != null) {
 			World.create(Integer.parseInt(args[0]), Integer.parseInt(args[1]), 0.1f);
+		}
+		else{
+			System.out.println("Need World's size");
+			System.exit(1);
 		}
 		World world = World.getInstance();
 		String name = getAID().getName();

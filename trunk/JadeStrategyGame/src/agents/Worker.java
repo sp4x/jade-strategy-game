@@ -1,13 +1,12 @@
 package agents;
 
-import com.jrts.environment.Position;
-
 import jade.core.behaviours.TickerBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 
+import com.jrts.environment.Position;
 import common.GameConfig;
 
 public class Worker extends Unit {

@@ -63,7 +63,7 @@ public class World {
 	}
 	
 	public Position nextTo(Position p) {
-		Direction []neigh = {Direction.DOWN, Direction.LEFT, Direction.LEFT_DOWN,
+		Direction[] neigh = {Direction.DOWN, Direction.LEFT, Direction.LEFT_DOWN,
 				Direction.LEFT_UP, Direction.RIGHT, Direction.RIGHT_DOWN,
 				Direction.RIGHT_UP, Direction.UP};
 		for (int i = 0; i < neigh.length; i++) {
@@ -110,7 +110,5 @@ public class World {
 	public Floor getFloor() {
 		return floor;
 	}
-	
-	
 
 }
