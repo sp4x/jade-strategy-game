@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import javax.swing.WindowConstants;
 
 import com.jrts.environment.Floor;
-import com.jrts.environment.World;
 
 
 /**
