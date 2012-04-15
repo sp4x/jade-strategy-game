@@ -97,11 +97,12 @@ public class GridPanel extends JPanel {
 					labelMatrix[i][j].setIcon(ImageLoader.treeIcon);
 				if(floor.get(i,j) == Cell.UNIT)
 					labelMatrix[i][j].setIcon(ImageLoader.workerIcon);
+				if(floor.get(i,j) == Cell.BUILDING)
+					labelMatrix[i][j].setIcon(ImageLoader.workerFactoryIcon);
 			}
 		try {
 			Thread.sleep(250);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
