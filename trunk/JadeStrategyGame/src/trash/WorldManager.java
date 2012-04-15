@@ -1,4 +1,4 @@
-package agents;
+package trash;
 
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;

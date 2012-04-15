@@ -106,9 +106,8 @@ public class World {
 		unit.id = id;
 		if (!isAvailable(p)) {
 			p = nextTo(p);
-			if (p == null) {
+			if (p == null)
 				return null;
-			}
 		}
 		floor.set(p.row, p.col, unit);
 		return p;
@@ -126,7 +125,6 @@ public class World {
 	public Floor getFloor() {
 		return floor;
 	}
-	
 	
 	/**
 	 * Returns the perceived floor in a certain position with the specified range of sight

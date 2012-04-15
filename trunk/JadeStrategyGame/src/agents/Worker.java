@@ -9,12 +9,8 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 import com.jrts.environment.Position;
 import common.GameConfig;
 
+@SuppressWarnings("serial")
 public class Worker extends Unit {
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 7202575787943066263L;
 
 	public Worker(){}
 		
@@ -32,7 +28,7 @@ public class Worker extends Unit {
 		setSpeed(GameConfig.WORKER_SPEED);
 		setForceOfAttack(GameConfig.WORKER_FORCE_OF_ATTACK);
 		
-		System.out.println(getLocalName()+" STARTED");
+		System.out.println(getLocalName()+":Started");
 		
 		try {
 			// create the agent description of itself
@@ -44,24 +40,19 @@ public class Worker extends Unit {
 	  		dfd.addServices(sd);
 			// register the description with the DF
 			DFService.register(this, dfd);
-			System.out.println(getLocalName()+" REGISTERED WITH THE DF");
+			System.out.println(getLocalName()+":Registered with the df");
 		} catch (FIPAException e) {
 			e.printStackTrace();
 		}
 		
-		addBehaviour(new TickerBehaviour(this, 1000) {
-
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = 1L;
+		addBehaviour(new TickerBehaviour(this, 5000) {
 
 			@Override
 			protected void onTick() {
-//				System.out.println("Worker Pos(" + getRow() + "," + getCol() + ") Changed: " + isPositionChanged());
+				System.out.println(getLocalName()+ ":Pos" + getPosition());
 			}
 		});
 		
-		goThere(49,49);
+//		goThere(49,49);
 	}
 }
