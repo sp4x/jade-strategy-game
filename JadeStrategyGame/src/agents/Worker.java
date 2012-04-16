@@ -9,8 +9,12 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 import com.jrts.environment.Position;
 import common.GameConfig;
 
-@SuppressWarnings("serial")
 public class Worker extends Unit {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	public Worker(){}
 		
@@ -20,9 +24,10 @@ public class Worker extends Unit {
 
 	protected void setup(){
 		Object[] args = getArguments();
-		if (args != null && args[0] instanceof Position) {
+		if (args != null) {
 			System.out.println("Set position");
 			setPosition((Position) args[0]);
+			setTeam((String) args[1]);
 		}
 		setLife(GameConfig.WORKER_LIFE);
 		setSpeed(GameConfig.WORKER_SPEED);
@@ -46,6 +51,11 @@ public class Worker extends Unit {
 		}
 		
 		addBehaviour(new TickerBehaviour(this, 5000) {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onTick() {

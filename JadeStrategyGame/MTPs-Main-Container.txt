@@ -1,1 +1,1 @@
-http://98hufhy:7778/acc
+http://hit-nxdomain.opendns.com:7778/acc

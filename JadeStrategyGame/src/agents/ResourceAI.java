@@ -13,6 +13,11 @@ import com.jrts.environment.World;
 
 public class ResourceAI extends Agent {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	String teamName;
 	
 	ArrayList<AID> workersList = new ArrayList<AID>();
@@ -37,6 +42,12 @@ public class ResourceAI extends Agent {
 		createWorker();
 		createWorker();
 		createWorker();
+		createWorker();
+		createWorker();
+		createWorker();
+		createWorker();
+		createWorker();
+		createWorker();
 	}
 	
 	public boolean createWorker(){
@@ -48,12 +59,12 @@ public class ResourceAI extends Agent {
 			PlatformController container = getContainerController();
 			AgentController worker;
 			try {
-				Position[] arg = new Position[1];
-				arg[0] = workerPosition;
-				worker = container.createNewAgent("worker"+workersList.size(), "agents.Worker", arg);
+				Object[] args = {workerPosition, teamName};
+				String workerName = teamName + "-worker"+workersList.size();
+				worker = container.createNewAgent(workerName, "agents.Worker", args);
 				worker.start();
 				// keep the worker's ID on a local list
-				workersList.add( new AID("worker"+workersList.size(), AID.ISLOCALNAME) );
+				workersList.add( new AID(workerName, AID.ISLOCALNAME) );
 			} catch (ControllerException e) {
 				e.printStackTrace();
 			}

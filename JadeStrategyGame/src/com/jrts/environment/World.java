@@ -61,15 +61,17 @@ public class World {
 		}
 		return false;
 	}
+
 	
-	public Position nextTo(Position p) {
-		Direction[] neigh = {Direction.DOWN, Direction.LEFT, Direction.LEFT_DOWN,
-				Direction.LEFT_UP, Direction.RIGHT, Direction.RIGHT_DOWN,
-				Direction.RIGHT_UP, Direction.UP};
-		for (int i = 0; i < neigh.length; i++) {
-			Position candidate = p.step(neigh[i]);
-			if (isAvailable(candidate))
-				return candidate;
+	public Position nextTo(Position p, int maxDistance) {
+		if (maxDistance == 0)
+			return p;
+		for (int minDistance = 1; minDistance <= maxDistance; minDistance++) {
+			for (Direction d : Direction.ALL) {
+				Position candidate = nextTo(p.step(d), minDistance -1);
+				if (candidate != null && isAvailable(candidate))
+					return candidate;
+			}
 		}
 		return null;
 	}
@@ -105,7 +107,7 @@ public class World {
 		Cell unit = Cell.UNIT;
 		unit.id = id;
 		if (!isAvailable(p)) {
-			p = nextTo(p);
+			p = nextTo(p,2);
 			if (p == null)
 				return null;
 		}
