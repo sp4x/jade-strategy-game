@@ -10,6 +10,11 @@ public enum Direction{
 	LEFT_UP(-1,-1),
 	LEFT_DOWN(1,-1);
 	
+	
+	public static Direction[] ALL = {DOWN, LEFT, RIGHT, UP,
+				LEFT_DOWN, LEFT_UP, RIGHT_DOWN, RIGHT_UP, };
+	
+	
 	private int rowVar;
 	private int colVar;
 	

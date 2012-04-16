@@ -19,11 +19,11 @@ public abstract class Unit extends Agent{
 	private static final long serialVersionUID = -6755184651108394854L;
 
 	private Position position = null;
+	private String team;
 	int life;
 	int speed;
 	int forceOfAttack;
 	
-	int team;
 	
 	PositionGoal positionGoal;
 	
@@ -81,8 +81,12 @@ public abstract class Unit extends Agent{
 		this.forceOfAttack = forceOfAttack;
 	}
 
-	public int getTeam() {
+	public String getTeam() {
 		return team;
+	}
+
+	protected void setTeam(String team) {
+		this.team = team;
 	}
 
 	public void spendTime() {
