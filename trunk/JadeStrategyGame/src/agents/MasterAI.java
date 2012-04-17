@@ -1,10 +1,15 @@
 package agents;
 
 import jade.core.Agent;
+import jade.core.behaviours.CyclicBehaviour;
+import jade.lang.acl.ACLMessage;
+import jade.lang.acl.UnreadableException;
 import jade.wrapper.AgentController;
 import jade.wrapper.ControllerException;
 import jade.wrapper.PlatformController;
 
+import com.jrts.environment.Cell;
+import com.jrts.environment.Floor;
 import com.jrts.environment.World;
 
 public class MasterAI extends Agent {
@@ -13,6 +18,8 @@ public class MasterAI extends Agent {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	Floor floorImage;
 
 	protected void setup(){
 		
@@ -33,5 +40,33 @@ public class MasterAI extends Agent {
 			e.printStackTrace();
 		}
 		System.out.println(teamName + ":MasterAI setup");
+		
+		floorImage = world.getFloor().getCopy();
+		floorImage.setAll(Cell.UNKNOWN);
+		
+		//receive perceptions from units
+		addBehaviour(new CyclicBehaviour() {
+			
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void action() {
+				ACLMessage msg = receive();
+				if (msg != null && msg.getPerformative() == ACLMessage.INFORM) {
+					try {
+						Object info = msg.getContentObject();
+						if (info instanceof Floor)
+							floorImage.mergeWith((Floor) info);
+					} catch (UnreadableException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+				}
+			}
+		});
 	}
 }

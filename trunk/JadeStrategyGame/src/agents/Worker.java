@@ -32,6 +32,7 @@ public class Worker extends Unit {
 		setLife(GameConfig.WORKER_LIFE);
 		setSpeed(GameConfig.WORKER_SPEED);
 		setForceOfAttack(GameConfig.WORKER_FORCE_OF_ATTACK);
+		setSight(GameConfig.WORKER_SIGHT);
 		
 		System.out.println(getLocalName()+":Started");
 		
