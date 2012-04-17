@@ -74,7 +74,6 @@ public class Utils {
 						walkableGraph.addWeightedEdge(v1, v2, 1);
 					}
 				}
-				//TODO se la cella di destinazione non è libera sceglierne un'altra vicina come dest
 			}
 
 		//calculate path on the graph
