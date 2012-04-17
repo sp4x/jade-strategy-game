@@ -1,4 +1,4 @@
-package common;
+package com.common;
 
 public class GameConfig {
 	public static final int WORKER_LIFE = 10;

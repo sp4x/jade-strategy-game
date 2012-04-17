@@ -61,7 +61,7 @@ public class ResourceAI extends Agent {
 			try {
 				Object[] args = {workerPosition, teamName};
 				String workerName = teamName + "-worker"+workersList.size();
-				worker = container.createNewAgent(workerName, "agents.Worker", args);
+				worker = container.createNewAgent(workerName, "com.jrts.agents.Worker", args);
 				worker.start();
 				// keep the worker's ID on a local list
 				workersList.add( new AID(workerName, AID.ISLOCALNAME) );

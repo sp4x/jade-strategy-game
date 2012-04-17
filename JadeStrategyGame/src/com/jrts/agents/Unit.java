@@ -7,7 +7,6 @@ import jade.lang.acl.ACLMessage;
 import java.io.IOException;
 import java.util.List;
 
-import logic.PositionGoal;
 import behaviours.FollowPathBehaviour;
 
 import com.jrts.environment.Direction;
@@ -29,7 +28,6 @@ public abstract class Unit extends Agent{
 	int forceOfAttack;
 	int sight;
 		
-	PositionGoal positionGoal;
 	Floor perception;
 	
 	public Unit() {}
