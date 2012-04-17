@@ -1,10 +1,12 @@
 package com.jrts.environment;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import com.common.GameConfig;
 import com.common.Utils;
 
 public class World {
@@ -51,6 +53,10 @@ public class World {
 	}
 	
 	public synchronized List<Direction> getPath(Position source, int destRow, int destCol) {
+//		Position dest = nextTo(new Position(destRow, destCol), GameConfig.PATH_TOLLERANCE);
+//		if(dest == null)
+//			return new ArrayList<Direction>();
+//		return Utils.calculatePath(floor, source.getRow(), source.getCol(), dest.getCol(), dest.getRow());
 		return Utils.calculatePath(floor, source.getRow(), source.getCol(), destRow, destCol);
 	}
 	

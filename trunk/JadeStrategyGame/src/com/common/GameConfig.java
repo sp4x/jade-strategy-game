@@ -12,4 +12,6 @@ public class GameConfig {
 	
 	public static final int WORKER_SIGHT = 3;
 	public static final int SOLDIER_SIGHT = 4;
+	
+	public static final int PATH_TOLLERANCE = 10;
 }

@@ -9,12 +9,8 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 import com.jrts.environment.Position;
 import com.common.GameConfig;
 
+@SuppressWarnings("serial")
 public class Worker extends Unit {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 
 	public Worker(){}
 		
@@ -53,17 +49,12 @@ public class Worker extends Unit {
 		
 		addBehaviour(new TickerBehaviour(this, 5000) {
 
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = 1L;
-
 			@Override
 			protected void onTick() {
 				System.out.println(getLocalName()+ ":Pos" + getPosition());
 			}
 		});
 		
-//		goThere(49,49);
+		goThere(49,49);
 	}
 }
