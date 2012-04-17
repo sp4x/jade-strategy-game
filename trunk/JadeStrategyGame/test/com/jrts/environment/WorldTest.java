@@ -4,7 +4,8 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import agents.Worker;
+import com.jrts.agents.Worker;
+
 
 public class WorldTest {
 	

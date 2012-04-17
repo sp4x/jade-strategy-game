@@ -1,4 +1,4 @@
-package agents;
+package com.jrts.agents;
 
 import jade.core.behaviours.TickerBehaviour;
 import jade.domain.DFService;

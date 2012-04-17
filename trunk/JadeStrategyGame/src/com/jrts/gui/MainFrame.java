@@ -1,4 +1,4 @@
-package gui;
+package com.jrts.gui;
 import java.awt.BorderLayout;
 
 import javax.swing.WindowConstants;

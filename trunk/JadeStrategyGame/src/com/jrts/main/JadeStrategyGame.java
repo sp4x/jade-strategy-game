@@ -1,9 +1,9 @@
 package com.jrts.main;
 
-import gui.MainFrame;
 import jade.Boot;
 
 import com.jrts.environment.World;
+import com.jrts.gui.MainFrame;
 
 public class JadeStrategyGame {
 

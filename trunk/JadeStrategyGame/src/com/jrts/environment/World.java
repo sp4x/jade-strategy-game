@@ -68,7 +68,7 @@ public class World {
 			return p;
 		for (int minDistance = 1; minDistance <= maxDistance; minDistance++) {
 			for (Direction d : Direction.ALL) {
-				Position candidate = nextTo(p.step(d), minDistance -1);
+				Position candidate = nextTo(p.step(d), minDistance-1);
 				if (candidate != null && isAvailable(candidate))
 					return candidate;
 			}
