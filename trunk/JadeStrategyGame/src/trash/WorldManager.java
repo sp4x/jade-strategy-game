@@ -23,7 +23,7 @@ import messages.MoveThere;
 import com.jrts.environment.Cell;
 import com.jrts.environment.Direction;
 import com.jrts.environment.Floor;
-import common.Utils;
+import com.common.Utils;
 
 public class WorldManager extends Agent{
 

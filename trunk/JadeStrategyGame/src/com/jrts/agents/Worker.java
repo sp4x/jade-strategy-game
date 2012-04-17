@@ -7,7 +7,7 @@ import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 
 import com.jrts.environment.Position;
-import common.GameConfig;
+import com.common.GameConfig;
 
 public class Worker extends Unit {
 

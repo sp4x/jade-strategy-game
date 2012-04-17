@@ -34,7 +34,7 @@ public class MasterAI extends Agent {
 		try {
 			String[] arg = new String[1];
 			arg[0] = teamName;
-			resourceAI = container.createNewAgent(teamName + "-resourceAI", "agents.ResourceAI", arg);
+			resourceAI = container.createNewAgent(teamName + "-resourceAI", "com.jrts.agents.ResourceAI", arg);
 			resourceAI.start();
 		} catch (ControllerException e) {
 			e.printStackTrace();
