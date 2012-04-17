@@ -63,7 +63,7 @@ public class World {
 	}
 
 	
-	public Position nextTo(Position p, int maxDistance) {
+	private Position nextTo(Position p, int maxDistance) {
 		if (maxDistance == 0)
 			return p;
 		for (int minDistance = 1; minDistance <= maxDistance; minDistance++) {
@@ -75,6 +75,13 @@ public class World {
 		}
 		return null;
 	}
+	
+//	private Position near(Position p, int maxDistance) {
+//		Random r = new Random();
+//		int row = r.nextInt(2*maxDistance) - maxDistance;
+//		int col = r.nextInt(2*maxDistance) - maxDistance;
+//		return new Position(p.row+row, p.col+col);
+//	}
 	
 	boolean isAvailable(Position p) {
 		return floor.get(p.row, p.col) == Cell.FREE;

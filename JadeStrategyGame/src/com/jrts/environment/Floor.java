@@ -11,7 +11,7 @@ import java.util.Random;
  * @see Cell	 
  *
  */
-public class Floor implements Serializable{
+public class Floor implements Serializable {
 
 	/**
 	 * 
@@ -33,9 +33,13 @@ public class Floor implements Serializable{
 		this.rows = rows;
 		this.cols = cols;
 		this.floor = new Cell[rows][cols];
+		setAll(Cell.FREE);
+	}
+	
+	public void setAll(Cell objectsType) {
 		for (int i = 0; i < rows; i++)
 			for (int j = 0; j < cols; j++)
-				this.floor[i][j] = Cell.FREE;
+				this.floor[i][j] = objectsType;
 	}
 	
 	/**
@@ -77,12 +81,6 @@ public class Floor implements Serializable{
 			Square myCell = cells.remove(random);
 			floor[myCell.x][myCell.y] = objectsType;
 		}
-	}
-
-	public void clear(){
-		for (int i = 0; i < rows; i++)
-			for (int j = 0; j < cols; j++)
-				floor[i][j] = Cell.FREE;
 	}
 
 	public void load(Floor floor){
@@ -138,5 +136,17 @@ public class Floor implements Serializable{
 			for (int j = 0; j < cols; j++)
 				newFloor.set(i, j, floor[i][j]);
 		return newFloor;
+	}
+	
+	public void mergeWith(Floor info) {
+		if (rows == info.rows && cols == info.cols) {
+			for (int i = 0; i < rows; i++) {
+				for (int j = 0; j < cols; j++) {
+					Cell current = info.get(i, j);
+					if (current != Cell.UNKNOWN && current != Cell.UNIT)
+						set(i, j, current);
+				}
+			}
+		}
 	}
 }
