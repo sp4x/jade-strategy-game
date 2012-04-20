@@ -149,4 +149,15 @@ public class Floor implements Serializable {
 			}
 		}
 	}
+	
+	@Override
+	public String toString(){
+		String out = "";
+		for (int i = 0; i < rows; i++){
+			for (int j = 0; j < cols; j++)
+				out += get(i,j) + "\t";
+			out += "\n";
+		}
+		return out;
+	}
 }

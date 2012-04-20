@@ -1,6 +1,9 @@
 package com.common;
 
 public class GameConfig {
+	public static final int WORLD_ROWS = 50;
+	public static final int WORLD_COLS = 50;
+	
 	public static final int WORKER_LIFE = 10;
 	public static final int SOLDIER_LIFE = 20;
 	
@@ -14,4 +17,5 @@ public class GameConfig {
 	public static final int SOLDIER_SIGHT = 4;
 	
 	public static final int PATH_TOLLERANCE = 10;
+	public static final int REFRESH_TIME = 5000;
 }

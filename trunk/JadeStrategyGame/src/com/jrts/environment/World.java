@@ -31,7 +31,6 @@ public class World {
 		floor = new Floor(rows, cols);
 	}
 	
-	
 	/**
 	 * changes the position of an object using the specified direction
 	 * 
@@ -50,14 +49,6 @@ public class World {
 			return true;
 		}
 		return false;
-	}
-	
-	public synchronized List<Direction> getPath(Position source, int destRow, int destCol) {
-//		Position dest = nextTo(new Position(destRow, destCol), GameConfig.PATH_TOLLERANCE);
-//		if(dest == null)
-//			return new ArrayList<Direction>();
-//		return Utils.calculatePath(floor, source.getRow(), source.getCol(), dest.getCol(), dest.getRow());
-		return Utils.calculatePath(floor, source.getRow(), source.getCol(), destRow, destCol);
 	}
 	
 	boolean addObject(Cell objectType, Position p) {

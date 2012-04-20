@@ -17,36 +17,36 @@ public class Utils {
 		for (int i = 0; i < floor.getRows(); i++)
 			for (int j = 0; j < floor.getCols(); j++){
 				//NB La cella di partenza anche se occupata dall'unita' fa parte del grafo
-				if(floor.get(i, j) == Cell.FREE){
+				if(floor.get(i, j) == Cell.FREE || floor.get(i, j) == Cell.UNKNOWN){
 					// A
 					// |
-					if( i-1 >= 0 && (floor.get(i-1, j) == Cell.FREE || (i-1==x1 && j==y1)) ){
+					if( i-1 >= 0 && (floor.get(i-1, j) == Cell.FREE || floor.get(i-1, j) == Cell.UNKNOWN || (i-1==x1 && j==y1)) ){
 						String v1 = i + "," + j;
 						String v2 = (i-1) + "," + j;
 						walkableGraph.addWeightedEdge(v1, v2, 1);
 					}
 					// |
 					// v
-					if( i+1 < floor.getRows() && (floor.get(i+1, j) == Cell.FREE || (i+1==x1 && j==y1)) ){
+					if( i+1 < floor.getRows() && (floor.get(i+1, j) == Cell.FREE || floor.get(i+1, j) == Cell.UNKNOWN || (i+1==x1 && j==y1)) ){
 						String v1 = i + "," + j;
 						String v2 = (i+1) + "," + j;
 						walkableGraph.addWeightedEdge(v1, v2, 1);
 					}
 					// <-
-					if( j-1 >= 0 && (floor.get(i, j-1) == Cell.FREE || (i==x1 && j-1==y1)) ){
+					if( j-1 >= 0 && (floor.get(i, j-1) == Cell.FREE || floor.get(i, j-1) == Cell.UNKNOWN || (i==x1 && j-1==y1)) ){
 						String v1 = i + "," + j;
 						String v2 = i + "," + (j-1);
 						walkableGraph.addWeightedEdge(v1, v2, 1);
 					}
 					// ->
-					if( j+1 <= floor.getCols() && (floor.get(i, j+1) == Cell.FREE || (i==x1 && j+1==y1)) ){
+					if( j+1 <= floor.getCols() && (floor.get(i, j+1) == Cell.FREE || floor.get(i, j+1) == Cell.UNKNOWN || (i==x1 && j+1==y1)) ){
 						String v1 = i + "," + j;
 						String v2 = i + "," + (j+1);
 						walkableGraph.addWeightedEdge(v1, v2, 1);
 					}
 					// A
 					//  \
-					if( j-1 >= 0 && i-1 >= 0 && (floor.get(i-1, j-1) == Cell.FREE || (i-1==x1 && j-1==y1)) ){
+					if( j-1 >= 0 && i-1 >= 0 && (floor.get(i-1, j-1) == Cell.FREE || floor.get(i-1, j-1) == Cell.UNKNOWN || (i-1==x1 && j-1==y1)) ){
 						String v1 = i + "," + j;
 						String v2 = (i-1) + "," + (j-1);
 						walkableGraph.addWeightedEdge(v1, v2, 1);
@@ -54,21 +54,21 @@ public class Utils {
 					
 					//   A
 					//  /
-					if( j+1 < floor.getCols() && i-1 >= 0 && (floor.get(i-1, j+1) == Cell.FREE || (i-1==x1 && j+1==y1)) ){
+					if( j+1 < floor.getCols() && i-1 >= 0 && (floor.get(i-1, j+1) == Cell.FREE || floor.get(i-1, j+1) == Cell.UNKNOWN || (i-1==x1 && j+1==y1)) ){
 						String v1 = i + "," + j;
 						String v2 = (i-1) + "," + (j+1);
 						walkableGraph.addWeightedEdge(v1, v2, 1);
 					}
 					//  /
 					// v
-					if( j-1 >= 0 && i+1 < floor.getRows() && (floor.get(i+1, j-1) == Cell.FREE || (i+1==x1 && j-1==y1)) ){
+					if( j-1 >= 0 && i+1 < floor.getRows() && (floor.get(i+1, j-1) == Cell.FREE || floor.get(i+1, j-1) == Cell.UNKNOWN || (i+1==x1 && j-1==y1)) ){
 						String v1 = i + "," + j;
 						String v2 = (i+1) + "," + (j-1);
 						walkableGraph.addWeightedEdge(v1, v2, 1);
 					}
 					//  \
 					//   v
-					if( j+1 < floor.getCols() && i+1 < floor.getRows() && (floor.get(i+1, j+1) == Cell.FREE || (i+1==x1 && j+1==y1)) ){
+					if( j+1 < floor.getCols() && i+1 < floor.getRows() && (floor.get(i+1, j+1) == Cell.FREE || floor.get(i+1, j+1) == Cell.UNKNOWN || (i+1==x1 && j+1==y1)) ){
 						String v1 = i + "," + j;
 						String v2 = (i+1) + "," + (j+1);
 						walkableGraph.addWeightedEdge(v1, v2, 1);

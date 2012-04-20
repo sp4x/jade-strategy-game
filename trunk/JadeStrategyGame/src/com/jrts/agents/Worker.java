@@ -55,6 +55,6 @@ public class Worker extends Unit {
 			}
 		});
 		
-		goThere(49,49);
+		goThere(GameConfig.WORLD_ROWS-1, GameConfig.WORLD_COLS-1);
 	}
 }
