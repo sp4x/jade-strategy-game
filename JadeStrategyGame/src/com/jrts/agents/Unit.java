@@ -7,8 +7,13 @@ import jade.lang.acl.ACLMessage;
 import java.io.IOException;
 import java.util.List;
 
+import javax.rmi.CORBA.Util;
+
 import behaviours.FollowPathBehaviour;
 
+import com.common.GameConfig;
+import com.common.Utils;
+import com.jrts.environment.Cell;
 import com.jrts.environment.Direction;
 import com.jrts.environment.Floor;
 import com.jrts.environment.Position;
@@ -42,12 +47,20 @@ public abstract class Unit extends Agent{
 	}
 
 	public void goThere(int x, int y) {
-		List<Direction> path = World.getInstance().getPath(this.position, x, y);
+		updatePerception();
+//		List<Direction> path = World.getInstance().getPath(this.position, x, y);
+		List<Direction> path = Utils.calculatePath(perception, position.getRow(), position.getCol(), x, y);
+//		System.out.println(getLocalName() + ":" + path);
 		addBehaviour(new FollowPathBehaviour(this, path, x, y));
 	}
 	
 	protected void updatePerception() {
-		perception = World.getInstance().getPerception(getPosition(), sight);
+		Floor newPerception = World.getInstance().getPerception(getPosition(), sight);
+		if(getPerception() == null)//if it's the first step
+			perception = newPerception;
+		else //update my local world's perception
+			updateLocalWorldPerception(newPerception);
+//		System.out.println(perception);
 		//send perception to Master
 		ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
 		msg.addReceiver(new AID(team, AID.ISLOCALNAME));
@@ -58,6 +71,14 @@ public abstract class Unit extends Agent{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	public void updateLocalWorldPerception(Floor newPerc) {
+		//refresh local world's perception only if newPerc contains new info
+		for (int i = 0; i < newPerc.getRows(); i++)
+			for (int j = 0; j < newPerc.getCols(); j++)
+				if(newPerc.get(i, j) != Cell.UNKNOWN)
+					perception.set(i, j, newPerc.get(i, j));
 	}
 
 	public boolean move(Direction dir){
@@ -125,7 +146,7 @@ public abstract class Unit extends Agent{
 
 	public void spendTime() {
 		try {
-			Thread.sleep(5000/getSpeed());
+			Thread.sleep(GameConfig.REFRESH_TIME/getSpeed());
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}

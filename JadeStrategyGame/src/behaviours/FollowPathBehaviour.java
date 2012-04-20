@@ -28,14 +28,14 @@ public class FollowPathBehaviour extends Behaviour {
 
 	@Override
 	public void action() {
+		unit.spendTime();
 		if(list.isEmpty())
 			return;
 		if (!unit.move(list.remove(0))) {
-			System.out.println("Need path recalculation");
+			System.out.println(unit.getLocalName() + ":Need path recalculation");
 			list.clear();
 			unit.goThere(goalRow, goalCol);
 		}
-		unit.spendTime();
 	}
 
 	@Override
