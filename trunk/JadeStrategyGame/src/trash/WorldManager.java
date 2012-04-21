@@ -20,10 +20,10 @@ import messages.CreateWorker;
 import messages.GetPath;
 import messages.MoveThere;
 
+import com.common.Utils;
 import com.jrts.environment.Cell;
 import com.jrts.environment.Direction;
 import com.jrts.environment.Floor;
-import com.common.Utils;
 
 public class WorldManager extends Agent{
 
