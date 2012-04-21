@@ -14,7 +14,9 @@ public class Utils {
 	public static ArrayList<Direction> calculatePath(Floor floor, int x1, int y1, int x2, int y2){
 		//create walkable graph
 		UndirectedWeightedGraph walkableGraph = new UndirectedWeightedGraph();
+		//avoid exceptions
 		walkableGraph.addVertex(x1 + "," + y1);
+		walkableGraph.addVertex(x2 + "," + y2);
 		for (int i = 0; i < floor.getRows(); i++)
 			for (int j = 0; j < floor.getCols(); j++){
 				//NB La cella di partenza anche se occupata dall'unita' fa parte del grafo
