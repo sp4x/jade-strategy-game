@@ -1,12 +1,12 @@
 package com.jrts.agents;
 
-import java.util.ArrayList;
-
 import jade.core.AID;
 import jade.core.Agent;
 import jade.wrapper.AgentController;
 import jade.wrapper.ControllerException;
 import jade.wrapper.PlatformController;
+
+import java.util.ArrayList;
 
 import com.jrts.environment.Position;
 import com.jrts.environment.World;
@@ -35,19 +35,8 @@ public class ResourceAI extends Agent {
 		}
 		System.out.println(teamName + ":ResourceAI setup");
 		
-		createWorker();
-		createWorker();
-		createWorker();
-		createWorker();
-		createWorker();
-		createWorker();
-		createWorker();
-		createWorker();
-		createWorker();
-		createWorker();
-		createWorker();
-		createWorker();
-		createWorker();
+		for (int i = 0; i < 10; i++)
+			createWorker();
 	}
 	
 	public boolean createWorker(){

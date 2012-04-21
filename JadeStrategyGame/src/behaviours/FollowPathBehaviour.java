@@ -4,7 +4,6 @@ import jade.core.behaviours.Behaviour;
 
 import java.util.List;
 
-
 import com.jrts.agents.Unit;
 import com.jrts.environment.Direction;
 

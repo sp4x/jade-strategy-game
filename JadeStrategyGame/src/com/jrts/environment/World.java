@@ -1,13 +1,8 @@
 package com.jrts.environment;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
-
-import com.common.GameConfig;
-import com.common.Utils;
 
 public class World {
 	

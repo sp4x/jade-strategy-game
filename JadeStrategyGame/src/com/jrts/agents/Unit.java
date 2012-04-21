@@ -7,8 +7,6 @@ import jade.lang.acl.ACLMessage;
 import java.io.IOException;
 import java.util.List;
 
-import javax.rmi.CORBA.Util;
-
 import behaviours.FollowPathBehaviour;
 
 import com.common.GameConfig;
@@ -20,7 +18,7 @@ import com.jrts.environment.Position;
 import com.jrts.environment.World;
 
 public abstract class Unit extends Agent{
-	
+
 	/**
 	 * 
 	 */
@@ -32,11 +30,11 @@ public abstract class Unit extends Agent{
 	int speed;
 	int forceOfAttack;
 	int sight;
-		
+
 	Floor perception;
-	
+
 	public Unit() {}
-	
+
 	Unit(Position position) {
 		super();
 		this.position = position;
@@ -48,19 +46,19 @@ public abstract class Unit extends Agent{
 
 	public void goThere(int x, int y) {
 		updatePerception();
-//		List<Direction> path = World.getInstance().getPath(this.position, x, y);
+		//		List<Direction> path = World.getInstance().getPath(this.position, x, y);
 		List<Direction> path = Utils.calculatePath(perception, position.getRow(), position.getCol(), x, y);
-//		System.out.println(getLocalName() + ":" + path);
+		//		System.out.println(getLocalName() + ":" + path);
 		addBehaviour(new FollowPathBehaviour(this, path, x, y));
 	}
-	
+
 	protected void updatePerception() {
 		Floor newPerception = World.getInstance().getPerception(getPosition(), sight);
 		if(getPerception() == null)//if it's the first step
 			perception = newPerception;
 		else //update my local world's perception
 			updateLocalWorldPerception(newPerception);
-//		System.out.println(perception);
+		//		System.out.println(perception);
 		//send perception to Master
 		ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
 		msg.addReceiver(new AID(team, AID.ISLOCALNAME));
@@ -87,7 +85,7 @@ public abstract class Unit extends Agent{
 			updatePerception();
 		return success;
 	}
-	
+
 	public Position getPosition() {
 		return position;
 	}
