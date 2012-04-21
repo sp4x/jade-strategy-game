@@ -5,12 +5,11 @@ import jade.core.Agent;
 import jade.lang.acl.ACLMessage;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.Random;
 
 import behaviours.FollowPathBehaviour;
 
 import com.common.GameConfig;
-import com.common.Utils;
 import com.jrts.environment.Cell;
 import com.jrts.environment.Direction;
 import com.jrts.environment.Floor;
@@ -46,10 +45,7 @@ public abstract class Unit extends Agent{
 
 	public void goThere(int x, int y) {
 		updatePerception();
-		//		List<Direction> path = World.getInstance().getPath(this.position, x, y);
-		List<Direction> path = Utils.calculatePath(perception, position.getRow(), position.getCol(), x, y);
-		//		System.out.println(getLocalName() + ":" + path);
-		addBehaviour(new FollowPathBehaviour(this, path, x, y));
+		addBehaviour(new FollowPathBehaviour(this, x, y, GameConfig.WORKER_MOVING_ATTEMPTS));
 	}
 
 	protected void updatePerception() {
@@ -145,6 +141,15 @@ public abstract class Unit extends Agent{
 	public void spendTime() {
 		try {
 			Thread.sleep(GameConfig.REFRESH_TIME/getSpeed());
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void spendRandomTime() {
+		Random r = new Random();
+		try {
+			Thread.sleep(GameConfig.REFRESH_TIME + r.nextInt(GameConfig.REFRESH_TIME));
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}

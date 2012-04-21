@@ -5,7 +5,7 @@ public class Position {
 	int row;
 	int col;
 	
-	Position(int row, int col) {
+	public Position(int row, int col) {
 		super();
 		this.row = row;
 		this.col = col;
@@ -28,4 +28,9 @@ public class Position {
 		return "(" + Integer.toString(row) + "," + Integer.toString(col) + ")";
 	}
 
+	@Override
+	public boolean equals(Object pos){
+		Position p = (Position) pos;
+		return getRow() == p.getRow() && getCol() == p.getCol();
+	}
 }
