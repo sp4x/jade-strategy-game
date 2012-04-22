@@ -66,5 +66,17 @@ public class WorldTest {
 		}
 		assertEquals(5, seen);
 	}
+	
+	
+	@Test
+	public void near() {
+		World.create(10, 10, 0);
+		Position centre = new Position(5, 5);
+		for (int i = 0; i < 10; i++) {
+			Position p = World.getInstance().near(centre, 2, 4);
+			boolean success = (p.row>=5+2 || p.row<=5-2) && (p.col>=5+2 || p.col<=5-2);
+			assertTrue(success);
+		}
+	}
 
 }

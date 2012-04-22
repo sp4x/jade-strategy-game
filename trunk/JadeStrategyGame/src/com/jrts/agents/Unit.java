@@ -1,7 +1,6 @@
 package com.jrts.agents;
 
 import jade.core.AID;
-import jade.core.Agent;
 import jade.lang.acl.ACLMessage;
 
 import java.io.IOException;
@@ -10,13 +9,12 @@ import java.util.Random;
 import behaviours.FollowPathBehaviour;
 
 import com.common.GameConfig;
-import com.jrts.environment.Cell;
 import com.jrts.environment.Direction;
 import com.jrts.environment.Floor;
 import com.jrts.environment.Position;
 import com.jrts.environment.World;
 
-public abstract class Unit extends Agent{
+public abstract class Unit extends JrtsAgent {
 
 	/**
 	 * 
@@ -24,13 +22,11 @@ public abstract class Unit extends Agent{
 	private static final long serialVersionUID = -6755184651108394854L;
 
 	private Position position = null;
-	private String team;
 	int life;
 	int speed;
 	int forceOfAttack;
 	int sight;
 
-	Floor perception;
 
 	public Unit() {}
 
@@ -48,31 +44,21 @@ public abstract class Unit extends Agent{
 		addBehaviour(new FollowPathBehaviour(this, x, y, GameConfig.WORKER_MOVING_ATTEMPTS));
 	}
 
+	@Override
 	protected void updatePerception() {
 		Floor newPerception = World.getInstance().getPerception(getPosition(), sight);
-		if(getPerception() == null)//if it's the first step
-			perception = newPerception;
-		else //update my local world's perception
-			updateLocalWorldPerception(newPerception);
-		//		System.out.println(perception);
+		life -= newPerception.get(getPosition()).getDamage(); //update life
+		updateLocalPerception(newPerception);
 		//send perception to Master
 		ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
 		msg.addReceiver(new AID(team, AID.ISLOCALNAME));
 		try {
-			msg.setContentObject(perception);
+			msg.setContentObject(newPerception);
 			send(msg);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
-
-	public void updateLocalWorldPerception(Floor newPerc) {
-		//refresh local world's perception only if newPerc contains new info
-		for (int i = 0; i < newPerc.getRows(); i++)
-			for (int j = 0; j < newPerc.getCols(); j++)
-				if(newPerc.get(i, j) != Cell.UNKNOWN)
-					perception.set(i, j, newPerc.get(i, j));
 	}
 
 	public boolean move(Direction dir){
@@ -124,18 +110,6 @@ public abstract class Unit extends Agent{
 
 	protected void setSight(int sight) {
 		this.sight = sight;
-	}
-
-	public String getTeam() {
-		return team;
-	}
-
-	protected void setTeam(String team) {
-		this.team = team;
-	}
-
-	public Floor getPerception() {
-		return perception;
 	}
 
 	public void spendTime() {
