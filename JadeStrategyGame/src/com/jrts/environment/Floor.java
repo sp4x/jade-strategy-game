@@ -160,4 +160,8 @@ public class Floor implements Serializable {
 		}
 		return out;
 	}
+
+	public Cell get(Position p) {
+		return get(p.row, p.col);
+	}
 }

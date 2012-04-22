@@ -6,6 +6,12 @@ import java.util.Random;
 
 public class World {
 	
+	private static int WOOD_ENERGY = 100;
+	private static int FOOD_ENERGY = 10000;
+	private static int BUILDING_ENERGY = 1000;
+	private static int FOOD_MIN_DISTANCE = 3;
+	private static int FOOD_MAX_DISTANCE = 6;
+	
 	private static World instance = null;
 	
 	private Floor floor;
@@ -15,7 +21,9 @@ public class World {
 	public static void create(int rows, int cols, float woodPercentage) {
 		instance = new World(rows, cols);
 		int numWood = (int) (((float) (rows*cols)) * woodPercentage);
-		instance.floor.generateObject(numWood, Cell.WOOD);
+		Cell wood = Cell.WOOD;
+		wood.energy = WOOD_ENERGY;
+		instance.floor.generateObject(numWood, wood);
 	}
 	
 	public static World getInstance() {
@@ -55,7 +63,7 @@ public class World {
 	}
 
 	
-	private Position nextTo(Position p, int maxDistance) {
+	Position nextTo(Position p, int maxDistance) {
 		if (maxDistance == 0)
 			return p;
 		for (int minDistance = 1; minDistance <= maxDistance; minDistance++) {
@@ -68,15 +76,27 @@ public class World {
 		return null;
 	}
 	
-//	private Position near(Position p, int maxDistance) {
-//		Random r = new Random();
-//		int row = r.nextInt(2*maxDistance) - maxDistance;
-//		int col = r.nextInt(2*maxDistance) - maxDistance;
-//		return new Position(p.row+row, p.col+col);
-//	}
+	Position near(Position p, int minDistance, int maxDistance) {
+		if (p.row+maxDistance > floor.rows || p.col+maxDistance > floor.cols)
+			return null;
+		int maxIterations = 10;
+		int len = maxDistance - minDistance + 1;
+		Random r = new Random();
+		Position candidate = null;
+		do {
+			int rowOffset = r.nextInt(len) + minDistance;
+			int colOffset = r.nextInt(len) + minDistance;
+			int rowMultiplier = ( r.nextInt(2) == 0 ? -1 : 1);
+			int colMultiplier = ( r.nextInt(2) == 0 ? -1 : 1);
+			int row = p.row+rowOffset*rowMultiplier;
+			int col = p.col+colOffset*colMultiplier;
+			candidate = new Position(row, col);
+		} while (!isAvailable(candidate) && --maxIterations>0);
+		return candidate;
+	}
 	
 	boolean isAvailable(Position p) {
-		return floor.get(p.row, p.col) == Cell.FREE;
+		return p != null && floor.get(p.row, p.col) == Cell.FREE;
 	}
 	
 	
@@ -88,11 +108,17 @@ public class World {
 		Random r = new Random();
 		Cell base = Cell.BUILDING;
 		base.id = name;
+		base.energy = BUILDING_ENERGY;
 		Position p;
 		do {
 			p = new Position(r.nextInt(floor.rows), r.nextInt(floor.cols));
 		} while (!addObject(base, p));
 		teams.put(name, p);
+		System.out.println("adding team "+name+" in "+p.toString());
+		Position foodPosition = near(p, FOOD_MIN_DISTANCE, FOOD_MAX_DISTANCE);
+		Cell food = Cell.FOOD;
+		food.energy = FOOD_ENERGY;
+		addObject(food, foodPosition);
 	}
 	
 	
@@ -120,6 +146,7 @@ public class World {
 	 * @return the position of the main building
 	 */
 	public synchronized Position getBuilding(String teamName) {
+		System.out.println("asking for "+teamName);
 		return teams.get(teamName);
 	}
 
@@ -143,7 +170,34 @@ public class World {
 				perception.set(row, col, perceived);
 			}
 		}
+		floor.get(centre).damage = 0; //set damage to 0 after it has been perceived
 		return perception;
+	}
+	
+	public synchronized void applyDamage(Position target, int damage) {
+		Cell targetCell = floor.get(target);
+		if (targetCell == Cell.UNIT) {
+			targetCell.damage = damage;
+		}
+		else if (targetCell == Cell.BUILDING) {
+			targetCell.energy -= damage;
+		}
+	}
+	
+	public synchronized int takeEnergy(Position target, int amount) {
+		Cell targetCell = floor.get(target);
+		if (targetCell.energy >= amount) {
+			targetCell.energy -= amount;
+			return amount;
+		} else {
+			int taken = targetCell.energy;
+			targetCell.energy = 0;
+			return taken;
+		}
+	}
+	
+	public synchronized void clear(Position p) {
+		floor.set(p.row, p.col, Cell.FREE);
 	}
 
 }
