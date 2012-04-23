@@ -143,7 +143,7 @@ public class Floor implements Serializable {
 			for (int i = 0; i < rows; i++) {
 				for (int j = 0; j < cols; j++) {
 					Cell current = info.get(i, j);
-					if (current != Cell.UNKNOWN && current != Cell.UNIT)
+					if (current != Cell.UNKNOWN)
 						set(i, j, current);
 				}
 			}

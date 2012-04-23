@@ -165,8 +165,8 @@ public class World {
 		Floor perception = new Floor(floor.rows, floor.cols);
 		for (int row = 0; row < floor.rows; row++) {
 			for (int col = 0; col < floor.cols; col++) {
-				int sumOfDiff = Math.abs(centre.row-row) + Math.abs(centre.col-col);
-				Cell perceived = (sumOfDiff <= sight ? floor.get(row, col) : Cell.UNKNOWN);
+				boolean inRange = Math.abs(centre.row-row) <= sight && Math.abs(centre.col-col) <= sight;
+				Cell perceived = ( inRange ? floor.get(row, col) : Cell.UNKNOWN);
 				perception.set(row, col, perceived);
 			}
 		}

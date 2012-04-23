@@ -14,19 +14,14 @@ import com.jrts.environment.Floor;
 import com.jrts.environment.Position;
 import com.jrts.environment.World;
 
+@SuppressWarnings("serial")
 public abstract class Unit extends JrtsAgent {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -6755184651108394854L;
 
 	private Position position = null;
 	int life;
 	int speed;
 	int forceOfAttack;
 	int sight;
-
 
 	public Unit() {}
 
@@ -41,7 +36,7 @@ public abstract class Unit extends JrtsAgent {
 
 	public void goThere(int x, int y) {
 		updatePerception();
-		addBehaviour(new FollowPathBehaviour(this, x, y, GameConfig.WORKER_MOVING_ATTEMPTS));
+		addBehaviour(new FollowPathBehaviour(this, x, y, GameConfig.UNIT_MOVING_ATTEMPTS));
 	}
 
 	@Override
@@ -56,7 +51,6 @@ public abstract class Unit extends JrtsAgent {
 			msg.setContentObject(newPerception);
 			send(msg);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -123,7 +117,7 @@ public abstract class Unit extends JrtsAgent {
 	public void spendRandomTime() {
 		Random r = new Random();
 		try {
-			Thread.sleep(GameConfig.REFRESH_TIME + r.nextInt(GameConfig.REFRESH_TIME));
+			Thread.sleep(GameConfig.REFRESH_TIME*r.nextInt(5));
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}

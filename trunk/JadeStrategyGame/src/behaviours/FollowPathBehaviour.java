@@ -2,8 +2,9 @@ package behaviours;
 
 import jade.core.behaviours.Behaviour;
 
-import java.util.List;
+import java.util.ArrayList;
 
+import com.common.GameConfig;
 import com.common.Utils;
 import com.jrts.agents.Unit;
 import com.jrts.environment.Direction;
@@ -12,7 +13,7 @@ import com.jrts.environment.Position;
 @SuppressWarnings("serial")
 public class FollowPathBehaviour extends Behaviour {
 
-	List<Direction> list;
+	ArrayList<Direction> list;
 	Unit unit;
 	private int goalRow, goalCol;
 	int remainingAttempts;
@@ -22,31 +23,26 @@ public class FollowPathBehaviour extends Behaviour {
 		this.goalRow = goalRow;
 		this.goalCol = goalCol;
 		this.remainingAttempts = remainingAttempts;
+		this.list = new ArrayList<Direction>();
 		
-		Position unitPos = unit.getPosition();
-		this.list  = Utils.calculatePath(unit.getPerception(), unitPos.getRow(), unitPos.getCol(), goalRow, goalCol);
-		
-		//se non ho un path valido (unita' in mezzo alla folla) riprovo a calcolarlo dopo un tempo casuale
-		if(list.isEmpty()){
-			System.out.println(unit.getLocalName() + ":New Attempt");
-			unit.spendRandomTime();
-			unit.addBehaviour(new FollowPathBehaviour(unit, goalRow, goalCol, remainingAttempts-1));
+		if(remainingAttempts > 0){
+			Position unitPos = unit.getPosition();
+			this.list  = Utils.calculatePath(unit.getPerception(), unitPos.getRow(), unitPos.getCol(), goalRow, goalCol);
 		}
 	}
 
 	@Override
 	public void action() {
 		unit.spendTime();
-		if(remainingAttempts == 0){
-			list.clear();
-			return;
-		}
+		
 		//se non riesco a spostarmi ricalcolo il path
 		if (!list.isEmpty() && !unit.move(list.remove(0))) {
 			System.out.println(unit.getLocalName() + ":Need path recalculation");
 			list.clear();
-			unit.goThere(goalRow, goalCol);
+			unit.addBehaviour(new FollowPathBehaviour(unit, goalRow, goalCol, remainingAttempts-1));
 		}
+		else
+			remainingAttempts = GameConfig.UNIT_MOVING_ATTEMPTS;
 	}
 
 	@Override

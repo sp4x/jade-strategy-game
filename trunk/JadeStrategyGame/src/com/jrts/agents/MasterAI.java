@@ -12,13 +12,8 @@ import com.jrts.environment.Floor;
 import com.jrts.environment.Position;
 import com.jrts.environment.World;
 
-public class MasterAI extends JrtsAgent {
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
+@SuppressWarnings("serial")
+public class MasterAI extends JrtsAgent {	
 
 	protected void setup(){
 		
@@ -41,16 +36,12 @@ public class MasterAI extends JrtsAgent {
 		System.out.println(team + ":MasterAI setup");
 		
 		addBehaviour(new TickerBehaviour(this, 1000) {
-			
-			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onTick() {
 				updatePerception();
 			}
 		});
-			
-		
 	}
 	
 	@Override
