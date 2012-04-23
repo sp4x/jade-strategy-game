@@ -10,13 +10,8 @@ import java.util.ArrayList;
 import com.jrts.environment.Position;
 import com.jrts.environment.World;
 
+@SuppressWarnings("serial")
 public class ResourceAI extends JrtsAgent {
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	
 	ArrayList<AID> workersList = new ArrayList<AID>();
 	
@@ -66,6 +61,5 @@ public class ResourceAI extends JrtsAgent {
 	@Override
 	protected void updatePerception() {
 		// TODO Auto-generated method stub
-		
 	}
 }

@@ -18,6 +18,7 @@ import com.jrts.environment.Floor;
  * Implement a JPanel to represent the environment and the agent
  *
  */
+@SuppressWarnings("serial")
 public class GridPanel extends JPanel {
 
 	private Floor floor;

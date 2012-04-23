@@ -1,8 +1,8 @@
 package com.jrts.agents;
 
-import com.jrts.environment.Floor;
-
 import jade.core.Agent;
+
+import com.jrts.environment.Floor;
 
 public abstract class JrtsAgent extends Agent {
 	
