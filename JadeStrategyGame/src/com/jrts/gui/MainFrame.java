@@ -1,6 +1,5 @@
 package com.jrts.gui;
-import java.awt.BorderLayout;
-
+import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
 import com.jrts.environment.Floor;
@@ -11,26 +10,20 @@ import com.jrts.environment.Floor;
  * and display the sequence of actions performed by the agent
  *
  */
-public class MainFrame extends javax.swing.JFrame {
+@SuppressWarnings("serial")
+public class MainFrame extends JFrame {
 
-	private static final long serialVersionUID = 1L;
 
-	public GridPanel gridPanel;
-	//	public SettingsPanel settingsPanel;
+	public WorldViewPanel worldViewPanel;
 
 	public MainFrame(Floor floor) {
 		super();
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-		getContentPane().setLayout(new BorderLayout());
-		//		setResizable(false);
+		
+		worldViewPanel = new WorldViewPanel(floor);
+		add(worldViewPanel);
 
-		//		settingsPanel = new SettingsPanel(this);
-		//		getContentPane().add(settingsPanel, BorderLayout.WEST);
-		//		
-		gridPanel = new GridPanel(floor);
-		getContentPane().add(gridPanel, BorderLayout.EAST);
-
-		pack();
+		setSize((floor.getCols()+1)*ImageLoader.iconSize, (floor.getRows()+4)*ImageLoader.iconSize*3/5);
 		this.setVisible(true);
 
 		class RefreshGUI implements Runnable{
@@ -47,6 +40,6 @@ public class MainFrame extends javax.swing.JFrame {
 	}
 
 	public void update(){
-		gridPanel.update();
+		worldViewPanel.update();
 	}
 }
