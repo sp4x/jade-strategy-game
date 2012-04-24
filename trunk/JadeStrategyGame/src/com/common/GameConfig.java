@@ -21,5 +21,4 @@ public class GameConfig {
 	
 	public static final int PATH_TOLLERANCE = 10;
 	public static final int REFRESH_TIME = 5000;
-	
 }

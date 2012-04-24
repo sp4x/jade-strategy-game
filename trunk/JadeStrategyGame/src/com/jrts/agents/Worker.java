@@ -1,5 +1,7 @@
 package com.jrts.agents;
 
+import java.util.Random;
+
 import jade.core.behaviours.TickerBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
@@ -55,6 +57,16 @@ public class Worker extends Unit {
 			}
 		});
 		
-		goThere(GameConfig.WORLD_ROWS-1, GameConfig.WORLD_COLS-1);
+		Random r = new Random();
+		int x, y;
+		if(r.nextInt(2) == 0)
+			x = GameConfig.WORLD_ROWS-1;
+		else
+			x = 0;
+		if(r.nextInt(2) == 0)
+			y = GameConfig.WORLD_ROWS-1;
+		else
+			y = 0;
+		goThere(x,y);
 	}
 }
