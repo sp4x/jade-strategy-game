@@ -20,5 +20,8 @@ public class GameConfig {
 	public static final int UNIT_MOVING_ATTEMPTS = 20;
 	
 	public static final int PATH_TOLLERANCE = 10;
-	public static final int REFRESH_TIME = 5000;
+	
+	public static final int DEFAULT_REFRESH_TIME = 5000;
+	public static final int MIN_REFRESH_TIME = 1000;
+	public static final int MAX_REFRESH_TIME = 8000;
 }
