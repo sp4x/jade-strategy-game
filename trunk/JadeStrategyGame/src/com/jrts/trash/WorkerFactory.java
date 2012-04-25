@@ -1,4 +1,4 @@
-package trash;
+package com.jrts.trash;
 //package agents;
 //
 //import jade.core.AID;

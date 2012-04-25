@@ -1,1 +1,1 @@
-http://neb-pc:7778/acc
+http://sal-PC:7778/acc

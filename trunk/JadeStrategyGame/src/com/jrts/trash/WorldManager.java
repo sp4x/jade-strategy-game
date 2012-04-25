@@ -1,4 +1,4 @@
-package trash;
+package com.jrts.trash;
 
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
@@ -16,14 +16,14 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 
-import messages.CreateWorker;
-import messages.GetPath;
-import messages.MoveThere;
 
-import com.common.Utils;
+import com.jrts.common.Utils;
 import com.jrts.environment.Cell;
 import com.jrts.environment.Direction;
 import com.jrts.environment.Floor;
+import com.jrts.messages.CreateWorker;
+import com.jrts.messages.GetPath;
+import com.jrts.messages.MoveThere;
 
 public class WorldManager extends Agent{
 

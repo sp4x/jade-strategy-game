@@ -1,12 +1,12 @@
-package behaviours;
+package com.jrts.behaviours;
 
 import jade.core.behaviours.Behaviour;
 
 import java.util.ArrayList;
 
-import com.common.GameConfig;
-import com.common.Utils;
 import com.jrts.agents.Unit;
+import com.jrts.common.GameConfig;
+import com.jrts.common.Utils;
 import com.jrts.environment.Direction;
 import com.jrts.environment.Position;
 

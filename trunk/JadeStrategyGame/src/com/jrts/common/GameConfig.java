@@ -1,4 +1,4 @@
-package com.common;
+package com.jrts.common;
 
 public class GameConfig {
 	public static final int WORLD_ROWS = 50;

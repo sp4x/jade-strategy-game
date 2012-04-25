@@ -1,4 +1,4 @@
-package com.common;
+package com.jrts.common;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -6,9 +6,9 @@ import jade.lang.acl.ACLMessage;
 import java.io.IOException;
 import java.util.Random;
 
-import behaviours.FollowPathBehaviour;
 
-import com.common.GameConfig;
+import com.jrts.behaviours.FollowPathBehaviour;
+import com.jrts.common.GameConfig;
 import com.jrts.environment.Direction;
 import com.jrts.environment.Floor;
 import com.jrts.environment.Position;

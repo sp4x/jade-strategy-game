@@ -1,4 +1,4 @@
-package trash;
+package com.jrts.trash;
 
 public abstract class UnitFactory {
 
