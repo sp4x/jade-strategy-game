@@ -8,7 +8,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class TeamPanel extends JPanel{
-
+	private static final long serialVersionUID = 1L;
 	protected JLabel food;
 	protected JLabel wood;
 	

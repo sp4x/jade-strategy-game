@@ -1,4 +1,4 @@
-package com.common;
+package com.jrts.common;
 
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.SimpleWeightedGraph;

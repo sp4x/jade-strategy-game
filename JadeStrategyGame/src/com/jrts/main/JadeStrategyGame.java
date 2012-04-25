@@ -2,7 +2,7 @@ package com.jrts.main;
 
 import jade.Boot;
 
-import com.common.GameConfig;
+import com.jrts.common.GameConfig;
 import com.jrts.environment.World;
 import com.jrts.gui.MainFrame;
 

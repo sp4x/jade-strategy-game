@@ -8,7 +8,7 @@ import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 
-import com.common.GameConfig;
+import com.jrts.common.GameConfig;
 import com.jrts.environment.Position;
 
 @SuppressWarnings("serial")

@@ -2,14 +2,9 @@ package com.jrts.gui;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.border.Border;
-
 import com.jrts.environment.Cell;
 import com.jrts.environment.Floor;
 
@@ -34,7 +29,6 @@ public class WorldViewPanel extends JPanel {
 		setLayout(null);
 		super.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		
-		//setSize(floor.getCols()*ImageLoader.iconSize, floor.getRows()*ImageLoader.iconSize);
 		labelMatrix = new JLabel[floor.getRows()][floor.getCols()];
 		for (int i = floor.getRows()-1; i >= 0 ; i--)
 			for (int j = floor.getCols()-1; j >= 0; j--) {
@@ -44,7 +38,6 @@ public class WorldViewPanel extends JPanel {
 			}
 		
 		Dimension d = new Dimension((floor.getCols())*ImageLoader.iconSize, (floor.getRows())*ImageLoader.iconSize);
-		//setSize((floor.getCols()+1)*ImageLoader.iconSize, (floor.getRows()+4)*ImageLoader.iconSize*3/5);
 		setPreferredSize(d);
 		setMinimumSize(d);
 		setMaximumSize(d);

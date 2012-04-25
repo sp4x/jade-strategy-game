@@ -1,4 +1,4 @@
-package messages;
+package com.jrts.messages;
 
 import jade.util.leap.Serializable;
 

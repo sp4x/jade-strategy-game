@@ -7,7 +7,7 @@ import jade.wrapper.AgentController;
 import jade.wrapper.ControllerException;
 import jade.wrapper.PlatformController;
 
-import com.common.GameConfig;
+import com.jrts.common.GameConfig;
 import com.jrts.environment.Floor;
 import com.jrts.environment.Position;
 import com.jrts.environment.World;
