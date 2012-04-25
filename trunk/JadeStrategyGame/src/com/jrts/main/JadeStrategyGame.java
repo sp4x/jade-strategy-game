@@ -16,7 +16,7 @@ public class JadeStrategyGame {
 		String agents = "master1:com.jrts.agents.MasterAI;master2:com.jrts.agents.MasterAI";
 		String[] jadeArgs = {"-local-host", "127.0.0.1", agents};
 		Boot.main(jadeArgs);
-		new MainFrame(World.getInstance().getFloor());
+		MainFrame.start(World.getInstance().getFloor());
 	}
 
 }

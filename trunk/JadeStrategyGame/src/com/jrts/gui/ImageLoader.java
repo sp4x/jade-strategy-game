@@ -4,7 +4,7 @@ import javax.swing.ImageIcon;
 
 class ImageLoader {
 	public static ImageIcon freeIcon, workerIcon, treeIcon, workerFactoryIcon;
-	public static int iconSize = 20;
+	public static int iconSize = 15;
 	
 	static {
 		freeIcon = new ImageIcon(new ImageIcon("img/tile.gif").getImage().getScaledInstance(iconSize,iconSize,iconSize));
