@@ -24,4 +24,7 @@ public class GameConfig {
 	public static final int DEFAULT_REFRESH_TIME = 5000;
 	public static final int MIN_REFRESH_TIME = 1000;
 	public static final int MAX_REFRESH_TIME = 8000;
+	
+	public static final float VERTICAL_OVERLAP = 0.67f;
+	public static final float HORIZONTAL_OVERLAP = 1.00f;
 }
