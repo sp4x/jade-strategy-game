@@ -5,6 +5,8 @@ import java.awt.Dimension;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import com.jrts.common.GameConfig;
 import com.jrts.environment.Cell;
 import com.jrts.environment.Floor;
 
@@ -47,7 +49,9 @@ public class WorldViewPanel extends JPanel {
 	public void update() {
 		for (int i = 0; i < floor.getRows(); i++)
 			for (int j = 0; j < floor.getCols(); j++) {
-				labelMatrix[i][j].setBounds(j*ImageLoader.iconSize, i*ImageLoader.iconSize, ImageLoader.iconSize, ImageLoader.iconSize);
+				int y = (int) (j*ImageLoader.iconSize*GameConfig.HORIZONTAL_OVERLAP);
+				int x = (int) (i*ImageLoader.iconSize*GameConfig.VERTICAL_OVERLAP);
+				labelMatrix[i][j].setBounds( y, x, ImageLoader.iconSize, ImageLoader.iconSize);
 				if(floor.get(i, j) == Cell.WOOD)
 					labelMatrix[i][j].setIcon(ImageLoader.treeIcon);
 				else if(floor.get(i, j) == Cell.UNIT)
