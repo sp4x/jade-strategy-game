@@ -26,7 +26,6 @@ public class ResourceAI extends JrtsAgent {
 			System.out.println("Needs team's name");
 			System.exit(1);
 		}
-		System.out.println(team + ":ResourceAI setup");
 		
 		for (int i = 0; i < 10; i++)
 			createWorker();
@@ -34,15 +33,15 @@ public class ResourceAI extends JrtsAgent {
 	
 	public boolean createWorker(){
 		World world = World.getInstance();
-		String workerName = team + "-worker"+workersList.size();
-		Position workerPosition = world.addUnit(workerName, world.getBuilding(team));
+		String workerName = getTeam() + "-worker"+workersList.size();
+		Position workerPosition = world.addUnit(workerName, world.getBuilding(getTeam()));
 		if(workerPosition != null){
 			//Instantiate the worker
 			// get a container controller for creating new agents
 			PlatformController container = getContainerController();
 			AgentController worker;
 			try {
-				Object[] args = {workerPosition, team};
+				Object[] args = {workerPosition, getTeam()};
 				worker = container.createNewAgent(workerName, "com.jrts.agents.Worker", args);
 				worker.start();
 				// keep the worker's ID on a local list
@@ -50,10 +49,9 @@ public class ResourceAI extends JrtsAgent {
 			} catch (ControllerException e) {
 				e.printStackTrace();
 			}
-			System.out.println(team + ":Created worker " + workersList.get(workersList.size()-1));
 		}
 		else{
-			System.out.println(team + ":Cannot instantiate the worker");
+			System.out.println(getTeam() + ":Cannot instantiate the worker");
 		}
 		return false;
 	}
