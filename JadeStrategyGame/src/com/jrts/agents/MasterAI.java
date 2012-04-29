@@ -24,8 +24,10 @@ public class MasterAI extends JrtsAgent {
 		//create ResourceAI
 		// get a container controller for creating new agents
 		PlatformController container = getContainerController();
-		AgentController resourceAI;
+		AgentController resourceAI, df;
 		try {
+			df = container.createNewAgent(team + "-df", "jade.domain.df", null);
+			df.start();
 			String[] arg = new String[1];
 			arg[0] = team;
 			resourceAI = container.createNewAgent(team + "-resourceAI", "com.jrts.agents.ResourceAI", arg);
