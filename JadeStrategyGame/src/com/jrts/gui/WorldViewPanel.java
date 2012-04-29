@@ -36,7 +36,7 @@ public class WorldViewPanel extends JPanel {
 			for (int j = floor.getCols()-1; j >= 0; j--) {
 				CellLabel label = new CellLabel(floor.get(i, j), i, j);
 				labelMatrix[i][j] = label;
-				add(label);
+				super.add(label);
 			}
 		
 		Dimension d = new Dimension((floor.getCols())*ImageLoader.iconSize, (floor.getRows())*ImageLoader.iconSize);
@@ -54,6 +54,8 @@ public class WorldViewPanel extends JPanel {
 				labelMatrix[i][j].setBounds( y, x, ImageLoader.iconSize, ImageLoader.iconSize);
 				if(floor.get(i, j) == Cell.WOOD)
 					labelMatrix[i][j].setIcon(ImageLoader.treeIcon);
+				if(floor.get(i, j) == Cell.FOOD)
+					labelMatrix[i][j].setIcon(ImageLoader.foodIcon);
 				else if(floor.get(i, j) == Cell.UNIT)
 					labelMatrix[i][j].setIcon(ImageLoader.workerIcon);
 				else if(floor.get(i, j) == Cell.BUILDING)

@@ -18,8 +18,8 @@ public class TeamPanel extends JPanel{
 		
 		super.setPreferredSize(new Dimension(150, 50));
 
-		this.food = new JLabel(ImageLoader.treeIcon);
-		this.food.setText("1500"); 
+		this.food = new JLabel(ImageLoader.foodIcon);
+		this.food.setText("3607"); 
 		
 		this.wood = new JLabel(ImageLoader.treeIcon);
 		this.wood.setText("1500");

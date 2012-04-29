@@ -4,8 +4,10 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 import com.jrts.environment.Cell;
+import com.jrts.environment.World;
 
 public class CellLabel extends JLabel {
 	private static final long serialVersionUID = 1L;
@@ -21,11 +23,27 @@ public class CellLabel extends JLabel {
 		super.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if(CellLabel.this.cell.getId() == null) {
-					MainFrame.getInstance().clickedAgentId = null;
-					MainFrame.getInstance().showCellInfo(CellLabel.this.i, CellLabel.this.j, CellLabel.this.cell.getEnergy());
+				
+				if(MainFrame.getInstance().clickType.equals(MainFrame.selectionClick))
+				{
+					if(CellLabel.this.cell != Cell.UNIT) {
+						MainFrame.getInstance().clickedAgentId = null;
+						MainFrame.getInstance().showCellInfo(CellLabel.this.i, CellLabel.this.j, CellLabel.this.cell.getEnergy());
+					} else {
+						MainFrame.getInstance().clickedAgentId = CellLabel.this.cell.getId(); 
+					}
 				} else {
-					MainFrame.getInstance().clickedAgentId = CellLabel.this.cell.getId(); 
+					if(CellLabel.this.cell != Cell.UNIT)
+					{
+						JOptionPane.showMessageDialog(MainFrame.getInstance(), "Tipo Cell:" + CellLabel.this.cell.toString() + " Posizione: " + CellLabel.this.i + " - " + CellLabel.this.j);
+						
+						if(MainFrame.getInstance().clickType.equals(MainFrame.treeClick))
+							World.getInstance().getFloor().set(CellLabel.this.i, CellLabel.this.j, Cell.WOOD);
+						else if(MainFrame.getInstance().clickType.equals(MainFrame.foodClick))
+							World.getInstance().getFloor().set(CellLabel.this.i, CellLabel.this.j, Cell.FOOD);
+						else if(MainFrame.getInstance().clickType.equals(MainFrame.emptyCellClick))
+							World.getInstance().getFloor().set(CellLabel.this.i, CellLabel.this.j, Cell.FREE);
+					}
 				}
 			}
 		});
