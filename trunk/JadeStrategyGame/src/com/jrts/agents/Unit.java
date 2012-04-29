@@ -43,7 +43,7 @@ public abstract class Unit extends JrtsAgent {
 		basicService = new ServiceDescription();
 		basicService.setName(getAID().getName());
 		basicService.setType(getClass().getName());
-		addBehaviour(new LookForEnemy(this, 500));
+		addBehaviour(new LookForEnemy(this, 2000));
 	}
 	
 	public void goThere(Position p) {
@@ -62,7 +62,7 @@ public abstract class Unit extends JrtsAgent {
 		updateLocalPerception(newPerception);
 		//send perception to Master
 		ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
-		msg.addReceiver(new AID(team, AID.ISLOCALNAME));
+		msg.addReceiver(masterAID);
 		try {
 			msg.setContentObject(newPerception);
 			send(msg);

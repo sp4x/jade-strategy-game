@@ -16,7 +16,7 @@ public abstract class JrtsAgent extends Agent {
 	private static final long serialVersionUID = 1L;
 	
 	
-	String team;
+	AID masterAID;
 	Floor perception;
 	
 	protected abstract void updatePerception();
@@ -29,15 +29,13 @@ public abstract class JrtsAgent extends Agent {
 	}
 	
 	public String getTeam() {
-		return team;
-	}
-	
-	protected AID getMasterAID() {
-		return new AID(team, AID.ISLOCALNAME);
+		if (masterAID == null)
+			return "NONE";
+		return masterAID.getLocalName();
 	}
 	
 	protected AID getTeamDF() {
-		return new AID(team+"-df", AID.ISLOCALNAME);
+		return new AID(getTeam()+"-df", AID.ISLOCALNAME);
 	}
 
 	protected void register(DFAgentDescription desc, boolean deletePrevious) {
@@ -52,7 +50,7 @@ public abstract class JrtsAgent extends Agent {
 	}
 	
 	protected void setTeam(String team) {
-		this.team = team;
+		masterAID = new AID(team, AID.ISLOCALNAME);
 	}
 
 	public Floor getPerception() {
