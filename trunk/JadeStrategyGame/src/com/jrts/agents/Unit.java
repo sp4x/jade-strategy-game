@@ -1,6 +1,10 @@
 package com.jrts.agents;
 
 import jade.core.AID;
+import jade.domain.DFService;
+import jade.domain.FIPAException;
+import jade.domain.FIPAAgentManagement.DFAgentDescription;
+import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
 
 import java.io.IOException;
@@ -22,14 +26,24 @@ public abstract class Unit extends JrtsAgent {
 	int speed;
 	int forceOfAttack;
 	int sight;
+	
+	private ServiceDescription basicService;
 
-	public Unit() {}
+	public Unit() {
+	}
 
 	Unit(Position position) {
 		super();
 		this.position = position;
 	}
 
+	@Override
+	protected void setup() {
+		basicService = new ServiceDescription();
+		basicService.setName(getAID().getName());
+		basicService.setType(getClass().getName());
+	}
+	
 	public void goThere(Position p) {
 		goThere(p.getRow(), p.getCol());
 	}
@@ -122,4 +136,37 @@ public abstract class Unit extends JrtsAgent {
 			e.printStackTrace();
 		}
 	}
+
+	private void setStatus(String newStatus, boolean deletePrevious) {
+		DFAgentDescription dfd = new DFAgentDescription();
+		dfd.setName(getAID());
+		ServiceDescription sd = new ServiceDescription();
+		sd.setName(getAID().getName());
+		sd.setType(newStatus);
+		dfd.addServices(basicService);
+		dfd.addServices(sd);
+		// register the description with the DF
+		register(dfd, deletePrevious);
+	}
+	
+	protected void setStatus(String newStatus) {
+		setStatus(newStatus, false);
+	}
+	
+	public void switchStatus(String newStatus) {
+		setStatus(newStatus, true);
+	}
+	
+	public boolean isFriend(String aid) {
+		DFAgentDescription desc = new DFAgentDescription();
+		desc.setName(new AID(aid, AID.ISLOCALNAME));
+		try {
+			return DFService.search(this, getTeamDF(), desc) != null;
+		} catch (FIPAException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
 }

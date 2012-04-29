@@ -1,26 +1,26 @@
 package com.jrts.agents;
 
+import jade.core.behaviours.TickerBehaviour;
+
 import java.util.Random;
 
-import jade.core.behaviours.TickerBehaviour;
-import jade.domain.DFService;
-import jade.domain.FIPAException;
-import jade.domain.FIPAAgentManagement.DFAgentDescription;
-import jade.domain.FIPAAgentManagement.ServiceDescription;
-
+import com.jrts.common.AgentStatus;
 import com.jrts.common.GameConfig;
 import com.jrts.environment.Position;
 
 @SuppressWarnings("serial")
 public class Worker extends Unit {
-
-	public Worker(){}
 		
+	public Worker() {
+		super();
+	}
+
 	public Worker(Position position) {
 		super(position);
 	}
 
 	protected void setup(){
+		super.setup();
 		Object[] args = getArguments();
 		if (args != null) {
 			System.out.println("Set position");
@@ -32,23 +32,9 @@ public class Worker extends Unit {
 		setForceOfAttack(GameConfig.WORKER_FORCE_OF_ATTACK);
 		setSight(GameConfig.WORKER_SIGHT);
 		
-		System.out.println(getLocalName()+":Started");
-		
-		try {
-			// create the agent description of itself
-			DFAgentDescription dfd = new DFAgentDescription();
-			dfd.setName(getAID());
-			ServiceDescription sd = new ServiceDescription();
-	  		sd.setName(getAID().getName());
-	  		sd.setType("worker");
-	  		dfd.addServices(sd);
-			// register the description with the DF
-			DFService.register(this, dfd);
-			System.out.println(getLocalName()+":Registered with the df");
-		} catch (FIPAException e) {
-			e.printStackTrace();
-		}
-		
+		System.out.println(getLocalName() + ":Started");
+
+		setStatus(AgentStatus.FREE);
 		addBehaviour(new TickerBehaviour(this, 5000) {
 
 			@Override
