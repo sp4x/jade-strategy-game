@@ -34,7 +34,8 @@ public class ResourceAI extends JrtsAgent {
 	
 	public boolean createWorker(){
 		World world = World.getInstance();
-		Position workerPosition = world.addUnit("worker", world.getBuilding(team));
+		String workerName = team + "-worker"+workersList.size();
+		Position workerPosition = world.addUnit(workerName, world.getBuilding(team));
 		if(workerPosition != null){
 			//Instantiate the worker
 			// get a container controller for creating new agents
@@ -42,7 +43,6 @@ public class ResourceAI extends JrtsAgent {
 			AgentController worker;
 			try {
 				Object[] args = {workerPosition, team};
-				String workerName = team + "-worker"+workersList.size();
 				worker = container.createNewAgent(workerName, "com.jrts.agents.Worker", args);
 				worker.start();
 				// keep the worker's ID on a local list

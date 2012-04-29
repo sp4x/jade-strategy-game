@@ -12,6 +12,7 @@ import java.util.Random;
 
 
 import com.jrts.behaviours.FollowPathBehaviour;
+import com.jrts.behaviours.LookForEnemy;
 import com.jrts.common.GameConfig;
 import com.jrts.environment.Direction;
 import com.jrts.environment.Floor;
@@ -42,6 +43,7 @@ public abstract class Unit extends JrtsAgent {
 		basicService = new ServiceDescription();
 		basicService.setName(getAID().getName());
 		basicService.setType(getClass().getName());
+		addBehaviour(new LookForEnemy(this, 500));
 	}
 	
 	public void goThere(Position p) {
@@ -161,7 +163,7 @@ public abstract class Unit extends JrtsAgent {
 		DFAgentDescription desc = new DFAgentDescription();
 		desc.setName(new AID(aid, AID.ISLOCALNAME));
 		try {
-			return DFService.search(this, getTeamDF(), desc) != null;
+			return DFService.search(this, getTeamDF(), desc).length == 0;
 		} catch (FIPAException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
