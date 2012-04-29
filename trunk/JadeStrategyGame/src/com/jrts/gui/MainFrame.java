@@ -3,13 +3,17 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JSlider;
 import javax.swing.WindowConstants;
 
@@ -36,6 +40,15 @@ public class MainFrame extends JFrame {
 
 	private JLabel labelType, labelPosition, labelEnergy, labelAction;
 	
+	//public static int treeClick = 0;
+	
+	public static String treeClick = "Add Tree";
+	public static String foodClick = "Add Food";
+	public static String emptyCellClick = "Add Empty Cell";
+	public static String selectionClick = "Get Cell/Unit Info";
+	
+	public String clickType = selectionClick;
+	
 	public static void start(Floor floor)
 	{
 		mainFrame = new MainFrame(floor);
@@ -61,13 +74,39 @@ public class MainFrame extends JFrame {
 		
 		topPanel.add(new TeamPanel("Team1"), BorderLayout.WEST);
 		topPanel.add(new TeamPanel("Team2"), BorderLayout.EAST);
-
-		JPanel settingsPanel = new JPanel();
+			    
 		JSlider speed = new JSlider(JSlider.HORIZONTAL, GameConfig.MIN_REFRESH_TIME, 
 				GameConfig.MAX_REFRESH_TIME, GameConfig.DEFAULT_REFRESH_TIME);
 		speed.setBorder(BorderFactory.createTitledBorder("Speed"));
+		
+		ActionListener al = new ActionListener() {
+			public void actionPerformed(ActionEvent e) { MainFrame.this.clickType = e.getActionCommand(); }
+		};
+		JRadioButton tree = new JRadioButton(treeClick);
+		tree.addActionListener(al);
+		tree.setActionCommand(treeClick);
+		JRadioButton food = new JRadioButton(foodClick);
+		food.addActionListener(al);
+		food.setActionCommand(foodClick);
+		JRadioButton emptyCell = new JRadioButton(emptyCellClick);
+		emptyCell.setActionCommand(emptyCellClick);
+		emptyCell.addActionListener(al);
+		JRadioButton selection = new JRadioButton(selectionClick, true);
+		selection.setActionCommand(selectionClick);
+		selection.addActionListener(al);
+	    ButtonGroup group = new ButtonGroup();
+	    group.add(tree);
+	    group.add(food);
+	    group.add(emptyCell);
+	    group.add(selection);
+		
+		JPanel settingsPanel = new JPanel(new GridLayout(5, 1));
 		settingsPanel.add(speed);
-
+		settingsPanel.add(tree);
+		settingsPanel.add(food);
+		settingsPanel.add(emptyCell);
+		settingsPanel.add(selection);
+		
 		this.infoPanel = new JPanel();
 		infoPanel.setBorder(BorderFactory.createTitledBorder("Informations"));
 		infoPanel.setLayout(new GridLayout(4, 2));
@@ -124,7 +163,7 @@ public class MainFrame extends JFrame {
 	public void update(){
 		worldViewPanel.update();
 		
-		if(this.clickedAgentId != null) this.showAgentInfo();
+		if(this.clickedAgentId != null) this.showAgentInfo(this.clickedAgentId);
 	}
 	
 	protected void showCellInfo(int i, int j, int energy)
@@ -135,7 +174,7 @@ public class MainFrame extends JFrame {
 		labelAction.setText("nothing");
 	}
 	
-	protected void showAgentInfo()
+	protected void showAgentInfo(String clickedAgentId)
 	{
 		labelType.setText("Worker");
 		labelPosition.setText("10, 10");
