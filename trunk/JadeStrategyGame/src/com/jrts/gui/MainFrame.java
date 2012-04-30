@@ -1,4 +1,6 @@
 package com.jrts.gui;
+import jade.core.Runtime;
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -61,9 +63,10 @@ public class MainFrame extends JFrame {
 			@Override
 			public void windowClosed(WindowEvent e) {
 				super.windowClosed(e);
+				Runtime.instance().shutDown();
 				dispose();
+				System.exit(0);
 				//TODO: Chiudere tutto
-				
 			}
 		});
 		
