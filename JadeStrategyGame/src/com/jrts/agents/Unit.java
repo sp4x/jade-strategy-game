@@ -10,7 +10,6 @@ import jade.lang.acl.ACLMessage;
 import java.io.IOException;
 import java.util.Random;
 
-
 import com.jrts.behaviours.FollowPathBehaviour;
 import com.jrts.behaviours.LookForEnemy;
 import com.jrts.common.GameConfig;
@@ -58,7 +57,6 @@ public abstract class Unit extends JrtsAgent {
 	@Override
 	protected void updatePerception() {
 		Floor newPerception = World.getInstance().getPerception(getPosition(), sight);
-		life -= newPerception.get(getPosition()).getDamage(); //update life
 		updateLocalPerception(newPerception);
 		//send perception to Master
 		ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
@@ -69,6 +67,11 @@ public abstract class Unit extends JrtsAgent {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		sendHit(Direction.randomDirection());
+	}
+
+	private void sendHit(Direction randomDirection) {
+		World.getInstance().addHit(getPosition().clone(), Direction.randomDirection(), 1);
 	}
 
 	public boolean move(Direction dir){

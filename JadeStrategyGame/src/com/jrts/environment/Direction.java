@@ -1,5 +1,7 @@
 package com.jrts.environment;
 
+import java.util.Random;
+
 public enum Direction{
 	RIGHT(0,1),
 	LEFT(0,-1),
@@ -14,6 +16,10 @@ public enum Direction{
 	public static Direction[] ALL = {DOWN, LEFT, RIGHT, UP,
 				LEFT_DOWN, LEFT_UP, RIGHT_DOWN, RIGHT_UP, };
 	
+	public static Direction randomDirection(){
+		Random r = new Random();
+		return ALL[r.nextInt(ALL.length)];
+	}
 	
 	private int rowVar;
 	private int colVar;
