@@ -23,6 +23,19 @@ public class Position {
 		return col;
 	}
 	
+	public void setRow(int row) {
+		this.row = row;
+	}
+
+	public void setCol(int col) {
+		this.col = col;
+	}
+	
+	@Override
+	public Position clone(){
+		return new Position(row, col);
+	}
+
 	@Override
 	public String toString() {
 		return "(" + Integer.toString(row) + "," + Integer.toString(col) + ")";

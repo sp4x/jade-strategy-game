@@ -16,7 +16,6 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 
-
 import com.jrts.common.Utils;
 import com.jrts.environment.Cell;
 import com.jrts.environment.Direction;
