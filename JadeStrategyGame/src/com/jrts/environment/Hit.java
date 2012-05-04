@@ -1,18 +1,16 @@
 package com.jrts.environment;
 
-import java.util.ArrayList;
-
 public class Hit {
 
 	Position pos;
-	int speed;
+	int damage;
 	Direction dir;
 	boolean enabled = true;
 	
-	public Hit(Position pos, int speed, Direction dir) {
+	public Hit(Position pos, Direction dir, int damage) {
 		super();
 		this.pos = pos;
-		this.speed = speed;
+		this.damage = damage;
 		this.dir = dir;
 	}
 	
@@ -29,12 +27,12 @@ public class Hit {
 		this.pos = pos;
 	}
 
-	public int getSpeed() {
-		return speed;
+	public int getDamage() {
+		return damage;
 	}
 
-	public void setSpeed(int speed) {
-		this.speed = speed;
+	public void setDamage(int damage) {
+		this.damage = damage;
 	}
 
 	public Direction getDir() {
@@ -55,13 +53,5 @@ public class Hit {
 
 	public boolean respectLimits(int rows, int cols) {
 		return pos.row >= 0 && pos.row < rows && pos.col >= 0 && pos.col < cols;
-	}
-
-	public static boolean isThereAnHit(ArrayList<Hit> hits, int row, int col) {
-		for (int i = 0; i < hits.size(); i++)
-			if(hits.get(i).getPos().equals(new Position(row, col)))
-				return true;
-		System.out.println("No hit found");
-		return false;
 	}
 }

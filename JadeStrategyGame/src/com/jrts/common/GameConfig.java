@@ -7,8 +7,8 @@ public class GameConfig {
 	public static final int WORKER_LIFE = 10;
 	public static final int SOLDIER_LIFE = 20;
 	
-	public static final int WORKER_FORCE_OF_ATTACK = 1;
-	public static final int SOLDIER_FORCE_OF_ATTACK = 3;
+	public static final int WORKER_DAMAGES = 1;
+	public static final int SOLDIER_DAMAGES = 3;
 	
 	public static final int WORKER_SPEED = 15;
 	public static final int SOLDIER_SPEED = 7;
@@ -23,6 +23,6 @@ public class GameConfig {
 	public static final int MIN_REFRESH_TIME = 1000;
 	public static final int MAX_REFRESH_TIME = 8000;
 	
-	public static final float VERTICAL_OVERLAP = 0.67f;
+	public static final float VERTICAL_OVERLAP = 1.00f;
 	public static final float HORIZONTAL_OVERLAP = 1.00f;
 }

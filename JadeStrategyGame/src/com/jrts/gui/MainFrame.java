@@ -9,7 +9,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -22,7 +21,6 @@ import javax.swing.WindowConstants;
 
 import com.jrts.common.GameConfig;
 import com.jrts.environment.Floor;
-import com.jrts.environment.Hit;
 
 
 /**
@@ -53,12 +51,12 @@ public class MainFrame extends JFrame {
 	
 	public String clickType = selectionClick;
 	
-	public static void start(Floor floor, ArrayList<Hit> hits)
+	public static void start(Floor floor)
 	{
-		mainFrame = new MainFrame(floor, hits);
+		mainFrame = new MainFrame(floor);
 	}
 	
-	protected MainFrame(Floor floor, ArrayList<Hit> hits) {
+	protected MainFrame(Floor floor) {
 		super();
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		super.addWindowListener(new WindowAdapter() {
@@ -72,7 +70,7 @@ public class MainFrame extends JFrame {
 			}
 		});
 		
-		this.worldViewPanel = new WorldViewPanel(floor, hits);
+		this.worldViewPanel = new WorldViewPanel(floor);
 		this.floor = floor;
 		
 		JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
