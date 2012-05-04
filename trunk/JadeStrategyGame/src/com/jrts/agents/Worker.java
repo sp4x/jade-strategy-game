@@ -6,7 +6,9 @@ import java.util.Random;
 
 import com.jrts.common.AgentStatus;
 import com.jrts.common.GameConfig;
+import com.jrts.environment.Direction;
 import com.jrts.environment.Position;
+import com.jrts.gui.AttacksManager;
 
 @SuppressWarnings("serial")
 public class Worker extends Unit {
@@ -29,7 +31,7 @@ public class Worker extends Unit {
 		}
 		setLife(GameConfig.WORKER_LIFE);
 		setSpeed(GameConfig.WORKER_SPEED);
-		setForceOfAttack(GameConfig.WORKER_FORCE_OF_ATTACK);
+		setForceOfAttack(GameConfig.WORKER_DAMAGES);
 		setSight(GameConfig.WORKER_SIGHT);
 		
 		System.out.println(getLocalName() + ":Started");
@@ -54,5 +56,18 @@ public class Worker extends Unit {
 		else
 			y = 0;
 		goThere(x,y);
+		
+		addBehaviour(new TickerBehaviour(this, 1000) {
+
+			@Override
+			protected void onTick() {
+				sendHit(Direction.random());
+			}
+		});
+	}
+	
+	private void sendHit(Direction direction) {
+		AttacksManager.addHit(getPosition().clone(), direction, GameConfig.WORKER_DAMAGES);
 	}
 }
+;

@@ -67,11 +67,6 @@ public abstract class Unit extends JrtsAgent {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		sendHit(Direction.randomDirection());
-	}
-
-	private void sendHit(Direction randomDirection) {
-		World.getInstance().addHit(getPosition().clone(), Direction.randomDirection(), 1);
 	}
 
 	public boolean move(Direction dir){

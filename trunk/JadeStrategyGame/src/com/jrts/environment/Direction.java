@@ -16,7 +16,7 @@ public enum Direction{
 	public static Direction[] ALL = {DOWN, LEFT, RIGHT, UP,
 				LEFT_DOWN, LEFT_UP, RIGHT_DOWN, RIGHT_UP, };
 	
-	public static Direction randomDirection(){
+	public static Direction random(){
 		Random r = new Random();
 		return ALL[r.nextInt(ALL.length)];
 	}

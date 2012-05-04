@@ -1,6 +1,5 @@
 package com.jrts.environment;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -18,23 +17,29 @@ public class World {
 	private Floor floor;
 
 	private Map<String, Position> teams = new HashMap<String, Position>();
-	private ArrayList<Hit> hits = new ArrayList<Hit>();
-	private int hitsCounter = 0;
+
+	private int rows;
+	private int cols;
 
 	public static void create(int rows, int cols, float woodPercentage) {
-		instance = new World(rows, cols);
-		int numWood = (int) (((float) (rows*cols)) * woodPercentage);
-		Cell wood = Cell.WOOD;
-		wood.energy = WOOD_ENERGY;
-		instance.floor.generateObject(numWood, wood);
+		instance = new World(rows, cols, woodPercentage);
 	}
 
 	public static World getInstance() {
 		return instance;
 	}
 
-	private World(int rows, int cols) {
+	private World(int rows, int cols, float woodPercentage) {
+		this.rows = rows;
+		this.cols = cols;
 		floor = new Floor(rows, cols);
+		
+		int numWood = (int) (((float) (rows*cols)) * woodPercentage);
+		Cell wood = Cell.WOOD;
+		wood.energy = WOOD_ENERGY;
+		floor.generateObject(numWood, wood);
+		
+		teams = new HashMap<String, Position>();
 	}
 
 	/**
@@ -55,53 +60,6 @@ public class World {
 			return true;
 		}
 		return false;
-	}
-
-	public synchronized void addHit(Position pos, Direction dir, int speed){
-		hits.add(new Hit(pos,speed,dir));
-		System.out.println("Added new hit" + hits.size());
-	}
-
-	private synchronized void updateHits() {
-		hitsCounter ++;
-		if(hitsCounter < 50)
-			return;
-		hitsCounter = 0;
-		
-		//refresh hit's positions
-		for (int i = 0; i < hits.size(); i++){
-			Hit hit = (Hit) hits.get(i);
-			hit.step();
-			//disable hit which exceed floor's bound
-			if(hit.respectLimits(floor.rows, floor.cols))
-				hit.setEnabled(false);
-		}
-		
-		//remove disabled hits
-		for (int i = 0; i < hits.size(); i++)
-			if(!hits.get(i).isEnabled()){
-				hits.remove(i);
-				System.out.println("Removed hit");
-			}
-		
-		//check if there is some collision
-		for (int i = 0; i < hits.size(); i++){
-			Position hitPos = hits.get(i).getPos();
-			if(floor.get(hitPos.row, hitPos.col) == Cell.UNIT)
-				notifyDamageToUnit(hitPos.row, hitPos.col);
-			else if(floor.get(hitPos.row, hitPos.col) == Cell.BUILDING)
-				notifyDamageToBuilding(hitPos.row, hitPos.col);
-		}
-	}
-
-	private void notifyDamageToBuilding(int row, int col) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	private void notifyDamageToUnit(int row, int col) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	boolean addObject(Cell objectType, Position p) {
@@ -164,10 +122,10 @@ public class World {
 		} while (!addObject(base, p));
 		teams.put(name, p);
 		System.out.println("adding team "+name+" in "+p.toString());
-//		Position foodPosition = near(p, FOOD_MIN_DISTANCE, FOOD_MAX_DISTANCE);
-//		Cell food = Cell.FOOD;
-//		food.energy = FOOD_ENERGY;
-//		addObject(food, foodPosition);
+		//		Position foodPosition = near(p, FOOD_MIN_DISTANCE, FOOD_MAX_DISTANCE);
+		//		Cell food = Cell.FOOD;
+		//		food.energy = FOOD_ENERGY;
+		//		addObject(food, foodPosition);
 	}
 
 
@@ -211,7 +169,6 @@ public class World {
 	 * and the others are set to UNKNOWN
 	 */
 	public synchronized Floor getPerception(Position centre, int sight) {
-		updateHits();
 		Floor perception = new Floor(floor.rows, floor.cols);
 		for (int row = 0; row < floor.rows; row++) {
 			for (int col = 0; col < floor.cols; col++) {
@@ -239,8 +196,11 @@ public class World {
 		floor.set(p.row, p.col, Cell.FREE);
 	}
 
-	public ArrayList<Hit> geHits() {
-		return hits;
+	public int getRows() {
+		return rows;
 	}
 
+	public int getCols() {
+		return cols;
+	}
 }
