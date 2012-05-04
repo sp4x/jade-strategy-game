@@ -4,8 +4,9 @@ import java.io.Serializable;
 
 import com.jrts.environment.Direction;
 
-
+@SuppressWarnings("serial")
 public class MoveThere implements Serializable {
+	
 	int sourceRow;
 	int sourceCol;
 	Direction dir;
