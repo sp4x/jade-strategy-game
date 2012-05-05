@@ -154,19 +154,21 @@ public class MainFrame extends JFrame {
 			@Override
 			public void run() {
 				while(true){
-//					System.out.println("Update GUI");
-					MainFrame.this.update();
+					MainFrame.this.repaint();
 				}
 			}
 		}
 
 		new Thread(new RefreshGUI()).start();
 	}
-
-	public void update(){
+	
+	@Override
+	public void repaint(){
 		worldViewPanel.update();
-		
-		if(this.clickedAgentId != null) this.showAgentInfo(this.clickedAgentId);
+		if(clickedAgentId != null)
+			showAgentInfo(clickedAgentId);
+//		System.out.println("REPAINT MAIN");
+		super.repaint();
 	}
 	
 	protected void showCellInfo(int i, int j, int energy)

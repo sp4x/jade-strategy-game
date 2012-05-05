@@ -48,6 +48,7 @@ public class WorldViewPanel extends JPanel {
 	}
 
 	public void update() {
+		AttacksManager.update();
 		for (int i = 0; i < floor.getRows(); i++)
 			for (int j = 0; j < floor.getCols(); j++) {
 				int y = (int) (j*ImageLoader.iconSize*GameConfig.HORIZONTAL_OVERLAP);
@@ -68,10 +69,4 @@ public class WorldViewPanel extends JPanel {
 					labelMatrix[i][j].setIcon(ImageLoader.freeIcon);
 			}
 	}
-	
-//	@Override
-//	public void repaint(){
-//		update();
-//		super.repaint();
-//	}
 }

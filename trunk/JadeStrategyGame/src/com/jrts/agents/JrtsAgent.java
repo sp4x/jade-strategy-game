@@ -8,13 +8,8 @@ import jade.domain.FIPAAgentManagement.DFAgentDescription;
 
 import com.jrts.environment.Floor;
 
+@SuppressWarnings("serial")
 public abstract class JrtsAgent extends Agent {
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	
 	AID masterAID;
 	Floor perception;
