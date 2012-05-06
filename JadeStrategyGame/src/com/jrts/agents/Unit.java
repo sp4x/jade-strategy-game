@@ -10,6 +10,7 @@ import jade.lang.acl.ACLMessage;
 import java.io.IOException;
 import java.util.Random;
 
+import com.jrts.behaviours.CheckReceivedAttacks;
 import com.jrts.behaviours.FollowPathBehaviour;
 import com.jrts.behaviours.LookForEnemy;
 import com.jrts.common.GameConfig;
@@ -42,6 +43,7 @@ public abstract class Unit extends JrtsAgent {
 		basicService = new ServiceDescription();
 		basicService.setName(getAID().getName());
 		basicService.setType(getClass().getName());
+		addBehaviour(new CheckReceivedAttacks(this));
 		addBehaviour(new LookForEnemy(this, 2000));
 	}
 	
@@ -92,8 +94,19 @@ public abstract class Unit extends JrtsAgent {
 	protected void setLife(int life) {
 		if(life>0)
 			this.life = life;
-		else
+		else{
 			this.life = 0;
+			die();
+		}
+	}
+	
+	private void die() {
+		World.getInstance().agentDies(getPosition());
+		doDelete();
+	}
+
+	public void decreaseLife(int damage){
+		setLife(getLife() - damage);
 	}
 
 	public int getSpeed() {

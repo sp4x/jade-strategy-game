@@ -33,7 +33,7 @@ public class Floor implements Serializable {
 		this.rows = rows;
 		this.cols = cols;
 		this.floor = new Cell[rows][cols];
-		setAll(Cell.FREE);
+		setAll(new Cell(CellType.FREE));
 	}
 	
 	public void setAll(Cell objectsType) {
@@ -62,7 +62,7 @@ public class Floor implements Serializable {
 
 		for (int i = 0; i < getRows(); i++)
 			for (int j = 0; j < getCols(); j++)
-				if(floor[i][j] == Cell.FREE)
+				if(floor[i][j].getType() == CellType.FREE)
 					cells.add(new Square(i, j));
 
 		Collections.shuffle(cells);
@@ -97,7 +97,7 @@ public class Floor implements Serializable {
 	 */
 	public Cell get(int i, int j){
 		if(i<0 || j<0 || i>=rows || j>=cols)
-			return Cell.UNKNOWN;
+			return new Cell(CellType.UNKNOWN);
 		return this.floor[i][j];
 	}
 
@@ -143,7 +143,7 @@ public class Floor implements Serializable {
 			for (int i = 0; i < rows; i++) {
 				for (int j = 0; j < cols; j++) {
 					Cell current = info.get(i, j);
-					if (current != Cell.UNKNOWN)
+					if (current.getType() != CellType.UNKNOWN)
 						set(i, j, current);
 				}
 			}

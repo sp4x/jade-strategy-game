@@ -61,7 +61,7 @@ public class WorldTest {
 		int seen = 0;
 		for (int row = 0; row < floor.rows; row++) {
 			for (int col = 0; col < floor.cols; col++) {
-				seen += floor.get(row, col) == Cell.UNKNOWN ? 0 : 1;
+				seen += floor.get(row, col).getType() == CellType.UNKNOWN ? 0 : 1;
 			}
 		}
 		assertEquals(5, seen);

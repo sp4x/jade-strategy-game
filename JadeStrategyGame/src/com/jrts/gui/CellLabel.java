@@ -7,6 +7,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 import com.jrts.environment.Cell;
+import com.jrts.environment.CellType;
 import com.jrts.environment.World;
 
 public class CellLabel extends JLabel {
@@ -26,23 +27,23 @@ public class CellLabel extends JLabel {
 				
 				if(MainFrame.getInstance().clickType.equals(MainFrame.selectionClick))
 				{
-					if(CellLabel.this.cell != Cell.UNIT) {
+					if(CellLabel.this.cell.getType() != CellType.UNIT) {
 						MainFrame.getInstance().clickedAgentId = null;
-						MainFrame.getInstance().showCellInfo(CellLabel.this.i, CellLabel.this.j, CellLabel.this.cell.getEnergy());
+						MainFrame.getInstance().showCellInfo(CellLabel.this.i, CellLabel.this.j, CellLabel.this.cell.getResourceEnergy());
 					} else {
 						MainFrame.getInstance().clickedAgentId = CellLabel.this.cell.getId(); 
 					}
 				} else {
-					if(CellLabel.this.cell != Cell.UNIT)
+					if(CellLabel.this.cell.getType() != CellType.UNIT)
 					{
 						JOptionPane.showMessageDialog(MainFrame.getInstance(), "Tipo Cell:" + CellLabel.this.cell.toString() + " Posizione: " + CellLabel.this.i + " - " + CellLabel.this.j);
 						
 						if(MainFrame.getInstance().clickType.equals(MainFrame.treeClick))
-							World.getInstance().getFloor().set(CellLabel.this.i, CellLabel.this.j, Cell.WOOD);
+							World.getInstance().getFloor().set(CellLabel.this.i, CellLabel.this.j, new Cell(CellType.WOOD));
 						else if(MainFrame.getInstance().clickType.equals(MainFrame.foodClick))
-							World.getInstance().getFloor().set(CellLabel.this.i, CellLabel.this.j, Cell.FOOD);
+							World.getInstance().getFloor().set(CellLabel.this.i, CellLabel.this.j, new Cell(CellType.FOOD));
 						else if(MainFrame.getInstance().clickType.equals(MainFrame.emptyCellClick))
-							World.getInstance().getFloor().set(CellLabel.this.i, CellLabel.this.j, Cell.FREE);
+							World.getInstance().getFloor().set(CellLabel.this.i, CellLabel.this.j, new Cell(CellType.FREE));
 					}
 				}
 			}

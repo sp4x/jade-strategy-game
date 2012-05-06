@@ -5,6 +5,7 @@ import jade.core.behaviours.TickerBehaviour;
 
 import com.jrts.agents.Unit;
 import com.jrts.environment.Cell;
+import com.jrts.environment.CellType;
 import com.jrts.environment.Floor;
 
 public class LookForEnemy extends TickerBehaviour {
@@ -30,11 +31,11 @@ public class LookForEnemy extends TickerBehaviour {
 
 	private void check(Cell cell) {
 		Unit unit = (Unit) myAgent;
-		if (cell == Cell.UNIT && !unit.isFriend(cell.getId()))
+		if (cell.getType() == CellType.UNIT && !unit.isFriend(cell.getId()))
 			doSomething();
 	}
 
 	private void doSomething() {
-		System.out.println("found enemy!");
+//		System.out.println("found enemy!");
 	}
 }

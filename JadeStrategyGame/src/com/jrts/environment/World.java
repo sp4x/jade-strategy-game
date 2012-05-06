@@ -35,8 +35,8 @@ public class World {
 		floor = new Floor(rows, cols);
 		
 		int numWood = (int) (((float) (rows*cols)) * woodPercentage);
-		Cell wood = Cell.WOOD;
-		wood.energy = WOOD_ENERGY;
+		Cell wood = new Cell(CellType.WOOD);
+		wood.resourceEnergy = WOOD_ENERGY;
 		floor.generateObject(numWood, wood);
 		
 		teams = new HashMap<String, Position>();
@@ -53,8 +53,9 @@ public class World {
 		Position destination = source.step(d);
 		Cell srcCell = floor.get(source.row, source.col);
 		if (isAvailable(destination)) {
-			floor.set(source.row, source.col, Cell.FREE);
+			floor.set(source.row, source.col, new Cell(CellType.FREE));
 			floor.set(destination.row, destination.col, srcCell);
+			System.out.println("------moved cell "+ srcCell.id);
 			source.row = destination.row;
 			source.col = destination.col;
 			return true;
@@ -103,7 +104,7 @@ public class World {
 	}
 
 	boolean isAvailable(Position p) {
-		return p != null && floor.get(p.row, p.col) == Cell.FREE;
+		return p != null && floor.get(p.row, p.col).type == CellType.FREE;
 	}
 
 
@@ -113,9 +114,9 @@ public class World {
 	 */
 	public synchronized void addTeam(String name) {
 		Random r = new Random();
-		Cell base = Cell.BUILDING;
+		Cell base = new Cell(CellType.BUILDING);
 		base.id = name;
-		base.energy = BUILDING_ENERGY;
+		base.resourceEnergy = BUILDING_ENERGY;
 		Position p;
 		do {
 			p = new Position(r.nextInt(floor.rows), r.nextInt(floor.cols));
@@ -136,7 +137,7 @@ public class World {
 	 * @return the position where the unit has been created
 	 */
 	public synchronized Position addUnit(String id, Position p) {
-		Cell unit = Cell.UNIT;
+		Cell unit = new Cell(CellType.UNIT);
 		unit.id = id;
 		if (!isAvailable(p)) {
 			p = nextTo(p,2);
@@ -173,7 +174,7 @@ public class World {
 		for (int row = 0; row < floor.rows; row++) {
 			for (int col = 0; col < floor.cols; col++) {
 				boolean inRange = Math.abs(centre.row-row) <= sight && Math.abs(centre.col-col) <= sight;
-				Cell perceived = ( inRange ? floor.get(row, col) : Cell.UNKNOWN);
+				Cell perceived = ( inRange ? floor.get(row, col) : new Cell(CellType.UNKNOWN));
 				perception.set(row, col, perceived);
 			}
 		}
@@ -182,18 +183,18 @@ public class World {
 
 	public synchronized int takeEnergy(Position target, int amount) {
 		Cell targetCell = floor.get(target);
-		if (targetCell.energy >= amount) {
-			targetCell.energy -= amount;
+		if (targetCell.resourceEnergy >= amount) {
+			targetCell.resourceEnergy -= amount;
 			return amount;
 		} else {
-			int taken = targetCell.energy;
-			targetCell.energy = 0;
+			int taken = targetCell.resourceEnergy;
+			targetCell.resourceEnergy = 0;
 			return taken;
 		}
 	}
 
 	public synchronized void clear(Position p) {
-		floor.set(p.row, p.col, Cell.FREE);
+		floor.set(p.row, p.col, new Cell(CellType.FREE));
 	}
 
 	public int getRows() {
@@ -202,5 +203,9 @@ public class World {
 
 	public int getCols() {
 		return cols;
+	}
+
+	public void agentDies(Position p) {
+		floor.set(p.getRow(), p.getCol(), new Cell(CellType.FREE));
 	}
 }
