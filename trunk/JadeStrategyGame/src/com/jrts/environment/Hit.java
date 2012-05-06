@@ -54,4 +54,9 @@ public class Hit {
 	public boolean respectLimits(int rows, int cols) {
 		return pos.row >= 0 && pos.row < rows && pos.col >= 0 && pos.col < cols;
 	}
+	
+	@Override
+	public String toString(){
+		return getPos().row + "," + getPos().col;
+	}
 }

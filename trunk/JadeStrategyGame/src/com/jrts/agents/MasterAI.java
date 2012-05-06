@@ -56,7 +56,7 @@ public class MasterAI extends JrtsAgent {
 		Position cityCentre = world.getBuilding(getTeam());
 		Floor centre = world.getPerception(cityCentre, GameConfig.CITY_CENTRE_SIGHT);
 		updateLocalPerception(centre);
-		if (perception.get(cityCentre).getEnergy() <= 0) {
+		if (perception.get(cityCentre).getResourceEnergy() <= 0) {
 			//TODO do something
 		}
 		
@@ -67,7 +67,6 @@ public class MasterAI extends JrtsAgent {
 				if (info instanceof Floor) 
 					perception.mergeWith((Floor) info);
 			} catch (UnreadableException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

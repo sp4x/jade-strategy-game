@@ -1,5 +1,7 @@
 package com.jrts.gui;
 
+import jade.domain.introspection.GetValue;
+
 import java.awt.Color;
 import java.awt.Dimension;
 
@@ -9,6 +11,7 @@ import javax.swing.JPanel;
 
 import com.jrts.common.GameConfig;
 import com.jrts.environment.Cell;
+import com.jrts.environment.CellType;
 import com.jrts.environment.Floor;
 
 /**
@@ -55,17 +58,17 @@ public class WorldViewPanel extends JPanel {
 				int x = (int) (i*ImageLoader.iconSize*GameConfig.VERTICAL_OVERLAP);
 				labelMatrix[i][j].setBounds( y, x, ImageLoader.iconSize, ImageLoader.iconSize);
 				
-				if(floor.get(i, j) == Cell.UNIT)
+				if(floor.get(i, j).getType() == CellType.UNIT)
 					labelMatrix[i][j].setIcon(ImageLoader.workerIcon);
-				else if(floor.get(i, j) == Cell.WOOD)
+				else if(floor.get(i, j).getType() == CellType.WOOD)
 					labelMatrix[i][j].setIcon(ImageLoader.treeIcon);
-				else if(floor.get(i, j) == Cell.FOOD)
+				else if(floor.get(i, j).getType() == CellType.FOOD)
 					labelMatrix[i][j].setIcon(ImageLoader.foodIcon);
-				else if(floor.get(i, j) == Cell.BUILDING)
+				else if(floor.get(i, j).getType() == CellType.BUILDING)
 					labelMatrix[i][j].setIcon(ImageLoader.workerFactoryIcon);
 				else if(AttacksManager.isThereAnHit(i,j))
 					labelMatrix[i][j].setIcon(ImageLoader.hitIcon);
-				else if(floor.get(i, j) == Cell.FREE)
+				else if(floor.get(i, j).getType() == CellType.FREE)
 					labelMatrix[i][j].setIcon(ImageLoader.freeIcon);
 			}
 	}
