@@ -1,9 +1,6 @@
 package com.jrts.agents;
 
 import jade.core.AID;
-import jade.core.behaviours.TickerBehaviour;
-import jade.lang.acl.ACLMessage;
-import jade.lang.acl.UnreadableException;
 import jade.wrapper.AgentController;
 import jade.wrapper.ControllerException;
 import jade.wrapper.PlatformController;
@@ -19,7 +16,7 @@ public class MasterAI extends JrtsAgent {
 	AID resourceAID;
 
 	protected void setup(){
-		
+		super.setup();
 		World world = World.getInstance();
 		masterAID = getAID();
 		world.addTeam(getTeam());
@@ -40,35 +37,22 @@ public class MasterAI extends JrtsAgent {
 		} catch (ControllerException e) {
 			e.printStackTrace();
 		}
-		
-		addBehaviour(new TickerBehaviour(this, 1000) {
-
-			@Override
-			protected void onTick() {
-				updatePerception();
-			}
-		});
 	}
 	
 	@Override
 	protected void updatePerception() {
 		World world = World.getInstance();
+		//the area near the building is always visible
 		Position cityCentre = world.getBuilding(getTeam());
 		Floor centre = world.getPerception(cityCentre, GameConfig.CITY_CENTRE_SIGHT);
+		//TODO maybe do something if an enemy is detected
 		updateLocalPerception(centre);
 		if (perception.get(cityCentre).getResourceEnergy() <= 0) {
-			//TODO do something
+			//TODO do something if the main building has been destroyed
 		}
-		
-		ACLMessage msg = receive();
-		if (msg != null && msg.getPerformative() == ACLMessage.INFORM) {
-			try {
-				Object info = msg.getContentObject();
-				if (info instanceof Floor) 
-					perception.mergeWith((Floor) info);
-			} catch (UnreadableException e) {
-				e.printStackTrace();
-			}
-		}
+		//wait from perception messages from other agents
+		receivePerception();
+		//update resourcesAI's perception
+		sendPerception(perception, resourceAID);
 	}
 }

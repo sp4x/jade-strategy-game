@@ -27,4 +27,5 @@ public class GameConfig {
 	public static final float HORIZONTAL_OVERLAP = 1.00f;
 	
 	public static final int ATTACKS_REFRESH = 50;
+	public static final int PERCEPTION_REFRESH = 500;
 }

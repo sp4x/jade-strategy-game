@@ -2,10 +2,17 @@ package com.jrts.agents;
 
 import jade.core.AID;
 import jade.core.Agent;
+import jade.core.behaviours.TickerBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
+import jade.lang.acl.ACLMessage;
+import jade.lang.acl.MessageTemplate;
+import jade.lang.acl.UnreadableException;
 
+import java.io.IOException;
+
+import com.jrts.common.GameConfig;
 import com.jrts.environment.Floor;
 
 @SuppressWarnings("serial")
@@ -14,6 +21,18 @@ public abstract class JrtsAgent extends Agent {
 	AID masterAID;
 	Floor perception;
 	
+	@Override
+	protected void setup() {
+		super.setup();
+		addBehaviour(new TickerBehaviour(this, GameConfig.PERCEPTION_REFRESH) {
+
+			@Override
+			protected void onTick() {
+				updatePerception();
+			}
+		});
+	}
+	
 	protected abstract void updatePerception();
 	
 	protected void updateLocalPerception(Floor info) {
@@ -21,6 +40,32 @@ public abstract class JrtsAgent extends Agent {
 			perception = info;
 		else
 			perception.mergeWith(info);
+	}
+	
+	public void sendPerception(Floor perception, AID receiver) {
+		ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
+		msg.setLanguage("environment");
+		msg.addReceiver(receiver);
+		try {
+			msg.setContentObject(perception);
+			send(msg);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void receivePerception() {
+		MessageTemplate mt = MessageTemplate.MatchLanguage("environment");
+		ACLMessage msg = receive(mt);
+		if (msg != null) {
+			try {
+				Object info = msg.getContentObject();
+				if (info instanceof Floor) 
+					perception.mergeWith((Floor) info);
+			} catch (UnreadableException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	public String getTeam() {

@@ -19,7 +19,7 @@ public class CheckReceivedAttacks extends CyclicBehaviour {
 		Position p = agent.getPosition();
 		int damage = AttacksManager.getDamagesFor(agent.getLocalName());
 		agent.decreaseLife(damage);
-		System.out.println("Agent " + agent.getLocalName() + " colpito. Life: " + agent.getLife());
+//		System.out.println("Agent " + agent.getLocalName() + " colpito. Life: " + agent.getLife());
 	}
 
 }

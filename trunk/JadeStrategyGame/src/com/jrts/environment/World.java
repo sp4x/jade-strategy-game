@@ -4,13 +4,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
+import com.jrts.api.IUnit;
+
 public class World {
 
 	private static int WOOD_ENERGY = 100;
 	private static int FOOD_ENERGY = 10000;
 	private static int BUILDING_ENERGY = 1000;
-	private static int FOOD_MIN_DISTANCE = 3;
-	private static int FOOD_MAX_DISTANCE = 6;
+	private static int FOOD_MIN_DISTANCE = 2;
+	private static int FOOD_MAX_DISTANCE = 4;
 
 	private static World instance = null;
 
@@ -55,7 +57,6 @@ public class World {
 		if (isAvailable(destination)) {
 			floor.set(source.row, source.col, new Cell(CellType.FREE));
 			floor.set(destination.row, destination.col, srcCell);
-			System.out.println("------moved cell "+ srcCell.id);
 			source.row = destination.row;
 			source.col = destination.col;
 			return true;
@@ -109,7 +110,7 @@ public class World {
 
 
 	/**
-	 * adds the city centre in a random position for a new team with the specified name
+	 * adds the city center in a random position for a new team with the specified name
 	 * @param name the name of the team, has to be unique
 	 */
 	public synchronized void addTeam(String name) {
@@ -123,10 +124,10 @@ public class World {
 		} while (!addObject(base, p));
 		teams.put(name, p);
 		System.out.println("adding team "+name+" in "+p.toString());
-		//		Position foodPosition = near(p, FOOD_MIN_DISTANCE, FOOD_MAX_DISTANCE);
-		//		Cell food = Cell.FOOD;
-		//		food.energy = FOOD_ENERGY;
-		//		addObject(food, foodPosition);
+		Position foodPosition = near(p, FOOD_MIN_DISTANCE, FOOD_MAX_DISTANCE);
+		Cell food = new Cell(CellType.FOOD);
+		food.resourceEnergy = FOOD_ENERGY;
+		addObject(food, foodPosition);
 	}
 
 
@@ -147,9 +148,16 @@ public class World {
 		floor.set(p.row, p.col, unit);
 		return p;
 	}
+	
+	public synchronized void setReference(IUnit unit) {
+		Position p = unit.getPosition();
+		if (floor.get(p).id.equals(unit.getId())) {
+			floor.get(p).unit = unit;
+		}
+	}
 
 	/**
-	 * gets the position of the city centre of the team with the specified name
+	 * gets the position of the city center of the team with the specified name
 	 * @param teamName the name of the team
 	 * @return the position of the main building
 	 */
