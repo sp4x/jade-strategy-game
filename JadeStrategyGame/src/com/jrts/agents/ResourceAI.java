@@ -18,6 +18,7 @@ public class ResourceAI extends JrtsAgent {
 	public ResourceAI() {}
 
 	protected void setup(){
+		super.setup();
 		String[] args = (String[]) getArguments();
 		if (args != null) {
 			setTeam(args[0]);
@@ -27,8 +28,7 @@ public class ResourceAI extends JrtsAgent {
 			System.exit(1);
 		}
 		
-		for (int i = 0; i < 10; i++)
-			createWorker();
+		createWorker();
 	}
 	
 	public boolean createWorker(){

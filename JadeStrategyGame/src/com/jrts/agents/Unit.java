@@ -5,14 +5,14 @@ import jade.domain.DFService;
 import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
-import jade.lang.acl.ACLMessage;
 
-import java.io.IOException;
 import java.util.Random;
 
+import com.jrts.api.IUnit;
 import com.jrts.behaviours.CheckReceivedAttacks;
 import com.jrts.behaviours.FollowPathBehaviour;
 import com.jrts.behaviours.LookForEnemy;
+import com.jrts.common.AgentStatus;
 import com.jrts.common.GameConfig;
 import com.jrts.environment.Direction;
 import com.jrts.environment.Floor;
@@ -20,7 +20,7 @@ import com.jrts.environment.Position;
 import com.jrts.environment.World;
 
 @SuppressWarnings("serial")
-public abstract class Unit extends JrtsAgent {
+public abstract class Unit extends JrtsAgent implements IUnit {
 
 	private Position position = null;
 	int life;
@@ -40,6 +40,13 @@ public abstract class Unit extends JrtsAgent {
 
 	@Override
 	protected void setup() {
+		super.setup();
+		Object[] args = getArguments();
+		if (args != null) {
+			setPosition((Position) args[0]);
+			setTeam((String) args[1]);
+		}
+		World.getInstance().setReference(this);
 		basicService = new ServiceDescription();
 		basicService.setName(getAID().getName());
 		basicService.setType(getClass().getName());
@@ -61,23 +68,14 @@ public abstract class Unit extends JrtsAgent {
 		Floor newPerception = World.getInstance().getPerception(getPosition(), sight);
 		updateLocalPerception(newPerception);
 		//send perception to Master
-		ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
-		msg.addReceiver(masterAID);
-		try {
-			msg.setContentObject(newPerception);
-			send(msg);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		sendPerception(newPerception, masterAID);
 	}
 
 	public boolean move(Direction dir){
-		boolean success = World.getInstance().move(this.position, dir);
-		if (success)
-			updatePerception();
-		return success;
+		return World.getInstance().move(this.position, dir);
 	}
 
+	@Override
 	public Position getPosition() {
 		return position;
 	}
@@ -87,6 +85,7 @@ public abstract class Unit extends JrtsAgent {
 			this.position = position;
 	}
 
+	@Override
 	public int getLife() {
 		return life;
 	}
@@ -164,6 +163,17 @@ public abstract class Unit extends JrtsAgent {
 	
 	protected void setStatus(String newStatus) {
 		setStatus(newStatus, false);
+	}
+	
+	@Override
+	public String getStatus() {
+		//TODO get status
+		return AgentStatus.FREE;
+	}
+	
+	@Override
+	public String getId() {
+		return getAID().getLocalName();
 	}
 	
 	public void switchStatus(String newStatus) {

@@ -31,6 +31,12 @@ public class Position {
 		this.col = col;
 	}
 	
+	public double distance(Position other) {
+		float x = Math.abs(this.col - other.col);
+		float y = Math.abs(this.row - other.row);
+		return Math.hypot(x, y);
+	}
+	
 	@Override
 	public Position clone(){
 		return new Position(row, col);
