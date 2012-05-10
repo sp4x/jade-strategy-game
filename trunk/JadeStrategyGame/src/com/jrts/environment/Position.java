@@ -1,6 +1,10 @@
 package com.jrts.environment;
 
-public class Position {
+import jade.util.leap.Serializable;
+
+public class Position implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
 	
 	int row;
 	int col;
