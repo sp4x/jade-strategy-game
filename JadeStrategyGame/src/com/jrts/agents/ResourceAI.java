@@ -1,17 +1,25 @@
 package com.jrts.agents;
 
 import jade.core.AID;
+import jade.core.behaviours.TickerBehaviour;
+import jade.domain.FIPAAgentManagement.DFAgentDescription;
+import jade.domain.FIPAAgentManagement.ServiceDescription;
+import jade.lang.acl.ACLMessage;
 import jade.wrapper.AgentController;
 import jade.wrapper.ControllerException;
 import jade.wrapper.PlatformController;
 
 import java.util.ArrayList;
 
+import com.jrts.common.AgentStatus;
 import com.jrts.environment.Position;
 import com.jrts.environment.World;
 
 @SuppressWarnings("serial")
 public class ResourceAI extends JrtsAgent {
+	
+	int collectedWood;
+	int collectedFood;
 	
 	ArrayList<AID> workersList = new ArrayList<AID>();
 	
@@ -29,9 +37,16 @@ public class ResourceAI extends JrtsAgent {
 		}
 		
 		createWorker();
+		addBehaviour(new TickerBehaviour(this, 5000) {
+			
+			@Override
+			protected void onTick() {
+				assignWoodcutter();
+			}
+		});
 	}
 	
-	public boolean createWorker(){
+	public AID createWorker(){
 		World world = World.getInstance();
 		String workerName = getTeam() + "-worker"+workersList.size();
 		Position workerPosition = world.addUnit(workerName, world.getBuilding(getTeam()));
@@ -45,7 +60,10 @@ public class ResourceAI extends JrtsAgent {
 				worker = container.createNewAgent(workerName, "com.jrts.agents.Worker", args);
 				worker.start();
 				// keep the worker's ID on a local list
-				workersList.add( new AID(workerName, AID.ISLOCALNAME) );
+				
+				AID workerAID = new AID(workerName, AID.ISLOCALNAME);
+				workersList.add( workerAID );
+				return workerAID;
 			} catch (ControllerException e) {
 				e.printStackTrace();
 			}
@@ -53,11 +71,24 @@ public class ResourceAI extends JrtsAgent {
 		else{
 			System.out.println(getTeam() + ":Cannot instantiate the worker");
 		}
-		return false;
+		return null;
+	}
+	
+	public void assignWoodcutter() {
+		ServiceDescription sd = new ServiceDescription();
+		sd.setType(AgentStatus.FREE);
+		DFAgentDescription[] free = search(sd);
+		AID worker = (free.length > 0 ? free[0].getName() : createWorker());
+		if (worker != null) {
+			ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
+			msg.addReceiver(worker);
+			msg.setContent(AgentStatus.WOOD_CUTTING);
+			send(msg);
+		}
 	}
 
 	@Override
 	protected void updatePerception() {
-		// TODO Auto-generated method stub
+		receivePerception();
 	}
 }

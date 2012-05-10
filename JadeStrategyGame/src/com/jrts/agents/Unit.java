@@ -12,8 +12,10 @@ import com.jrts.api.IUnit;
 import com.jrts.behaviours.CheckReceivedAttacks;
 import com.jrts.behaviours.FollowPathBehaviour;
 import com.jrts.behaviours.LookForEnemy;
+import com.jrts.behaviours.ReceiveOrders;
 import com.jrts.common.AgentStatus;
 import com.jrts.common.GameConfig;
+import com.jrts.environment.CellType;
 import com.jrts.environment.Direction;
 import com.jrts.environment.Floor;
 import com.jrts.environment.Position;
@@ -50,8 +52,10 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 		basicService = new ServiceDescription();
 		basicService.setName(getAID().getName());
 		basicService.setType(getClass().getName());
+		updatePerception();
 		addBehaviour(new CheckReceivedAttacks(this));
 		addBehaviour(new LookForEnemy(this, 2000));
+		addBehaviour(new ReceiveOrders(this));
 	}
 	
 	public void goThere(Position p) {
@@ -59,6 +63,7 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 	}
 
 	public void goThere(int x, int y) {
+		System.out.println("mi muovo");
 		updatePerception();
 		addBehaviour(new FollowPathBehaviour(this, x, y, GameConfig.UNIT_MOVING_ATTEMPTS));
 	}
@@ -190,6 +195,24 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 			e.printStackTrace();
 			return false;
 		}
+	}
+	
+	public Position findNearest(CellType type) {
+		double distance = Double.MAX_VALUE;
+		Position nearestPosition = null;
+		for (int i = 0; i < perception.getRows(); i++) {
+			for (int j = 0; j < perception.getCols(); j++) {
+				Position p = new Position(i, j);
+				if (perception.get(p).getType() == type) {
+					double currentDistance = position.distance(p);
+					if (currentDistance < distance) {
+						nearestPosition = p;
+						distance = currentDistance;
+					}
+				}
+			}
+		}
+		return nearestPosition;
 	}
 	
 }

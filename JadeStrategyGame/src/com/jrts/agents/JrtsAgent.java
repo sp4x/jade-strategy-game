@@ -6,6 +6,7 @@ import jade.core.behaviours.TickerBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
+import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.UnreadableException;
@@ -44,7 +45,7 @@ public abstract class JrtsAgent extends Agent {
 	
 	public void sendPerception(Floor perception, AID receiver) {
 		ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
-		msg.setLanguage("environment");
+		msg.setContent("perception");
 		msg.addReceiver(receiver);
 		try {
 			msg.setContentObject(perception);
@@ -55,7 +56,7 @@ public abstract class JrtsAgent extends Agent {
 	}
 	
 	public void receivePerception() {
-		MessageTemplate mt = MessageTemplate.MatchLanguage("environment");
+		MessageTemplate mt = MessageTemplate.MatchContent("perception");
 		ACLMessage msg = receive(mt);
 		if (msg != null) {
 			try {
@@ -87,6 +88,18 @@ public abstract class JrtsAgent extends Agent {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	protected DFAgentDescription[] search(ServiceDescription sd) {
+		DFAgentDescription desc = new DFAgentDescription();
+		desc.addServices(sd);
+		try {
+			return DFService.search(this, getTeamDF(), desc);
+		} catch (FIPAException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return new DFAgentDescription[1];
 	}
 	
 	protected void setTeam(String team) {

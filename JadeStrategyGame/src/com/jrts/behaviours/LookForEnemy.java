@@ -6,7 +6,6 @@ import jade.core.behaviours.TickerBehaviour;
 import com.jrts.agents.Unit;
 import com.jrts.environment.Cell;
 import com.jrts.environment.CellType;
-import com.jrts.environment.Floor;
 
 public class LookForEnemy extends TickerBehaviour {
 
@@ -21,10 +20,13 @@ public class LookForEnemy extends TickerBehaviour {
 
 	@Override
 	protected void onTick() {
-		Floor perception = ((Unit) myAgent).getPerception();
-		for (int i = 0; i < perception.getRows(); i++) {
-			for (int j = 0; j < perception.getCols(); j++) {
-				check(perception.get(i, j));
+		Unit unit = (Unit) myAgent;
+		int row = unit.getPosition().getRow();
+		int col = unit.getPerception().getCols();
+		int sight = unit.getSight();
+		for (int i = row - sight; i < row + sight; i++) {
+			for (int j = col - sight; j < col + sight; j++) {
+				check(unit.getPerception().get(i, j));
 			}
 		}
 	}

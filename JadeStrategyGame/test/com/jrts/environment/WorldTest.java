@@ -56,8 +56,8 @@ public class WorldTest {
 	@Test
 	public void perception() {
 		World.create(10, 10, 0);
-		Position centre = new Position(5, 5);
-		Floor floor = World.getInstance().getPerception(centre, 1);
+		Position center = new Position(5, 5);
+		Floor floor = World.getInstance().getPerception(center, 1);
 		int seen = 0;
 		for (int row = 0; row < floor.rows; row++) {
 			for (int col = 0; col < floor.cols; col++) {
@@ -71,9 +71,9 @@ public class WorldTest {
 	@Test
 	public void near() {
 		World.create(10, 10, 0);
-		Position centre = new Position(5, 5);
+		Position center = new Position(5, 5);
 		for (int i = 0; i < 10; i++) {
-			Position p = World.getInstance().near(centre, 2, 4);
+			Position p = World.getInstance().near(center, 2, 4);
 			boolean success = (p.row>=5+2 || p.row<=5-2) && (p.col>=5+2 || p.col<=5-2);
 			assertTrue(success);
 		}
