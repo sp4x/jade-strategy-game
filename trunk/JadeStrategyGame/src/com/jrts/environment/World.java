@@ -84,6 +84,14 @@ public class World {
 		}
 		return null;
 	}
+	
+	public synchronized Position nextTo(Position p) {
+		return nextTo(p, 1);
+	}
+	
+	public synchronized Cell getCell(Position p) {
+		return floor.get(p);
+	}
 
 	Position near(Position p, int minDistance, int maxDistance) {
 		if (p.row+maxDistance > floor.rows || p.col+maxDistance > floor.cols)

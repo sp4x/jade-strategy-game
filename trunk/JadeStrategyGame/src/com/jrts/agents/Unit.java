@@ -25,6 +25,7 @@ import com.jrts.environment.World;
 public abstract class Unit extends JrtsAgent implements IUnit {
 
 	private Position position = null;
+	private String status;
 	int life;
 	int speed;
 	int forceOfAttack;
@@ -63,7 +64,6 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 	}
 
 	public void goThere(int x, int y) {
-		System.out.println("mi muovo");
 		updatePerception();
 		addBehaviour(new FollowPathBehaviour(this, x, y, GameConfig.UNIT_MOVING_ATTEMPTS));
 	}
@@ -164,6 +164,7 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 		dfd.addServices(sd);
 		// register the description with the DF
 		register(dfd, deletePrevious);
+		status = newStatus;
 	}
 	
 	protected void setStatus(String newStatus) {
@@ -172,8 +173,7 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 	
 	@Override
 	public String getStatus() {
-		//TODO get status
-		return AgentStatus.FREE;
+		return status;
 	}
 	
 	@Override

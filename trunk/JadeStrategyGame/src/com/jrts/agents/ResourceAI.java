@@ -2,6 +2,7 @@ package com.jrts.agents;
 
 import jade.core.AID;
 import jade.core.behaviours.TickerBehaviour;
+import jade.core.behaviours.WakerBehaviour;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
@@ -37,10 +38,9 @@ public class ResourceAI extends JrtsAgent {
 		}
 		
 		createWorker();
-		addBehaviour(new TickerBehaviour(this, 5000) {
-			
+		addBehaviour(new WakerBehaviour(this, 5000) {
 			@Override
-			protected void onTick() {
+			protected void handleElapsedTimeout() {
 				assignWoodcutter();
 			}
 		});

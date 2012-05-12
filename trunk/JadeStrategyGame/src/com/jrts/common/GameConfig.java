@@ -15,7 +15,9 @@ public class GameConfig {
 	
 	public static final int WORKER_SIGHT = 4;
 	public static final int SOLDIER_SIGHT = 4;
-	public static final int CITY_center_SIGHT = 5;
+	public static final int CITY_CENTER_SIGHT = 5;
+	
+	public static final int WORKER_KNAPSACK_CAPACITY = 10;
 	
 	public static final int UNIT_MOVING_ATTEMPTS = 20;
 	
