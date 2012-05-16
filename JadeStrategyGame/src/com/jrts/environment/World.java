@@ -78,15 +78,32 @@ public class World {
 		for (int minDistance = 1; minDistance <= maxDistance; minDistance++) {
 			for (Direction d : Direction.ALL) {
 				Position candidate = nextTo(p.step(d), minDistance-1);
-				if (candidate != null && isAvailable(candidate))
+				if (isAvailable(candidate))
 					return candidate;
 			}
 		}
 		return null;
 	}
 	
-	public synchronized Position nextTo(Position p) {
-		return nextTo(p, 1);
+	
+	/**
+	 * returns the nearest position from a source point next to a target.
+	 * @param src the source position
+	 * @param p the target position
+	 * @return the requested position
+	 */
+	public synchronized Position nextTo(Position src, Position p) {
+		double distance = Double.MAX_VALUE;
+		Position chosen = null;
+		for (Direction d : Direction.VON_NEUMANN_NEIGH) {
+			Position candidate = p.step(d);
+			double candidateDistance = src.distance(candidate);
+			if (isAvailable(candidate) && candidateDistance < distance) {
+				chosen = candidate;
+				distance = candidateDistance;
+			}
+		}
+		return chosen;
 	}
 	
 	public synchronized Cell getCell(Position p) {

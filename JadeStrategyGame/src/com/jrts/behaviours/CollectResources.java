@@ -24,6 +24,7 @@ public class CollectResources extends Behaviour {
 	int status = STATUS_NONE;
 
 	Position resource;
+	Position cityCenter;
 	Position pickUpPoint;
 	Position leavePoint;
 
@@ -31,8 +32,7 @@ public class CollectResources extends Behaviour {
 		super(worker);
 		this.worker = worker;
 		this.agentStatus = agentStatus;
-		Position cityCenter = World.getInstance().getBuilding(worker.getTeam());
-		this.leavePoint = World.getInstance().nextTo(cityCenter);
+		cityCenter = World.getInstance().getBuilding(worker.getTeam());
 	}
 
 	@Override
@@ -53,18 +53,19 @@ public class CollectResources extends Behaviour {
 	}
 	
 	private void carry() {
-		System.out.println("worker in "+worker.getPosition()+" leave in "+leavePoint);
 		if (worker.getPosition().equals(leavePoint)) {
-			System.out.println("leaving");
 			worker.dropResources();
 			go();
 		}
 	}
 
 	private void pick() {
-		if (worker.getPosition().equals(pickUpPoint)) {
+		Position p = worker.getPosition();
+		if (p.equals(pickUpPoint)) {
+			worker.spendTime();
 			worker.takeResources(resource);
 			if (worker.knapsackIsFull()) {
+				leavePoint = World.getInstance().nextTo(p, cityCenter);
 				worker.goThere(leavePoint);
 				status = STATUS_CARRYING;
 			}
@@ -73,8 +74,8 @@ public class CollectResources extends Behaviour {
 
 	private void go() {
 		resource = worker.findNearest(CellType.WOOD);
-		pickUpPoint = World.getInstance().nextTo(resource);
-		if (resource != null) {
+		pickUpPoint = World.getInstance().nextTo(worker.getPosition(), resource);
+		if (resource != null && pickUpPoint != null) {
 			worker.goThere(pickUpPoint);
 			status = STATUS_GOING;
 		}
@@ -88,7 +89,6 @@ public class CollectResources extends Behaviour {
 			return true;
 		}
 		if (!worker.getStatus().equals(agentStatus)) {
-			System.out.println("done, exiting");
 			return true;
 		}
 		return false;
