@@ -1,7 +1,7 @@
 package com.jrts.agents;
 
 import jade.core.AID;
-import jade.core.behaviours.TickerBehaviour;
+import jade.core.behaviours.CyclicBehaviour;
 import jade.core.behaviours.WakerBehaviour;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
@@ -24,10 +24,9 @@ public class ResourceAI extends JrtsAgent {
 	
 	ArrayList<AID> workersList = new ArrayList<AID>();
 	
-	public ResourceAI() {}
-
 	protected void setup(){
 		super.setup();
+		
 		String[] args = (String[]) getArguments();
 		if (args != null) {
 			setTeam(args[0]);
@@ -42,6 +41,20 @@ public class ResourceAI extends JrtsAgent {
 			@Override
 			protected void handleElapsedTimeout() {
 				assignWoodcutter();
+			}
+		});
+		
+		addBehaviour(new CyclicBehaviour() {
+			@Override
+			public void action() {
+				// send a food/wood update message to the masterAi
+				ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
+				msg.setContent("food: " + collectedFood + " wood: " + collectedWood);
+
+				msg.addReceiver(new AID(getTeam(), AID.ISLOCALNAME));
+				msg.addReceiver(new AID(getTeam(), AID.ISLOCALNAME));
+
+				send(msg);
 			}
 		});
 	}

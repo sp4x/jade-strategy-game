@@ -3,6 +3,10 @@ package com.jrts.messages;
 import jade.util.leap.Serializable;
 
 public class CreateWorker implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1475481700008094468L;
 	int x;
 	int y;
 	

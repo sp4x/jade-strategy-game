@@ -3,7 +3,6 @@ package com.jrts.agents;
 import com.jrts.behaviours.CollectResources;
 import com.jrts.common.AgentStatus;
 import com.jrts.common.GameConfig;
-import com.jrts.environment.Cell;
 import com.jrts.environment.CellType;
 import com.jrts.environment.Direction;
 import com.jrts.environment.Position;
@@ -36,6 +35,7 @@ public class Worker extends Unit {
 		
 	}
 	
+	@SuppressWarnings("unused")
 	private void sendHit(Direction direction) {
 		AttacksManager.addHit(getPosition().clone(), direction, GameConfig.WORKER_DAMAGES);
 	}

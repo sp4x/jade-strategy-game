@@ -13,6 +13,7 @@ public class CheckReceivedAttacks extends CyclicBehaviour {
 		super(unit);
 	}
 
+	@SuppressWarnings("unused")
 	@Override
 	public void action() {
 		Unit agent = (Unit) myAgent;
