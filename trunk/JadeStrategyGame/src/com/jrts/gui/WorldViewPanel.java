@@ -23,7 +23,7 @@ public class WorldViewPanel extends JPanel {
 
 	private Floor floor;
 	
-	private JLabel[][] labelMatrix;
+	CellLabel[][] labelMatrix;
 
 	public WorldViewPanel(Floor floor) {
 		this.floor = floor;
@@ -35,10 +35,10 @@ public class WorldViewPanel extends JPanel {
 		setLayout(null);
 		super.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		
-		labelMatrix = new JLabel[floor.getRows()][floor.getCols()];
+		labelMatrix = new CellLabel[floor.getRows()][floor.getCols()];
 		for (int i = floor.getRows()-1; i >= 0 ; i--)
 			for (int j = floor.getCols()-1; j >= 0; j--) {
-				CellLabel label = new CellLabel(floor.get(i, j), i, j);
+				CellLabel label = new CellLabel(i, j);
 				labelMatrix[i][j] = label;
 				super.add(label);
 			}
