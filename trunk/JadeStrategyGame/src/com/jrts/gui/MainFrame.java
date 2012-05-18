@@ -19,6 +19,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JSlider;
 import javax.swing.WindowConstants;
 
+import com.jrts.api.IUnit;
 import com.jrts.common.GameConfig;
 import com.jrts.environment.Floor;
 
@@ -36,7 +37,7 @@ public class MainFrame extends JFrame {
 	protected WorldViewPanel worldViewPanel;
 	protected Floor floor;
 	
-	protected String clickedAgentId = null;
+	protected IUnit selectedUnit = null;
 
 	protected JPanel infoPanel;
 
@@ -165,8 +166,8 @@ public class MainFrame extends JFrame {
 	@Override
 	public void repaint(){
 		worldViewPanel.update();
-		if(clickedAgentId != null)
-			showAgentInfo(clickedAgentId);
+		if(selectedUnit != null)
+			showAgentInfo();
 //		System.out.println("REPAINT MAIN");
 		super.repaint();
 	}
@@ -179,12 +180,12 @@ public class MainFrame extends JFrame {
 		labelAction.setText("nothing");
 	}
 	
-	protected void showAgentInfo(String clickedAgentId)
+	protected void showAgentInfo()
 	{
 		labelType.setText("Worker");
-		labelPosition.setText("10, 10");
-		labelEnergy.setText("100");
-		labelAction.setText("work");
+		labelPosition.setText(selectedUnit.getPosition().getCol() +", "+ selectedUnit.getPosition().getRow());
+		labelEnergy.setText("" + selectedUnit.getLife());
+		labelAction.setText(selectedUnit.getStatus());
 	}
 	
 	public static MainFrame getInstance(){

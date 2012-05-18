@@ -59,6 +59,7 @@ public class ResourceAI extends JrtsAgent {
 				Object[] args = {workerPosition, getTeam()};
 				worker = container.createNewAgent(workerName, "com.jrts.agents.Worker", args);
 				worker.start();
+				
 				// keep the worker's ID on a local list
 				
 				AID workerAID = new AID(workerName, AID.ISLOCALNAME);
