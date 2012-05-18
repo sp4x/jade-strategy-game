@@ -240,4 +240,26 @@ public class World {
 	public void agentDies(Position p) {
 		floor.set(p.getRow(), p.getCol(), new Cell(CellType.FREE));
 	}
+
+	public Map<String, Position> getTeams() {
+		return teams;
+	}
+
+	public void setTeams(Map<String, Position> teams) {
+		this.teams = teams;
+	}
+
+	public void setFloor(Floor floor) {
+		this.floor = floor;
+	}
+
+	public void setRows(int rows) {
+		this.rows = rows;
+	}
+
+	public void setCols(int cols) {
+		this.cols = cols;
+	}
+	
+	
 }

@@ -3,6 +3,10 @@ package com.jrts.messages;
 import jade.util.leap.Serializable;
 
 public class GetPath implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5802697270808291950L;
 	private int srcRow, srcCol, dstRow, dstCol;
 	
 	public GetPath(int srcRow, int srcCol, int dstRow, int dstCol) {

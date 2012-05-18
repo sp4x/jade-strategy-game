@@ -1,16 +1,12 @@
 package com.jrts.gui;
 
-import jade.domain.introspection.GetValue;
-
 import java.awt.Color;
 import java.awt.Dimension;
 
 import javax.swing.BorderFactory;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import com.jrts.common.GameConfig;
-import com.jrts.environment.Cell;
 import com.jrts.environment.CellType;
 import com.jrts.environment.Floor;
 

@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -19,6 +20,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JSlider;
 import javax.swing.WindowConstants;
 
+import com.jrts.O2Ainterfaces.Team;
 import com.jrts.api.IUnit;
 import com.jrts.common.GameConfig;
 import com.jrts.environment.Floor;
@@ -52,13 +54,20 @@ public class MainFrame extends JFrame {
 	
 	public String clickType = selectionClick;
 	
-	public static void start(Floor floor)
+	List<Team> teams;
+	
+	JPanel topPanel;
+	
+	public static void start(Floor floor, List<Team> teams)
 	{
-		mainFrame = new MainFrame(floor);
+		mainFrame = new MainFrame(floor, teams);
 	}
 	
-	protected MainFrame(Floor floor) {
+	protected MainFrame(Floor floor, List<Team> teams) {
 		super();
+		
+		this.teams = teams;
+		
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		super.addWindowListener(new WindowAdapter() {
 			@Override
@@ -66,18 +75,19 @@ public class MainFrame extends JFrame {
 				super.windowClosed(e);
 				Runtime.instance().shutDown();
 				dispose();
+				//TODO killare tutti gli agenti e chiudere la runtime
 				System.exit(0);
-				//TODO: Chiudere tutto
 			}
 		});
 		
 		this.worldViewPanel = new WorldViewPanel(floor);
 		this.floor = floor;
 		
-		JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+		topPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 		
-		topPanel.add(new TeamPanel("Team1"), BorderLayout.WEST);
-		topPanel.add(new TeamPanel("Team2"), BorderLayout.EAST);
+		for (Team t : teams) {
+			topPanel.add(new TeamPanel(t), BorderLayout.WEST);
+		}
 			    
 		JSlider speed = new JSlider(JSlider.HORIZONTAL, GameConfig.MIN_REFRESH_TIME, 
 				GameConfig.MAX_REFRESH_TIME, GameConfig.DEFAULT_REFRESH_TIME);
@@ -165,12 +175,21 @@ public class MainFrame extends JFrame {
 	
 	@Override
 	public void repaint(){
+		/** update world panel */
 		worldViewPanel.update();
+		
+		/** update all teampanels */
+		for (int i = 0; i < topPanel.getComponentCount(); i++) {
+			if (topPanel.getComponent(i) instanceof TeamPanel)
+				((TeamPanel) topPanel.getComponent(i)).update();
+		}
+		
+		/** follow the selected unit */
 		if(selectedUnit != null) {
 			showAgentInfo();
 			setSelectedCell(selectedUnit.getPosition().getRow(), selectedUnit.getPosition().getCol());
 		}
-//		System.out.println("REPAINT MAIN");
+		
 		super.repaint();
 	}
 	
