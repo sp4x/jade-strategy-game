@@ -30,6 +30,10 @@ public class Cell implements Serializable {
 	public IUnit getUnit() {
 		return unit;
 	}
+	
+	public void setUnit(IUnit unit) {
+		this.unit = unit;
+	}
 
 	public int getResourceEnergy() {
 		return resourceEnergy;
