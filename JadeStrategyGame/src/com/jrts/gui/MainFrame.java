@@ -166,8 +166,10 @@ public class MainFrame extends JFrame {
 	@Override
 	public void repaint(){
 		worldViewPanel.update();
-		if(selectedUnit != null)
+		if(selectedUnit != null) {
 			showAgentInfo();
+			setSelectedCell(selectedUnit.getPosition().getRow(), selectedUnit.getPosition().getCol());
+		}
 //		System.out.println("REPAINT MAIN");
 		super.repaint();
 	}
@@ -190,5 +192,17 @@ public class MainFrame extends JFrame {
 	
 	public static MainFrame getInstance(){
 		return mainFrame;
+	}
+
+	public void setSelectedCell(int row, int col) {
+		for (int i = 0; i < floor.getRows(); i++) {
+			for (int j = 0; j < floor.getCols(); j++) {
+				if (row == i && col == j) {
+					worldViewPanel.labelMatrix[i][j].setSelected(true);
+				} else {
+					worldViewPanel.labelMatrix[i][j].setSelected(false);
+				}
+			}
+		}
 	}
 }

@@ -1,8 +1,10 @@
 package com.jrts.gui;
 
+import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
@@ -16,7 +18,7 @@ public class CellLabel extends JLabel {
 	int i;
 	int j;
 	
-	public CellLabel(Cell cell, int row, int col) {
+	public CellLabel(int row, int col) {
 		this.i = row;
 		this.j = col;
 		
@@ -29,7 +31,8 @@ public class CellLabel extends JLabel {
 					if(cell.getType() != CellType.UNIT) {
 						MainFrame.getInstance().selectedUnit = null;
 						MainFrame.getInstance().showCellInfo(i, j, cell.getResourceEnergy());
-					
+						MainFrame.getInstance().setSelectedCell(i,j);
+						
 					} else if(cell.getType() == CellType.UNIT) {
 						MainFrame.getInstance().selectedUnit = cell.getUnit();
 					}
@@ -51,4 +54,32 @@ public class CellLabel extends JLabel {
 		});
 	}
 	
+	
+	public int getI() {
+		return i;
+	}
+
+
+	public void setI(int i) {
+		this.i = i;
+	}
+
+
+	public int getJ() {
+		return j;
+	}
+
+
+	public void setJ(int j) {
+		this.j = j;
+	}
+
+
+	public void setSelected(boolean selected) {
+		if (selected) {
+			setBorder(BorderFactory.createLineBorder(Color.green, 2));
+		} else {
+			setBorder(null);
+		}
+	}
 }
