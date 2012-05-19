@@ -2,7 +2,7 @@ package com.jrts.environment;
 
 import java.io.Serializable;
 
-import com.jrts.api.IUnit;
+import com.jrts.O2Ainterfaces.IUnit;
 
 public class Cell implements Serializable {
 	/**

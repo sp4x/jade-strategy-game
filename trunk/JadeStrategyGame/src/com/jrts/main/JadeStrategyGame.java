@@ -6,6 +6,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 
 import jade.Boot;
+import jade.core.Profile;
 import jade.core.ProfileImpl;
 import jade.core.Runtime;
 import jade.util.leap.Properties;
@@ -32,9 +33,10 @@ public class JadeStrategyGame {
 		
 		/** start jade runtime */
 		Runtime rt = Runtime.instance();
-		String[] jadeArgs = {"-local-host", "127.0.0.1"};
-		Properties pp = Boot.parseCmdLineArgs(jadeArgs);
-		ProfileImpl p = new ProfileImpl(pp);
+//		String[] jadeArgs = {"-local-host", "127.0.0.1"};
+//		Properties pp = Boot.parseCmdLineArgs(jadeArgs);
+		ProfileImpl p = new ProfileImpl();
+		p.setParameter(Profile.LOCAL_HOST, Profile.LOOPBACK_ADDRESS_CONSTANT);
 		
 		Runtime.instance().setCloseVM(true);
 		

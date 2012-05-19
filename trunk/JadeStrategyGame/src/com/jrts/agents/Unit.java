@@ -8,7 +8,7 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 
 import java.util.Random;
 
-import com.jrts.api.IUnit;
+import com.jrts.O2Ainterfaces.IUnit;
 import com.jrts.behaviours.CheckReceivedAttacks;
 import com.jrts.behaviours.FollowPathBehaviour;
 import com.jrts.behaviours.LookForEnemy;

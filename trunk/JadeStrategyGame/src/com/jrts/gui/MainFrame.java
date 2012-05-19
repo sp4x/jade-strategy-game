@@ -20,8 +20,8 @@ import javax.swing.JRadioButton;
 import javax.swing.JSlider;
 import javax.swing.WindowConstants;
 
+import com.jrts.O2Ainterfaces.IUnit;
 import com.jrts.O2Ainterfaces.Team;
-import com.jrts.api.IUnit;
 import com.jrts.common.GameConfig;
 import com.jrts.environment.Floor;
 
