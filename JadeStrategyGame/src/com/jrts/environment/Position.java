@@ -15,7 +15,7 @@ public class Position implements Serializable {
 		this.col = col;
 	}
 
-	Position step(Direction d) {
+	public Position step(Direction d) {
 		return new Position(row + d.rowVar(), col + d.colVar());
 	}
 	
