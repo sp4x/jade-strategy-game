@@ -1,17 +1,16 @@
 package com.jrts.main;
 
+import jade.core.Profile;
+import jade.core.ProfileImpl;
+import jade.core.Runtime;
+import jade.wrapper.AgentContainer;
+import jade.wrapper.AgentController;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JOptionPane;
 
-import jade.Boot;
-import jade.core.Profile;
-import jade.core.ProfileImpl;
-import jade.core.Runtime;
-import jade.util.leap.Properties;
-import jade.wrapper.AgentContainer;
-import jade.wrapper.AgentController;
 import com.jrts.O2Ainterfaces.Team;
 import com.jrts.agents.MasterAI;
 import com.jrts.common.GameConfig;

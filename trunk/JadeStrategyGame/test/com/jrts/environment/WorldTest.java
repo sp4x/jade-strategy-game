@@ -21,8 +21,8 @@ public class WorldTest {
 		World w = World.getInstance();
 		w1 = new Worker(new Position(0, 0));
 		w2 = new Worker(new Position(1, 0));
-		w.addUnit("w1", w1.getPosition());
-		w.addUnit("w2", w2.getPosition());
+		w.addUnit(w1.getPosition(), "w1", null);
+		w.addUnit(w2.getPosition(), "w2", null);
 		
 		
 		Thread moveW1 = new Thread() {

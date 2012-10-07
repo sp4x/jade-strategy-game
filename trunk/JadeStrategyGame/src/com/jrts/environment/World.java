@@ -140,8 +140,7 @@ public class World {
 	 */
 	public synchronized void addTeam(String name) {
 		Random r = new Random();
-		Cell base = new Cell(CellType.BUILDING);
-		base.id = name;
+		Cell base = new Cell(CellType.BUILDING, name);
 		base.resourceEnergy = BUILDING_ENERGY;
 		Position p;
 		do {
@@ -157,28 +156,22 @@ public class World {
 
 
 	/**
-	 * adds a unit in the specified position or in the neighborhood if it is not free
-	 * @param id an identification string for the unit, should be unique for the world
-	 * @param p the position to use. Can be the position of a factory
-	 * @return the position where the unit has been created
+	 * gets the position in the neighborhood of the parameter
+	 * @param p the position to use as center of the neighborhood
+	 * @return the position available
 	 */
-	public synchronized Position addUnit(String id, Position p) {
-		Cell unit = new Cell(CellType.UNIT);
-		unit.id = id;
+	public synchronized Position neighPosition(Position p) {
 		if (!isAvailable(p)) {
 			p = nextTo(p,2);
 			if (p == null)
 				return null;
 		}
-		floor.set(p.row, p.col, unit);
 		return p;
 	}
 	
-	public synchronized void setReference(IUnit unit) {
-		Position p = unit.getPosition();
-		if (floor.get(p).id.equals(unit.getId())) {
-			floor.get(p).unit = unit;
-		}
+	public synchronized void addUnit(Position p, String id, IUnit unit) {
+		Cell unitCell = new Cell(id, unit);
+		floor.set(p.row, p.col, unitCell);
 	}
 
 	/**
