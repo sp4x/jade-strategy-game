@@ -2,6 +2,7 @@ package com.jrts.agents;
 
 import jade.core.AID;
 import jade.core.behaviours.CyclicBehaviour;
+import jade.core.behaviours.TickerBehaviour;
 import jade.core.behaviours.WakerBehaviour;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
@@ -12,13 +13,14 @@ import jade.wrapper.PlatformController;
 
 import java.util.ArrayList;
 
+import com.jrts.O2Ainterfaces.IResourceAI;
 import com.jrts.O2Ainterfaces.IUnit;
 import com.jrts.common.AgentStatus;
 import com.jrts.environment.Position;
 import com.jrts.environment.World;
 
 @SuppressWarnings("serial")
-public class ResourceAI extends JrtsAgent {
+public class ResourceAI extends JrtsAgent implements IResourceAI{
 	
 	int collectedWood;
 	int collectedFood;
@@ -45,14 +47,16 @@ public class ResourceAI extends JrtsAgent {
 			}
 		});
 		
-		addBehaviour(new CyclicBehaviour() {
+		addBehaviour(new CyclicBehaviour(this){
+			
 			@Override
 			public void action() {
+				doWait(1000);
 				// send a food/wood update message to the masterAi
 				ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
+				System.out.println("Notify resources: " + "food: " + collectedFood + " wood: " + collectedWood);
 				msg.setContent("food: " + collectedFood + " wood: " + collectedWood);
 
-				msg.addReceiver(new AID(getTeam(), AID.ISLOCALNAME));
 				msg.addReceiver(new AID(getTeam(), AID.ISLOCALNAME));
 
 				send(msg);
@@ -70,7 +74,7 @@ public class ResourceAI extends JrtsAgent {
 			PlatformController container = getContainerController();
 			AgentController agentController;
 			try {
-				Object[] args = {workerPosition, getTeam()};
+				Object[] args = {workerPosition, getTeam(), this};
 				agentController = container.createNewAgent(workerName, "com.jrts.agents.Worker", args);
 				agentController.start();
 				IUnit o2a = agentController.getO2AInterface(IUnit.class);
@@ -107,5 +111,17 @@ public class ResourceAI extends JrtsAgent {
 	@Override
 	protected void updatePerception() {
 		receivePerception();
+	}
+
+	@Override
+	public void addFood(int newFood) {
+		collectedFood += newFood;
+	}
+
+	@Override
+	public void addWood(int newWood) {
+		System.out.println("Ricevo " + newWood + " legna");
+		collectedWood += newWood;
+		System.out.println("Wood: " + collectedWood);
 	}
 }

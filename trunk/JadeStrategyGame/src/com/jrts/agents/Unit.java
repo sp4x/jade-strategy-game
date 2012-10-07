@@ -196,21 +196,34 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 	}
 	
 	public Position findNearest(CellType type) {
-		double distance = Double.MAX_VALUE;
-		Position nearestPosition = null;
-		for (int i = 0; i < perception.getRows(); i++) {
-			for (int j = 0; j < perception.getCols(); j++) {
-				Position p = new Position(i, j);
-				if (perception.get(p).getType() == type) {
-					double currentDistance = position.distance(p);
-					if (currentDistance < distance) {
-						nearestPosition = p;
-						distance = currentDistance;
-					}
-				}
-			}
-		}
-		return nearestPosition;
+        double distance = Double.MAX_VALUE;
+        Position nearestPosition = null;
+        for (int i = 0; i < perception.getRows(); i++) {
+                for (int j = 0; j < perception.getCols(); j++) {
+                        Position p = new Position(i, j);
+                        if (perception.get(p).getType() == type) {
+                                double currentDistance = position.distance(p);
+                                if (currentDistance < distance) {
+                                        nearestPosition = p;
+                                        distance = currentDistance;
+                                }
+                        }
+                }
+        }
+        return nearestPosition;
 	}
+	
+//	public Position findNearest(Position p, int distance, CellType type) {
+//		double maxDistance = Double.MAX_VALUE;
+//		
+//		for (int minDistance = 1; minDistance <= maxDistance; minDistance++) {
+//			for (Direction d : Direction.ALL) {
+//				Position candidate = findNearest(p.step(d), minDistance-1, type);
+//				if (World.getInstance().getCell(candidate).getType() == type)
+//					return candidate;
+//			}
+//		}
+//		return null;
+//	}
 	
 }

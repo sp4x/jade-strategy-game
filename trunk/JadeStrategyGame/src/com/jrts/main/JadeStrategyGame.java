@@ -21,7 +21,7 @@ import com.jrts.gui.MainFrame;
 public class JadeStrategyGame {
 
 	public static void main(String[] args) throws Exception {
-		World.create(GameConfig.WORLD_ROWS, GameConfig.WORLD_COLS, 0.1f);
+		World.create(GameConfig.WORLD_ROWS, GameConfig.WORLD_COLS, 0.01f);
 		
 		String teamsString = "";
 		do {

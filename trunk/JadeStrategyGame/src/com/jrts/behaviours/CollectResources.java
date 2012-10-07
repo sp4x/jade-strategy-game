@@ -73,8 +73,9 @@ public class CollectResources extends Behaviour {
 	}
 
 	private void go() {
+//		resource = worker.findNearest(worker.getPosition(), worker.getSight(), CellType.WOOD);
 		resource = worker.findNearest(CellType.WOOD);
-		pickUpPoint = World.getInstance().nextTo(worker.getPosition(), resource);
+        pickUpPoint = World.getInstance().nextTo(worker.getPosition(), resource);
 		if (resource != null && pickUpPoint != null) {
 			worker.goThere(pickUpPoint);
 			status = STATUS_GOING;

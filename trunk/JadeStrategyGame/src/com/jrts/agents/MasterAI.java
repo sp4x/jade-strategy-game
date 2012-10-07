@@ -60,6 +60,7 @@ public class MasterAI extends JrtsAgent implements Team {
 						String[] array = mess.split("\\s");
 						food = Integer.parseInt(array[1]);
 						wood = Integer.parseInt(array[3]);
+						System.out.println("Ricevute info resources: " + mess);
 					}
 				} else {
 					// if no message is arrived, block the behaviour
@@ -90,12 +91,12 @@ public class MasterAI extends JrtsAgent implements Team {
 	
 	@Override
 	public int getFood() {
-		return 102;
+		return food;
 	}
 
 	@Override
 	public int getWood() {
-		return 203;
+		return wood;
 	}
 
 	@Override

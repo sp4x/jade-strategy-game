@@ -177,7 +177,7 @@ public class MainFrame extends JFrame {
 	public void repaint(){
 		/** update world panel */
 		worldViewPanel.update();
-		
+				
 		/** update all teampanels */
 		for (int i = 0; i < topPanel.getComponentCount(); i++) {
 			if (topPanel.getComponent(i) instanceof TeamPanel)
