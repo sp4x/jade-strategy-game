@@ -12,6 +12,7 @@ import jade.wrapper.PlatformController;
 
 import java.util.ArrayList;
 
+import com.jrts.O2Ainterfaces.IUnit;
 import com.jrts.common.AgentStatus;
 import com.jrts.environment.Position;
 import com.jrts.environment.World;
@@ -62,16 +63,18 @@ public class ResourceAI extends JrtsAgent {
 	public AID createWorker(){
 		World world = World.getInstance();
 		String workerName = getTeam() + "-worker"+workersList.size();
-		Position workerPosition = world.addUnit(workerName, world.getBuilding(getTeam()));
+		Position workerPosition = world.neighPosition(world.getBuilding(getTeam()));
 		if(workerPosition != null){
 			//Instantiate the worker
 			// get a container controller for creating new agents
 			PlatformController container = getContainerController();
-			AgentController worker;
+			AgentController agentController;
 			try {
 				Object[] args = {workerPosition, getTeam()};
-				worker = container.createNewAgent(workerName, "com.jrts.agents.Worker", args);
-				worker.start();
+				agentController = container.createNewAgent(workerName, "com.jrts.agents.Worker", args);
+				agentController.start();
+				IUnit o2a = agentController.getO2AInterface(IUnit.class);
+				World.getInstance().addUnit(workerPosition, workerName, o2a);
 				
 				// keep the worker's ID on a local list
 				

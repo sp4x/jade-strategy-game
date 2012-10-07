@@ -48,7 +48,6 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 			setPosition((Position) args[0]);
 			setTeam((String) args[1]);
 		}
-		World.getInstance().setReference(this);
 		basicService = new ServiceDescription();
 		basicService.setName(getAID().getName());
 		basicService.setType(getClass().getName());
