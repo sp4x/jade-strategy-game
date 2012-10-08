@@ -2,7 +2,6 @@ package com.jrts.agents;
 
 import jade.core.AID;
 import jade.core.behaviours.CyclicBehaviour;
-import jade.core.behaviours.TickerBehaviour;
 import jade.core.behaviours.WakerBehaviour;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
@@ -27,6 +26,11 @@ public class ResourceAI extends JrtsAgent implements IResourceAI{
 	
 	ArrayList<AID> workersList = new ArrayList<AID>();
 	
+	public ResourceAI() {
+		super();
+		registerO2AInterface(IResourceAI.class, this);
+	}
+
 	protected void setup(){
 		super.setup();
 		
