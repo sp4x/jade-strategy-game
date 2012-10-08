@@ -1,7 +1,6 @@
 package com.jrts.agents;
 
 import com.jrts.O2Ainterfaces.IResourceAI;
-import com.jrts.O2Ainterfaces.Team;
 import com.jrts.behaviours.CollectResources;
 import com.jrts.common.AgentStatus;
 import com.jrts.common.GameConfig;
@@ -20,6 +19,10 @@ public class Worker extends Unit {
 
 	public Worker() {
 		super();
+	}
+
+	public Worker(Position position) {
+		super(position);
 	}
 
 	@Override
@@ -64,7 +67,7 @@ public class Worker extends Unit {
 	}
 
 	public void dropResources() {
-		System.out.println("Invio " + knapsack + " legna");
+//		System.out.println("Invio " + knapsack + " legna");
 		iResourceAI.addWood(knapsack);
 		knapsack = 0;
 	}

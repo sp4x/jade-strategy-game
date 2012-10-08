@@ -33,10 +33,12 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 	private ServiceDescription basicService;
 
 	public Unit() {
+		super();
+		registerO2AInterface(IUnit.class, this);
 	}
 
-	Unit(Position position) {
-		super();
+	public Unit(Position position) {
+		this();
 		this.position = position;
 	}
 
@@ -196,21 +198,21 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 	}
 	
 	public Position findNearest(CellType type) {
-        double distance = Double.MAX_VALUE;
-        Position nearestPosition = null;
-        for (int i = 0; i < perception.getRows(); i++) {
-                for (int j = 0; j < perception.getCols(); j++) {
-                        Position p = new Position(i, j);
-                        if (perception.get(p).getType() == type) {
-                                double currentDistance = position.distance(p);
-                                if (currentDistance < distance) {
-                                        nearestPosition = p;
-                                        distance = currentDistance;
-                                }
-                        }
-                }
-        }
-        return nearestPosition;
+		double distance = Double.MAX_VALUE;
+		Position nearestPosition = null;
+		for (int i = 0; i < perception.getRows(); i++) {
+			for (int j = 0; j < perception.getCols(); j++) {
+				Position p = new Position(i, j);
+				if (perception.get(p).getType() == type) {
+					double currentDistance = position.distance(p);
+					if (currentDistance < distance) {
+						nearestPosition = p;
+						distance = currentDistance;
+					}
+				}
+			}
+		}
+		return nearestPosition;
 	}
 	
 //	public Position findNearest(Position p, int distance, CellType type) {

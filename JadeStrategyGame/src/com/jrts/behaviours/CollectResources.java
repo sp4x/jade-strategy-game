@@ -3,6 +3,7 @@ package com.jrts.behaviours;
 import jade.core.behaviours.Behaviour;
 
 import com.jrts.agents.Worker;
+import com.jrts.common.AgentStatus;
 import com.jrts.environment.CellType;
 import com.jrts.environment.Position;
 import com.jrts.environment.World;
@@ -75,7 +76,8 @@ public class CollectResources extends Behaviour {
 	private void go() {
 //		resource = worker.findNearest(worker.getPosition(), worker.getSight(), CellType.WOOD);
 		resource = worker.findNearest(CellType.WOOD);
-        pickUpPoint = World.getInstance().nextTo(worker.getPosition(), resource);
+		if (resource != null)
+			pickUpPoint = World.getInstance().nextTo(worker.getPosition(), resource);
 		if (resource != null && pickUpPoint != null) {
 			worker.goThere(pickUpPoint);
 			status = STATUS_GOING;
@@ -87,6 +89,7 @@ public class CollectResources extends Behaviour {
 	@Override
 	public boolean done() {
 		if (status == STATUS_NONE) {
+			worker.switchStatus(AgentStatus.FREE);
 			return true;
 		}
 		if (!worker.getStatus().equals(agentStatus)) {

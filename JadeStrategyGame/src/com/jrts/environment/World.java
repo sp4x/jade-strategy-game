@@ -199,7 +199,13 @@ public class World {
 		for (int row = 0; row < floor.rows; row++) {
 			for (int col = 0; col < floor.cols; col++) {
 				boolean inRange = Math.abs(center.row-row) <= sight && Math.abs(center.col-col) <= sight;
-				Cell perceived = ( inRange ? floor.get(row, col) : new Cell(CellType.UNKNOWN));
+				Cell perceived;
+				if (inRange) {
+					Cell cell = floor.get(row, col);
+					perceived = new Cell(cell.type, cell.id);
+				} else {
+					perceived =  new Cell(CellType.UNKNOWN);
+				}
 				perception.set(row, col, perceived);
 			}
 		}
