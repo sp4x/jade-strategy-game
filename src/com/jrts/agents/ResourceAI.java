@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import com.jrts.O2Ainterfaces.IResourceAI;
 import com.jrts.O2Ainterfaces.IUnit;
 import com.jrts.common.AgentStatus;
+import com.jrts.environment.Floor;
 import com.jrts.environment.Position;
 import com.jrts.environment.World;
 
@@ -58,7 +59,7 @@ public class ResourceAI extends JrtsAgent implements IResourceAI{
 				doWait(1000);
 				// send a food/wood update message to the masterAi
 				ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
-				System.out.println("Notify resources: " + "food: " + collectedFood + " wood: " + collectedWood);
+//				System.out.println("Notify resources: " + "food: " + collectedFood + " wood: " + collectedWood);
 				msg.setContent("food: " + collectedFood + " wood: " + collectedWood);
 
 				msg.addReceiver(new AID(getTeam(), AID.ISLOCALNAME));
@@ -113,8 +114,8 @@ public class ResourceAI extends JrtsAgent implements IResourceAI{
 	}
 
 	@Override
-	protected void updatePerception() {
-		receivePerception();
+	protected Floor updatePerception() {
+		return receivePerception();
 	}
 
 	@Override

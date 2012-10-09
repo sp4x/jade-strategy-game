@@ -22,6 +22,7 @@ import com.jrts.environment.World;
 
 @SuppressWarnings("serial")
 public abstract class Unit extends JrtsAgent implements IUnit {
+	
 
 	private Position position = null;
 	private String status;
@@ -30,6 +31,7 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 	int forceOfAttack;
 	int sight;
 	
+	private DFAgentDescription agentDescription;
 	private ServiceDescription basicService;
 
 	public Unit() {
@@ -50,10 +52,13 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 			setPosition((Position) args[0]);
 			setTeam((String) args[1]);
 		}
+		agentDescription = new DFAgentDescription();
+		agentDescription.setName(getAID());
 		basicService = new ServiceDescription();
 		basicService.setName(getAID().getName());
 		basicService.setType(getClass().getName());
-		updatePerception();
+		agentDescription.addServices(basicService);
+		register(agentDescription, false);
 		addBehaviour(new CheckReceivedAttacks(this));
 		addBehaviour(new LookForEnemy(this, 2000));
 		addBehaviour(new ReceiveOrders(this));
@@ -67,13 +72,17 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 		updatePerception();
 		addBehaviour(new FollowPathBehaviour(this, x, y, GameConfig.UNIT_MOVING_ATTEMPTS));
 	}
+	
+	public AID getMasterAID() {
+		return new AID(getTeam(), AID.ISLOCALNAME);
+	}
 
 	@Override
-	protected void updatePerception() {
-		Floor newPerception = World.getInstance().getPerception(getPosition(), sight);
-		updateLocalPerception(newPerception);
+	protected Floor updatePerception() {
+		Floor perception = World.getInstance().getPerception(getPosition(), sight);
 		//send perception to Master
-		sendPerception(newPerception, masterAID);
+		sendPerception(perception, getMasterAID());
+		return perception;
 	}
 
 	public boolean move(Direction dir){
@@ -154,23 +163,6 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 		}
 	}
 
-	private void setStatus(String newStatus, boolean deletePrevious) {
-		DFAgentDescription dfd = new DFAgentDescription();
-		dfd.setName(getAID());
-		ServiceDescription sd = new ServiceDescription();
-		sd.setName(getAID().getName());
-		sd.setType(newStatus);
-		dfd.addServices(basicService);
-		dfd.addServices(sd);
-		// register the description with the DF
-		register(dfd, deletePrevious);
-		status = newStatus;
-	}
-	
-	protected void setStatus(String newStatus) {
-		setStatus(newStatus, false);
-	}
-	
 	@Override
 	public String getStatus() {
 		return status;
@@ -182,7 +174,15 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 	}
 	
 	public void switchStatus(String newStatus) {
-		setStatus(newStatus, true);
+		ServiceDescription sd = new ServiceDescription();
+		sd.setName(getAID().getName());
+		sd.setType(newStatus);
+		agentDescription.clearAllServices();
+		agentDescription.addServices(basicService);
+		agentDescription.addServices(sd);
+		// register the description with the DF
+		register(agentDescription, true);
+		status = newStatus;
 	}
 	
 	public boolean isFriend(String aid) {
@@ -200,6 +200,7 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 	public Position findNearest(CellType type) {
 		double distance = Double.MAX_VALUE;
 		Position nearestPosition = null;
+		Floor perception = getPerception();
 		for (int i = 0; i < perception.getRows(); i++) {
 			for (int j = 0; j < perception.getCols(); j++) {
 				Position p = new Position(i, j);

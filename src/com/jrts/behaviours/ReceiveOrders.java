@@ -5,7 +5,6 @@ import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 
-import com.jrts.agents.Unit;
 import com.jrts.agents.Worker;
 import com.jrts.common.AgentStatus;
 
@@ -35,10 +34,9 @@ public class ReceiveOrders extends CyclicBehaviour {
 	}
 
 	private void parseOrder(String order) {
-		// TODO Auto-generated method stub
-		((Unit) myAgent).switchStatus(order);
 		if (order.equals(AgentStatus.WOOD_CUTTING)) {
-			((Worker) myAgent).cutWood();
+			if (myAgent instanceof Worker)
+				((Worker) myAgent).cutWood();
 		}
 	}
 

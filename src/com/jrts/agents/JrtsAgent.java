@@ -14,34 +14,38 @@ import jade.lang.acl.UnreadableException;
 import java.io.IOException;
 
 import com.jrts.common.GameConfig;
+import com.jrts.environment.CellType;
 import com.jrts.environment.Floor;
+import com.jrts.environment.World;
 
 @SuppressWarnings("serial")
 public abstract class JrtsAgent extends Agent {
 	
-	AID masterAID;
-	Floor perception;
+	private String team;
+	private Floor perception;
 	
 	@Override
 	protected void setup() {
 		super.setup();
-		addBehaviour(new TickerBehaviour(this, GameConfig.PERCEPTION_REFRESH) {
-
-			@Override
-			protected void onTick() {
-				updatePerception();
-			}
-		});
+		World w = World.getInstance();
+		if (w != null) {
+			perception = new Floor(w.getRows(), w.getCols(), CellType.UNKNOWN);
+			addBehaviour(new TickerBehaviour(this, GameConfig.PERCEPTION_REFRESH) {
+	
+				@Override
+				protected void onTick() {
+					perception = updatePerception();
+				}
+			});
+		}
 	}
 	
-	protected abstract void updatePerception();
+	/**
+	 * updates the agent perception
+	 * @return the updated perception
+	 */
+	protected abstract Floor updatePerception();
 	
-	protected void updateLocalPerception(Floor info) {
-		if (perception == null)
-			perception = info;
-		else
-			perception.mergeWith(info);
-	}
 	
 	public void sendPerception(Floor perception, AID receiver) {
 		ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
@@ -55,7 +59,7 @@ public abstract class JrtsAgent extends Agent {
 		}
 	}
 	
-	public void receivePerception() {
+	public Floor receivePerception() {
 		MessageTemplate mt = MessageTemplate.MatchContent("perception");
 		ACLMessage msg = receive(mt);
 		if (msg != null) {
@@ -67,18 +71,27 @@ public abstract class JrtsAgent extends Agent {
 				e.printStackTrace();
 			}
 		}
+		return perception;
 	}
 	
 	public String getTeam() {
-		if (masterAID == null)
-			return "NONE";
-		return masterAID.getLocalName();
+		return team;
 	}
 	
+	
+	/**
+	 * gets the AID of the team directory facilitator
+	 */
 	protected AID getTeamDF() {
 		return new AID(getTeam()+"-df", AID.ISLOCALNAME);
 	}
 
+	
+	/**
+	 * register this agent description to the team directory facilitator
+	 * @param desc the agent description
+	 * @param deletePrevious deregister any previous description associated to the agent
+	 */
 	protected void register(DFAgentDescription desc, boolean deletePrevious) {
 		try {
 			if (deletePrevious)
@@ -103,7 +116,7 @@ public abstract class JrtsAgent extends Agent {
 	}
 	
 	protected void setTeam(String team) {
-		masterAID = new AID(team, AID.ISLOCALNAME);
+		this.team = team;
 	}
 
 	public Floor getPerception() {

@@ -29,7 +29,7 @@ public class MasterAI extends JrtsAgent implements Team {
 	protected void setup(){
 		super.setup();
 		World world = World.getInstance();
-		masterAID = getAID();
+		setTeam(getAID().getLocalName());
 		world.addTeam(getTeam());
 		
 		resourceAID = new AID(getTeam() + "-resourceAI", AID.ISLOCALNAME);
@@ -60,7 +60,7 @@ public class MasterAI extends JrtsAgent implements Team {
 						String[] array = mess.split("\\s");
 						food = Integer.parseInt(array[1]);
 						wood = Integer.parseInt(array[3]);
-						System.out.println("Ricevute info resources: " + mess);
+//						System.out.println("Ricevute info resources: " + mess);
 					}
 				} else {
 					// if no message is arrived, block the behaviour
@@ -71,13 +71,14 @@ public class MasterAI extends JrtsAgent implements Team {
 	}
 	
 	@Override
-	protected void updatePerception() {
+	protected Floor updatePerception() {
 		World world = World.getInstance();
 		//the area near the building is always visible
 		Position citycenter = world.getBuilding(getTeam());
 		Floor center = world.getPerception(citycenter, GameConfig.CITY_CENTER_SIGHT);
 		//TODO maybe do something if an enemy is detected
-		updateLocalPerception(center);
+		Floor perception = getPerception();
+		perception.mergeWith(center);
 		if (perception.get(citycenter).getResourceEnergy() <= 0) {
 			//TODO do something if the main building has been destroyed
 		}
@@ -85,6 +86,7 @@ public class MasterAI extends JrtsAgent implements Team {
 		receivePerception();
 		//update resourcesAI's perception
 		sendPerception(perception, resourceAID);
+		return perception;
 	}
 
 	/** O2A methods (for use in non-agent java objects) */
