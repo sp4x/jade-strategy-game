@@ -33,9 +33,10 @@ public class Worker extends Unit {
 		setForceOfAttack(GameConfig.WORKER_DAMAGES);
 		setSight(GameConfig.WORKER_SIGHT);
 		
-		setStatus(AgentStatus.FREE);
+		switchStatus(AgentStatus.FREE);
 		
-		iResourceAI = (IResourceAI) getArguments()[2];
+		if (getArguments() != null)
+			iResourceAI = (IResourceAI) getArguments()[2];
 		
 	}
 	
@@ -73,6 +74,7 @@ public class Worker extends Unit {
 	}
 
 	public void cutWood() {
+		switchStatus(AgentStatus.WOOD_CUTTING);
 		addBehaviour(new CollectResources(this, AgentStatus.WOOD_CUTTING, CellType.WOOD));
 	}
 }

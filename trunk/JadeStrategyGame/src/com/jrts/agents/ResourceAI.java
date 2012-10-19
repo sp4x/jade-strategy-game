@@ -58,7 +58,7 @@ public class ResourceAI extends JrtsAgent implements IResourceAI{
 				doWait(1000);
 				// send a food/wood update message to the masterAi
 				ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
-				System.out.println("Notify resources: " + "food: " + collectedFood + " wood: " + collectedWood);
+//				System.out.println("Notify resources: " + "food: " + collectedFood + " wood: " + collectedWood);
 				msg.setContent("food: " + collectedFood + " wood: " + collectedWood);
 
 				msg.addReceiver(new AID(getTeam(), AID.ISLOCALNAME));
@@ -106,6 +106,7 @@ public class ResourceAI extends JrtsAgent implements IResourceAI{
 		AID worker = (free.length > 0 ? free[0].getName() : createWorker());
 		if (worker != null) {
 			ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
+			msg.setConversationId("order");
 			msg.addReceiver(worker);
 			msg.setContent(AgentStatus.WOOD_CUTTING);
 			send(msg);
@@ -114,7 +115,6 @@ public class ResourceAI extends JrtsAgent implements IResourceAI{
 
 	@Override
 	protected void updatePerception() {
-		receivePerception();
 	}
 
 	@Override

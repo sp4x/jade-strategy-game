@@ -24,18 +24,24 @@ public class Floor implements Serializable {
 
 	private Cell [][] floor;
 	
+	
+	public Floor(int rows, int cols, CellType defaultCell){
+		this.rows = rows;
+		this.cols = cols;
+		this.floor = new Cell[rows][cols];
+		setAll(new Cell(defaultCell));
+	}
+	
 	/**
 	 * 
 	 * @param rows		length of the floor
 	 * @param cols			width of the floor
 	 */
-	public Floor(int rows, int cols){
-		this.rows = rows;
-		this.cols = cols;
-		this.floor = new Cell[rows][cols];
-		setAll(new Cell(CellType.FREE));
+	public Floor(int rows, int cols) {
+		this(rows, cols, CellType.FREE);
 	}
-	
+
+
 	public void setAll(Cell objectsType) {
 		for (int i = 0; i < rows; i++)
 			for (int j = 0; j < cols; j++)
