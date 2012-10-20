@@ -31,12 +31,14 @@ public class ResourceAI extends GoalBasedAI {
 		super.setup();
 		
 		unitFactory.trainUnit(Worker.class);
+		unitFactory.trainUnit(Worker.class);
 		
 		// order someone to cut wood
 		addBehaviour(new WakerBehaviour(this, 15000) {
 			@Override
 			protected void handleElapsedTimeout() {
 				assignWoodcutter();
+				assignFoodCollector();
 			}
 		});
 		
@@ -89,9 +91,25 @@ public class ResourceAI extends GoalBasedAI {
 		AID worker = (free.length > 0 ? free[0].getName() : null);
 		if (worker != null) {
 			ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
-			msg.setConversationId("order");
+			msg.setConversationId(AgentStatus.class.getSimpleName());
 			msg.addReceiver(worker);
 			msg.setContent(AgentStatus.WOOD_CUTTING);
+			send(msg);
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean assignFoodCollector() {
+		ServiceDescription sd = new ServiceDescription();
+		sd.setType(AgentStatus.FREE);
+		DFAgentDescription[] free = search(sd);
+		AID worker = (free.length > 0 ? free[0].getName() : null);
+		if (worker != null) {
+			ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
+			msg.setConversationId(AgentStatus.class.getSimpleName());
+			msg.addReceiver(worker);
+			msg.setContent(AgentStatus.FOOD_COLLECTING);
 			send(msg);
 			return true;
 		}

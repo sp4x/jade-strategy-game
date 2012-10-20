@@ -246,6 +246,8 @@ public class World {
 	public void setCols(int cols) {
 		this.cols = cols;
 	}
-	
-	
+
+	public synchronized boolean isGameFinished() {
+		return teams.size() <= 1;
+	}
 }
