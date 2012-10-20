@@ -57,7 +57,7 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 		Object[] args = getArguments();
 		if (args != null) {
 			setPosition((Position) args[0]);
-			setTeam((String) args[1]);
+			setTeamName((String) args[1]);
 		}
 		agentDescription = new DFAgentDescription();
 		agentDescription.setName(getAID());
@@ -81,7 +81,11 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 	}
 	
 	public AID getMasterAID() {
-		return new AID(getTeam(), AID.ISLOCALNAME);
+		return new AID(getTeamName(), AID.ISLOCALNAME);
+	}
+	
+	public AID getResourceAID() {
+		return new AID(getTeamName() + "-resourceAI", AID.ISLOCALNAME);
 	}
 
 	@Override
@@ -100,7 +104,6 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 	}
 
 	public boolean move(Direction dir){
-		System.out.println("moving");
 		return World.getInstance().move(this.position, dir);
 	}
 
