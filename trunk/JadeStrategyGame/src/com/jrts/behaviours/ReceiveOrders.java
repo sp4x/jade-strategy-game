@@ -36,7 +36,10 @@ public class ReceiveOrders extends CyclicBehaviour {
 	private void parseOrder(String order) {
 		if (order.equals(AgentStatus.WOOD_CUTTING)) {
 			if (myAgent instanceof Worker)
-				((Worker) myAgent).cutWood();
+				((Worker) myAgent).collectWood();
+		} else if (order.equals(AgentStatus.FOOD_COLLECTING)) {
+			if (myAgent instanceof Worker)
+				((Worker) myAgent).collectFood();
 		}
 	}
 

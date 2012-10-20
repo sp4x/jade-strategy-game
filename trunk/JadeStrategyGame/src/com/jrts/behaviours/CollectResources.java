@@ -2,6 +2,7 @@ package com.jrts.behaviours;
 
 import jade.core.behaviours.Behaviour;
 
+import com.jrts.agents.Unit;
 import com.jrts.agents.Worker;
 import com.jrts.common.AgentStatus;
 import com.jrts.environment.CellType;
@@ -15,37 +16,36 @@ public class CollectResources extends Behaviour {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-
-	private static final int STATUS_NONE = 0;
-	private static final int STATUS_GOING = 1;
-	private static final int STATUS_CARRYING = 2;
+	private static final int STATUS_IDLE = 0;
+	private static final int STATUS_GOING_WORK = 1;
+	private static final int STATUS_BACK_HOME = 2;
 
 	Worker worker;
-	String agentStatus;
-	int status = STATUS_NONE;
+	CellType resourceToCollect;
+	int behaviourStatus = STATUS_IDLE;
 
-	Position resource;
+	Position resourcePosition;
 	Position cityCenter;
 	Position pickUpPoint;
 	Position leavePoint;
 
-	public CollectResources(Worker worker, String agentStatus, CellType resource) {
+	public CollectResources(Worker worker, CellType resource) {
 		super(worker);
 		this.worker = worker;
-		this.agentStatus = agentStatus;
-		cityCenter = World.getInstance().getBuilding(worker.getTeamName());
+		this.resourceToCollect = resource;
+		this.cityCenter = World.getInstance().getCityCenter(worker.getTeamName());
 	}
 
 	@Override
 	public void action() {
-		switch (status) {
-		case STATUS_NONE:
+		switch (behaviourStatus) {
+		case STATUS_IDLE:
 			go();
 			break;
-		case STATUS_GOING:
+		case STATUS_GOING_WORK:
 			pick();
 			break;
-		case STATUS_CARRYING:
+		case STATUS_BACK_HOME:
 			carry();
 			break;
 		default:
@@ -61,40 +61,40 @@ public class CollectResources extends Behaviour {
 	}
 
 	private void pick() {
-		Position p = worker.getPosition();
-		if (p.equals(pickUpPoint)) {
+		Position currentPosition = worker.getPosition();
+		if (currentPosition.equals(pickUpPoint)) {
 			worker.spendTime();
-			worker.takeResources(resource);
+			worker.takeResources(resourcePosition);
 			if (worker.knapsackIsFull()) {
-				leavePoint = World.getInstance().nextTo(p, cityCenter);
+				leavePoint = World.getInstance().nextTo(currentPosition, cityCenter);
 				worker.goThere(leavePoint);
-				status = STATUS_CARRYING;
+				behaviourStatus = STATUS_BACK_HOME;
 			}
 		}
 	}
 
+	/**
+	 * Find a near resource and start to go there
+	 */
 	private void go() {
-//		resource = worker.findNearest(worker.getPosition(), worker.getSight(), CellType.WOOD);
-		resource = worker.findNearest(CellType.WOOD);
-		if (resource != null)
-			pickUpPoint = World.getInstance().nextTo(worker.getPosition(), resource);
-		if (resource != null && pickUpPoint != null) {
+		resourcePosition = worker.findNearest(resourceToCollect);
+		if (resourcePosition != null)
+			pickUpPoint = World.getInstance().nextTo(worker.getPosition(), resourcePosition);
+		if (resourcePosition != null && pickUpPoint != null) {
 			worker.goThere(pickUpPoint);
-			status = STATUS_GOING;
+			behaviourStatus = STATUS_GOING_WORK;
 		}
 		else
-			status = STATUS_NONE;
+			behaviourStatus = STATUS_IDLE;
 	}
 	
 	@Override
 	public boolean done() {
-		if (status == STATUS_NONE) {
-			worker.switchStatus(AgentStatus.FREE);
+		String agentStatus = ((Unit) myAgent).getStatus();
+		if (!agentStatus.equals(AgentStatus.FOOD_COLLECTING) && resourceToCollect == CellType.FOOD)
 			return true;
-		}
-		if (!worker.getStatus().equals(agentStatus)) {
+		if (!agentStatus.equals(AgentStatus.WOOD_CUTTING) && resourceToCollect == CellType.WOOD)
 			return true;
-		}
 		return false;
 	}
 

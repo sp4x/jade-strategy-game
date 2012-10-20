@@ -102,7 +102,7 @@ public class MasterAI extends JrtsAgent implements Team {
 	protected void updatePerception() {
 		World world = World.getInstance();
 		//the area near the building is always visible
-		Position citycenter = world.getBuilding(getTeamName());
+		Position citycenter = world.getCityCenter(getTeamName());
 		Perception center = world.getPerception(citycenter, GameConfig.CITY_CENTER_SIGHT);
 		//TODO maybe do something if an enemy is detected
 		//TODO check if the main building has been destroyed

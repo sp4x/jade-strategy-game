@@ -83,9 +83,14 @@ public class Worker extends Unit {
 		knapsack = 0;
 	}
 
-	public void cutWood() {
+	public void collectWood() {
 		switchStatus(AgentStatus.WOOD_CUTTING);
-		addBehaviour(new CollectResources(this, AgentStatus.WOOD_CUTTING, CellType.WOOD));
+		addBehaviour(new CollectResources(this, CellType.WOOD));
+	}
+
+	public void collectFood() {
+		switchStatus(AgentStatus.FOOD_COLLECTING);
+		addBehaviour(new CollectResources(this, CellType.FOOD));
 	}
 }
 ;

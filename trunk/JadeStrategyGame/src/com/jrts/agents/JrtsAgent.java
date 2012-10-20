@@ -59,7 +59,6 @@ public abstract class JrtsAgent extends Agent {
 				DFService.deregister(this, getTeamDF());
 			DFService.register(this, getTeamDF(), desc);
 		} catch (FIPAException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -70,10 +69,9 @@ public abstract class JrtsAgent extends Agent {
 		try {
 			return DFService.search(this, getTeamDF(), desc);
 		} catch (FIPAException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return new DFAgentDescription[1];
+		return new DFAgentDescription[0];
 	}
 
 	protected void setTeamName(String team) {

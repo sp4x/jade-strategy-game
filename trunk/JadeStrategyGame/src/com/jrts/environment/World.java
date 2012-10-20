@@ -179,7 +179,7 @@ public class World {
 	 * @param teamName the name of the team
 	 * @return the position of the main building
 	 */
-	public synchronized Position getBuilding(String teamName) {
+	public synchronized Position getCityCenter(String teamName) {
 		return teams.get(teamName);
 	}
 
