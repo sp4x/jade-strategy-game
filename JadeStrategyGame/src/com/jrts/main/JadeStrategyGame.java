@@ -32,8 +32,6 @@ public class JadeStrategyGame {
 		
 		/** start jade runtime */
 		Runtime rt = Runtime.instance();
-//		String[] jadeArgs = {"-local-host", "127.0.0.1"};
-//		Properties pp = Boot.parseCmdLineArgs(jadeArgs);
 		ProfileImpl p = new ProfileImpl();
 		p.setParameter(Profile.LOCAL_HOST, Profile.LOOPBACK_ADDRESS_CONSTANT);
 		

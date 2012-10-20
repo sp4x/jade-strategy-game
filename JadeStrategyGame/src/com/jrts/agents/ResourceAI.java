@@ -47,6 +47,7 @@ public class ResourceAI extends JrtsAgent {
 		
 		createWorker();
 		
+		// order someone to cut wood
 		addBehaviour(new WakerBehaviour(this, 5000) {
 			@Override
 			protected void handleElapsedTimeout() {
@@ -54,6 +55,7 @@ public class ResourceAI extends JrtsAgent {
 			}
 		});
 		
+		// inform the masterAI about resources 
 		addBehaviour(new CyclicBehaviour(this){
 			@Override
 			public void action() {
@@ -73,8 +75,8 @@ public class ResourceAI extends JrtsAgent {
 			}
 		});
 		
+		// listen for resources update by the workers
 		addBehaviour(new CyclicBehaviour(this) {
-			
 			@Override
 			public void action() {
 				// listen if a food/wood update message arrives from the resourceAi
