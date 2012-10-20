@@ -13,6 +13,16 @@ public class GameConfig {
 	public static final int WORKER_SPEED = 15;
 	public static final int SOLDIER_SPEED = 7;
 	
+	
+	public static final int WORKER_FOOD_COST = 15;
+	public static final int WORKER_WOOD_COST = 5;
+
+	public static final int SOLDIER_FOOD_COST = 20;
+	public static final int SOLDIER_WOOD_COST = 15;
+	
+	public static final int SOLDIER_NUMBER_LIMIT = 10;
+	public static final int WORKER_NUMBER_LIMIT = 10;
+	
 	public static final int WORKER_SIGHT = 40; //TODO change
 	public static final int SOLDIER_SIGHT = 4;
 	public static final int CITY_CENTER_SIGHT = 5;
@@ -30,4 +40,6 @@ public class GameConfig {
 	
 	public static final int ATTACKS_REFRESH = 50;
 	public static final int PERCEPTION_REFRESH = 500;
+	
+	public static final int UNIT_CREATION_TIME = 10;
 }
