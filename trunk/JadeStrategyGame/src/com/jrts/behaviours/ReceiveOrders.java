@@ -17,12 +17,11 @@ public class ReceiveOrders extends CyclicBehaviour {
 
 	public ReceiveOrders(Agent a) {
 		super(a);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public void action() {
-		MessageTemplate pattern = MessageTemplate.MatchConversationId("order");
+		MessageTemplate pattern = MessageTemplate.MatchConversationId(AgentStatus.class.getSimpleName());
 		ACLMessage msg = myAgent.receive(pattern);
 		if (msg != null) {
 			parseOrder(msg.getContent());
