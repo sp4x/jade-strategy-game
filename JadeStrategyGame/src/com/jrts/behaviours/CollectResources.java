@@ -33,7 +33,7 @@ public class CollectResources extends Behaviour {
 		super(worker);
 		this.worker = worker;
 		this.agentStatus = agentStatus;
-		cityCenter = World.getInstance().getBuilding(worker.getTeam());
+		cityCenter = World.getInstance().getBuilding(worker.getTeamName());
 	}
 
 	@Override

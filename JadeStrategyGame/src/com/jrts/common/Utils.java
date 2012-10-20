@@ -11,6 +11,7 @@ import com.jrts.environment.Direction;
 import com.jrts.environment.Floor;
 
 public class Utils {
+	
 	public static ArrayList<Direction> calculatePath(Floor floor, int x1, int y1, int x2, int y2){
 		//create walkable graph
 		UndirectedWeightedGraph walkableGraph = new UndirectedWeightedGraph();

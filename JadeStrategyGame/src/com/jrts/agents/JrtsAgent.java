@@ -34,7 +34,7 @@ public abstract class JrtsAgent extends Agent {
 	protected abstract void updatePerception();
 
 
-	public String getTeam() {
+	public String getTeamName() {
 		return team;
 	}
 
@@ -42,7 +42,7 @@ public abstract class JrtsAgent extends Agent {
 	 * gets the AID of the team directory facilitator
 	 */
 	protected AID getTeamDF() {
-		return new AID(getTeam() + "-df", AID.ISLOCALNAME);
+		return new AID(getTeamName() + "-df", AID.ISLOCALNAME);
 	}
 
 	/**
@@ -76,7 +76,7 @@ public abstract class JrtsAgent extends Agent {
 		return new DFAgentDescription[1];
 	}
 
-	protected void setTeam(String team) {
+	protected void setTeamName(String team) {
 		this.team = team;
 	}
 

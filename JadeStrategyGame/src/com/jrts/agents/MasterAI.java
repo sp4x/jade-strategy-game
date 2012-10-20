@@ -17,6 +17,7 @@ import com.jrts.environment.Perception;
 import com.jrts.environment.Position;
 import com.jrts.environment.World;
 import com.jrts.environment.WorldMap;
+import com.jrts.messages.AggiornaRisorse;
 
 
 @SuppressWarnings("serial")
@@ -36,10 +37,10 @@ public class MasterAI extends JrtsAgent implements Team {
 		super.setup();
 		World world = World.getInstance();
 		worldMap = new WorldMap(world.getRows(), world.getCols());
-		setTeam(getAID().getLocalName());
-		world.addTeam(getTeam());
+		setTeamName(getAID().getLocalName());
+		world.addTeam(getTeamName());
 		
-		resourceAID = new AID(getTeam() + "-resourceAI", AID.ISLOCALNAME);
+		resourceAID = new AID(getTeamName() + "-resourceAI", AID.ISLOCALNAME);
 
 		//create ResourceAI
 		// get a container controller for creating new agents
@@ -49,32 +50,32 @@ public class MasterAI extends JrtsAgent implements Team {
 			df = container.createNewAgent(getTeamDF().getLocalName(), "jade.domain.df", null);
 			df.start();
 			String[] arg = new String[1];
-			arg[0] = getTeam();
-			resourceAI = container.createNewAgent(resourceAID.getLocalName(), "com.jrts.agents.ResourceAI", arg);
+			arg[0] = getTeamName();
+			resourceAI = container.createNewAgent(resourceAID.getLocalName(), ResourceAI.class.getName(), arg);
 			resourceAI.start();
 		} catch (ControllerException e) {
 			e.printStackTrace();
 		}
 		
-//		addBehaviour(new CyclicBehaviour() {
-//			@Override
-//			public void action() {
-//				// listen if a food/wood update message arrives from the resourceAi
-//				ACLMessage msg = receive(MessageTemplate.MatchPerformative(ACLMessage.INFORM));
-//				if (msg != null) {
-//					String mess = msg.getContent();
-//					if (mess.matches("food: \\d+ wood: \\d+")) {
-//						String[] array = mess.split("\\s");
-//						food = Integer.parseInt(array[1]);
-//						wood = Integer.parseInt(array[3]);
-////						System.out.println("Ricevute info resources: " + mess);
-//					}
-//				} else {
-//					// if no message is arrived, block the behaviour
-//					block();
-//				}
-//			}
-//		});
+		addBehaviour(new CyclicBehaviour() {
+			@Override
+			public void action() {
+				// listen if a food/wood update message arrives from the resourceAi
+				ACLMessage msg = receive(MessageTemplate.MatchConversationId(AggiornaRisorse.class.getSimpleName()));
+				if (msg != null) {
+					try {
+						AggiornaRisorse aggiornamento = (AggiornaRisorse) msg.getContentObject();
+						food = aggiornamento.getFood();
+						wood = aggiornamento.getWood();
+					} catch (UnreadableException e) {
+						e.printStackTrace();
+					}
+				} else {
+					// if no message is arrived, block the behaviour
+					block();
+				}
+			}
+		});
 		
 		addBehaviour(new CyclicBehaviour() {
 			
@@ -103,7 +104,7 @@ public class MasterAI extends JrtsAgent implements Team {
 	protected void updatePerception() {
 		World world = World.getInstance();
 		//the area near the building is always visible
-		Position citycenter = world.getBuilding(getTeam());
+		Position citycenter = world.getBuilding(getTeamName());
 		Perception center = world.getPerception(citycenter, GameConfig.CITY_CENTER_SIGHT);
 		//TODO maybe do something if an enemy is detected
 		//TODO check if the main building has been destroyed
