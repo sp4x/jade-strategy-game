@@ -57,10 +57,10 @@ public class MasterAI extends JrtsAgent implements Team {
 			e.printStackTrace();
 		}
 		
+		// listen if a food/wood update message arrives from the resourceAi
 		addBehaviour(new CyclicBehaviour() {
 			@Override
 			public void action() {
-				// listen if a food/wood update message arrives from the resourceAi
 				ACLMessage msg = receive(MessageTemplate.MatchConversationId(AggiornaRisorse.class.getSimpleName()));
 				if (msg != null) {
 					try {
@@ -71,14 +71,13 @@ public class MasterAI extends JrtsAgent implements Team {
 						e.printStackTrace();
 					}
 				} else {
-					// if no message is arrived, block the behaviour
 					block();
 				}
 			}
 		});
 		
+		// listen for world map request and answer
 		addBehaviour(new CyclicBehaviour() {
-			
 			@Override
 			public void action() {
 				MessageTemplate mt = MessageTemplate.MatchConversationId(WorldMap.class.getSimpleName());
@@ -88,10 +87,9 @@ public class MasterAI extends JrtsAgent implements Team {
 					try {
 						reply.setContentObject(worldMap);
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					System.out.println("replying");
+//					System.out.println("replying");
 					send(reply);
 				} else {
 					block();
