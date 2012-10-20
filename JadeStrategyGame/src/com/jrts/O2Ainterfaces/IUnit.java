@@ -8,5 +8,5 @@ public interface IUnit {
 	public String getStatus();
 	public String getId();
 	public Position getPosition();
-
+	public String getTeamName();
 }

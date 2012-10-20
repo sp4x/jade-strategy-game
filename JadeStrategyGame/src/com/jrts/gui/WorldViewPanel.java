@@ -9,6 +9,8 @@ import javax.swing.JPanel;
 import com.jrts.common.GameConfig;
 import com.jrts.environment.CellType;
 import com.jrts.environment.Floor;
+import com.jrts.environment.Position;
+import com.jrts.environment.World;
 
 /**
  * Implement a JPanel to represent the environment and the agent
@@ -54,15 +56,18 @@ public class WorldViewPanel extends JPanel {
 				int x = (int) (i*ImageLoader.iconSize*GameConfig.VERTICAL_OVERLAP);
 				labelMatrix[i][j].setBounds( y, x, ImageLoader.iconSize, ImageLoader.iconSize);
 				
-				if(floor.get(i, j).getType() == CellType.UNIT)
-					labelMatrix[i][j].setIcon(ImageLoader.workerIcon);
-				else if(floor.get(i, j).getType() == CellType.WOOD)
+				if(floor.get(i, j).getType() == CellType.UNIT){
+					labelMatrix[i][j].setIcon(ImageLoader.getWorkerImageIcon(World.getInstance().getCell(new Position(labelMatrix[i][j].i, labelMatrix[i][j].j)).getUnit().getTeamName()));
+					//labelMatrix[i][j].setIcon(ImageLoader.workerIcon);
+				} else if(floor.get(i, j).getType() == CellType.WOOD)
 					labelMatrix[i][j].setIcon(ImageLoader.treeIcon);
 				else if(floor.get(i, j).getType() == CellType.FOOD)
 					labelMatrix[i][j].setIcon(ImageLoader.foodIcon);
 				else if(floor.get(i, j).getType() == CellType.BUILDING)
-					labelMatrix[i][j].setIcon(ImageLoader.workerFactoryIcon);
-				else if(AttacksManager.isThereAnHit(i,j))
+				{
+					labelMatrix[i][j].setIcon(ImageLoader.getWorkerFactoryImageIcon(World.getInstance().getCell(new Position(labelMatrix[i][j].i, labelMatrix[i][j].j)).getId()));
+					//labelMatrix[i][j].setIcon(ImageLoader.workerFactoryIcon);
+				} else if(AttacksManager.isThereAnHit(i,j))
 					labelMatrix[i][j].setIcon(ImageLoader.hitIcon);
 				else if(floor.get(i, j).getType() == CellType.FREE)
 					labelMatrix[i][j].setIcon(ImageLoader.freeIcon);

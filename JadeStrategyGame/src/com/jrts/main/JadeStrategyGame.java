@@ -25,9 +25,9 @@ public class JadeStrategyGame {
 		
 		String teamsString = "";
 		do {
-			teamsString = JOptionPane.showInputDialog("Number of teams", "2");
+			teamsString = JOptionPane.showInputDialog("Number of teams (max 4)", "2");
 		}
-		while (!teamsString.matches("\\d+"));
+		while (!teamsString.matches("\\d+") || Integer.valueOf(teamsString) > 4);
 		int teamNumber = Integer.valueOf(teamsString);
 		
 		/** start jade runtime */
