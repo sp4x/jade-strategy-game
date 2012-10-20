@@ -100,14 +100,14 @@ public class ResourceAI extends JrtsAgent {
 	public AID createWorker(){
 		World world = World.getInstance();
 		String workerName = getTeamName() + "-worker"+workersList.size();
-		Position workerPosition = world.neighPosition(world.getBuilding(getTeamName()));
+		Position workerPosition = world.neighPosition(world.getCityCenter(getTeamName()));
 		if(workerPosition != null){
 			//Instantiate the worker
 			// get a container controller for creating new agents
 			PlatformController container = getContainerController();
 			AgentController agentController;
 			try {
-				Object[] args = {workerPosition, getTeamName(), this};
+				Object[] args = {workerPosition, getTeamName()};
 				agentController = container.createNewAgent(workerName, Worker.class.getName(), args);
 				agentController.start();
 				IUnit o2a = agentController.getO2AInterface(IUnit.class);
