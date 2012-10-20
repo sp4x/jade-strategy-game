@@ -8,21 +8,15 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.UnreadableException;
-import jade.wrapper.AgentController;
-import jade.wrapper.ControllerException;
-import jade.wrapper.PlatformController;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
-import com.jrts.O2Ainterfaces.IUnit;
 import com.jrts.common.AgentStatus;
-import com.jrts.environment.Position;
-import com.jrts.environment.World;
 import com.jrts.messages.AggiornaRisorse;
 
 @SuppressWarnings("serial")
-public class ResourceAI extends JrtsAgent {
+public class ResourceAI extends GoalBasedAI {
 	
 	int collectedWood;
 	int collectedFood;
@@ -36,19 +30,10 @@ public class ResourceAI extends JrtsAgent {
 	protected void setup(){
 		super.setup();
 		
-		String[] args = (String[]) getArguments();
-		if (args != null) {
-			setTeamName(args[0]);
-		}
-		else{
-			System.out.println("Needs team's name");
-			System.exit(1);
-		}
-		
-		createWorker();
+		unitFactory.trainUnit(Worker.class);
 		
 		// order someone to cut wood
-		addBehaviour(new WakerBehaviour(this, 5000) {
+		addBehaviour(new WakerBehaviour(this, 15000) {
 			@Override
 			protected void handleElapsedTimeout() {
 				assignWoodcutter();
@@ -97,53 +82,23 @@ public class ResourceAI extends JrtsAgent {
 		});
 	}
 	
-	public AID createWorker(){
-		World world = World.getInstance();
-		String workerName = getTeamName() + "-worker"+workersList.size();
-		Position workerPosition = world.neighPosition(world.getCityCenter(getTeamName()));
-		if(workerPosition != null){
-			//Instantiate the worker
-			// get a container controller for creating new agents
-			PlatformController container = getContainerController();
-			AgentController agentController;
-			try {
-				Object[] args = {workerPosition, getTeamName()};
-				agentController = container.createNewAgent(workerName, Worker.class.getName(), args);
-				agentController.start();
-				IUnit o2a = agentController.getO2AInterface(IUnit.class);
-				World.getInstance().addUnit(workerPosition, workerName, o2a);
-				
-				// keep the worker's ID on a local list
-				
-				AID workerAID = new AID(workerName, AID.ISLOCALNAME);
-				workersList.add( workerAID );
-				return workerAID;
-			} catch (ControllerException e) {
-				e.printStackTrace();
-			}
-		}
-		else{
-			System.out.println(getTeamName() + ":Cannot instantiate the worker");
-		}
-		return null;
-	}
-	
-	public void assignWoodcutter() {
+	public boolean assignWoodcutter() {
 		ServiceDescription sd = new ServiceDescription();
 		sd.setType(AgentStatus.FREE);
 		DFAgentDescription[] free = search(sd);
-		AID worker = (free.length > 0 ? free[0].getName() : createWorker());
+		AID worker = (free.length > 0 ? free[0].getName() : null);
 		if (worker != null) {
 			ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
 			msg.setConversationId("order");
 			msg.addReceiver(worker);
 			msg.setContent(AgentStatus.WOOD_CUTTING);
 			send(msg);
+			return true;
 		}
+		return false;
 	}
 
 	@Override
 	protected void updatePerception() {
 	}
-
 }

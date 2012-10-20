@@ -13,21 +13,26 @@ import jade.wrapper.PlatformController;
 
 import com.jrts.O2Ainterfaces.Team;
 import com.jrts.common.GameConfig;
+import com.jrts.common.GoalPriority;
+import com.jrts.common.UnitFactory;
 import com.jrts.environment.Perception;
 import com.jrts.environment.Position;
 import com.jrts.environment.World;
 import com.jrts.environment.WorldMap;
 import com.jrts.messages.AggiornaRisorse;
+import com.jrts.messages.GoalLevels;
 
 
 @SuppressWarnings("serial")
 public class MasterAI extends JrtsAgent implements Team {
 	
-	AID resourceAID;
+	AID resourceAID, militaryAID;
 	
 	WorldMap worldMap;
 	
 	int food, wood;
+	
+	GoalPriority resources;
 	
 	public MasterAI() {
 		registerO2AInterface(Team.class, this);
@@ -41,18 +46,24 @@ public class MasterAI extends JrtsAgent implements Team {
 		world.addTeam(getTeamName());
 		
 		resourceAID = new AID(getTeamName() + "-resourceAI", AID.ISLOCALNAME);
+		militaryAID = new AID(getTeamName() + "-militaryAI", AID.ISLOCALNAME);
 
 		//create ResourceAI
 		// get a container controller for creating new agents
 		PlatformController container = getContainerController();
-		AgentController resourceAI, df;
+		AgentController militaryAI, resourceAI, df;
 		try {
 			df = container.createNewAgent(getTeamDF().getLocalName(), "jade.domain.df", null);
 			df.start();
-			String[] arg = new String[1];
+			
+			Object[] arg = new Object[2];
 			arg[0] = getTeamName();
+			arg[1] = new UnitFactory(this.getO2AInterface(Team.class), getContainerController());
+			
 			resourceAI = container.createNewAgent(resourceAID.getLocalName(), ResourceAI.class.getName(), arg);
 			resourceAI.start();
+			militaryAI = container.createNewAgent(militaryAID.getLocalName(), MilitaryAI.class.getName(), arg);
+			militaryAI.start();
 		} catch (ControllerException e) {
 			e.printStackTrace();
 		}
@@ -141,4 +152,25 @@ public class MasterAI extends JrtsAgent implements Team {
 	public String getTeamName() {
 		return getLocalName();
 	}
+
+	public void setResourcesGoalPriority(GoalPriority resources) {
+		this.resources = resources;
+		notifyGoalChanges();
+	}
+	
+	private void notifyGoalChanges() {
+		ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
+		msg.setConversationId(GoalLevels.class.getSimpleName());
+		msg.addReceiver(militaryAID);
+		msg.addReceiver(resourceAID);
+		try {
+			msg.setContentObject(new GoalLevels(resources));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		send(msg);
+	}
+	
+	
 }
