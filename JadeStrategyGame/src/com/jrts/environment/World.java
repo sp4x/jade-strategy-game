@@ -109,7 +109,11 @@ public class World {
 	public synchronized Cell getCell(Position p) {
 		return floor.get(p);
 	}
-
+	/*
+	public Cell unSyncGetCell(Position p) {
+		return floor.get(p);
+	}
+	*/
 	Position near(Position p, int minDistance, int maxDistance) {
 		if (p.row+maxDistance > floor.rows || p.col+maxDistance > floor.cols)
 			return null;
