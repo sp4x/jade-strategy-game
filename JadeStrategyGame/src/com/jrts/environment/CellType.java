@@ -4,7 +4,8 @@ public enum CellType {
 	FREE,
 	WOOD,
 	FOOD,
-	UNIT,
+	WORKER, 
+	SOLDIER,
 	CITY_CENTER,
 	UNKNOWN;
 }

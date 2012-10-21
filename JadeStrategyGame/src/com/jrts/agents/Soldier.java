@@ -37,4 +37,9 @@ public class Soldier extends Unit {
 	public void sendHit(Direction direction) {
 		AttacksManager.addHit(getPosition().clone(), direction, GameConfig.SOLDIER_DAMAGES);
 	}
+
+	@Override
+	public CellType getType() {
+		return CellType.SOLDIER;
+	}
 }

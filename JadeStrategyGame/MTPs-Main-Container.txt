@@ -1,1 +1,1 @@
-http://Sal-PC.homenet.telecomitalia.it:7778/acc
+http://neb:7778/acc

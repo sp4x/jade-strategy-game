@@ -27,7 +27,7 @@ public class TeamPanel extends JPanel{
 		
 		if(team.getTeamName().equals("team1")) border.setTitleColor(Color.RED);
 		if(team.getTeamName().equals("team2")) border.setTitleColor(Color.BLACK);
-		if(team.getTeamName().equals("team3")) border.setTitleColor(Color.YELLOW);
+		if(team.getTeamName().equals("team3")) border.setTitleColor(Color.ORANGE);
 		if(team.getTeamName().equals("team4")) border.setTitleColor(Color.BLUE);
 		
 		super.setBorder(border);

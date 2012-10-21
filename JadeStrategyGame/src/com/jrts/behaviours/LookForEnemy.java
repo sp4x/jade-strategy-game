@@ -33,7 +33,8 @@ public class LookForEnemy extends TickerBehaviour {
 
 	private void check(Cell cell) {
 		Unit unit = (Unit) myAgent;
-		if (cell.getType() == CellType.UNIT && !unit.isFriend(cell.getId()))
+		// TODO: E se celltype è WORKER?
+		if (cell.getType() == CellType.SOLDIER && !unit.isFriend(cell.getId()))
 			doSomething();
 	}
 

@@ -28,9 +28,9 @@ public class Cell implements Serializable {
 		this.unit = null;
 	}
 
-	public Cell(String id, IUnit unit) {
+	public Cell(String id, IUnit unit, CellType type) {
 		super();
-		this.type = CellType.UNIT;
+		this.type = type;
 		this.id = id;
 		this.unit = unit;
 	}

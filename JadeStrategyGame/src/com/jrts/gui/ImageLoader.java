@@ -1,13 +1,13 @@
 package com.jrts.gui;
 
 import java.awt.Dimension;
-import java.awt.Image;
 
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
 class ImageLoader {
 	public static ImageIcon freeIcon, workerIcon1, workerIcon2, workerIcon3, workerIcon4, 
-							treeIcon, woodIcon, foodIcon, workerFactoryIcon1, 
+							treeIcon, woodIcon, foodIcon, workerFactoryIcon1, soldierIcon, 
 							workerFactoryIcon2, workerFactoryIcon3, workerFactoryIcon4,
 							background;
 	
@@ -36,6 +36,10 @@ class ImageLoader {
 		return null;
 	}
 	
+	public static Icon getSoldierImageIcon(String teamName) {
+		return soldierIcon;
+	}
+	
 	public static ImageIcon getBackgroundImage(Dimension d)
 	{
 		return new ImageIcon(new ImageIcon("img/sabbia.jpg").getImage().getScaledInstance((int)d.getWidth(), (int)d.getHeight(), 15));
@@ -50,6 +54,9 @@ class ImageLoader {
 		workerFactoryIcon2 = new ImageIcon(new ImageIcon("img/workerFactory2.png").getImage().getScaledInstance(iconSize,iconSize,iconSize));
 		workerFactoryIcon3 = new ImageIcon(new ImageIcon("img/workerFactory3.png").getImage().getScaledInstance(iconSize,iconSize,iconSize));
 		workerFactoryIcon4 = new ImageIcon(new ImageIcon("img/workerFactory4.png").getImage().getScaledInstance(iconSize,iconSize,iconSize));
+		
+		soldierIcon = new ImageIcon(new ImageIcon("img/soldier.jpg").getImage().getScaledInstance(iconSize,iconSize,iconSize));
+		
 		workerIcon1 = new ImageIcon(new ImageIcon("img/worker1.gif").getImage().getScaledInstance(iconSize,iconSize,iconSize));
 		workerIcon2 = new ImageIcon(new ImageIcon("img/worker2.gif").getImage().getScaledInstance(iconSize,iconSize,iconSize));
 		workerIcon3 = new ImageIcon(new ImageIcon("img/worker3.gif").getImage().getScaledInstance(iconSize,iconSize,iconSize));
