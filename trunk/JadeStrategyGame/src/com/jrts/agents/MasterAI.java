@@ -31,7 +31,7 @@ public class MasterAI extends JrtsAgent implements Team {
 	
 	WorldMap worldMap;
 	
-	GoalPriority resources;
+	GoalPriority resourcesPriority;
 	ResourcesContainer resourcesContainer;
 	UnitFactory unitFactory;
 	
@@ -153,8 +153,8 @@ public class MasterAI extends JrtsAgent implements Team {
 		return getLocalName();
 	}
 
-	public void setResourcesGoalPriority(GoalPriority resources) {
-		this.resources = resources;
+	public void setResourcesGoalPriority(GoalPriority resourcesPriority) {
+		this.resourcesPriority = resourcesPriority;
 		notifyGoalChanges();
 	}
 	
@@ -164,7 +164,7 @@ public class MasterAI extends JrtsAgent implements Team {
 		msg.addReceiver(militaryAID);
 		msg.addReceiver(resourceAID);
 		try {
-			msg.setContentObject(new GoalLevels(resources));
+			msg.setContentObject(new GoalLevels(resourcesPriority));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
