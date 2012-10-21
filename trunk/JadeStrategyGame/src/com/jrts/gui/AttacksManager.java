@@ -23,7 +23,7 @@ public class AttacksManager {
 
 	public synchronized static void addHit(Position pos, Direction dir, int damage){
 		Hit hit = new Hit(pos, dir, damage);
-		//Eseguo uno spostamento per evitare che il colpo danneggi l'unit√† sorgente stessa
+		//Eseguo uno spostamento per evitare che il colpo danneggi l'unita'† sorgente stessa
 		hit.step();
 		hits.add(hit);
 //		System.out.println("Added new hit" + hits.size());

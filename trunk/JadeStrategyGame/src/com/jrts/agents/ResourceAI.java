@@ -117,6 +117,5 @@ public class ResourceAI extends GoalBasedAI {
 	}
 
 	@Override
-	protected void updatePerception() {
-	}
+	protected void updatePerception() {}
 }

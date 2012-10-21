@@ -52,12 +52,14 @@ public class WorldViewPanel extends JPanel {
 		AttacksManager.update();
 		for (int i = 0; i < floor.getRows(); i++)
 			for (int j = 0; j < floor.getCols(); j++) {
+				CellLabel currCellLabel = labelMatrix[i][j];
 				int y = (int) (j*ImageLoader.iconSize*GameConfig.HORIZONTAL_OVERLAP);
 				int x = (int) (i*ImageLoader.iconSize*GameConfig.VERTICAL_OVERLAP);
-				labelMatrix[i][j].setBounds( y, x, ImageLoader.iconSize, ImageLoader.iconSize);
+				currCellLabel.setBounds( y, x, ImageLoader.iconSize, ImageLoader.iconSize);
 				
 				if(floor.get(i, j).getType() == CellType.UNIT){
-					labelMatrix[i][j].setIcon(ImageLoader.getWorkerImageIcon(World.getInstance().getCell(new Position(labelMatrix[i][j].i, labelMatrix[i][j].j)).getUnit().getTeamName()));
+					//todo fixare baco. Succede che viene passato un id pari a null
+					labelMatrix[i][j].setIcon(ImageLoader.getWorkerImageIcon(World.getInstance().getCell(new Position(i,j)).getUnit().getTeamName()));
 					//labelMatrix[i][j].setIcon(ImageLoader.workerIcon);
 				} else if(floor.get(i, j).getType() == CellType.WOOD)
 					labelMatrix[i][j].setIcon(ImageLoader.treeIcon);
@@ -65,7 +67,7 @@ public class WorldViewPanel extends JPanel {
 					labelMatrix[i][j].setIcon(ImageLoader.foodIcon);
 				else if(floor.get(i, j).getType() == CellType.BUILDING)
 				{
-					labelMatrix[i][j].setIcon(ImageLoader.getWorkerFactoryImageIcon(World.getInstance().getCell(new Position(labelMatrix[i][j].i, labelMatrix[i][j].j)).getId()));
+					labelMatrix[i][j].setIcon(ImageLoader.getWorkerFactoryImageIcon(World.getInstance().getCell(new Position(i,j)).getId()));
 					//labelMatrix[i][j].setIcon(ImageLoader.workerFactoryIcon);
 				} else if(AttacksManager.isThereAnHit(i,j))
 					labelMatrix[i][j].setIcon(ImageLoader.hitIcon);
