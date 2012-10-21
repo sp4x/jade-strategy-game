@@ -39,7 +39,7 @@ public class Worker extends Unit {
 		
 		switchStatus(AgentStatus.FREE);
 		
-		addBehaviour(new SendAttack(this));
+//		addBehaviour(new SendAttack(this));
 	}
 	
 	public void sendHit(Direction direction) {

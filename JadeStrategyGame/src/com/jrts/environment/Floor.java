@@ -191,4 +191,8 @@ public class Floor implements Serializable {
 		}
 		return null;
 	}
+
+	public Cell getCopy(Position p) {
+		return new Cell(get(p));
+	}
 }

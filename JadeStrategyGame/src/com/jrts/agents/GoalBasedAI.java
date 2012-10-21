@@ -1,12 +1,15 @@
 package com.jrts.agents;
 
 import jade.core.AID;
+import jade.domain.FIPAAgentManagement.DFAgentDescription;
+import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.wrapper.AgentController;
 import jade.wrapper.ControllerException;
 import jade.wrapper.PlatformController;
 
 import com.jrts.O2Ainterfaces.IUnit;
 import com.jrts.behaviours.CheckGoals;
+import com.jrts.common.AgentStatus;
 import com.jrts.common.UnitFactory;
 import com.jrts.environment.Position;
 import com.jrts.environment.World;
@@ -31,7 +34,7 @@ public abstract class GoalBasedAI extends JrtsAgent {
 		Object[] args = getArguments();
 		if (args != null) {
 			setTeamName((String) args[0]);
-			setUnitFactory((UnitFactory) args[1]);
+			unitFactory = ((UnitFactory) args[1]);
 		} else {
 			System.out.println("Needs team's name");
 			System.exit(1);
@@ -70,28 +73,19 @@ public abstract class GoalBasedAI extends JrtsAgent {
 	public void updateGoalLevels(GoalLevels goals) {
 		this.goalLevels = goals;
 	}
+	
+//	public AID[] getAgentsByServiceType(String type) {
+//		ServiceDescription sd = new ServiceDescription();
+//		sd.setType(type);
+//		DFAgentDescription[] results = search(sd);
+//		AID[] agents = new AID[results.length];
+//		for (int i = 0; i < results.length; i++) {
+//			agents[i] = results[i].getName();
+//		}
+//		return agents;
+//	}
+	
+	
 
-	public GoalLevels getGoalLevels() {
-		return goalLevels;
-	}
-
-	public void setGoalLevels(GoalLevels goalLevels) {
-		this.goalLevels = goalLevels;
-	}
-
-	public long getUnitCounter() {
-		return unitCounter;
-	}
-
-	public void setUnitCounter(long unitCounter) {
-		this.unitCounter = unitCounter;
-	}
-
-	public UnitFactory getUnitFactory() {
-		return unitFactory;
-	}
-
-	public void setUnitFactory(UnitFactory unitFactory) {
-		this.unitFactory = unitFactory;
-	}
+	
 }
