@@ -243,7 +243,10 @@ public class MainFrame extends JFrame {
 	{
 		//IUnit  World.getInstance().getCell(selectedUnit.getPosition()).getUnit();
 		labelTeam.setText(selectedUnit.getTeamName());
-		labelType.setText("Worker");
+		if(selectedUnit.getType().equals(CellType.WORKER))
+			labelType.setText("Worker");
+		else if(selectedUnit.getType().equals(CellType.SOLDIER))
+			labelType.setText("Soldier");
 		labelPosition.setText(selectedUnit.getPosition().getCol() +", "+ selectedUnit.getPosition().getRow());
 		labelEnergy.setText("" + selectedUnit.getLife());
 		labelAction.setText(selectedUnit.getStatus());

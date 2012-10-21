@@ -93,5 +93,10 @@ public class Worker extends Unit {
 		switchStatus(AgentStatus.FOOD_COLLECTING);
 		addBehaviour(new CollectResources(this, CellType.FOOD));
 	}
+	
+	@Override
+	public CellType getType() {
+		return CellType.WORKER;
+	}
 }
 ;

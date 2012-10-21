@@ -169,7 +169,7 @@ public class World {
 	}
 	
 	public synchronized void addUnit(Position p, String id, IUnit unit) {
-		Cell unitCell = new Cell(id, unit);
+		Cell unitCell = new Cell(id, unit, unit.getType());
 		floor.set(p.row, p.col, unitCell);
 	}
 

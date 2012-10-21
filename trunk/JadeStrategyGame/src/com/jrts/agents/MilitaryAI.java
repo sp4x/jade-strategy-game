@@ -1,6 +1,7 @@
 package com.jrts.agents;
 
 import jade.core.AID;
+import jade.core.behaviours.WakerBehaviour;
 
 import java.util.ArrayList;
 
@@ -15,6 +16,13 @@ public class MilitaryAI extends GoalBasedAI {
 		super.setup();
 		
 		// TODO che cazzo deve fare la milaryAI?
+		
+		addBehaviour(new WakerBehaviour(this, 15000) {
+			@Override
+			protected void handleElapsedTimeout() {
+				unitFactory.trainUnit(Soldier.class);
+			}
+		});
 	}
 
 	@Override

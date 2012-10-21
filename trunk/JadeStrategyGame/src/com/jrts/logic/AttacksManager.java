@@ -21,7 +21,7 @@ public class AttacksManager {
 
 	public synchronized static void addHit(Position pos, Direction dir, int damage){
 		Hit hit = new Hit(pos, dir, damage);
-		//Eseguo uno spostamento per evitare che il colpo danneggi l'unita'  sorgente stessa
+		//Eseguo uno spostamento per evitare che il colpo danneggi l'unita'ï¿½ sorgente stessa
 		hit.step();
 		hits.add(hit);
 //		System.out.println("Added new hit" + hits.size());
@@ -57,7 +57,7 @@ public class AttacksManager {
 				Hit hit = hits.remove(i);
 				Position pos = hit.getPos();
 				int damage = hit.getDamage();
-				if(floor.get(hp).getType() == CellType.UNIT)
+				if(floor.get(hp).getType() == CellType.WORKER || floor.get(hp).getType() == CellType.SOLDIER)
 					World.getInstance().getCell(pos).getUnit().decreaseLife(damage);
 			}
 		}

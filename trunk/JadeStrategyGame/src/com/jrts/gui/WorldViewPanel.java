@@ -60,8 +60,13 @@ public class WorldViewPanel extends JPanel {
 				int x = (int) (i*ImageLoader.iconSize*GameConfig.VERTICAL_OVERLAP);
 				currCellLabel.setBounds( y, x, ImageLoader.iconSize, ImageLoader.iconSize);
 				
-				if(floor.get(i, j).getType() == CellType.UNIT){
+				if(floor.get(i, j).getType() == CellType.WORKER){
 					try { labelMatrix[i][j].setIcon(ImageLoader.getWorkerImageIcon(World.getInstance().getCell(new Position(i,j)).getUnit().getTeamName()));
+					} catch (NullPointerException e) {}
+
+					//labelMatrix[i][j].setIcon(ImageLoader.workerIcon);
+				} else if(floor.get(i, j).getType() == CellType.SOLDIER){
+					try { labelMatrix[i][j].setIcon(ImageLoader.getSoldierImageIcon(World.getInstance().getCell(new Position(i,j)).getUnit().getTeamName()));
 					} catch (NullPointerException e) {}
 
 					//labelMatrix[i][j].setIcon(ImageLoader.workerIcon);

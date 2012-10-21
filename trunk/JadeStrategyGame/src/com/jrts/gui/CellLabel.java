@@ -28,16 +28,17 @@ public class CellLabel extends JLabel {
 				Cell cell = World.getInstance().getCell(new Position(i, j));
 				if(MainFrame.getInstance().clickType.equals(MainFrame.selectionClick))
 				{
-					if(cell.getType() != CellType.UNIT) {
+					if(cell.getType() == CellType.WORKER || cell.getType() == CellType.SOLDIER) {
+						MainFrame.getInstance().selectedUnit = cell.getUnit();
+					// } else if(cell.getType() != CellType.WORKER) {
+					} else {
 						MainFrame.getInstance().selectedUnit = null;
 						MainFrame.getInstance().showCellInfo(i, j, cell.getResourceEnergy());
 						MainFrame.getInstance().setSelectedCell(i,j);
 						
-					} else if(cell.getType() == CellType.UNIT) {
-						MainFrame.getInstance().selectedUnit = cell.getUnit();
 					}
 				} else {
-					if(cell.getType() != CellType.UNIT)
+					if(cell.getType() != CellType.WORKER)
 					{
 //						JOptionPane.showMessageDialog(MainFrame.getInstance(), 
 //								"Tipo Cell:" + cell.toString() + " Posizione: " + i + " - " + j);

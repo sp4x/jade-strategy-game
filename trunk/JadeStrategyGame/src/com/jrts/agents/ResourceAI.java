@@ -3,14 +3,11 @@ package com.jrts.agents;
 import jade.core.AID;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.core.behaviours.WakerBehaviour;
-import jade.domain.FIPAAgentManagement.DFAgentDescription;
-import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.UnreadableException;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import com.jrts.behaviours.UpdateWorkersMap;
 import com.jrts.common.AgentStatus;

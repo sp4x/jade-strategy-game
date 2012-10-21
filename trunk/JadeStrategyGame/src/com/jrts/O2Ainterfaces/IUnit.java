@@ -1,5 +1,6 @@
 package com.jrts.O2Ainterfaces;
 
+import com.jrts.environment.CellType;
 import com.jrts.environment.Position;
 
 public interface IUnit {
@@ -10,4 +11,5 @@ public interface IUnit {
 	public String getId();
 	public Position getPosition();
 	public String getTeamName();
+	public CellType getType();
 }
