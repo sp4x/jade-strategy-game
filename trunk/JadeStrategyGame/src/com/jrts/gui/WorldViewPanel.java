@@ -11,6 +11,7 @@ import com.jrts.environment.CellType;
 import com.jrts.environment.Floor;
 import com.jrts.environment.Position;
 import com.jrts.environment.World;
+import com.jrts.logic.AttacksManager;
 
 /**
  * Implement a JPanel to represent the environment and the agent
