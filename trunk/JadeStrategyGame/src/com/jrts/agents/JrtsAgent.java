@@ -1,5 +1,7 @@
 package com.jrts.agents;
 
+import java.util.logging.Logger;
+
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.TickerBehaviour;
@@ -13,6 +15,8 @@ import com.jrts.common.GameConfig;
 @SuppressWarnings("serial")
 public abstract class JrtsAgent extends Agent {
 
+	public Logger logger = Logger.getLogger(Agent.class.getName());
+	
 	private String team;
 
 	@Override

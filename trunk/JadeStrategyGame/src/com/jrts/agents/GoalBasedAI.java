@@ -1,15 +1,12 @@
 package com.jrts.agents;
 
 import jade.core.AID;
-import jade.domain.FIPAAgentManagement.DFAgentDescription;
-import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.wrapper.AgentController;
 import jade.wrapper.ControllerException;
 import jade.wrapper.PlatformController;
 
 import com.jrts.O2Ainterfaces.IUnit;
 import com.jrts.behaviours.CheckGoals;
-import com.jrts.common.AgentStatus;
 import com.jrts.common.UnitFactory;
 import com.jrts.environment.Position;
 import com.jrts.environment.World;
@@ -36,7 +33,7 @@ public abstract class GoalBasedAI extends JrtsAgent {
 			setTeamName((String) args[0]);
 			unitFactory = ((UnitFactory) args[1]);
 		} else {
-			System.out.println("Needs team's name");
+			logger.severe("Needs team's name");
 			System.exit(1);
 		}
 		
@@ -65,7 +62,7 @@ public abstract class GoalBasedAI extends JrtsAgent {
 			}
 		}
 		else{
-			System.out.println(getTeamName() + ":Cannot instantiate the unit");
+			logger.severe(getTeamName() + ":Cannot instantiate the unit");
 		}
 		return null;
 	}

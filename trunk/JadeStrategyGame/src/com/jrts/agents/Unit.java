@@ -27,7 +27,6 @@ import com.jrts.environment.WorldMap;
 @SuppressWarnings("serial")
 public abstract class Unit extends JrtsAgent implements IUnit {
 	
-
 	private Position position = null;
 	private String status;
 	private Perception perception;
@@ -57,6 +56,8 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 		if (args != null) {
 			setPosition((Position) args[0]);
 			setTeamName((String) args[1]);
+		} else {
+			
 		}
 		agentDescription = new DFAgentDescription();
 		agentDescription.setName(getAID());
@@ -74,7 +75,7 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 	}
 
 	public void goThere(int x, int y) {
-		System.out.println(getAID().getName() + ":Go there " + new Position(x, y));
+		logger.info(getAID().getName() + ":Go there " + new Position(x, y));
 		addBehaviour(new FollowPathBehaviour(this, x, y, GameConfig.UNIT_MOVING_ATTEMPTS));
 	}
 	

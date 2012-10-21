@@ -103,7 +103,6 @@ public class MasterAI extends JrtsAgent implements Team {
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
-//					System.out.println("replying");
 					send(reply);
 				} else {
 					block();

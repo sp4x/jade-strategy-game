@@ -5,7 +5,6 @@ import jade.lang.acl.ACLMessage;
 import java.io.IOException;
 
 import com.jrts.behaviours.CollectResources;
-import com.jrts.behaviours.SendAttack;
 import com.jrts.common.AgentStatus;
 import com.jrts.common.GameConfig;
 import com.jrts.environment.CellType;
