@@ -1,15 +1,9 @@
 package com.jrts.behaviours;
 
 import jade.core.behaviours.CyclicBehaviour;
-import jade.lang.acl.ACLMessage;
-import jade.lang.acl.MessageTemplate;
-import jade.lang.acl.UnreadableException;
 
-import com.jrts.agents.GoalBasedAI;
-import com.jrts.agents.Unit;
 import com.jrts.agents.Worker;
 import com.jrts.environment.Direction;
-import com.jrts.messages.GoalLevels;
 
 public class SendAttack extends CyclicBehaviour {
 

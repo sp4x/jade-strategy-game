@@ -2,7 +2,6 @@ package com.jrts.behaviours;
 
 import jade.core.behaviours.Behaviour;
 
-import java.awt.image.renderable.RenderableImage;
 import java.util.ArrayList;
 
 import com.jrts.agents.Unit;

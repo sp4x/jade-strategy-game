@@ -13,7 +13,6 @@ public class GameConfig {
 	public static final int WORKER_SPEED = 15;
 	public static final int SOLDIER_SPEED = 7;
 	
-	
 	public static final int WORKER_FOOD_COST = 15;
 	public static final int WORKER_WOOD_COST = 5;
 
@@ -31,7 +30,7 @@ public class GameConfig {
 	
 	public static final int UNIT_MOVING_ATTEMPTS = 20;
 	
-	public static final int DEFAULT_REFRESH_TIME = 5000;
+	public static int REFRESH_TIME = 5000;
 	public static final int MIN_REFRESH_TIME = 1000;
 	public static final int MAX_REFRESH_TIME = 8000;
 	
