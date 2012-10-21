@@ -19,6 +19,8 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSlider;
 import javax.swing.WindowConstants;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import com.jrts.O2Ainterfaces.IUnit;
 import com.jrts.O2Ainterfaces.Team;
@@ -94,9 +96,19 @@ public class MainFrame extends JFrame {
 		}
 			    
 		JSlider speed = new JSlider(JSlider.HORIZONTAL, GameConfig.MIN_REFRESH_TIME, 
-				GameConfig.MAX_REFRESH_TIME, GameConfig.DEFAULT_REFRESH_TIME);
+				GameConfig.MAX_REFRESH_TIME, GameConfig.REFRESH_TIME);
+		speed.setPaintTicks(true);
+		speed.setPaintLabels(true);
 		speed.setBorder(BorderFactory.createTitledBorder("Speed"));
-		
+		speed.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent ce) {
+			    JSlider source = (JSlider)ce.getSource();
+			    if (!source.getValueIsAdjusting())
+			        GameConfig.REFRESH_TIME = (int)source.getValue();
+			}
+		});
+
 		ActionListener al = new ActionListener() {
 			public void actionPerformed(ActionEvent e) { MainFrame.this.clickType = e.getActionCommand(); }
 		};

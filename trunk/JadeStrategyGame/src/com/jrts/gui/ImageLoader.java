@@ -1,9 +1,16 @@
 package com.jrts.gui;
 
+import java.awt.Dimension;
+import java.awt.Image;
+
 import javax.swing.ImageIcon;
 
 class ImageLoader {
-	public static ImageIcon freeIcon, workerIcon1, workerIcon2, workerIcon3, workerIcon4, treeIcon, woodIcon, foodIcon, workerFactoryIcon1, workerFactoryIcon2, workerFactoryIcon3, workerFactoryIcon4;
+	public static ImageIcon freeIcon, workerIcon1, workerIcon2, workerIcon3, workerIcon4, 
+							treeIcon, woodIcon, foodIcon, workerFactoryIcon1, 
+							workerFactoryIcon2, workerFactoryIcon3, workerFactoryIcon4,
+							background;
+	
 	public static ImageIcon hitIcon;
 	public static int iconSize = 15;
 	
@@ -29,19 +36,28 @@ class ImageLoader {
 		return null;
 	}
 	
+	public static ImageIcon getBackgroundImage(Dimension d)
+	{
+		return new ImageIcon(new ImageIcon("img/sabbia.jpg").getImage().getScaledInstance((int)d.getWidth(), (int)d.getHeight(), 15));
+	}
+	
 	static {
+		//background = new ImageIcon("img/sabbia.jpg");
+
 		freeIcon = new ImageIcon(new ImageIcon("img/tile.gif").getImage().getScaledInstance(iconSize,iconSize,iconSize));
-		workerIcon1 = new ImageIcon(new ImageIcon("img/worker1.gif").getImage().getScaledInstance(iconSize,iconSize,iconSize));
-		workerIcon2 = new ImageIcon(new ImageIcon("img/worker2.gif").getImage().getScaledInstance(iconSize,iconSize,iconSize));
-		workerIcon3 = new ImageIcon(new ImageIcon("img/worker3.gif").getImage().getScaledInstance(iconSize,iconSize,iconSize));
-		workerIcon4 = new ImageIcon(new ImageIcon("img/worker4.gif").getImage().getScaledInstance(iconSize,iconSize,iconSize));
-		treeIcon = new ImageIcon(new ImageIcon("img/tree.png").getImage().getScaledInstance(iconSize,iconSize,iconSize));
-		foodIcon = new ImageIcon(new ImageIcon("img/food.gif").getImage().getScaledInstance(iconSize,iconSize,iconSize));
+
 		workerFactoryIcon1 = new ImageIcon(new ImageIcon("img/workerFactory1.png").getImage().getScaledInstance(iconSize,iconSize,iconSize));
 		workerFactoryIcon2 = new ImageIcon(new ImageIcon("img/workerFactory2.png").getImage().getScaledInstance(iconSize,iconSize,iconSize));
 		workerFactoryIcon3 = new ImageIcon(new ImageIcon("img/workerFactory3.png").getImage().getScaledInstance(iconSize,iconSize,iconSize));
 		workerFactoryIcon4 = new ImageIcon(new ImageIcon("img/workerFactory4.png").getImage().getScaledInstance(iconSize,iconSize,iconSize));
+		workerIcon1 = new ImageIcon(new ImageIcon("img/worker1.gif").getImage().getScaledInstance(iconSize,iconSize,iconSize));
+		workerIcon2 = new ImageIcon(new ImageIcon("img/worker2.gif").getImage().getScaledInstance(iconSize,iconSize,iconSize));
+		workerIcon3 = new ImageIcon(new ImageIcon("img/worker3.gif").getImage().getScaledInstance(iconSize,iconSize,iconSize));
+		workerIcon4 = new ImageIcon(new ImageIcon("img/worker4.gif").getImage().getScaledInstance(iconSize,iconSize,iconSize));
+		
+		treeIcon = new ImageIcon(new ImageIcon("img/tree.png").getImage().getScaledInstance(iconSize,iconSize,iconSize));
+		foodIcon = new ImageIcon(new ImageIcon("img/food.png").getImage().getScaledInstance(iconSize,iconSize,iconSize));
 		woodIcon = new ImageIcon(new ImageIcon("img/wood.png").getImage().getScaledInstance(iconSize,iconSize,iconSize));
-		hitIcon = new ImageIcon(new ImageIcon("img/hit.gif").getImage().getScaledInstance(iconSize,iconSize,iconSize));		
+		hitIcon = new ImageIcon(new ImageIcon("img/hit.gif").getImage().getScaledInstance(iconSize,iconSize,iconSize));
 	}
 }

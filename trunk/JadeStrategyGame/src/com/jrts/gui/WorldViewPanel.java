@@ -2,6 +2,7 @@ package com.jrts.gui;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
@@ -26,6 +27,7 @@ public class WorldViewPanel extends JPanel {
 
 	public WorldViewPanel(Floor floor) {
 		this.floor = floor;
+
 		init();
 		update();
 	}
@@ -77,4 +79,8 @@ public class WorldViewPanel extends JPanel {
 					labelMatrix[i][j].setIcon(ImageLoader.freeIcon);
 			}
 	}
+	
+	  public void paintComponent(Graphics g) {
+		    g.drawImage(ImageLoader.getBackgroundImage(this.getSize()).getImage(), 0, 0, null);
+		  }
 }
