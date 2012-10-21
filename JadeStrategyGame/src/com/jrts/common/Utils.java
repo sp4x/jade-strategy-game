@@ -9,48 +9,54 @@ import org.jgrapht.graph.DefaultWeightedEdge;
 import com.jrts.environment.CellType;
 import com.jrts.environment.Direction;
 import com.jrts.environment.Floor;
+import com.jrts.environment.Position;
 
 public class Utils {
 	
-	public static ArrayList<Direction> calculatePath(Floor floor, int x1, int y1, int x2, int y2){
+	public static ArrayList<Direction> calculatePath(Floor floor, Position startPosition, Position endPosition){
+		int startRow = startPosition.getRow();
+		int startCol = startPosition.getCol();
+		int endRow = endPosition.getRow();
+		int endCol = endPosition.getCol();
+		
 		//create walkable graph
 		UndirectedWeightedGraph walkableGraph = new UndirectedWeightedGraph();
 		//avoid exceptions
-		walkableGraph.addVertex(x1 + "," + y1);
-		walkableGraph.addVertex(x2 + "," + y2);
+		walkableGraph.addVertex(startRow + "," + startCol);
+		walkableGraph.addVertex(endRow + "," + endCol);
 		for (int i = 0; i < floor.getRows(); i++)
 			for (int j = 0; j < floor.getCols(); j++){
 				//NB La cella di partenza anche se occupata dall'unita' fa parte del grafo
 				if(floor.get(i, j).getType() == CellType.FREE || floor.get(i, j).getType() == CellType.UNKNOWN){
 					// A
 					// |
-					if( i-1 >= 0 && (floor.get(i-1, j).getType() == CellType.FREE || floor.get(i-1, j).getType() == CellType.UNKNOWN || (i-1==x1 && j==y1)) ){
+					if( i-1 >= 0 && (floor.get(i-1, j).getType() == CellType.FREE || floor.get(i-1, j).getType() == CellType.UNKNOWN || (i-1==startRow && j==startCol)) ){
 						String v1 = i + "," + j;
 						String v2 = (i-1) + "," + j;
 						walkableGraph.addWeightedEdge(v1, v2, 1);
 					}
 					// |
 					// v
-					if( i+1 < floor.getRows() && (floor.get(i+1, j).getType() == CellType.FREE || floor.get(i+1, j).getType() == CellType.UNKNOWN || (i+1==x1 && j==y1)) ){
+					if( i+1 < floor.getRows() && (floor.get(i+1, j).getType() == CellType.FREE || floor.get(i+1, j).getType() == CellType.UNKNOWN || (i+1==startRow && j==startCol)) ){
 						String v1 = i + "," + j;
 						String v2 = (i+1) + "," + j;
 						walkableGraph.addWeightedEdge(v1, v2, 1);
 					}
 					// <-
-					if( j-1 >= 0 && (floor.get(i, j-1).getType() == CellType.FREE || floor.get(i, j-1).getType() == CellType.UNKNOWN || (i==x1 && j-1==y1)) ){
+					if( j-1 >= 0 && (floor.get(i, j-1).getType() == CellType.FREE || floor.get(i, j-1).getType() == CellType.UNKNOWN || (i==startRow && j-1==startCol)) ){
 						String v1 = i + "," + j;
 						String v2 = i + "," + (j-1);
 						walkableGraph.addWeightedEdge(v1, v2, 1);
 					}
 					// ->
-					if( j+1 <= floor.getCols() && (floor.get(i, j+1).getType() == CellType.FREE || floor.get(i, j+1).getType() == CellType.UNKNOWN || (i==x1 && j+1==y1)) ){
+					if( j+1 <= floor.getCols() && (floor.get(i, j+1).getType() == CellType.FREE || floor.get(i, j+1).getType() == CellType.UNKNOWN || (i==startRow && j+1==startCol)) ){
 						String v1 = i + "," + j;
 						String v2 = i + "," + (j+1);
 						walkableGraph.addWeightedEdge(v1, v2, 1);
 					}
 					// A
 					//  \
-					if( j-1 >= 0 && i-1 >= 0 && (floor.get(i-1, j-1).getType() == CellType.FREE || floor.get(i-1, j-1).getType() == CellType.UNKNOWN || (i-1==x1 && j-1==y1)) ){
+					if( j-1 >= 0 && i-1 >= 0 && (floor.get(i-1, j-1).getType() == CellType.FREE || floor.get(i-1, j-1).getType() == CellType.UNKNOWN || (i-1==startRow && j-1==startCol)) ){
 						String v1 = i + "," + j;
 						String v2 = (i-1) + "," + (j-1);
 						walkableGraph.addWeightedEdge(v1, v2, 1);
@@ -58,21 +64,21 @@ public class Utils {
 					
 					//   A
 					//  /
-					if( j+1 < floor.getCols() && i-1 >= 0 && (floor.get(i-1, j+1).getType() == CellType.FREE || floor.get(i-1, j+1).getType() == CellType.UNKNOWN || (i-1==x1 && j+1==y1)) ){
+					if( j+1 < floor.getCols() && i-1 >= 0 && (floor.get(i-1, j+1).getType() == CellType.FREE || floor.get(i-1, j+1).getType() == CellType.UNKNOWN || (i-1==startRow && j+1==startCol)) ){
 						String v1 = i + "," + j;
 						String v2 = (i-1) + "," + (j+1);
 						walkableGraph.addWeightedEdge(v1, v2, 1);
 					}
 					//  /
 					// v
-					if( j-1 >= 0 && i+1 < floor.getRows() && (floor.get(i+1, j-1).getType() == CellType.FREE || floor.get(i+1, j-1).getType() == CellType.UNKNOWN || (i+1==x1 && j-1==y1)) ){
+					if( j-1 >= 0 && i+1 < floor.getRows() && (floor.get(i+1, j-1).getType() == CellType.FREE || floor.get(i+1, j-1).getType() == CellType.UNKNOWN || (i+1==startRow && j-1==startCol)) ){
 						String v1 = i + "," + j;
 						String v2 = (i+1) + "," + (j-1);
 						walkableGraph.addWeightedEdge(v1, v2, 1);
 					}
 					//  \
 					//   v
-					if( j+1 < floor.getCols() && i+1 < floor.getRows() && (floor.get(i+1, j+1).getType() == CellType.FREE || floor.get(i+1, j+1).getType() == CellType.UNKNOWN || (i+1==x1 && j+1==y1)) ){
+					if( j+1 < floor.getCols() && i+1 < floor.getRows() && (floor.get(i+1, j+1).getType() == CellType.FREE || floor.get(i+1, j+1).getType() == CellType.UNKNOWN || (i+1==startRow && j+1==startCol)) ){
 						String v1 = i + "," + j;
 						String v2 = (i+1) + "," + (j+1);
 						walkableGraph.addWeightedEdge(v1, v2, 1);
@@ -81,8 +87,8 @@ public class Utils {
 			}
 
 		//calculate path on the graph
-		String sourceNode = x1 + "," + y1;
-		String destNode = x2 + "," + y2;
+		String sourceNode = startRow + "," + startCol;
+		String destNode = endRow + "," + endCol;
 		if(!walkableGraph.containsVertex(destNode)){
 			System.out.println("Dest Node not reachable");
 			return new ArrayList<Direction>();
@@ -93,6 +99,9 @@ public class Utils {
 		ArrayList<String> cellList = edgeListToCellList(walkableGraph, sourceNode, list);
 //		System.out.println("Cells List:" + cellList);
 		ArrayList<Direction> directions = cellListToDirections(cellList);
+		System.out.println("Path's StartPos:" + startPosition);
+		System.out.println("Path's EndPos:" + endPosition);
+		System.out.println("Path's direction:" + directions);
 		return directions;
 	}
 

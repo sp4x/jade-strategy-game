@@ -17,6 +17,10 @@ class ImageLoader {
 	}
 	
 	public static ImageIcon getWorkerImageIcon(String id){
+		if(id == null){
+			System.out.println("Requested id null!");
+			return null;
+		}
 		if(id.equals("team1")) return workerIcon1;
 		if(id.equals("team2")) return workerIcon2;
 		if(id.equals("team3")) return workerIcon3;

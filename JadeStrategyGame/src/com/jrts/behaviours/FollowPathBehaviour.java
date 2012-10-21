@@ -2,13 +2,16 @@ package com.jrts.behaviours;
 
 import jade.core.behaviours.Behaviour;
 
+import java.awt.image.renderable.RenderableImage;
 import java.util.ArrayList;
 
 import com.jrts.agents.Unit;
 import com.jrts.common.GameConfig;
 import com.jrts.common.Utils;
 import com.jrts.environment.Direction;
+import com.jrts.environment.Floor;
 import com.jrts.environment.Position;
+import com.jrts.environment.World;
 
 @SuppressWarnings("serial")
 public class FollowPathBehaviour extends Behaviour {
@@ -18,6 +21,8 @@ public class FollowPathBehaviour extends Behaviour {
 	private int goalRow, goalCol;
 	int remainingAttempts;
 	
+	Floor worldCachedCopy;
+		
 	public FollowPathBehaviour(Unit unit, int goalRow, int goalCol, int remainingAttempts) {
 		this.unit = unit;
 		this.goalRow = goalRow;
@@ -25,10 +30,13 @@ public class FollowPathBehaviour extends Behaviour {
 		this.remainingAttempts = remainingAttempts;
 		this.list = new ArrayList<Direction>();
 		
-		if(remainingAttempts > 0){
-			Position unitPos = unit.getPosition();
-			this.list  = Utils.calculatePath(unit.getPerception(), unitPos.getRow(), unitPos.getCol(), goalRow, goalCol);
+		//se prima invocazione del behaviour
+		if(remainingAttempts == GameConfig.UNIT_MOVING_ATTEMPTS){
+			setWorldCachedCopy(World.getInstance().getFloor().getCopy());
 		}
+		
+		if(remainingAttempts > 0)
+			this.list  = Utils.calculatePath(getWorldCachedCopy(), unit.getPosition(), new Position(goalRow, goalCol));
 	}
 
 	@Override
@@ -64,5 +72,13 @@ public class FollowPathBehaviour extends Behaviour {
 
 	public void setGoalCol(int goalCol) {
 		this.goalCol = goalCol;
+	}
+
+	public Floor getWorldCachedCopy() {
+		return worldCachedCopy;
+	}
+
+	public void setWorldCachedCopy(Floor cachedCopy) {
+		this.worldCachedCopy = cachedCopy;
 	}
 }

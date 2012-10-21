@@ -4,7 +4,6 @@ import jade.wrapper.AgentController;
 import jade.wrapper.ControllerException;
 import jade.wrapper.PlatformController;
 
-import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import com.jrts.O2Ainterfaces.IUnit;
