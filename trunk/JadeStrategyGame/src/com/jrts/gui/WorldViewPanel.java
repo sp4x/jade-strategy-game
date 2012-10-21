@@ -69,7 +69,7 @@ public class WorldViewPanel extends JPanel {
 					labelMatrix[i][j].setIcon(ImageLoader.treeIcon);
 				else if(floor.get(i, j).getType() == CellType.FOOD)
 					labelMatrix[i][j].setIcon(ImageLoader.foodIcon);
-				else if(floor.get(i, j).getType() == CellType.BUILDING)
+				else if(floor.get(i, j).getType() == CellType.CITY_CENTER)
 				{
 					labelMatrix[i][j].setIcon(ImageLoader.getWorkerFactoryImageIcon(World.getInstance().getCell(new Position(i,j)).getId()));
 					//labelMatrix[i][j].setIcon(ImageLoader.workerFactoryIcon);

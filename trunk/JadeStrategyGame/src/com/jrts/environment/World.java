@@ -139,7 +139,7 @@ public class World {
 	 */
 	public synchronized void addTeam(String name) {
 		Random r = new Random();
-		Cell base = new Cell(CellType.BUILDING, name);
+		Cell base = new Cell(CellType.CITY_CENTER, name);
 		base.resourceEnergy = BUILDING_ENERGY;
 		Position p;
 		do {
