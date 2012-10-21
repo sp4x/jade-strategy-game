@@ -12,27 +12,29 @@ import jade.lang.acl.UnreadableException;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import com.jrts.behaviours.UpdateWorkersMap;
 import com.jrts.common.AgentStatus;
+import com.jrts.common.WorkersMap;
 import com.jrts.messages.AggiornaRisorse;
 
 @SuppressWarnings("serial")
 public class ResourceAI extends GoalBasedAI {
-	
+
 	int collectedWood;
 	int collectedFood;
-	
-	ArrayList<AID> workersList = new ArrayList<AID>();
-	
+
+	WorkersMap workersMap = new WorkersMap();
+
 	public ResourceAI() {
 		super();
 	}
 
-	protected void setup(){
+	protected void setup() {
 		super.setup();
-		
+
 		unitFactory.trainUnit(Worker.class);
 		unitFactory.trainUnit(Worker.class);
-		
+
 		// order someone to cut wood
 		addBehaviour(new WakerBehaviour(this, 15000) {
 			@Override
@@ -41,9 +43,9 @@ public class ResourceAI extends GoalBasedAI {
 				assignFoodCollector();
 			}
 		});
-		
-		// inform the masterAI about resources 
-		addBehaviour(new CyclicBehaviour(this){
+
+		// inform the masterAI about resources
+		addBehaviour(new CyclicBehaviour(this) {
 			@Override
 			public void action() {
 				doWait(1000);
@@ -51,7 +53,8 @@ public class ResourceAI extends GoalBasedAI {
 				ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
 				msg.setConversationId(AggiornaRisorse.class.getSimpleName());
 				try {
-					msg.setContentObject(new AggiornaRisorse(collectedWood, collectedFood));
+					msg.setContentObject(new AggiornaRisorse(collectedWood,
+							collectedFood));
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -61,16 +64,20 @@ public class ResourceAI extends GoalBasedAI {
 				send(msg);
 			}
 		});
-		
+
 		// listen for resources update by the workers
 		addBehaviour(new CyclicBehaviour(this) {
 			@Override
 			public void action() {
-				// listen if a food/wood update message arrives from the resourceAi
-				ACLMessage msg = receive(MessageTemplate.MatchConversationId(AggiornaRisorse.class.getSimpleName()));
+				// listen if a food/wood update message arrives from the
+				// resourceAi
+				ACLMessage msg = receive(MessageTemplate
+						.MatchConversationId(AggiornaRisorse.class
+								.getSimpleName()));
 				if (msg != null) {
 					try {
-						AggiornaRisorse aggiornamento = (AggiornaRisorse) msg.getContentObject();
+						AggiornaRisorse aggiornamento = (AggiornaRisorse) msg
+								.getContentObject();
 						collectedFood += aggiornamento.getFood();
 						collectedWood += aggiornamento.getWood();
 					} catch (UnreadableException e) {
@@ -82,40 +89,36 @@ public class ResourceAI extends GoalBasedAI {
 				}
 			}
 		});
+		
+		addBehaviour(new UpdateWorkersMap(this));
+
 	}
-	
+
 	public boolean assignWoodcutter() {
-		ServiceDescription sd = new ServiceDescription();
-		sd.setType(AgentStatus.FREE);
-		DFAgentDescription[] free = search(sd);
-		AID worker = (free.length > 0 ? free[0].getName() : null);
+		AID worker = workersMap.getFreeWorker();
 		if (worker != null) {
-			ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
-			msg.setConversationId(AgentStatus.class.getSimpleName());
-			msg.addReceiver(worker);
-			msg.setContent(AgentStatus.WOOD_CUTTING);
-			send(msg);
-			return true;
-		}
-		return false;
-	}
-	
-	public boolean assignFoodCollector() {
-		ServiceDescription sd = new ServiceDescription();
-		sd.setType(AgentStatus.FREE);
-		DFAgentDescription[] free = search(sd);
-		AID worker = (free.length > 0 ? free[0].getName() : null);
-		if (worker != null) {
-			ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
-			msg.setConversationId(AgentStatus.class.getSimpleName());
-			msg.addReceiver(worker);
-			msg.setContent(AgentStatus.FOOD_COLLECTING);
-			send(msg);
+			changeAgentStatus(worker, AgentStatus.WOOD_CUTTING);
+			workersMap.put(worker, AgentStatus.WOOD_CUTTING);
 			return true;
 		}
 		return false;
 	}
 
+	public boolean assignFoodCollector() {
+		AID worker = workersMap.getFreeWorker();
+		if (worker != null) {
+			changeAgentStatus(worker, AgentStatus.FOOD_COLLECTING);
+			workersMap.put(worker, AgentStatus.FOOD_COLLECTING);
+			return true;
+		}
+		return false;
+	}
+	
+	public WorkersMap getWorkersMap() {
+		return workersMap;
+	}
+
 	@Override
-	protected void updatePerception() {}
+	protected void updatePerception() {
+	}
 }
