@@ -23,7 +23,11 @@ import javax.swing.WindowConstants;
 import com.jrts.O2Ainterfaces.IUnit;
 import com.jrts.O2Ainterfaces.Team;
 import com.jrts.common.GameConfig;
+import com.jrts.environment.Cell;
+import com.jrts.environment.CellType;
 import com.jrts.environment.Floor;
+import com.jrts.environment.Position;
+import com.jrts.environment.World;
 
 
 /**
@@ -43,7 +47,7 @@ public class MainFrame extends JFrame {
 
 	protected JPanel infoPanel;
 
-	private JLabel labelType, labelPosition, labelEnergy, labelAction;
+	private JLabel labelTeam, labelType, labelPosition, labelEnergy, labelAction;
 	
 	//public static int treeClick = 0;
 	
@@ -123,7 +127,10 @@ public class MainFrame extends JFrame {
 		
 		this.infoPanel = new JPanel();
 		infoPanel.setBorder(BorderFactory.createTitledBorder("Informations"));
-		infoPanel.setLayout(new GridLayout(4, 2));
+		infoPanel.setLayout(new GridLayout(5, 2));
+		infoPanel.add(new JLabel("Team:"));
+		labelTeam = new JLabel("None");		
+		infoPanel.add(labelTeam);
 		infoPanel.add(new JLabel("Type:"));
 		labelType = new JLabel("cell");
 		infoPanel.add(labelType);
@@ -195,7 +202,26 @@ public class MainFrame extends JFrame {
 	
 	protected void showCellInfo(int i, int j, int energy)
 	{
-		labelType.setText("cell");
+		Cell cell = World.getInstance().getCell(new Position(i, j));
+		
+		try{
+			if(cell.getId().isEmpty() || cell.getId().trim().equals(""))
+				labelTeam.setText("None");
+			else
+				labelTeam.setText(cell.getId());
+		} catch(NullPointerException e){ labelTeam.setText("None"); }
+		
+		if(cell.getType().equals(CellType.BUILDING)) 
+			labelType.setText("Town Center");
+		else if(cell.getType().equals(CellType.FOOD)) 
+			labelType.setText("Food");
+		else if(cell.getType().equals(CellType.WOOD)) 
+			labelType.setText("Wood");
+		else if(cell.getType().equals(CellType.FREE)) 
+			labelType.setText("Ground");
+		else  
+			labelType.setText("Cell");
+		
 		labelPosition.setText(i + ", " + j);
 		labelEnergy.setText(String.valueOf(energy));
 		labelAction.setText("nothing");
@@ -203,6 +229,8 @@ public class MainFrame extends JFrame {
 	
 	protected void showAgentInfo()
 	{
+		//IUnit  World.getInstance().getCell(selectedUnit.getPosition()).getUnit();
+		labelTeam.setText(selectedUnit.getTeamName());
 		labelType.setText("Worker");
 		labelPosition.setText(selectedUnit.getPosition().getCol() +", "+ selectedUnit.getPosition().getRow());
 		labelEnergy.setText("" + selectedUnit.getLife());

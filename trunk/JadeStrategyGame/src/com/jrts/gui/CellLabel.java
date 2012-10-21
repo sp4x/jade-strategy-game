@@ -39,8 +39,8 @@ public class CellLabel extends JLabel {
 				} else {
 					if(cell.getType() != CellType.UNIT)
 					{
-						JOptionPane.showMessageDialog(MainFrame.getInstance(), 
-								"Tipo Cell:" + cell.toString() + " Posizione: " + i + " - " + j);
+//						JOptionPane.showMessageDialog(MainFrame.getInstance(), 
+//								"Tipo Cell:" + cell.toString() + " Posizione: " + i + " - " + j);
 						
 						if(MainFrame.getInstance().clickType.equals(MainFrame.treeClick))
 							World.getInstance().getFloor().set(CellLabel.this.i, CellLabel.this.j, new Cell(CellType.WOOD));
