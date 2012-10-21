@@ -66,7 +66,7 @@ public class CollectResources extends Behaviour {
 			worker.spendTime();
 			worker.takeResources(resourcePosition);
 			if (worker.knapsackIsFull()) {
-				leavePoint = World.getInstance().nextTo(currentPosition, cityCenter);
+				leavePoint = World.getInstance().freePositionNextToTarget(currentPosition, cityCenter);
 				worker.goThere(leavePoint);
 				behaviourStatus = STATUS_BACK_HOME;
 			}
@@ -79,7 +79,7 @@ public class CollectResources extends Behaviour {
 	private void go() {
 		resourcePosition = worker.findNearest(resourceToCollect);
 		if (resourcePosition != null)
-			pickUpPoint = World.getInstance().nextTo(worker.getPosition(), resourcePosition);
+			pickUpPoint = World.getInstance().freePositionNextToTarget(worker.getPosition(), resourcePosition);
 		if (resourcePosition != null && pickUpPoint != null) {
 			worker.goThere(pickUpPoint);
 			behaviourStatus = STATUS_GOING_WORK;

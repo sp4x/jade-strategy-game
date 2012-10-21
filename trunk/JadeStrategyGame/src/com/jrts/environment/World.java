@@ -16,12 +16,12 @@ public class World {
 
 	private static World instance = null;
 
-	private Floor floor;
+	private final Floor floor;
 
-	private Map<String, Position> teams = new HashMap<String, Position>();
+	private final Map<String, Position> teams;
 
-	private int rows;
-	private int cols;
+	private final int rows;
+	private final int cols;
 
 	public static void create(int rows, int cols, float woodPercentage) {
 		instance = new World(rows, cols, woodPercentage);
@@ -72,31 +72,18 @@ public class World {
 		return false;
 	}
 
-	Position nextTo(Position p, int maxDistance) {
-		if (maxDistance == 0)
-			return p;
-		for (int minDistance = 1; minDistance <= maxDistance; minDistance++) {
-			for (Direction d : Direction.ALL) {
-				Position candidate = nextTo(p.step(d), minDistance-1);
-				if (isAvailable(candidate))
-					return candidate;
-			}
-		}
-		return null;
-	}
-	
 	
 	/**
-	 * returns the nearest position from a source point next to a target.
+	 * returns the nearest free position from a source point next to a target.
 	 * @param src the source position
-	 * @param p the target position
+	 * @param target the target position
 	 * @return the requested position
 	 */
-	public synchronized Position nextTo(Position src, Position p) {
+	public synchronized Position freePositionNextToTarget(Position src, Position target) {
 		double distance = Double.MAX_VALUE;
 		Position chosen = null;
 		for (Direction d : Direction.VON_NEUMANN_NEIGH) {
-			Position candidate = p.step(d);
+			Position candidate = target.step(d);
 			double candidateDistance = src.distance(candidate);
 			if (isAvailable(candidate) && candidateDistance < distance) {
 				chosen = candidate;
@@ -114,8 +101,16 @@ public class World {
 		return floor.get(p);
 	}
 	*/
-	Position near(Position p, int minDistance, int maxDistance) {
-		if (p.row+maxDistance > floor.rows || p.col+maxDistance > floor.cols)
+	
+	/**
+	 * returns a random free position near a center between the specified distance range
+	 * @param center
+	 * @param minDistance
+	 * @param maxDistance
+	 * @return
+	 */
+	Position near(Position center, int minDistance, int maxDistance) {
+		if (center.row+maxDistance > floor.rows || center.col+maxDistance > floor.cols)
 			return null;
 		int maxIterations = 10;
 		int len = maxDistance - minDistance + 1;
@@ -126,8 +121,8 @@ public class World {
 			int colOffset = r.nextInt(len) + minDistance;
 			int rowMultiplier = ( r.nextInt(2) == 0 ? -1 : 1);
 			int colMultiplier = ( r.nextInt(2) == 0 ? -1 : 1);
-			int row = p.row+rowOffset*rowMultiplier;
-			int col = p.col+colOffset*colMultiplier;
+			int row = center.row+rowOffset*rowMultiplier;
+			int col = center.col+colOffset*colMultiplier;
 			candidate = new Position(row, col);
 		} while (!isAvailable(candidate) && --maxIterations>0);
 		return candidate;
@@ -160,13 +155,13 @@ public class World {
 
 
 	/**
-	 * gets the position in the neighborhood of the parameter
+	 * gets a free position in the neighborhood of the parameter
 	 * @param p the position to use as center of the neighborhood
 	 * @return the position available
 	 */
 	public synchronized Position neighPosition(Position p) {
 		if (!isAvailable(p)) {
-			p = nextTo(p,2);
+			p = floor.nextTo(p, CellType.FREE, 2);
 			if (p == null)
 				return null;
 		}
@@ -233,22 +228,6 @@ public class World {
 
 	public Map<String, Position> getTeams() {
 		return teams;
-	}
-
-	public void setTeams(Map<String, Position> teams) {
-		this.teams = teams;
-	}
-
-	public void setFloor(Floor floor) {
-		this.floor = floor;
-	}
-
-	public void setRows(int rows) {
-		this.rows = rows;
-	}
-
-	public void setCols(int cols) {
-		this.cols = cols;
 	}
 
 	public synchronized boolean isGameFinished() {
