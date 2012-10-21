@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import jade.core.AID;
 import jade.core.behaviours.CyclicBehaviour;
+import jade.core.behaviours.WakerBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.UnreadableException;
@@ -127,6 +128,14 @@ public class MasterAI extends JrtsAgent implements Team {
 					block();
 				}
 				
+			}
+		});
+		
+		
+		addBehaviour(new WakerBehaviour(this, 2000) {
+			@Override
+			protected void handleElapsedTimeout() {
+				setResourcesGoalPriority(GoalPriority.HIGH);
 			}
 		});
 	}

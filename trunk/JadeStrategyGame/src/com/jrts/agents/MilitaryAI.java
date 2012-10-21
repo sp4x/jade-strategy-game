@@ -28,4 +28,10 @@ public class MilitaryAI extends GoalBasedAI {
 	@Override
 	protected void updatePerception() {
 	}
+
+	@Override
+	public void onGoalsChanged() {
+		// TODO Auto-generated method stub
+		
+	}
 }

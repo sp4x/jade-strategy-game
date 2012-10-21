@@ -11,6 +11,7 @@ import java.io.IOException;
 
 import com.jrts.behaviours.UpdateWorkersMap;
 import com.jrts.common.AgentStatus;
+import com.jrts.common.GoalPriority;
 import com.jrts.common.WorkersMap;
 import com.jrts.messages.AggiornaRisorse;
 
@@ -21,6 +22,7 @@ public class ResourceAI extends GoalBasedAI {
 	int collectedFood;
 
 	WorkersMap workersMap = new WorkersMap();
+	int workersCounter = 0;
 
 	public ResourceAI() {
 		super();
@@ -29,17 +31,17 @@ public class ResourceAI extends GoalBasedAI {
 	protected void setup() {
 		super.setup();
 
-		unitFactory.trainUnit(Worker.class);
-		unitFactory.trainUnit(Worker.class);
-
-		// order someone to cut wood
-		addBehaviour(new WakerBehaviour(this, 15000) {
-			@Override
-			protected void handleElapsedTimeout() {
-				assignWoodcutter();
-				assignFoodCollector();
-			}
-		});
+//		unitFactory.trainUnit(Worker.class);
+//		unitFactory.trainUnit(Worker.class);
+//
+//		// order someone to cut wood
+//		addBehaviour(new WakerBehaviour(this, 15000) {
+//			@Override
+//			protected void handleElapsedTimeout() {
+//				assignWoodcutter();
+//				assignFoodCollector();
+//			}
+//		});
 
 		// inform the masterAI about resources
 		addBehaviour(new CyclicBehaviour(this) {
@@ -88,6 +90,27 @@ public class ResourceAI extends GoalBasedAI {
 		});
 		
 		addBehaviour(new UpdateWorkersMap(this));
+		
+		//trains and gives order to workers
+		addBehaviour(new CyclicBehaviour() {
+			
+			@Override
+			public void action() {
+				int numWorkers = (collectedFood+collectedWood)/50 - workersCounter + 1;
+				for (int i = 0; i < numWorkers; i++) {
+					unitFactory.trainUnit(Worker.class);
+					workersCounter++;
+				}
+				AID freeWorker = workersMap.getFreeWorker();
+				if (freeWorker != null) {
+					String newStatus = (collectedFood > collectedWood ? AgentStatus.WOOD_CUTTING : AgentStatus.FOOD_COLLECTING);
+					changeAgentStatus(freeWorker, newStatus);
+					workersMap.put(freeWorker, newStatus);
+				} else {
+					logger.info("no free workers");
+				}
+			}
+		});
 
 	}
 
@@ -117,5 +140,10 @@ public class ResourceAI extends GoalBasedAI {
 
 	@Override
 	protected void updatePerception() {
+	}
+
+	@Override
+	public void onGoalsChanged() {
+		
 	}
 }

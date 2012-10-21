@@ -71,8 +71,11 @@ public abstract class GoalBasedAI extends JrtsAgent {
 	
 	public void updateGoalLevels(GoalLevels goals) {
 		this.goalLevels = goals;
+		onGoalsChanged();
 	}
 	
+	public abstract void onGoalsChanged();
+
 	public void changeAgentStatus(AID target, String newStatus) {
 		ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
 		msg.setConversationId(AgentStatus.class.getSimpleName());
