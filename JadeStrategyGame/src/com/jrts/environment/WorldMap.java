@@ -21,23 +21,26 @@ public class WorldMap extends Floor {
 		}
 	}
 	
-	public Position findNearest(Position center, CellType type) {
-		double distance = Double.MAX_VALUE;
-		Position nearestPosition = null;
-		for (int i = 0; i < rows; i++) {
-			for (int j = 0; j < cols; j++) {
-				Position p = new Position(i, j);
-				if (get(p).getType() == type) {
-					double currentDistance = center.distance(p);
-					if (currentDistance < distance) {
-						nearestPosition = p;
-						distance = currentDistance;
-					}
-				}
-			}
-		}
-		return nearestPosition;
-	}
+//	public Position findNearest(Position center, CellType type) {
+//		double distance = Double.MAX_VALUE;
+//		Position nearestPosition = null;
+//		for (int i = 0; i < rows; i++) {
+//			for (int j = 0; j < cols; j++) {
+//				Position p = new Position(i, j);
+//				if (get(p).getType() == type) {
+//					double currentDistance = center.distance(p);
+//					if (currentDistance < distance) {
+//						nearestPosition = p;
+//						distance = currentDistance;
+//					}
+//				}
+//			}
+//		}
+//		return nearestPosition;
+//	}
 	
+	public Position findNearest(Position center, CellType type) {
+		return nextTo(center, type, (rows+cols)/2 );
+	}
 
 }

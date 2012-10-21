@@ -170,4 +170,25 @@ public class Floor implements Serializable {
 	public Cell get(Position p) {
 		return get(p.row, p.col);
 	}
+	
+	
+	/**
+	 * return the position of a cell of the specified type next to the specified position
+	 * @param p the source position
+	 * @param type the cell type to look for
+	 * @param maxDistance the maximum distance admissible from the source position
+	 * @return the position of the closest matching cell, if any. otherwise null
+	 */
+	public Position nextTo(Position p, CellType type, int maxDistance) {
+		if (maxDistance == 0)
+			return p;
+		for (int minDistance = 1; minDistance <= maxDistance; minDistance++) {
+			for (Direction d : Direction.ALL) {
+				Position candidate = nextTo(p.step(d), type, minDistance-1);
+				if (candidate != null && get(candidate).type == type)
+					return candidate;
+			}
+		}
+		return null;
+	}
 }
