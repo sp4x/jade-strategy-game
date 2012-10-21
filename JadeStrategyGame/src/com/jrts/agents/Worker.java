@@ -5,13 +5,14 @@ import jade.lang.acl.ACLMessage;
 import java.io.IOException;
 
 import com.jrts.behaviours.CollectResources;
+import com.jrts.behaviours.SendAttack;
 import com.jrts.common.AgentStatus;
 import com.jrts.common.GameConfig;
 import com.jrts.environment.CellType;
 import com.jrts.environment.Direction;
 import com.jrts.environment.Position;
 import com.jrts.environment.World;
-import com.jrts.gui.AttacksManager;
+import com.jrts.logic.AttacksManager;
 import com.jrts.messages.AggiornaRisorse;
 
 @SuppressWarnings("serial")
@@ -37,10 +38,11 @@ public class Worker extends Unit {
 		setSight(GameConfig.WORKER_SIGHT);
 		
 		switchStatus(AgentStatus.FREE);
+		
+		addBehaviour(new SendAttack(this));
 	}
 	
-	@SuppressWarnings("unused")
-	private void sendHit(Direction direction) {
+	public void sendHit(Direction direction) {
 		AttacksManager.addHit(getPosition().clone(), direction, GameConfig.WORKER_DAMAGES);
 	}
 	

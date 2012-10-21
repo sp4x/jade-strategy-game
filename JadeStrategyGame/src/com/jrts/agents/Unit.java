@@ -13,7 +13,6 @@ import java.io.IOException;
 import java.util.Random;
 
 import com.jrts.O2Ainterfaces.IUnit;
-import com.jrts.behaviours.CheckReceivedAttacks;
 import com.jrts.behaviours.FollowPathBehaviour;
 import com.jrts.behaviours.LookForEnemy;
 import com.jrts.behaviours.ReceiveOrders;
@@ -66,7 +65,6 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 		basicService.setType(getClass().getName());
 		agentDescription.addServices(basicService);
 		register(agentDescription, false);
-		addBehaviour(new CheckReceivedAttacks(this));
 		addBehaviour(new LookForEnemy(this, 2000));
 		addBehaviour(new ReceiveOrders(this));
 	}
@@ -136,6 +134,7 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 		doDelete();
 	}
 
+	@Override
 	public void decreaseLife(int damage){
 		setLife(getLife() - damage);
 	}

@@ -1,4 +1,4 @@
-package com.jrts.gui;
+package com.jrts.logic;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,11 +14,9 @@ public class AttacksManager {
 
 	private static ArrayList<Hit> hits;
 	private static int counter;
-	private static HashMap<String, Integer> damagesList;
 	
 	static {
 		hits = new ArrayList<Hit>();
-		damagesList = new HashMap<String, Integer>();
 	}
 
 	public synchronized static void addHit(Position pos, Direction dir, int damage){
@@ -29,7 +27,7 @@ public class AttacksManager {
 //		System.out.println("Added new hit" + hits.size());
 	}
 	
-	synchronized static void update() {
+	public synchronized static void update() {
 		if(counter++ < GameConfig.ATTACKS_REFRESH)
 			return;
 		counter = 0;
@@ -56,19 +54,13 @@ public class AttacksManager {
 			Floor floor = World.getInstance().getFloor();
 			if(floor.get(hp).getType() != CellType.FREE){
 				System.out.println("Detected collision");
-				notifyDamage(hits.remove(i));
+				Hit hit = hits.remove(i);
+				Position pos = hit.getPos();
+				int damage = hit.getDamage();
+				if(floor.get(hp).getType() == CellType.UNIT)
+					World.getInstance().getCell(pos).getUnit().decreaseLife(damage);
 			}
 		}
-	}
-
-	private static void notifyDamage(Hit hit) {
-		Floor floor = World.getInstance().getFloor();
-		
-		Position pos = hit.getPos();
-		String id = floor.get(pos).getId();
-		int damage = hit.getDamage();
-		
-		damagesList.put(id, damage);
 	}
 
 	public synchronized static boolean isThereAnHit(int row, int col) {
@@ -76,13 +68,5 @@ public class AttacksManager {
 			if(hits.get(i).getPos().equals(new Position(row, col)))
 				return true;
 		return false;
-	}
-
-	public synchronized static int getDamagesFor(String id) {
-		Integer damage = damagesList.get(id);
-		if(damage == null)
-			return 0;
-		System.out.println("Damage is " + damage);
-		return damage;
 	}
 }

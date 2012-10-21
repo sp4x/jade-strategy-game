@@ -21,7 +21,7 @@ public class FollowPathBehaviour extends Behaviour {
 	private int goalRow, goalCol;
 	int remainingAttempts;
 	
-	Floor worldCachedCopy;
+	Floor worldCachedCopy = null;
 		
 	public FollowPathBehaviour(Unit unit, int goalRow, int goalCol, int remainingAttempts) {
 		this.unit = unit;
@@ -31,12 +31,12 @@ public class FollowPathBehaviour extends Behaviour {
 		this.list = new ArrayList<Direction>();
 		
 		//se prima invocazione del behaviour
-		if(remainingAttempts == GameConfig.UNIT_MOVING_ATTEMPTS){
+		if(remainingAttempts == GameConfig.UNIT_MOVING_ATTEMPTS || worldCachedCopy == null){
 			setWorldCachedCopy(World.getInstance().getFloor().getCopy());
 		}
 		
 		if(remainingAttempts > 0)
-			this.list  = Utils.calculatePath(getWorldCachedCopy(), unit.getPosition(), new Position(goalRow, goalCol));
+			this.list = Utils.calculatePath(getWorldCachedCopy(), unit.getPosition(), new Position(goalRow, goalCol));
 	}
 
 	@Override
