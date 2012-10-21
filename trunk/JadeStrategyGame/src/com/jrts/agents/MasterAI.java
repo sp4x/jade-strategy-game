@@ -110,6 +110,27 @@ public class MasterAI extends JrtsAgent implements Team {
 				}
 			}
 		});
+		
+		//updated world map according to unit messages
+		addBehaviour(new CyclicBehaviour() {
+			
+			@Override
+			public void action() {
+				MessageTemplate mt = MessageTemplate.MatchConversationId(Perception.class.getSimpleName());
+				ACLMessage msg = receive(mt);
+				if (msg != null) {
+					try {
+						Perception info = (Perception) msg.getContentObject();
+						worldMap.update(info);
+					} catch (UnreadableException e) {
+						e.printStackTrace();
+					}
+				} else {
+					block();
+				}
+				
+			}
+		});
 	}
 	
 	@Override
@@ -121,23 +142,8 @@ public class MasterAI extends JrtsAgent implements Team {
 		//TODO maybe do something if an enemy is detected
 		//TODO check if the main building has been destroyed
 		worldMap.update(center);
-		//wait from perception messages from other agents
-		receivePerceptions();
 	}
 	
-	public void receivePerceptions() {
-		MessageTemplate mt = MessageTemplate.MatchConversationId(Perception.class.getSimpleName());
-		ACLMessage msg = receive(mt);
-		while (msg != null) {
-			try {
-				Perception info = (Perception) msg.getContentObject();
-				worldMap.update(info);
-			} catch (UnreadableException e) {
-				e.printStackTrace();
-			}
-			msg = receive(mt);
-		}
-	}
 
 	/** O2A methods (for use in non-agent java objects) */
 	
