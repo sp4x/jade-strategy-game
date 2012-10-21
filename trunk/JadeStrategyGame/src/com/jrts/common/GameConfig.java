@@ -42,4 +42,7 @@ public class GameConfig {
 	
 	public static final int UNIT_CREATION_TIME = 1;
 	public static final long WORKERS_MAP_REFRESH_TIME = 100;
+	
+	public static final int STARTUP_WOOD = 50;
+	public static final int STARTUP_FOOD = 50;
 }
