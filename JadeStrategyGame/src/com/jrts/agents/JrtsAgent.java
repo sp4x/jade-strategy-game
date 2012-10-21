@@ -15,7 +15,7 @@ import com.jrts.common.GameConfig;
 @SuppressWarnings("serial")
 public abstract class JrtsAgent extends Agent {
 
-	public Logger logger = Logger.getLogger(Agent.class.getName());
+	public final Logger logger = Logger.getLogger(Agent.class.getName());
 	
 	private String team;
 

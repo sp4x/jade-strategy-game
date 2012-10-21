@@ -79,8 +79,8 @@ public class MainFrame extends JFrame {
 			@Override
 			public void windowClosed(WindowEvent e) {
 				super.windowClosed(e);
-				Runtime.instance().shutDown();
 				dispose();
+				Runtime.instance().shutDown();
 				//TODO killare tutti gli agenti e chiudere la runtime
 				System.exit(0);
 			}
@@ -223,7 +223,7 @@ public class MainFrame extends JFrame {
 				labelTeam.setText(cell.getId());
 		} catch(NullPointerException e){ labelTeam.setText("None"); }
 		
-		if(cell.getType().equals(CellType.BUILDING)) 
+		if(cell.getType().equals(CellType.CITY_CENTER)) 
 			labelType.setText("Town Center");
 		else if(cell.getType().equals(CellType.FOOD)) 
 			labelType.setText("Food");

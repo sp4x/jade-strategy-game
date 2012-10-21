@@ -5,6 +5,6 @@ public enum CellType {
 	WOOD,
 	FOOD,
 	UNIT,
-	BUILDING,
+	CITY_CENTER,
 	UNKNOWN;
 }

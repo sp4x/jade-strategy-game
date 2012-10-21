@@ -112,7 +112,6 @@ public class MasterAI extends JrtsAgent implements Team {
 		
 		//updated world map according to unit messages
 		addBehaviour(new CyclicBehaviour() {
-			
 			@Override
 			public void action() {
 				MessageTemplate mt = MessageTemplate.MatchConversationId(Perception.class.getSimpleName());
