@@ -11,6 +11,7 @@ import java.io.IOException;
 
 import com.jrts.behaviours.UpdateWorkersMap;
 import com.jrts.common.AgentStatus;
+import com.jrts.common.GameConfig;
 import com.jrts.common.GoalPriority;
 import com.jrts.common.WorkersMap;
 import com.jrts.messages.AggiornaRisorse;
@@ -26,6 +27,8 @@ public class ResourceAI extends GoalBasedAI {
 
 	public ResourceAI() {
 		super();
+		collectedFood = GameConfig.STARTUP_FOOD;
+		collectedWood = GameConfig.STARTUP_WOOD;
 	}
 
 	protected void setup() {
