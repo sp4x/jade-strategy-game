@@ -14,25 +14,18 @@ import com.jrts.environment.World;
 
 public class UnitFactory extends Thread {
 
-	Team team;
+	String team;
 	PlatformController controller;
 	
 	long unitCounter = 0;
 	
 	LinkedBlockingQueue<Class<? extends Unit>> queue = new LinkedBlockingQueue<Class<? extends Unit>>();
 	
-	public UnitFactory(Team team, PlatformController controller) {
+	public UnitFactory(String team, PlatformController controller) {
 		this.team = team;
 		this.controller = controller;
 	}
 	
-	public Team getTeam() {
-		return team;
-	}
-
-	public void setTeam(Team team) {
-		this.team = team;
-	}
 
 	@Override
 	public void run() {
@@ -50,20 +43,25 @@ public class UnitFactory extends Thread {
 		queue.add(claz);
 	}
 	
-	private synchronized void createUnit(final Class<? extends Unit> claz) {
+	public synchronized long counter() {
+		return unitCounter++;
+	}
+	
+	private void createUnit(final Class<? extends Unit> claz) {
 		try {
 			Thread.sleep(GameConfig.UNIT_CREATION_TIME*1000);
 		} catch (InterruptedException e1) {
 			e1.printStackTrace();
+			System.exit(1);
 		}
 		World world = World.getInstance();
-		String unitName = team.getTeamName() + "-" + claz.getSimpleName() + unitCounter++;
-		Position unitPosition = world.neighPosition(world.getCityCenter(team.getTeamName()));
+		String unitName = team + "-" + claz.getSimpleName() + counter();
+		Position unitPosition = world.neighPosition(world.getCityCenter(team));
 		if(unitPosition != null){
 			//Instantiate the unit
 			AgentController agentController;
 			try {
-				Object[] args = {unitPosition, team.getTeamName()};
+				Object[] args = {unitPosition, team};
 				agentController = controller.createNewAgent(unitName, claz.getName(), args);
 				agentController.start();
 				IUnit o2a = agentController.getO2AInterface(IUnit.class);
@@ -74,7 +72,7 @@ public class UnitFactory extends Thread {
 			}
 		}
 		else{
-			System.out.println(team.getTeamName() + ":Cannot instantiate the unit");
+			System.out.println(team + ":Cannot instantiate the unit");
 		}
 	}
 }

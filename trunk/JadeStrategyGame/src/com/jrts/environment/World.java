@@ -94,7 +94,7 @@ public class World {
 	}
 	
 	public synchronized Cell getCell(Position p) {
-		return floor.get(p);
+		return floor.getCopy(p);
 	}
 	/*
 	public Cell unSyncGetCell(Position p) {

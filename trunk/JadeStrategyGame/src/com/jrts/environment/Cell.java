@@ -34,6 +34,13 @@ public class Cell implements Serializable {
 		this.id = id;
 		this.unit = unit;
 	}
+	
+	public Cell(Cell cell) {
+		this.type = cell.type;
+		this.id = cell.id;
+		this.unit = cell.unit;
+		this.resourceEnergy = cell.resourceEnergy;
+	}
 
 	public String getId() {
 		return id;

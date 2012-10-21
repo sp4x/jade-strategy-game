@@ -58,8 +58,8 @@ public class MasterAI extends JrtsAgent implements Team {
 			
 			Object[] arg = new Object[2];
 			arg[0] = getTeamName();
-			Team team = container.getAgent(getLocalName()).getO2AInterface(Team.class);
-			UnitFactory unitFactory = new UnitFactory(team, getContainerController());
+//			Team team = container.getAgent(getLocalName()).getO2AInterface(Team.class);
+			UnitFactory unitFactory = new UnitFactory(getTeamName(), getContainerController());
 			unitFactory.start();
 			arg[1] = unitFactory;
 			
