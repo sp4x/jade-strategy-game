@@ -18,6 +18,8 @@ public class MilitaryAI extends GoalBasedAI {
 		// TODO che cazzo deve fare la milaryAI?
 		
 		addBehaviour(new WakerBehaviour(this, 15000) {
+			private static final long serialVersionUID = 1746608629262055814L;
+
 			@Override
 			protected void handleElapsedTimeout() {
 				unitFactory.trainUnit(Soldier.class);

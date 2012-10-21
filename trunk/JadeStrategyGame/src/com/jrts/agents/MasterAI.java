@@ -15,12 +15,12 @@ import jade.wrapper.PlatformController;
 import com.jrts.O2Ainterfaces.Team;
 import com.jrts.common.GameConfig;
 import com.jrts.common.GoalPriority;
+import com.jrts.common.ResourcesContainer;
 import com.jrts.common.UnitFactory;
 import com.jrts.environment.Perception;
 import com.jrts.environment.Position;
 import com.jrts.environment.World;
 import com.jrts.environment.WorldMap;
-import com.jrts.messages.AggiornaRisorse;
 import com.jrts.messages.GoalLevels;
 
 
@@ -31,9 +31,9 @@ public class MasterAI extends JrtsAgent implements Team {
 	
 	WorldMap worldMap;
 	
-	int food, wood;
-	
 	GoalPriority resources;
+	ResourcesContainer resourcesContainer;
+	UnitFactory unitFactory;
 	
 	public MasterAI() {
 		registerO2AInterface(Team.class, this);
@@ -57,12 +57,15 @@ public class MasterAI extends JrtsAgent implements Team {
 			df = container.createNewAgent(getTeamDF().getLocalName(), "jade.domain.df", null);
 			df.start();
 			
-			Object[] arg = new Object[2];
-			arg[0] = getTeamName();
-//			Team team = container.getAgent(getLocalName()).getO2AInterface(Team.class);
-			UnitFactory unitFactory = new UnitFactory(getTeamName(), getContainerController());
+			unitFactory = new UnitFactory(getTeamName(), getContainerController());
 			unitFactory.start();
+			
+			resourcesContainer = new ResourcesContainer(GameConfig.STARTUP_WOOD, GameConfig.STARTUP_FOOD);
+			
+			Object[] arg = new Object[3];
+			arg[0] = getTeamName();
 			arg[1] = unitFactory;
+			arg[2] = resourcesContainer;
 			
 			resourceAI = container.createNewAgent(resourceAID.getLocalName(), ResourceAI.class.getName(), arg);
 			resourceAI.start();
@@ -71,25 +74,6 @@ public class MasterAI extends JrtsAgent implements Team {
 		} catch (ControllerException e) {
 			e.printStackTrace();
 		}
-		
-		// listen if a food/wood update message arrives from the resourceAi
-		addBehaviour(new CyclicBehaviour() {
-			@Override
-			public void action() {
-				ACLMessage msg = receive(MessageTemplate.MatchConversationId(AggiornaRisorse.class.getSimpleName()));
-				if (msg != null) {
-					try {
-						AggiornaRisorse aggiornamento = (AggiornaRisorse) msg.getContentObject();
-						food = aggiornamento.getFood();
-						wood = aggiornamento.getWood();
-					} catch (UnreadableException e) {
-						e.printStackTrace();
-					}
-				} else {
-					block();
-				}
-			}
-		});
 		
 		// listen for world map request and answer
 		addBehaviour(new CyclicBehaviour() {
@@ -156,12 +140,12 @@ public class MasterAI extends JrtsAgent implements Team {
 	
 	@Override
 	public int getFood() {
-		return food;
+		return resourcesContainer.getFood();
 	}
 
 	@Override
 	public int getWood() {
-		return wood;
+		return resourcesContainer.getWood();
 	}
 
 	@Override

@@ -2,33 +2,23 @@ package com.jrts.agents;
 
 import jade.core.AID;
 import jade.core.behaviours.CyclicBehaviour;
-import jade.core.behaviours.WakerBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.UnreadableException;
 
-import java.io.IOException;
-
 import com.jrts.behaviours.UpdateWorkersMap;
 import com.jrts.common.AgentStatus;
-import com.jrts.common.GameConfig;
-import com.jrts.common.GoalPriority;
 import com.jrts.common.WorkersMap;
 import com.jrts.messages.AggiornaRisorse;
 
 @SuppressWarnings("serial")
 public class ResourceAI extends GoalBasedAI {
 
-	int collectedWood;
-	int collectedFood;
-
 	WorkersMap workersMap = new WorkersMap();
 	int workersCounter = 0;
 
 	public ResourceAI() {
 		super();
-		collectedFood = GameConfig.STARTUP_FOOD;
-		collectedWood = GameConfig.STARTUP_WOOD;
 	}
 
 	protected void setup() {
@@ -46,27 +36,6 @@ public class ResourceAI extends GoalBasedAI {
 //			}
 //		});
 
-		// inform the masterAI about resources
-		addBehaviour(new CyclicBehaviour(this) {
-			@Override
-			public void action() {
-				doWait(1000);
-				// send a food/wood update message to the masterAi
-				ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
-				msg.setConversationId(AggiornaRisorse.class.getSimpleName());
-				try {
-					msg.setContentObject(new AggiornaRisorse(collectedWood,
-							collectedFood));
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-
-				msg.addReceiver(new AID(getTeamName(), AID.ISLOCALNAME));
-
-				send(msg);
-			}
-		});
-
 		// listen for resources update by the workers
 		addBehaviour(new CyclicBehaviour(this) {
 			@Override
@@ -80,8 +49,10 @@ public class ResourceAI extends GoalBasedAI {
 					try {
 						AggiornaRisorse aggiornamento = (AggiornaRisorse) msg
 								.getContentObject();
-						collectedFood += aggiornamento.getFood();
-						collectedWood += aggiornamento.getWood();
+						int collectedFood = aggiornamento.getFood();
+						int collectedWood = aggiornamento.getWood();
+						resourcesContainer.addFood(collectedFood);
+						resourcesContainer.addWood(collectedWood);
 					} catch (UnreadableException e) {
 						e.printStackTrace();
 					}
@@ -99,14 +70,14 @@ public class ResourceAI extends GoalBasedAI {
 			
 			@Override
 			public void action() {
-				int numWorkers = (collectedFood+collectedWood)/50 - workersCounter + 1;
+				int numWorkers = (resourcesContainer.getFood()+resourcesContainer.getWood())/50 - workersCounter + 1;
 				for (int i = 0; i < numWorkers; i++) {
 					unitFactory.trainUnit(Worker.class);
 					workersCounter++;
 				}
 				AID freeWorker = workersMap.getFreeWorker();
 				if (freeWorker != null) {
-					String newStatus = (collectedFood > collectedWood ? AgentStatus.WOOD_CUTTING : AgentStatus.FOOD_COLLECTING);
+					String newStatus = (resourcesContainer.getFood() > resourcesContainer.getWood() ? AgentStatus.WOOD_CUTTING : AgentStatus.FOOD_COLLECTING);
 					changeAgentStatus(freeWorker, newStatus);
 					workersMap.put(freeWorker, newStatus);
 				} else {
