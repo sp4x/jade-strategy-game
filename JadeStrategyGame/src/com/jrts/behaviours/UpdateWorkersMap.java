@@ -37,8 +37,10 @@ public class UpdateWorkersMap extends TickerBehaviour {
 			desc = results[i];
 			Iterator it = desc.getAllServices();
 			it.next(); //basic service
-			ServiceDescription currentStatus = (ServiceDescription) it.next();
-			agent.getWorkersMap().put(desc.getName(), currentStatus.getType());
+			if (it.hasNext()) {
+				ServiceDescription currentStatus = (ServiceDescription) it.next();
+				agent.getWorkersMap().put(desc.getName(), currentStatus.getType());
+			}
 		}
 	}
 
