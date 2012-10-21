@@ -58,7 +58,6 @@ public class WorldViewPanel extends JPanel {
 				currCellLabel.setBounds( y, x, ImageLoader.iconSize, ImageLoader.iconSize);
 				
 				if(floor.get(i, j).getType() == CellType.UNIT){
-					//System.out.println("Cella: " + i + ", " + j);
 					try { labelMatrix[i][j].setIcon(ImageLoader.getWorkerImageIcon(World.getInstance().getCell(new Position(i,j)).getUnit().getTeamName()));
 					} catch (NullPointerException e) {}
 
