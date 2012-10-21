@@ -1,12 +1,14 @@
 package com.jrts.agents;
 
 import jade.core.AID;
+import jade.lang.acl.ACLMessage;
 import jade.wrapper.AgentController;
 import jade.wrapper.ControllerException;
 import jade.wrapper.PlatformController;
 
 import com.jrts.O2Ainterfaces.IUnit;
 import com.jrts.behaviours.CheckGoals;
+import com.jrts.common.AgentStatus;
 import com.jrts.common.UnitFactory;
 import com.jrts.environment.Position;
 import com.jrts.environment.World;
@@ -71,16 +73,13 @@ public abstract class GoalBasedAI extends JrtsAgent {
 		this.goalLevels = goals;
 	}
 	
-//	public AID[] getAgentsByServiceType(String type) {
-//		ServiceDescription sd = new ServiceDescription();
-//		sd.setType(type);
-//		DFAgentDescription[] results = search(sd);
-//		AID[] agents = new AID[results.length];
-//		for (int i = 0; i < results.length; i++) {
-//			agents[i] = results[i].getName();
-//		}
-//		return agents;
-//	}
+	public void changeAgentStatus(AID target, String newStatus) {
+		ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
+		msg.setConversationId(AgentStatus.class.getSimpleName());
+		msg.addReceiver(target);
+		msg.setContent(newStatus);
+		send(msg);
+	}
 	
 	
 

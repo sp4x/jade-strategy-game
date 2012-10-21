@@ -63,7 +63,7 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 		agentDescription.setName(getAID());
 		basicService = new ServiceDescription();
 		basicService.setName(getAID().getName());
-		basicService.setType(getClass().getName());
+		basicService.setType(getClass().getSimpleName());
 		agentDescription.addServices(basicService);
 		register(agentDescription, false);
 		addBehaviour(new LookForEnemy(this, 2000));

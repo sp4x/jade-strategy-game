@@ -67,9 +67,7 @@ public abstract class JrtsAgent extends Agent {
 		}
 	}
 
-	protected DFAgentDescription[] search(ServiceDescription sd) {
-		DFAgentDescription desc = new DFAgentDescription();
-		desc.addServices(sd);
+	public DFAgentDescription[] search(DFAgentDescription desc) {
 		try {
 			return DFService.search(this, getTeamDF(), desc);
 		} catch (FIPAException e) {
