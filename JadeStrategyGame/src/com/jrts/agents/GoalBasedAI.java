@@ -9,6 +9,7 @@ import jade.wrapper.PlatformController;
 import com.jrts.O2Ainterfaces.IUnit;
 import com.jrts.behaviours.CheckGoals;
 import com.jrts.common.AgentStatus;
+import com.jrts.common.ResourcesContainer;
 import com.jrts.common.UnitFactory;
 import com.jrts.environment.Position;
 import com.jrts.environment.World;
@@ -22,6 +23,7 @@ public abstract class GoalBasedAI extends JrtsAgent {
 	
 	GoalLevels goalLevels;
 	UnitFactory unitFactory;
+	ResourcesContainer resourcesContainer;
 	
 	public GoalBasedAI() {
 		
@@ -33,7 +35,8 @@ public abstract class GoalBasedAI extends JrtsAgent {
 		Object[] args = getArguments();
 		if (args != null) {
 			setTeamName((String) args[0]);
-			unitFactory = ((UnitFactory) args[1]);
+			unitFactory = (UnitFactory) args[1];
+			resourcesContainer = (ResourcesContainer) args[2];
 		} else {
 			logger.severe("Needs team's name");
 			System.exit(1);
