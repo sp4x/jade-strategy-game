@@ -61,6 +61,7 @@ public class Worker extends Unit {
 			knapsack = 1;
 			resourceCarried = resource;
 		}
+		System.out.println("Worker (" + getId() + "," + getStatus() + "," + getKnapsack() + ")");
 	}
 	
 	public boolean knapsackIsFull() {
@@ -97,6 +98,10 @@ public class Worker extends Unit {
 	@Override
 	public CellType getType() {
 		return CellType.WORKER;
+	}
+	
+	public int getKnapsack() {
+		return knapsack;
 	}
 }
 ;
