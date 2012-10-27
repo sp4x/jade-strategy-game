@@ -23,10 +23,8 @@ public class Utils {
 		UndirectedWeightedGraph walkableGraph = createWalkableGraph(floor, startRow, startCol, endRow, endCol);
 		System.out.println("Initial EndPos:" + endPosition);
 		
-		Position correctedEndPosition = endPosition;
-		
-//		Position correctedEndPosition = approximateEndPosition(walkableGraph, floor, startRow, startCol, endRow, endCol);
-//		System.out.println("Corrected EndPos:" + correctedEndPosition);
+		Position correctedEndPosition = approximateEndPosition(walkableGraph, floor, startRow, startCol, endRow, endCol);
+		System.out.println("Corrected EndPos:" + correctedEndPosition);
 
 		endRow = correctedEndPosition.getRow();
 		endCol = correctedEndPosition.getCol();
@@ -65,19 +63,23 @@ public class Utils {
 	private static Position approximateEndPosition(UndirectedWeightedGraph walkableGraph, Floor floor, int startRow, int startCol, int endRow, int endCol) {
 		floor = floor.getCopy();
 		Position endPos = new Position(endRow, endCol);
-		int counter = 0;
-		Position correctedEndPosition;
-		do {
-			correctedEndPosition = floor.nextTo(endPos, CellType.FREE, GameConfig.PATH_TOLERANCE);
-			if(correctedEndPosition == null || 
-					!walkableGraph.containsVertex(correctedEndPosition.getRow() + "," + correctedEndPosition.getCol())){
-				counter++;
-				floor.set(correctedEndPosition.getRow(), correctedEndPosition.getCol(), new Cell(CellType.WOOD));
-			}
-			else
-				return correctedEndPosition;
-		}while(counter <= GameConfig.PATH_TOLERANCE*GameConfig.PATH_TOLERANCE);//covered area
-		return null;
+		if(walkableGraph.containsVertex(endPos.getRow() + "," + endPos.getCol()))
+			return endPos;
+		else{
+			int counter = 0;
+			Position correctedEndPosition;
+			do {
+				correctedEndPosition = floor.nextTo(endPos, CellType.FREE, GameConfig.PATH_TOLERANCE);
+				if(correctedEndPosition == null || 
+						!walkableGraph.containsVertex(correctedEndPosition.getRow() + "," + correctedEndPosition.getCol())){
+					counter++;
+					floor.set(correctedEndPosition.getRow(), correctedEndPosition.getCol(), new Cell(CellType.WOOD));
+				}
+				else
+					return correctedEndPosition;
+			}while(counter <= GameConfig.PATH_TOLERANCE*GameConfig.PATH_TOLERANCE);//covered area
+			return null;
+		}
 	}
 
 	private static UndirectedWeightedGraph createWalkableGraph(Floor floor, int startRow, int startCol, int endRow, int endCol) {
