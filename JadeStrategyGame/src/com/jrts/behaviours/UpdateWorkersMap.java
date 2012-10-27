@@ -1,10 +1,10 @@
 package com.jrts.behaviours;
 
-import java.util.Iterator;
-
 import jade.core.behaviours.TickerBehaviour;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
+
+import java.util.Iterator;
 
 import com.jrts.agents.ResourceAI;
 import com.jrts.agents.Worker;

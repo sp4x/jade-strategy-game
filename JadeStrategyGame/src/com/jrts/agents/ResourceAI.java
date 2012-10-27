@@ -4,7 +4,6 @@ import jade.core.AID;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
-import jade.lang.acl.UnreadableException;
 
 import com.jrts.behaviours.UpdateWorkersMap;
 import com.jrts.common.AgentStatus;

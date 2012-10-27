@@ -6,7 +6,6 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 
 import com.jrts.environment.Cell;
 import com.jrts.environment.CellType;

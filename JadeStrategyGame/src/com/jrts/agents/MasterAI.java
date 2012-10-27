@@ -1,7 +1,5 @@
 package com.jrts.agents;
 
-import java.io.IOException;
-
 import jade.core.AID;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.core.behaviours.WakerBehaviour;
@@ -11,6 +9,8 @@ import jade.lang.acl.UnreadableException;
 import jade.wrapper.AgentController;
 import jade.wrapper.ControllerException;
 import jade.wrapper.PlatformController;
+
+import java.io.IOException;
 
 import com.jrts.O2Ainterfaces.Team;
 import com.jrts.common.GameConfig;
