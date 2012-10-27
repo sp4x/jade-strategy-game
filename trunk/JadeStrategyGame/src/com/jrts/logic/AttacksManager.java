@@ -1,7 +1,7 @@
 package com.jrts.logic;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+
 import com.jrts.common.GameConfig;
 import com.jrts.environment.CellType;
 import com.jrts.environment.Direction;

@@ -19,15 +19,17 @@ public class FollowPathBehaviour extends Behaviour {
 	Unit unit;
 	private int goalRow, goalCol;
 	int remainingAttempts;
+	boolean tolerance;
 	
 	Floor worldCachedCopy = null;
 		
-	public FollowPathBehaviour(Unit unit, int goalRow, int goalCol, int remainingAttempts) {
+	public FollowPathBehaviour(Unit unit, int goalRow, int goalCol, int remainingAttempts, boolean tolerance) {
 		this.unit = unit;
 		this.goalRow = goalRow;
 		this.goalCol = goalCol;
 		this.remainingAttempts = remainingAttempts;
 		this.list = new ArrayList<Direction>();
+		this.tolerance = tolerance;
 		
 		//se prima invocazione del behaviour
 		if(remainingAttempts == GameConfig.UNIT_MOVING_ATTEMPTS || worldCachedCopy == null){
@@ -35,7 +37,7 @@ public class FollowPathBehaviour extends Behaviour {
 		}
 		
 		if(remainingAttempts > 0)
-			this.list = Utils.calculatePath(getWorldCachedCopy(), unit.getPosition(), new Position(goalRow, goalCol));
+			this.list = Utils.calculatePath(getWorldCachedCopy(), unit.getPosition(), new Position(goalRow, goalCol), tolerance);
 	}
 
 	@Override
@@ -47,7 +49,7 @@ public class FollowPathBehaviour extends Behaviour {
 		if (!list.isEmpty() && !unit.move(list.remove(0))) {
 			System.out.println(unit.getLocalName() + ":Need path recalculation");
 			list.clear();
-			unit.addBehaviour(new FollowPathBehaviour(unit, goalRow, goalCol, remainingAttempts-1));
+			unit.addBehaviour(new FollowPathBehaviour(unit, goalRow, goalCol, remainingAttempts-1, tolerance));
 		}
 		else
 			remainingAttempts = GameConfig.UNIT_MOVING_ATTEMPTS;

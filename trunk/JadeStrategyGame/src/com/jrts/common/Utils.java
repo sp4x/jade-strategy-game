@@ -14,7 +14,7 @@ import com.jrts.environment.Position;
 
 public class Utils {
 	
-	public static ArrayList<Direction> calculatePath(Floor floor, Position startPosition, Position endPosition){
+	public static ArrayList<Direction> calculatePath(Floor floor, Position startPosition, Position endPosition, boolean tolerance){
 		int startRow = startPosition.getRow();
 		int startCol = startPosition.getCol();
 		int endRow = endPosition.getRow();
@@ -23,11 +23,14 @@ public class Utils {
 		UndirectedWeightedGraph walkableGraph = createWalkableGraph(floor, startRow, startCol, endRow, endCol);
 		System.out.println("Initial EndPos:" + endPosition);
 		
-		Position correctedEndPosition = approximateEndPosition(walkableGraph, floor, startRow, startCol, endRow, endCol);
-		System.out.println("Corrected EndPos:" + correctedEndPosition);
-
-		endRow = correctedEndPosition.getRow();
-		endCol = correctedEndPosition.getCol();
+		if(tolerance){
+			Position correctedEndPosition = approximateEndPosition(walkableGraph, floor, startRow, startCol, endRow, endCol);
+			System.out.println("Corrected EndPos:" + correctedEndPosition);
+	
+			endRow = correctedEndPosition.getRow();
+			endCol = correctedEndPosition.getCol();
+		}
+		
 		walkableGraph = createWalkableGraph(floor, startRow, startCol, endRow, endCol);
 		
 		//calculate path on the graph
