@@ -6,6 +6,7 @@ import java.util.List;
 import org.jgrapht.alg.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultWeightedEdge;
 
+import com.jrts.environment.Cell;
 import com.jrts.environment.CellType;
 import com.jrts.environment.Direction;
 import com.jrts.environment.Floor;
@@ -19,6 +20,67 @@ public class Utils {
 		int endRow = endPosition.getRow();
 		int endCol = endPosition.getCol();
 		
+		UndirectedWeightedGraph walkableGraph = createWalkableGraph(floor, startRow, startCol, endRow, endCol);
+		System.out.println("Initial EndPos:" + endPosition);
+		
+		Position correctedEndPosition = endPosition;
+		
+//		Position correctedEndPosition = approximateEndPosition(walkableGraph, floor, startRow, startCol, endRow, endCol);
+//		System.out.println("Corrected EndPos:" + correctedEndPosition);
+
+		endRow = correctedEndPosition.getRow();
+		endCol = correctedEndPosition.getCol();
+		walkableGraph = createWalkableGraph(floor, startRow, startCol, endRow, endCol);
+		
+		//calculate path on the graph
+		String sourceNode = startRow + "," + startCol;
+		String destNode = endRow + "," + endCol;
+		if(!walkableGraph.containsVertex(destNode)){
+			System.out.println("Dest Node not reachable");
+			return new ArrayList<Direction>();
+		}
+		List<DefaultWeightedEdge> list = new DijkstraShortestPath<String, DefaultWeightedEdge>
+											(walkableGraph, sourceNode, destNode).getPathEdgeList();
+//		System.out.println("List Edges:" + list);
+		ArrayList<String> cellList = edgeListToCellList(walkableGraph, sourceNode, list);
+//		System.out.println("Cells List:" + cellList);
+		ArrayList<Direction> directions = cellListToDirections(cellList);
+		System.out.println("Path's StartPos:" + startPosition);
+		System.out.println("Path's EndPos:" + endPosition);
+		System.out.println("Path's direction:" + directions);
+		return directions;
+	}
+
+	/**
+	 * Avoid path null when end position is unreachable 
+	 * 
+	 * @param walkableGraph
+	 * @param floor
+	 * @param startRow
+	 * @param startCol
+	 * @param endRow
+	 * @param endCol
+	 * @return correctedEndPosition
+	 */
+	private static Position approximateEndPosition(UndirectedWeightedGraph walkableGraph, Floor floor, int startRow, int startCol, int endRow, int endCol) {
+		floor = floor.getCopy();
+		Position endPos = new Position(endRow, endCol);
+		int counter = 0;
+		Position correctedEndPosition;
+		do {
+			correctedEndPosition = floor.nextTo(endPos, CellType.FREE, GameConfig.PATH_TOLERANCE);
+			if(correctedEndPosition == null || 
+					!walkableGraph.containsVertex(correctedEndPosition.getRow() + "," + correctedEndPosition.getCol())){
+				counter++;
+				floor.set(correctedEndPosition.getRow(), correctedEndPosition.getCol(), new Cell(CellType.WOOD));
+			}
+			else
+				return correctedEndPosition;
+		}while(counter <= GameConfig.PATH_TOLERANCE*GameConfig.PATH_TOLERANCE);//covered area
+		return null;
+	}
+
+	private static UndirectedWeightedGraph createWalkableGraph(Floor floor, int startRow, int startCol, int endRow, int endCol) {
 		//create walkable graph
 		UndirectedWeightedGraph walkableGraph = new UndirectedWeightedGraph();
 		//avoid exceptions
@@ -85,24 +147,7 @@ public class Utils {
 					}
 				}
 			}
-
-		//calculate path on the graph
-		String sourceNode = startRow + "," + startCol;
-		String destNode = endRow + "," + endCol;
-		if(!walkableGraph.containsVertex(destNode)){
-			System.out.println("Dest Node not reachable");
-			return new ArrayList<Direction>();
-		}
-		List<DefaultWeightedEdge> list = new DijkstraShortestPath<String, DefaultWeightedEdge>
-											(walkableGraph, sourceNode, destNode).getPathEdgeList();
-//		System.out.println("List Edges:" + list);
-		ArrayList<String> cellList = edgeListToCellList(walkableGraph, sourceNode, list);
-//		System.out.println("Cells List:" + cellList);
-		ArrayList<Direction> directions = cellListToDirections(cellList);
-		System.out.println("Path's StartPos:" + startPosition);
-		System.out.println("Path's EndPos:" + endPosition);
-		System.out.println("Path's direction:" + directions);
-		return directions;
+		return walkableGraph;
 	}
 
 	public static ArrayList<String> edgeListToCellList(UndirectedWeightedGraph walkableGraph, String src, List<DefaultWeightedEdge> list) {

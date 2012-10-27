@@ -49,7 +49,7 @@ public class ResourceAI extends GoalBasedAI {
 						int collectedWood = aggiornamento.getWood();
 						resourcesContainer.addFood(collectedFood);
 						resourcesContainer.addWood(collectedWood);
-					} catch (UnreadableException e) {
+					} catch (Exception e) {
 						e.printStackTrace();
 					}
 				} else {
@@ -84,7 +84,7 @@ public class ResourceAI extends GoalBasedAI {
 					changeAgentStatus(freeWorker, newStatus);
 					workersMap.put(freeWorker, newStatus);
 				} else {
-					logger.info("no free workers");
+					//logger.info("no free workers");
 				}
 			}
 		});

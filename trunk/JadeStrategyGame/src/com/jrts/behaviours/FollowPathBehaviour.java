@@ -40,6 +40,7 @@ public class FollowPathBehaviour extends Behaviour {
 
 	@Override
 	public void action() {
+		System.out.println("Follow Path (" + unit.getId() + "," + unit.getStatus() + ")");
 		unit.spendTime();
 		
 		//se non riesco a spostarmi ricalcolo il path
@@ -54,6 +55,10 @@ public class FollowPathBehaviour extends Behaviour {
 
 	@Override
 	public boolean done() {
+		//Se il path è stato eseguito correttamente ma la posizione raggiunta non è quella giusta
+		//significa che è stata fatta un'approssimazione della posizione obiettivo
+		if(list.isEmpty() && !unit.getPosition().equals(new Position(goalRow, goalCol)))
+			unit.goThere(new Position(goalRow, goalCol));
 		return list.isEmpty();
 	}
 

@@ -45,4 +45,6 @@ public class GameConfig {
 	
 	public static final int STARTUP_WOOD = 50;
 	public static final int STARTUP_FOOD = 50;
+	
+	public static final int PATH_TOLERANCE = 5;
 }
