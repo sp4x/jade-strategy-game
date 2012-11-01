@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Random;
 
 import com.jrts.O2Ainterfaces.IUnit;
+import com.jrts.common.ThreadMonitor;
 
 public class World {
 
@@ -53,8 +54,8 @@ public class World {
 	 *            the direction
 	 * @return true if the movement has been performed
 	 */
-	public synchronized boolean move(Position source, Direction d) {
-		floor.acquireLock();
+	public boolean move(Position source, Direction d) {
+		ThreadMonitor.getInstance().doWait();
 		boolean result;
 		Position destination = source.step(d);
 		Cell srcCell = floor.get(source.row, source.col);
@@ -67,7 +68,6 @@ public class World {
 		} else {
 			result = false;
 		}
-		floor.releaseLock();
 		return result;
 	}
 
@@ -232,9 +232,7 @@ public class World {
 	}
 
 	public synchronized void clear(Position p) {
-		floor.acquireLock();
 		floor.set(p.row, p.col, new Cell(CellType.FREE));
-		floor.releaseLock();
 	}
 
 	public int getRows() {
@@ -246,9 +244,7 @@ public class World {
 	}
 
 	public void agentDies(Position p) {
-		floor.acquireLock();
 		floor.set(p.getRow(), p.getCol(), new Cell(CellType.FREE));
-		floor.releaseLock();
 	}
 
 	public Map<String, Position> getTeams() {
