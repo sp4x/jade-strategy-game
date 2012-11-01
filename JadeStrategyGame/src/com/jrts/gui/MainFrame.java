@@ -184,6 +184,10 @@ public class MainFrame extends JFrame {
 			@Override
 			public void run() {
 				while(true){
+					try {
+						Thread.sleep(10);
+					} catch (InterruptedException e) {
+					}
 					MainFrame.this.repaint();
 				}
 			}
