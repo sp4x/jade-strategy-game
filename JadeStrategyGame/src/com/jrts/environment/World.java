@@ -35,23 +35,27 @@ public class World {
 		this.rows = rows;
 		this.cols = cols;
 		floor = new Floor(rows, cols);
-		
-		int numWood = (int) (((float) (rows*cols)) * woodPercentage);
+
+		int numWood = (int) (((float) (rows * cols)) * woodPercentage);
 		Cell wood = new Cell(CellType.WOOD);
 		wood.resourceEnergy = WOOD_ENERGY;
 		floor.generateObject(numWood, wood);
-		
+
 		teams = new HashMap<String, Position>();
 	}
 
 	/**
 	 * changes the position of an object using the specified direction
 	 * 
-	 * @param source the position of the object
-	 * @param d the direction
+	 * @param source
+	 *            the position of the object
+	 * @param d
+	 *            the direction
 	 * @return true if the movement has been performed
 	 */
 	public synchronized boolean move(Position source, Direction d) {
+		floor.acquireLock();
+		boolean result;
 		Position destination = source.step(d);
 		Cell srcCell = floor.get(source.row, source.col);
 		if (isAvailable(destination)) {
@@ -59,9 +63,12 @@ public class World {
 			floor.set(destination.row, destination.col, srcCell);
 			source.row = destination.row;
 			source.col = destination.col;
-			return true;
+			result = true;
+		} else {
+			result = false;
 		}
-		return false;
+		floor.releaseLock();
+		return result;
 	}
 
 	boolean addObject(Cell objectType, Position p) {
@@ -72,14 +79,17 @@ public class World {
 		return false;
 	}
 
-	
 	/**
 	 * returns the nearest free position from a source point next to a target.
-	 * @param src the source position
-	 * @param target the target position
+	 * 
+	 * @param src
+	 *            the source position
+	 * @param target
+	 *            the target position
 	 * @return the requested position
 	 */
-	public synchronized Position freePositionNextToTarget(Position src, Position target) {
+	public synchronized Position freePositionNextToTarget(Position src,
+			Position target) {
 		double distance = Double.MAX_VALUE;
 		Position chosen = null;
 		for (Direction d : Direction.VON_NEUMANN_NEIGH) {
@@ -92,25 +102,27 @@ public class World {
 		}
 		return chosen;
 	}
-	
+
 	public synchronized Cell getCell(Position p) {
 		return floor.getCopy(p);
 	}
+
 	/*
-	public Cell unSyncGetCell(Position p) {
-		return floor.get(p);
-	}
-	*/
-	
+	 * public Cell unSyncGetCell(Position p) { return floor.get(p); }
+	 */
+
 	/**
-	 * returns a random free position near a center between the specified distance range
+	 * returns a random free position near a center between the specified
+	 * distance range
+	 * 
 	 * @param center
 	 * @param minDistance
 	 * @param maxDistance
 	 * @return
 	 */
 	Position near(Position center, int minDistance, int maxDistance) {
-		if (center.row+maxDistance > floor.rows || center.col+maxDistance > floor.cols)
+		if (center.row + maxDistance > floor.rows
+				|| center.col + maxDistance > floor.cols)
 			return null;
 		int maxIterations = 10;
 		int len = maxDistance - minDistance + 1;
@@ -119,12 +131,12 @@ public class World {
 		do {
 			int rowOffset = r.nextInt(len) + minDistance;
 			int colOffset = r.nextInt(len) + minDistance;
-			int rowMultiplier = ( r.nextInt(2) == 0 ? -1 : 1);
-			int colMultiplier = ( r.nextInt(2) == 0 ? -1 : 1);
-			int row = center.row+rowOffset*rowMultiplier;
-			int col = center.col+colOffset*colMultiplier;
+			int rowMultiplier = (r.nextInt(2) == 0 ? -1 : 1);
+			int colMultiplier = (r.nextInt(2) == 0 ? -1 : 1);
+			int row = center.row + rowOffset * rowMultiplier;
+			int col = center.col + colOffset * colMultiplier;
 			candidate = new Position(row, col);
-		} while (!isAvailable(candidate) && --maxIterations>0);
+		} while (!isAvailable(candidate) && --maxIterations > 0);
 		return candidate;
 	}
 
@@ -132,10 +144,12 @@ public class World {
 		return p != null && floor.get(p.row, p.col).type == CellType.FREE;
 	}
 
-
 	/**
-	 * adds the city center in a random position for a new team with the specified name
-	 * @param name the name of the team, has to be unique
+	 * adds the city center in a random position for a new team with the
+	 * specified name
+	 * 
+	 * @param name
+	 *            the name of the team, has to be unique
 	 */
 	public synchronized void addTeam(String name) {
 		Random r = new Random();
@@ -146,17 +160,18 @@ public class World {
 			p = new Position(r.nextInt(floor.rows), r.nextInt(floor.cols));
 		} while (!addObject(base, p));
 		teams.put(name, p);
-		System.out.println("adding team "+name+" in "+p.toString());
+		System.out.println("adding team " + name + " in " + p.toString());
 		Position foodPosition = near(p, FOOD_MIN_DISTANCE, FOOD_MAX_DISTANCE);
 		Cell food = new Cell(CellType.FOOD);
 		food.resourceEnergy = FOOD_ENERGY;
 		addObject(food, foodPosition);
 	}
 
-
 	/**
 	 * gets a free position in the neighborhood of the parameter
-	 * @param p the position to use as center of the neighborhood
+	 * 
+	 * @param p
+	 *            the position to use as center of the neighborhood
 	 * @return the position available
 	 */
 	public synchronized Position neighPosition(Position p) {
@@ -167,7 +182,7 @@ public class World {
 		}
 		return p;
 	}
-	
+
 	public synchronized void addUnit(Position p, String id, IUnit unit) {
 		Cell unitCell = new Cell(id, unit, unit.getType());
 		floor.set(p.row, p.col, unitCell);
@@ -175,7 +190,9 @@ public class World {
 
 	/**
 	 * gets the position of the city center of the team with the specified name
-	 * @param teamName the name of the team
+	 * 
+	 * @param teamName
+	 *            the name of the team
 	 * @return the position of the main building
 	 */
 	public synchronized Position getCityCenter(String teamName) {
@@ -187,11 +204,15 @@ public class World {
 	}
 
 	/**
-	 * Returns the perceived floor in a certain position with the specified range of sight
-	 * @param center where the observer is located
-	 * @param sight the range of sight of the observer
-	 * @return a floor object where the perceived cells are the same of the world's floor
-	 * and the others are set to UNKNOWN
+	 * Returns the perceived floor in a certain position with the specified
+	 * range of sight
+	 * 
+	 * @param center
+	 *            where the observer is located
+	 * @param sight
+	 *            the range of sight of the observer
+	 * @return a floor object where the perceived cells are the same of the
+	 *         world's floor and the others are set to UNKNOWN
 	 */
 
 	public synchronized Perception getPerception(Position center, int sight) {
@@ -211,7 +232,9 @@ public class World {
 	}
 
 	public synchronized void clear(Position p) {
+		floor.acquireLock();
 		floor.set(p.row, p.col, new Cell(CellType.FREE));
+		floor.releaseLock();
 	}
 
 	public int getRows() {
@@ -223,7 +246,9 @@ public class World {
 	}
 
 	public void agentDies(Position p) {
+		floor.acquireLock();
 		floor.set(p.getRow(), p.getCol(), new Cell(CellType.FREE));
+		floor.releaseLock();
 	}
 
 	public Map<String, Position> getTeams() {

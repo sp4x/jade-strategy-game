@@ -128,10 +128,8 @@ public class Floor implements Serializable {
 	 * @param st	the Cell's state
 	 */
 	public void set(int i, int j, Cell st){
-		lock.lock();
 		if(i>0 && j>0 && i<=rows && j<=cols)
 			this.floor[i][j] = st;
-		lock.unlock();
 	}
 
 	public int getRows() {
