@@ -19,6 +19,14 @@ public class Position implements Serializable {
 		return new Position(row + d.rowVar(), col + d.colVar());
 	}
 	
+	public Position bigStep(Direction d, int numSteps) {
+		Position newPosition = this;
+		for (int i = 0; i < numSteps; i++)
+			newPosition = newPosition.step(d);	
+		
+		return newPosition;
+	}
+	
 	public int getRow() {
 		return row;
 	}
