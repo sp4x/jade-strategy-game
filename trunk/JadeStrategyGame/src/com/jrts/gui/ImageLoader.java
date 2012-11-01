@@ -7,9 +7,9 @@ import javax.swing.ImageIcon;
 
 class ImageLoader {
 	public static ImageIcon freeIcon, workerIcon1, workerIcon2, workerIcon3, workerIcon4, 
-							treeIcon, woodIcon, foodIcon, workerFactoryIcon1, soldierIcon, 
-							workerFactoryIcon2, workerFactoryIcon3, workerFactoryIcon4,
-							background;
+							treeIcon, woodIcon, foodIcon, workerFactoryIcon1, soldierIcon1, 
+							soldierIcon2, soldierIcon3, soldierIcon4, background,
+							workerFactoryIcon2, workerFactoryIcon3, workerFactoryIcon4;
 	
 	public static ImageIcon hitIcon;
 	public static int iconSize = 15;
@@ -36,8 +36,18 @@ class ImageLoader {
 		return null;
 	}
 	
-	public static Icon getSoldierImageIcon(String teamName) {
-		return soldierIcon;
+	public static Icon getSoldierImageIcon(String id) {
+		if(id == null){
+			System.out.println("Requested id null!");
+			return null;
+		}
+		
+		if(id.equals("team1")) return soldierIcon1;
+		if(id.equals("team2")) return soldierIcon2;
+		if(id.equals("team3")) return soldierIcon3;
+		if(id.equals("team4")) return soldierIcon4;
+		
+		return null;
 	}
 	
 	public static ImageIcon getBackgroundImage(Dimension d)
@@ -55,7 +65,10 @@ class ImageLoader {
 		workerFactoryIcon3 = new ImageIcon(new ImageIcon("img/workerFactory3.png").getImage().getScaledInstance(iconSize,iconSize,iconSize));
 		workerFactoryIcon4 = new ImageIcon(new ImageIcon("img/workerFactory4.png").getImage().getScaledInstance(iconSize,iconSize,iconSize));
 		
-		soldierIcon = new ImageIcon(new ImageIcon("img/soldier.jpg").getImage().getScaledInstance(iconSize,iconSize,iconSize));
+		soldierIcon1 = new ImageIcon(new ImageIcon("img/soldier1.gif").getImage().getScaledInstance(iconSize,iconSize,iconSize));
+		soldierIcon2 = new ImageIcon(new ImageIcon("img/soldier2.gif").getImage().getScaledInstance(iconSize,iconSize,iconSize));
+		soldierIcon3 = new ImageIcon(new ImageIcon("img/soldier3.gif").getImage().getScaledInstance(iconSize,iconSize,iconSize));
+		soldierIcon4 = new ImageIcon(new ImageIcon("img/soldier4.gif").getImage().getScaledInstance(iconSize,iconSize,iconSize));
 		
 		workerIcon1 = new ImageIcon(new ImageIcon("img/worker1.gif").getImage().getScaledInstance(iconSize,iconSize,iconSize));
 		workerIcon2 = new ImageIcon(new ImageIcon("img/worker2.gif").getImage().getScaledInstance(iconSize,iconSize,iconSize));
