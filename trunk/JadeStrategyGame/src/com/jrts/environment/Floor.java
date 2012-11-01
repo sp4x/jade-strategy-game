@@ -26,9 +26,6 @@ public class Floor implements Serializable {
 
 	private Cell [][] floor;
 	
-	private Lock lock = new ReentrantLock();
-	
-	
 	public Floor(int rows, int cols, CellType defaultCell){
 		this.rows = rows;
 		this.cols = cols;
@@ -208,11 +205,6 @@ public class Floor implements Serializable {
 		return new Cell(get(p));
 	}
 	
-	public void acquireLock() {
-		lock.lock();
-	}
 	
-	public void releaseLock() {
-		lock.unlock();
-	}
+	
 }
