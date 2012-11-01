@@ -260,5 +260,12 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 	public Perception getPerception() {
 		return perception;
 	}
+	
+	public int getKnapsack() {
+		if (this instanceof Worker) 
+			return ((Worker) this).getKnapsack();
+		else
+			return -1;
+	}
 
 }

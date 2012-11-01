@@ -1,8 +1,8 @@
 package com.jrts.common;
 
 public class GameConfig {
-	public static final int WORLD_ROWS = 30;
-	public static final int WORLD_COLS = 30;
+	public static final int WORLD_ROWS = 40;
+	public static final int WORLD_COLS = 40;
 	
 	public static final int WORKER_LIFE = 10;
 	public static final int SOLDIER_LIFE = 20;
