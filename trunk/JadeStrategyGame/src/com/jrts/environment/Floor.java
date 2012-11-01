@@ -42,6 +42,15 @@ public class Floor implements Serializable {
 	}
 
 
+	public Floor(Floor floor) {
+		this.rows = floor.getRows();
+		this.cols = floor.getCols();
+		this.floor = new Cell[rows][cols];
+		for (int i = 0; i < rows; i++)
+			for (int j = 0; j < cols; j++)
+				this.floor[i][j] = new Cell(floor.get(i, j));
+	}
+
 	public void setAll(Cell objectsType) {
 		for (int i = 0; i < rows; i++)
 			for (int j = 0; j < cols; j++)
