@@ -12,4 +12,5 @@ public interface IUnit {
 	public Position getPosition();
 	public String getTeamName();
 	public CellType getType();
+	public int getKnapsack();
 }

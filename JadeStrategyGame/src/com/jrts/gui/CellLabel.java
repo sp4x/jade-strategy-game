@@ -44,11 +44,11 @@ public class CellLabel extends JLabel {
 //						JOptionPane.showMessageDialog(MainFrame.getInstance(), 
 //								"Tipo Cell:" + cell.toString() + " Posizione: " + i + " - " + j);
 						
-						if(MainFrame.getInstance().clickType.equals(MainFrame.treeClick))
+						if(MainFrame.getInstance().clickType.equals(MainFrame.addTreeClick))
 							World.getInstance().getFloor().set(CellLabel.this.i, CellLabel.this.j, new Cell(CellType.WOOD));
-						else if(MainFrame.getInstance().clickType.equals(MainFrame.foodClick))
+						else if(MainFrame.getInstance().clickType.equals(MainFrame.addFoodClick))
 							World.getInstance().getFloor().set(CellLabel.this.i, CellLabel.this.j, new Cell(CellType.FOOD));
-						else if(MainFrame.getInstance().clickType.equals(MainFrame.emptyCellClick))
+						else if(MainFrame.getInstance().clickType.equals(MainFrame.deleteCellClick))
 							World.getInstance().getFloor().set(CellLabel.this.i, CellLabel.this.j, new Cell(CellType.FREE));
 					}
 				}

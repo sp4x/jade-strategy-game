@@ -47,15 +47,15 @@ public class MainFrame extends JFrame {
 
 	protected JPanel infoPanel;
 
-	private JLabel labelTeam, labelType, labelPosition, labelEnergy, labelAction;
+	private JLabel labelTeam, labelType, labelPosition, labelEnergy, labelAction, labelKnapsack;
 	
 	private int selectedRow = 0, selectedCol = 0;
 	
 	//public static int treeClick = 0;
 	
-	public static String treeClick = "Add Tree";
-	public static String foodClick = "Add Food";
-	public static String emptyCellClick = "Add Empty Cell";
+	public static String addTreeClick = "Add Tree";
+	public static String addFoodClick = "Add Food";
+	public static String deleteCellClick = "Empty Cell";
 	public static String selectionClick = "Get Cell/Unit Info";
 	
 	public String clickType = selectionClick;
@@ -77,10 +77,8 @@ public class MainFrame extends JFrame {
 //		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		super.addWindowListener(new WindowAdapter() {
 			@Override
-			public void windowClosed(WindowEvent e) {
-				super.windowClosed(e);
+			public void windowClosing(WindowEvent e) {
 				Runtime.instance().shutDown();
-				dispose();
 				//TODO killare tutti gli agenti e chiudere la runtime
 				System.exit(0);
 			}
@@ -112,14 +110,14 @@ public class MainFrame extends JFrame {
 		ActionListener al = new ActionListener() {
 			public void actionPerformed(ActionEvent e) { MainFrame.this.clickType = e.getActionCommand(); }
 		};
-		JRadioButton tree = new JRadioButton(treeClick);
+		JRadioButton tree = new JRadioButton(addTreeClick);
 		tree.addActionListener(al);
-		tree.setActionCommand(treeClick);
-		JRadioButton food = new JRadioButton(foodClick);
+		tree.setActionCommand(addTreeClick);
+		JRadioButton food = new JRadioButton(addFoodClick);
 		food.addActionListener(al);
-		food.setActionCommand(foodClick);
-		JRadioButton emptyCell = new JRadioButton(emptyCellClick);
-		emptyCell.setActionCommand(emptyCellClick);
+		food.setActionCommand(addFoodClick);
+		JRadioButton emptyCell = new JRadioButton(deleteCellClick);
+		emptyCell.setActionCommand(deleteCellClick);
 		emptyCell.addActionListener(al);
 		JRadioButton selection = new JRadioButton(selectionClick, true);
 		selection.setActionCommand(selectionClick);
@@ -155,6 +153,9 @@ public class MainFrame extends JFrame {
 		infoPanel.add(new JLabel("Action:"));
 		labelAction = new JLabel("nothing");
 		infoPanel.add(labelAction);
+//		infoPanel.add(new JLabel("Knapsack:"));
+//		labelKnapsack = new JLabel("-");
+//		infoPanel.add(labelKnapsack);
 		
 		Dimension d = new Dimension(200, 150);
 		infoPanel.setPreferredSize(d);
@@ -190,18 +191,12 @@ public class MainFrame extends JFrame {
 						Thread.sleep(10);
 					} catch (InterruptedException e) {
 					}
-//					MainFrame.this.repaint();
 					update();
 				}
 			}
 		}
 
 		new Thread(new RefreshGUI()).start();
-	}
-	
-	@Override
-	public void repaint(){
-		super.repaint();
 	}
 	
 	public void update() {
