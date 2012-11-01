@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Random;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  *  This class implement a Floor built of a Cell matrix where the agent acts.
@@ -23,6 +25,8 @@ public class Floor implements Serializable {
 	public int cols;
 
 	private Cell [][] floor;
+	
+	private Lock lock = new ReentrantLock();
 	
 	
 	public Floor(int rows, int cols, CellType defaultCell){
@@ -124,9 +128,10 @@ public class Floor implements Serializable {
 	 * @param st	the Cell's state
 	 */
 	public void set(int i, int j, Cell st){
-		if(i<0 || j<0 || i>=rows || j>=cols)
-			return;
-		this.floor[i][j] = st;
+		lock.lock();
+		if(i>0 && j>0 && i<=rows && j<=cols)
+			this.floor[i][j] = st;
+		lock.unlock();
 	}
 
 	public int getRows() {
@@ -203,5 +208,13 @@ public class Floor implements Serializable {
 
 	public Cell getCopy(Position p) {
 		return new Cell(get(p));
+	}
+	
+	public void acquireLock() {
+		lock.lock();
+	}
+	
+	public void releaseLock() {
+		lock.unlock();
 	}
 }
