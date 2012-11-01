@@ -4,6 +4,7 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.logging.Logger;
 
 import com.jrts.O2Ainterfaces.IUnit;
 import com.jrts.common.ThreadMonitor;
@@ -32,6 +33,7 @@ public class World {
 	 * occupa uno di essi, allora la relativa cella dell'array diventa true.
 	 */
 	private boolean[] occupiedAngles = {false, false, false, false};
+	private Logger logger = Logger.getLogger(World.class.getName());
 	
 	public static void create(int rows, int cols, float woodPercentage) {
 		instance = new World(rows, cols, woodPercentage);
@@ -130,9 +132,6 @@ public class World {
 	 * @return
 	 */
 	Position near(Position center, int minDistance, int maxDistance) {
-		if (center.row + maxDistance > floor.rows
-				|| center.col + maxDistance > floor.cols)
-			return null;
 		int maxIterations = 10;
 		int len = maxDistance - minDistance + 1;
 		Random r = new Random();
@@ -150,6 +149,8 @@ public class World {
 	}
 
 	boolean isAvailable(Position p) {
+		if (p.row > floor.rows || p.col > floor.cols)
+			return false;
 		return p != null && floor.get(p.row, p.col).type == CellType.FREE;
 	}
 
@@ -204,14 +205,6 @@ public class World {
 		
 		} while (!addObject(base, startP));
 		
-		/*
-		Position p;
-		do {
-			p = new Position(r.nextInt(floor.rows), r.nextInt(floor.cols));
-		} while (!addObject(base, p));
-<<<<<<< .mine
-		*/
-		
 		teams.put(name, startP);
 		Position foodPosition = near(startP, FOOD_MIN_DISTANCE, FOOD_MAX_DISTANCE);
 
@@ -219,7 +212,7 @@ public class World {
 		food.resourceEnergy = FOOD_ENERGY;
 		addObject(food, foodPosition);
 
-		System.out.println("TEAM " + name + " added in " + startP.toString());
+		logger .info("TEAM " + name + " added in " + startP.toString());
 	}
 
 	/**
