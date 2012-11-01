@@ -53,8 +53,9 @@ public class WorldViewPanel extends JPanel {
 	public void update() {
 		AttacksManager.update();
 		/** take a snapshot of the floor at this moment and dispay it */
-		Floor floorSnapshot = new Floor(floor);
-		for (int i = 0; i < floorSnapshot.getRows(); i++)
+//		Floor floorSnapshot = new Floor(floor);
+		Floor floorSnapshot = floor;
+		for (int i = 0; i < floorSnapshot.getRows(); i++) {
 			for (int j = 0; j < floorSnapshot.getCols(); j++) {
 				CellLabel currCellLabel = labelMatrix[i][j];
 				int y = (int) (j * ImageLoader.iconSize * GameConfig.HORIZONTAL_OVERLAP);
@@ -79,6 +80,7 @@ public class WorldViewPanel extends JPanel {
 				else if (floorSnapshot.get(i, j).getType() == CellType.FREE)
 					labelMatrix[i][j].setIcon(ImageLoader.freeIcon);
 			}
+		}
 	}
 
 	public void paintComponent(Graphics g) {
