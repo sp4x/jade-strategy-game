@@ -1,5 +1,7 @@
 package com.jrts.agents;
 
+import com.jrts.behaviours.CollectResources;
+import com.jrts.behaviours.PatrolBehaviour;
 import com.jrts.common.AgentStatus;
 import com.jrts.common.GameConfig;
 import com.jrts.environment.CellType;
@@ -38,6 +40,15 @@ public class Soldier extends Unit {
 		AttacksManager.addHit(getPosition().clone(), direction, GameConfig.SOLDIER_DAMAGES);
 	}
 
+	/**
+	 * 
+	 * @param d must be one between TOP, RIGHT, DOWN, LEFT
+	 */
+	public void patrol(Direction d) {
+		//TODO: switchStatus(AgentStatus.);
+		addBehaviour(new PatrolBehaviour(this, d));
+	}
+	
 	@Override
 	public CellType getType() {
 		return CellType.SOLDIER;

@@ -168,8 +168,10 @@ public class World {
 		// se l'angolo non e' occupato da un'altra squadra 
 		// lo utilizzo per mettere la base della squadra corrente,
 		// altrimenti ne scelgo un altro
-		while(occupiedAngles[angle])
+
+		while(this.occupiedAngles[angle])
 			angle = (angle + 1) % 4;
+
 		this.occupiedAngles[angle] = true;
 		
 		System.out.println("TEAM " + name + " in angolo " + angle);
