@@ -7,5 +7,6 @@ public enum CellType {
 	WORKER, 
 	SOLDIER,
 	CITY_CENTER,
-	UNKNOWN;
+	UNKNOWN, 
+	OBSTACLE;
 }
