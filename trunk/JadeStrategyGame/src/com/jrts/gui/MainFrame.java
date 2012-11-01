@@ -155,7 +155,7 @@ public class MainFrame extends JFrame {
 		infoPanel.add(new JLabel("Action:"));
 		labelAction = new JLabel("nothing");
 		infoPanel.add(labelAction);
-		Dimension d = new Dimension(200, 150);
+		Dimension d = new Dimension(200, 50);
 		infoPanel.setPreferredSize(d);
 		infoPanel.setSize(d);
 		infoPanel.setMinimumSize(d);
@@ -218,7 +218,7 @@ public class MainFrame extends JFrame {
 	
 	protected void showCellInfo(int i, int j, int energy)
 	{
-		Cell cell = World.getInstance().getCell(new Position(i, j));
+		Cell cell = floor.get(new Position(i, j));
 		
 		try{
 			if(cell.getId().isEmpty() || cell.getId().trim().equals(""))
