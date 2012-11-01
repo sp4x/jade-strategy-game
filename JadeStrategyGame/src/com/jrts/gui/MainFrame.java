@@ -74,13 +74,13 @@ public class MainFrame extends JFrame {
 		
 		this.teams = teams;
 		
-		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+//		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		super.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosed(WindowEvent e) {
 				super.windowClosed(e);
-				dispose();
 				Runtime.instance().shutDown();
+				dispose();
 				//TODO killare tutti gli agenti e chiudere la runtime
 				System.exit(0);
 			}
