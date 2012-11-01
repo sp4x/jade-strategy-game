@@ -251,7 +251,7 @@ public class MainFrame extends JFrame {
 			labelType.setText("Worker");
 		else if(selectedUnit.getType().equals(CellType.SOLDIER))
 			labelType.setText("Soldier");
-		labelPosition.setText(selectedUnit.getPosition().getCol() +", "+ selectedUnit.getPosition().getRow());
+		labelPosition.setText(selectedUnit.getPosition().getRow() +", "+ selectedUnit.getPosition().getCol());
 		labelEnergy.setText("" + selectedUnit.getLife());
 		labelAction.setText(selectedUnit.getStatus());
 	}
