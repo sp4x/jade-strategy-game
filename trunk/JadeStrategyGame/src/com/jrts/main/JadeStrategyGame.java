@@ -20,8 +20,6 @@ import com.jrts.gui.MainFrame;
 public class JadeStrategyGame {
 
 	public static void main(String[] args) throws Exception {
-		World.create(GameConfig.WORLD_ROWS, GameConfig.WORLD_COLS, 0.01f);
-		
 		String teamsString = "";
 		do {
 			teamsString = JOptionPane.showInputDialog("Number of teams (max 4)", "2");
@@ -39,6 +37,8 @@ public class JadeStrategyGame {
 		AgentContainer ac = rt.createMainContainer(p);
 
 		List<Team> teams = new ArrayList<Team>();
+		
+		World.create(GameConfig.WORLD_ROWS, GameConfig.WORLD_COLS, 0.01f);
 		
 		/** create and start all the team's masterAi */
 		for (int i = 1; i <= teamNumber; i++) {
