@@ -155,12 +155,14 @@ public class MainFrame extends JFrame {
 		infoPanel.add(new JLabel("Action:"));
 		labelAction = new JLabel("nothing");
 		infoPanel.add(labelAction);
-		Dimension d = new Dimension(200, 50);
+		
+		Dimension d = new Dimension(200, 150);
 		infoPanel.setPreferredSize(d);
 		infoPanel.setSize(d);
 		infoPanel.setMinimumSize(d);
 		infoPanel.setMaximumSize(d);
 			
+		d = new Dimension(200, 300);
 		JPanel leftPanel = new JPanel();
 		leftPanel.setPreferredSize(d);
 		leftPanel.setSize(d);
@@ -183,7 +185,7 @@ public class MainFrame extends JFrame {
 		class RefreshGUI implements Runnable{
 			@Override
 			public void run() {
-				while(true){
+				while(true) {
 					try {
 						Thread.sleep(10);
 					} catch (InterruptedException e) {
@@ -225,7 +227,9 @@ public class MainFrame extends JFrame {
 				labelTeam.setText("None");
 			else
 				labelTeam.setText(cell.getId());
-		} catch(NullPointerException e){ labelTeam.setText("None"); }
+		} catch(NullPointerException e){ 
+			labelTeam.setText("None"); 
+		}
 		
 		if(cell.getType().equals(CellType.CITY_CENTER)) 
 			labelType.setText("Town Center");
