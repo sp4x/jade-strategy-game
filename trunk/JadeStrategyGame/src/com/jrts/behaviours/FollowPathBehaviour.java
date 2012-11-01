@@ -1,10 +1,9 @@
 package com.jrts.behaviours;
 
-import jade.core.behaviours.Behaviour;
-
 import java.util.ArrayList;
 
 import com.jrts.agents.Unit;
+import com.jrts.behaviours.structure.BaseBehaviour;
 import com.jrts.common.GameConfig;
 import com.jrts.common.Utils;
 import com.jrts.environment.Cell;
@@ -12,10 +11,9 @@ import com.jrts.environment.CellType;
 import com.jrts.environment.Direction;
 import com.jrts.environment.Floor;
 import com.jrts.environment.Position;
-import com.jrts.environment.World;
 
 @SuppressWarnings("serial")
-public class FollowPathBehaviour extends HighPriorityBehaviour {
+public class FollowPathBehaviour extends BaseBehaviour {
 
 	ArrayList<Direction> list;
 	Unit unit;
@@ -26,6 +24,7 @@ public class FollowPathBehaviour extends HighPriorityBehaviour {
 	Floor worldCachedCopy = null;
 		
 	public FollowPathBehaviour(Unit unit, int goalRow, int goalCol, int remainingAttempts, boolean tolerance, Floor cachedCopy) {
+		super(true);//high priority
 		this.unit = unit;
 		this.goalRow = goalRow;
 		this.goalCol = goalCol;
@@ -47,8 +46,7 @@ public class FollowPathBehaviour extends HighPriorityBehaviour {
 		this(unit, goalRow, goalCol, remainingAttempts, tolerance, null);
 	}
 
-	@Override
-	public void action() {
+	public void baseAction() {
 		System.out.println("Follow Path (" + unit.getId() + "," + unit.getStatus() + ")");
 		unit.spendTime();
 		

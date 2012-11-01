@@ -2,6 +2,7 @@ package com.jrts.agents;
 
 import jade.core.AID;
 import jade.core.behaviours.Behaviour;
+import jade.core.behaviours.CyclicBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
@@ -14,11 +15,11 @@ import java.io.IOException;
 import java.util.Random;
 
 import com.jrts.O2Ainterfaces.IUnit;
-import com.jrts.behaviours.BaseBehaviour;
 import com.jrts.behaviours.FollowPathBehaviour;
-import com.jrts.behaviours.HighPriorityBehaviour;
 import com.jrts.behaviours.LookForEnemy;
 import com.jrts.behaviours.ReceiveOrders;
+import com.jrts.behaviours.structure.BaseBehaviour;
+import com.jrts.behaviours.structure.BehaviourManager;
 import com.jrts.common.GameConfig;
 import com.jrts.environment.CellType;
 import com.jrts.environment.Direction;
@@ -36,8 +37,7 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 	private DFAgentDescription agentDescription;
 	private ServiceDescription basicService;
 	
-	private HighPriorityBehaviour highPriorityBehaviour;
-	private BaseBehaviour baseBehaviour;
+	private BehaviourManager behaviourManager;
 
 	int life;
 	int speed;
@@ -47,6 +47,7 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 	public Unit() {
 		super();
 		registerO2AInterface(IUnit.class, this);
+		behaviourManager = new BehaviourManager(this);
 	}
 
 	public Unit(Position position) {
@@ -73,49 +74,28 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 		register(agentDescription, false);
 		addBehaviour(new LookForEnemy(this, 2000));
 		addBehaviour(new ReceiveOrders(this));
+		addBehaviour(new CyclicBehaviour() {
+			@Override
+			public void action() {
+				behaviourManager.refresh();
+			}
+		});
 	}
-
+	
+	@Override
+	public void addBehaviour(Behaviour b) {
+		if(b instanceof BaseBehaviour)
+			behaviourManager.addBehaviour((BaseBehaviour) b);
+		super.addBehaviour(b);
+	}
+	
 	public void goThere(Position p) {
 		goThere(p.getRow(), p.getCol());
-	}
-	
-	public void setBaseBehaviour(Behaviour behaviour) {
-		
-	}
-	
-	public void setHighPriorityBehaviour(HighPriorityBehaviour behaviour) {
-		
 	}
 
 	public void goThere(int x, int y) {
 		logger.info(getAID().getName() + ":Go there " + new Position(x, y));
 		addBehaviour(new FollowPathBehaviour(this, x, y, GameConfig.UNIT_MOVING_ATTEMPTS, false));
-	}
-	
-	@Override
-	public void addBehaviour(Behaviour b) {
-		if (b instanceof HighPriorityBehaviour) {
-			if (highPriorityBehaviour != null)
-				removeBehaviour(highPriorityBehaviour);
-			highPriorityBehaviour = (HighPriorityBehaviour) b;
-		} else if (b instanceof BaseBehaviour) {
-			if (baseBehaviour != null)
-				removeBehaviour(baseBehaviour);
-			baseBehaviour = (BaseBehaviour) b;
-		}
-		super.addBehaviour(b);
-	}
-	
-	public void onHighPriorityCompetion() {
-		highPriorityBehaviour = null;
-	}
-
-	public HighPriorityBehaviour getHighPriorityBehaviour() {
-		return highPriorityBehaviour;
-	}
-
-	public BaseBehaviour getBaseBehaviour() {
-		return baseBehaviour;
 	}
 
 	public AID getMasterAID() {

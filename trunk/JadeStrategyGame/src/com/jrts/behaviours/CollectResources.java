@@ -4,12 +4,13 @@ import jade.core.behaviours.Behaviour;
 
 import com.jrts.agents.Unit;
 import com.jrts.agents.Worker;
+import com.jrts.behaviours.structure.BaseBehaviour;
 import com.jrts.common.AgentStatus;
 import com.jrts.environment.CellType;
 import com.jrts.environment.Position;
 import com.jrts.environment.World;
 
-public class CollectResources extends Behaviour {
+public class CollectResources extends BaseBehaviour {
 
 	/**
 	 * 
@@ -30,14 +31,13 @@ public class CollectResources extends Behaviour {
 	Position leavePoint;
 
 	public CollectResources(Worker worker, CellType resource) {
-		super(worker);
+		super(false);//low priority
 		this.worker = worker;
 		this.resourceToCollect = resource;
 		this.cityCenter = World.getInstance().getCityCenter(worker.getTeamName());
 	}
 
-	@Override
-	public void action() {
+	public void baseAction() {
 		switch (behaviourStatus) {
 		case STATUS_IDLE:
 			go();
