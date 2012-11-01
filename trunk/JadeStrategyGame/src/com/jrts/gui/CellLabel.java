@@ -6,6 +6,7 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
+import javax.swing.border.Border;
 
 import com.jrts.environment.Cell;
 import com.jrts.environment.CellType;
@@ -16,6 +17,8 @@ public class CellLabel extends JLabel {
 	private static final long serialVersionUID = 1L;
 	int i;
 	int j;
+	
+	Border selectedBorder = BorderFactory.createLineBorder(Color.green, 2);
 	
 	public CellLabel(int row, int col) {
 		this.i = row;
@@ -29,7 +32,6 @@ public class CellLabel extends JLabel {
 				{
 					if(cell.getType() == CellType.WORKER || cell.getType() == CellType.SOLDIER) {
 						MainFrame.getInstance().selectedUnit = cell.getUnit();
-					// } else if(cell.getType() != CellType.WORKER) {
 					} else {
 						MainFrame.getInstance().selectedUnit = null;
 						MainFrame.getInstance().showCellInfo(i, j, cell.getResourceEnergy());
@@ -77,7 +79,7 @@ public class CellLabel extends JLabel {
 
 	public void setSelected(boolean selected) {
 		if (selected) {
-			setBorder(BorderFactory.createLineBorder(Color.green, 2));
+			setBorder(selectedBorder);
 		} else {
 			setBorder(null);
 		}

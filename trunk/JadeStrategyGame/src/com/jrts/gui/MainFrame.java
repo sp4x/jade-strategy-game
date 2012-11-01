@@ -51,6 +51,8 @@ public class MainFrame extends JFrame {
 
 	private JLabel labelTeam, labelType, labelPosition, labelEnergy, labelAction;
 	
+	private int selectedRow = 0, selectedCol = 0;
+	
 	//public static int treeClick = 0;
 	
 	public static String treeClick = "Add Tree";
@@ -190,7 +192,8 @@ public class MainFrame extends JFrame {
 						Thread.sleep(10);
 					} catch (InterruptedException e) {
 					}
-					MainFrame.this.repaint();
+//					MainFrame.this.repaint();
+					update();
 				}
 			}
 		}
@@ -200,6 +203,10 @@ public class MainFrame extends JFrame {
 	
 	@Override
 	public void repaint(){
+		super.repaint();
+	}
+	
+	public void update() {
 		/** update world panel */
 		worldViewPanel.update();
 				
@@ -215,7 +222,7 @@ public class MainFrame extends JFrame {
 			setSelectedCell(selectedUnit.getPosition().getRow(), selectedUnit.getPosition().getCol());
 		}
 		
-		super.repaint();
+		repaint();
 	}
 	
 	protected void showCellInfo(int i, int j, int energy)
@@ -265,14 +272,9 @@ public class MainFrame extends JFrame {
 	}
 
 	public void setSelectedCell(int row, int col) {
-		for (int i = 0; i < floor.getRows(); i++) {
-			for (int j = 0; j < floor.getCols(); j++) {
-				if (row == i && col == j) {
-					worldViewPanel.labelMatrix[i][j].setSelected(true);
-				} else {
-					worldViewPanel.labelMatrix[i][j].setSelected(false);
-				}
-			}
-		}
+		worldViewPanel.labelMatrix[row][col].setSelected(true);
+		worldViewPanel.labelMatrix[selectedRow][selectedCol].setSelected(false);
+		selectedRow = row;
+		selectedCol = col;
 	}
 }
