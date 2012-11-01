@@ -15,7 +15,7 @@ import com.jrts.environment.Position;
 import com.jrts.environment.World;
 
 @SuppressWarnings("serial")
-public class FollowPathBehaviour extends Behaviour {
+public class FollowPathBehaviour extends HighPriorityBehaviour {
 
 	ArrayList<Direction> list;
 	Unit unit;
