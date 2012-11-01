@@ -1,5 +1,6 @@
 package com.jrts.environment;
 
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -24,6 +25,14 @@ public class World {
 	private final int rows;
 	private final int cols;
 
+	Random r = new Random(GregorianCalendar.getInstance().getTimeInMillis());
+
+	/**
+	 * I 4 booleani rappresentano i 4 angoli della mappa, ogni qual volta la base di una squadra 
+	 * occupa uno di essi, allora la relativa cella dell'array diventa true.
+	 */
+	private boolean[] occupiedAngles = {false, false, false, false};
+	
 	public static void create(int rows, int cols, float woodPercentage) {
 		instance = new World(rows, cols, woodPercentage);
 	}
@@ -152,19 +161,65 @@ public class World {
 	 *            the name of the team, has to be unique
 	 */
 	public synchronized void addTeam(String name) {
-		Random r = new Random();
+		// Prendo un angolo a caso tra 0 e 3
+		int angle = r.nextInt(4);
+
+		// se l'angolo non è occupato da un'altra squadra 
+		// lo utilizzo per mettere la base della squadra corrente,
+		// altrimenti ne scelgo un altro
+		while(!this.occupiedAngles[angle])
+			angle = Math.abs((angle - 1) % 4);
+		this.occupiedAngles[angle] = true;
+		
+		System.out.println("TEAM " + name + " in angolo " + angle);
+		
 		Cell base = new Cell(CellType.CITY_CENTER, name);
 		base.resourceEnergy = BUILDING_ENERGY;
+
+		//Inizializzo la var con una posizione inesistente
+		Position startP = new Position(-1, -1);
+		
+		// A seconda dell'angolo della mappa scelto e del valore della var n
+		// scelgo la posizione della mappa ove posizionare la base
+		int n = r.nextInt(10);
+		do {
+			switch (angle) {
+			case 0:
+				startP = new Position(n, n);
+				break;
+			case 1:
+				startP = new Position((this.rows - n), n);
+				break;
+			case 2:
+				startP = new Position((this.rows - n), (this.cols - n));
+				break;
+			case 3:
+				startP = new Position(5, (this.cols - n));
+				break;
+			}
+			
+			// Genero un numero casuale che sarà utilizzato per distanziare la base
+			// dalla cella di riferimento dellangolo della mappa scelto
+			//startP.col += (r.nextInt(2) == 0)? r.nextInt(10) : - r.nextInt(10);
+		
+		} while (!addObject(base, startP));
+		
+		/*
 		Position p;
 		do {
 			p = new Position(r.nextInt(floor.rows), r.nextInt(floor.cols));
 		} while (!addObject(base, p));
-		teams.put(name, p);
-		System.out.println("adding team " + name + " in " + p.toString());
-		Position foodPosition = near(p, FOOD_MIN_DISTANCE, FOOD_MAX_DISTANCE);
+<<<<<<< .mine
+		*/
+		
+		teams.put(name, startP);
+		Position foodPosition = near(startP, FOOD_MIN_DISTANCE, FOOD_MAX_DISTANCE);
+
 		Cell food = new Cell(CellType.FOOD);
 		food.resourceEnergy = FOOD_ENERGY;
 		addObject(food, foodPosition);
+
+		System.out.println("TEAM " + name + " added in " + startP.toString());
 	}
 
 	/**

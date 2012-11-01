@@ -17,7 +17,6 @@ import com.jrts.common.GameConfig;
 import com.jrts.environment.World;
 import com.jrts.gui.MainFrame;
 
-
 public class JadeStrategyGame {
 
 	public static void main(String[] args) throws Exception {
