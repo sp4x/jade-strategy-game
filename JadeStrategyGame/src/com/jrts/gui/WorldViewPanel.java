@@ -33,7 +33,6 @@ public class WorldViewPanel extends JPanel {
 
 	private void init() {
 		setLayout(null);
-		super.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
 		labelMatrix = new CellLabel[floor.getRows()][floor.getCols()];
 		for (int i = floor.getRows() - 1; i >= 0; i--)
@@ -48,6 +47,7 @@ public class WorldViewPanel extends JPanel {
 		setMinimumSize(d);
 		setMaximumSize(d);
 		setSize(d);
+		setBorder(BorderFactory.createLineBorder(Color.black, 1));
 	}
 
 	public void update() {

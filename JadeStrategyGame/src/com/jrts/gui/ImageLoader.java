@@ -34,7 +34,7 @@ class ImageLoader {
 		if(id.equals("team4")) return workerIcon4;
 		
 		return null;
-	}
+s	}
 	
 	public static Icon getSoldierImageIcon(String teamName) {
 		return soldierIcon;
