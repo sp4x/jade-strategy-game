@@ -18,7 +18,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSlider;
-import javax.swing.WindowConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -29,7 +28,6 @@ import com.jrts.environment.Cell;
 import com.jrts.environment.CellType;
 import com.jrts.environment.Floor;
 import com.jrts.environment.Position;
-import com.jrts.environment.World;
 
 
 /**
