@@ -8,6 +8,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
 import com.jrts.common.GameConfig;
+import com.jrts.common.ThreadMonitor;
 import com.jrts.environment.CellType;
 import com.jrts.environment.Floor;
 import com.jrts.environment.Position;
@@ -53,34 +54,33 @@ public class WorldViewPanel extends JPanel {
 	public void update() {
 		AttacksManager.update();
 		/** take a snapshot of the floor at this moment and dispay it */
-//		Floor floorSnapshot = new Floor(floor);
-		Floor floorSnapshot = floor;
-		for (int i = 0; i < floorSnapshot.getRows(); i++) {
-			for (int j = 0; j < floorSnapshot.getCols(); j++) {
+		for (int i = 0; i < floor.getRows(); i++) {
+			for (int j = 0; j < floor.getCols(); j++) {
 				CellLabel currCellLabel = labelMatrix[i][j];
 				int y = (int) (j * ImageLoader.iconSize * GameConfig.HORIZONTAL_OVERLAP);
 				int x = (int) (i * ImageLoader.iconSize * GameConfig.VERTICAL_OVERLAP);
 				currCellLabel.setBounds(y, x, ImageLoader.iconSize, ImageLoader.iconSize);
 
-				if (floorSnapshot.get(i, j).getType() == CellType.WORKER) {
-					labelMatrix[i][j].setIcon(ImageLoader.getWorkerImageIcon(floorSnapshot.get(new Position(i, j)).getUnit().getTeamName()));
+				if (floor.get(i, j).getType() == CellType.WORKER) {
+					labelMatrix[i][j].setIcon(ImageLoader.getWorkerImageIcon(floor.get(new Position(i, j)).getUnit().getTeamName()));
 					// labelMatrix[i][j].setIcon(ImageLoader.workerIcon);
-				} else if (floorSnapshot.get(i, j).getType() == CellType.SOLDIER) {
-					labelMatrix[i][j].setIcon(ImageLoader.getSoldierImageIcon(floorSnapshot.get(new Position(i, j)).getUnit().getTeamName()));
+				} else if (floor.get(i, j).getType() == CellType.SOLDIER) {
+					labelMatrix[i][j].setIcon(ImageLoader.getSoldierImageIcon(floor.get(new Position(i, j)).getUnit().getTeamName()));
 					// labelMatrix[i][j].setIcon(ImageLoader.workerIcon);
-				} else if (floorSnapshot.get(i, j).getType() == CellType.WOOD)
+				} else if (floor.get(i, j).getType() == CellType.WOOD)
 					labelMatrix[i][j].setIcon(ImageLoader.treeIcon);
-				else if (floorSnapshot.get(i, j).getType() == CellType.FOOD)
+				else if (floor.get(i, j).getType() == CellType.FOOD)
 					labelMatrix[i][j].setIcon(ImageLoader.foodIcon);
-				else if (floorSnapshot.get(i, j).getType() == CellType.CITY_CENTER) {
-					labelMatrix[i][j].setIcon(ImageLoader.getWorkerFactoryImageIcon(floorSnapshot.get(new Position(i, j)).getId()));
+				else if (floor.get(i, j).getType() == CellType.CITY_CENTER) {
+					labelMatrix[i][j].setIcon(ImageLoader.getWorkerFactoryImageIcon(floor.get(new Position(i, j)).getId()));
 					// labelMatrix[i][j].setIcon(ImageLoader.workerFactoryIcon);
 				} else if (AttacksManager.isThereAnHit(i, j))
 					labelMatrix[i][j].setIcon(ImageLoader.hitIcon);
-				else if (floorSnapshot.get(i, j).getType() == CellType.FREE)
+				else if (floor.get(i, j).getType() == CellType.FREE)
 					labelMatrix[i][j].setIcon(ImageLoader.freeIcon);
 			}
 		}
+		ThreadMonitor.getInstance().sendNotifyAll();
 	}
 
 	public void paintComponent(Graphics g) {
