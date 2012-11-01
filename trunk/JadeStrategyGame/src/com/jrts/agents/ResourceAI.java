@@ -24,17 +24,17 @@ public class ResourceAI extends GoalBasedAI {
 	protected void setup() {
 		super.setup();
 
-		// unitFactory.trainUnit(Worker.class);
+//		 unitFactory.trainUnit(Worker.class);
 		// unitFactory.trainUnit(Worker.class);
 		//
 		// // order someone to cut wood
-		// addBehaviour(new WakerBehaviour(this, 15000) {
-		// @Override
-		// protected void handleElapsedTimeout() {
-		// assignWoodcutter();
-		// assignFoodCollector();
-		// }
-		// });
+//		 addBehaviour(new WakerBehaviour(this, 15000) {
+//		 @Override
+//		 protected void handleElapsedTimeout() {
+//		 assignWoodcutter();
+//		 assignFoodCollector();
+//		 }
+//		 });
 
 		// listen for resources update by the workers
 		addBehaviour(new CyclicBehaviour(this) {

@@ -26,18 +26,17 @@ import com.jrts.environment.WorldMap;
 
 @SuppressWarnings("serial")
 public abstract class Unit extends JrtsAgent implements IUnit {
-	
+
 	private Position position = null;
 	private String status;
 	private Perception perception;
 	private DFAgentDescription agentDescription;
 	private ServiceDescription basicService;
-	
+
 	int life;
 	int speed;
 	int forceOfAttack;
 	int sight;
-	
 
 	public Unit() {
 		super();
@@ -57,7 +56,7 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 			setPosition((Position) args[0]);
 			setTeamName((String) args[1]);
 		} else {
-			
+
 		}
 		agentDescription = new DFAgentDescription();
 		agentDescription.setName(getAID());
@@ -69,20 +68,21 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 		addBehaviour(new LookForEnemy(this, 2000));
 		addBehaviour(new ReceiveOrders(this));
 	}
-	
+
 	public void goThere(Position p) {
 		goThere(p.getRow(), p.getCol());
 	}
 
 	public void goThere(int x, int y) {
 		logger.info(getAID().getName() + ":Go there " + new Position(x, y));
+
 		addBehaviour(new FollowPathBehaviour(this, x, y, GameConfig.UNIT_MOVING_ATTEMPTS, false));
 	}
-	
+
 	public AID getMasterAID() {
 		return new AID(getTeamName(), AID.ISLOCALNAME);
 	}
-	
+
 	public AID getResourceAID() {
 		return new AID(getTeamName() + "-resourceAI", AID.ISLOCALNAME);
 	}
@@ -90,7 +90,7 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 	@Override
 	protected void updatePerception() {
 		perception = World.getInstance().getPerception(getPosition(), sight);
-		//send perception to Master
+		// send perception to Master
 		ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
 		msg.setConversationId(Perception.class.getSimpleName());
 		msg.addReceiver(getMasterAID());
@@ -102,7 +102,7 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 		}
 	}
 
-	public boolean move(Direction dir){
+	public boolean move(Direction dir) {
 		return World.getInstance().move(this.position, dir);
 	}
 
@@ -122,21 +122,21 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 	}
 
 	protected void setLife(int life) {
-		if(life>0)
+		if (life > 0)
 			this.life = life;
-		else{
+		else {
 			this.life = 0;
 			die();
 		}
 	}
-	
+
 	private void die() {
 		World.getInstance().agentDies(getPosition());
 		doDelete();
 	}
 
 	@Override
-	public void decreaseLife(int damage){
+	public void decreaseLife(int damage) {
 		setLife(getLife() - damage);
 	}
 
@@ -166,16 +166,16 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 
 	public void spendTime() {
 		try {
-			Thread.sleep(GameConfig.REFRESH_TIME/getSpeed());
+			Thread.sleep(GameConfig.REFRESH_TIME / getSpeed());
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void spendRandomTime() {
 		Random r = new Random();
 		try {
-			Thread.sleep(GameConfig.REFRESH_TIME*r.nextInt(5));
+			Thread.sleep(GameConfig.REFRESH_TIME * r.nextInt(5));
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -185,12 +185,12 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 	public String getStatus() {
 		return status;
 	}
-	
+
 	@Override
 	public String getId() {
 		return getAID().getLocalName();
 	}
-	
+
 	public void switchStatus(String newStatus) {
 		ServiceDescription sd = new ServiceDescription();
 		sd.setName(getAID().getName());
@@ -202,7 +202,7 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 		register(agentDescription, true);
 		status = newStatus;
 	}
-	
+
 	public boolean isFriend(String aid) {
 		DFAgentDescription desc = new DFAgentDescription();
 		desc.setName(new AID(aid, AID.ISLOCALNAME));
@@ -214,18 +214,18 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 			return false;
 		}
 	}
-	
-	public Position findNearest(CellType type) {
+
+	public WorldMap requestMap() {
 		ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
 		String id = WorldMap.class.getSimpleName();
 		msg.setConversationId(id);
 		msg.addReceiver(getMasterAID());
 		send(msg);
-		ACLMessage response = blockingReceive(MessageTemplate.MatchConversationId(id));
+		ACLMessage response = blockingReceive(MessageTemplate
+				.MatchConversationId(id));
 		WorldMap map;
 		try {
-			map = (WorldMap) response.getContentObject();
-			return map.findNearest(getPosition(), type);
+			return (WorldMap) response.getContentObject();
 		} catch (UnreadableException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -233,8 +233,13 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 		return null;
 	}
 
+	public Position findNearest(CellType type) {
+		WorldMap map = requestMap();
+		return map.findNearest(getPosition(), type);
+	}
+
 	public Perception getPerception() {
 		return perception;
 	}
-	
+
 }
