@@ -42,13 +42,16 @@ public class JadeStrategyGame {
 		
 		/** create and start all the team's masterAi */
 		for (int i = 1; i <= teamNumber; i++) {
-			AgentController controller = ac.createNewAgent("team" + i,
+			String teamName = "team" + i;
+			AgentController controller = ac.createNewAgent(teamName,
 					MasterAI.class.getName(), new Object[0]);
 			controller.start();
 			
 			Team team = controller.getO2AInterface(Team.class);
 			teams.add(team);
+			World.getInstance().addTeam(teamName);
 		}
+		
 		
 		/** start graphics */
 		MainFrame.start(World.getInstance().getFloor(), teams);

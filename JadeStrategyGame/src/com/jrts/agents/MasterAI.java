@@ -44,7 +44,6 @@ public class MasterAI extends JrtsAgent implements Team {
 		World world = World.getInstance();
 		worldMap = new WorldMap(world.getRows(), world.getCols());
 		setTeamName(getAID().getLocalName());
-		world.addTeam(getTeamName());
 		
 		resourceAID = new AID(getTeamName() + "-resourceAI", AID.ISLOCALNAME);
 		militaryAID = new AID(getTeamName() + "-militaryAI", AID.ISLOCALNAME);

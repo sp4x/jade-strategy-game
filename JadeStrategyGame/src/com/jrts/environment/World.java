@@ -164,11 +164,11 @@ public class World {
 		// Prendo un angolo a caso tra 0 e 3
 		int angle = r.nextInt(4);
 
-		// se l'angolo non è occupato da un'altra squadra 
+		// se l'angolo non e' occupato da un'altra squadra 
 		// lo utilizzo per mettere la base della squadra corrente,
 		// altrimenti ne scelgo un altro
-		while(!this.occupiedAngles[angle])
-			angle = Math.abs((angle - 1) % 4);
+		while(occupiedAngles[angle])
+			angle = (angle + 1) % 4;
 		this.occupiedAngles[angle] = true;
 		
 		System.out.println("TEAM " + name + " in angolo " + angle);
@@ -181,7 +181,7 @@ public class World {
 		
 		// A seconda dell'angolo della mappa scelto e del valore della var n
 		// scelgo la posizione della mappa ove posizionare la base
-		int n = r.nextInt(10);
+		int n = r.nextInt(10) + 1;
 		do {
 			switch (angle) {
 			case 0:
@@ -194,7 +194,7 @@ public class World {
 				startP = new Position((this.rows - n), (this.cols - n));
 				break;
 			case 3:
-				startP = new Position(5, (this.cols - n));
+				startP = new Position(n, (this.cols - n));
 				break;
 			}
 			
