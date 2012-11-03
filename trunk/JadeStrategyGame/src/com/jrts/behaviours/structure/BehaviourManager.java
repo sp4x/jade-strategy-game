@@ -26,8 +26,10 @@ public class BehaviourManager {
 		if (newBehaviour.isHighPriority()) {
 			if (highPriority != null)
 				unit.removeBehaviour(getHighPriorityBehaviour());
-			highPriority = (BaseBehaviour) newBehaviour;
+			highPriority = newBehaviour;
 		} else {
+			if (lowPriority != null)
+				unit.removeBehaviour(getLowPriorityBehaviour());
 			lowPriority = newBehaviour;
 			if (getHighPriorityBehaviour() != null)
 				lowPriority.setIdle(true);
