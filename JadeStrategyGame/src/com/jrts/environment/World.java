@@ -231,9 +231,8 @@ public class World {
 		return p;
 	}
 
-	public synchronized void addUnit(IUnit unit) {
-		Cell unitCell = new Cell(unit.getId(), unit, unit.getType());
-		Position p = unit.getPosition();
+	public synchronized void addUnit(Position p, String unitId, IUnit unit) {
+		Cell unitCell = new Cell(unitId, unit, unit.getType());
 		floor.set(p.row, p.col, unitCell);
 	}
 

@@ -4,40 +4,37 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import com.jrts.O2Ainterfaces.IUnit;
 import com.jrts.agents.Worker;
 import com.jrts.common.ThreadMonitor;
 
 
 public class WorldTest {
 	
-	Worker w1;
-	Worker w2;
+	boolean movement1complete;
+	boolean movement2complete;
 	
-	boolean w1complete;
-	boolean w2complete;
-
 	@Test
 	public void concurrency() {
 		World.create(2, 2, 0);
 		World w = World.getInstance(); 
-		w1 = new Worker("w1", new Position(0, 0));
-		w2 = new Worker("w2", new Position(1, 0));
-		w.addUnit(w1);
-		w.addUnit(w2);
-		
+		final Position p1 = new Position(0, 0);
+		final Position p2 = new Position(1, 0);
+		w.getFloor().set(p1.row, p2.col, new Cell(CellType.SOLDIER));
+		w.getFloor().set(p1.row, p2.col, new Cell(CellType.SOLDIER));
 		
 		Thread moveW1 = new Thread() {
 			
 			@Override
 			public void run() {
-				w1complete = World.getInstance().move(w1.getPosition(), Direction.RIGHT );
+				movement1complete = World.getInstance().move(p1, Direction.RIGHT );
 			}
 		};
 		Thread moveW2 = new Thread() {
 			
 			@Override
 			public void run() {
-				w2complete = World.getInstance().move(w2.getPosition(), Direction.RIGHT_UP);
+				movement2complete = World.getInstance().move(p2, Direction.RIGHT_UP);
 			}
 		};
 		moveW1.start();
@@ -50,7 +47,7 @@ public class WorldTest {
 				e.printStackTrace();
 				fail();
 			}
-		boolean success = (w1complete && !w2complete) || (!w1complete && w2complete);
+		boolean success = (movement1complete && !movement2complete) || (!movement1complete && movement2complete);
 		assertTrue(success);
 	}
 	
