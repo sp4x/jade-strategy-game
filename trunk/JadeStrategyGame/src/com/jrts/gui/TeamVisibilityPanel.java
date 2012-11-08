@@ -1,5 +1,6 @@
 package com.jrts.gui;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -13,49 +14,59 @@ import javax.swing.border.TitledBorder;
 
 import com.jrts.O2Ainterfaces.Team;
 import com.jrts.common.GameConfig;
+import com.jrts.environment.Cell;
 import com.jrts.environment.CellType;
 
 public class TeamVisibilityPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
-	Team team;
+	//Team team;
 
 	public TeamVisibilityPanel(Team team) {
 		super(new FlowLayout());
 
-		this.team = team;
+		//this.team = team;
 
 		TitledBorder border = BorderFactory.createTitledBorder(team
 				.getTeamName());
 
 		if (team.getTeamName().equals("team1"))
 			border.setTitleColor(Color.RED);
-		if (team.getTeamName().equals("team2"))
+		else if (team.getTeamName().equals("team2"))
 			border.setTitleColor(Color.BLACK);
-		if (team.getTeamName().equals("team3"))
+		else if (team.getTeamName().equals("team3"))
 			border.setTitleColor(Color.ORANGE);
-		if (team.getTeamName().equals("team4"))
+		else if (team.getTeamName().equals("team4"))
 			border.setTitleColor(Color.BLUE);
 
 		super.setBorder(border);
 
 		// The Map is (40*15)x(40*15) => (row*iconSize)x(row*iconSize)
-		super.setPreferredSize(new Dimension(GameConfig.WORLD_ROWS
-				* GameConfig.WORLD_VISIBILITY_MAP_FACTOR + 15, GameConfig.WORLD_COLS
-				* GameConfig.WORLD_VISIBILITY_MAP_FACTOR + 35));
+		int width = GameConfig.WORLD_COLS * GameConfig.WORLD_VISIBILITY_MAP_FACTOR + 20;
+		int height = GameConfig.WORLD_ROWS * GameConfig.WORLD_VISIBILITY_MAP_FACTOR + 30;
+		
+		Dimension d = new Dimension(width, height);
+		super.setSize(d);
+		super.setMinimumSize(d);
+		super.setMaximumSize(d);
+		super.setPreferredSize(d);super.setPreferredSize(new Dimension(width, height));
 
 		super.setLayout(new FlowLayout(FlowLayout.CENTER));
-		super.add(new VisibilityPanel());
+		super.add(new VisibilityPanel(team), BorderLayout.CENTER);
 	}
 
 	class VisibilityPanel extends JPanel {
 		
-		public VisibilityPanel() {
-			// The Map is (40*15)x(40*15) => (row*iconSize)x(row*iconSize)
-			Dimension d = new Dimension(GameConfig.WORLD_ROWS
-					* GameConfig.WORLD_VISIBILITY_MAP_FACTOR,
-					GameConfig.WORLD_COLS
-							* GameConfig.WORLD_VISIBILITY_MAP_FACTOR);
+		Team team;
+		
+		public VisibilityPanel(Team t) {
+			
+			this.team = t;
+			
+			int width = GameConfig.WORLD_COLS * GameConfig.WORLD_VISIBILITY_MAP_FACTOR;
+			int height = GameConfig.WORLD_ROWS * GameConfig.WORLD_VISIBILITY_MAP_FACTOR;
+			
+			Dimension d = new Dimension(width, height);
 			
 			super.setSize(d);
 			super.setMinimumSize(d);
@@ -67,23 +78,34 @@ public class TeamVisibilityPanel extends JPanel {
 			super.paintComponent(g);
 
 			Graphics2D g2d = (Graphics2D) g;
-			g2d.setColor(Color.BLACK);
 			
-			/*
-			WorldMap map = new WorldMap(40, 40);
-			map.set(10, 10, new Cell(CellType.FOOD));
-			map.set(20, 20, new Cell(CellType.FOOD));
-			map.set(30, 15, new Cell(CellType.FOOD));
-			*/
-			
-			for (int i = 0; i <= super.getSize().getWidth(); i++) {
-				for (int j = 0; j <= super.getSize().getHeight(); j++) {
+			for (int i = 0; i < GameConfig.WORLD_COLS; i++) {
+				for (int j = 0; j < GameConfig.WORLD_ROWS; j++) {
 				    
-					if(team.getWorldMap().get(i, j).getType().equals(CellType.UNKNOWN))
+					Cell cell = this.team.getWorldMap().get(i, j);
+					CellType type = cell.getType();
+					if(type.equals(CellType.UNKNOWN))
 						g2d.setPaint(Color.BLACK);
+					else if(type.equals(CellType.WOOD))
+						g2d.setPaint(Color.GREEN);
+					else if(type.equals(CellType.FOOD))
+						g2d.setPaint(Color.RED);
+					else if(type.equals(CellType.FREE))
+						g2d.setPaint(Color.WHITE);
+					else if (team.getTeamName().contains("team1"))
+						g2d.setPaint(Color.RED);
+					else if (team.getTeamName().contains("team2"))
+						g2d.setPaint(Color.BLACK);
+					else if (team.getTeamName().contains("team3"))
+						g2d.setPaint(Color.ORANGE);
+					else if (team.getTeamName().contains("team4"))
+						g2d.setPaint(Color.BLUE);
 					else 
 						g2d.setPaint(Color.WHITE);
-
+					
+					if(j == GameConfig.WORLD_ROWS-1 || j == 0 || i == GameConfig.WORLD_COLS-1 || i == 0)
+						g2d.setPaint(Color.RED);
+					
 					int scaledI = i*GameConfig.WORLD_VISIBILITY_MAP_FACTOR;
 					int scaledJ = j*GameConfig.WORLD_VISIBILITY_MAP_FACTOR;
 					
@@ -91,5 +113,6 @@ public class TeamVisibilityPanel extends JPanel {
 				}
 			}
 		}
+		
 	}
 }
