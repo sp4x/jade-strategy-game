@@ -1,5 +1,7 @@
 package com.jrts.environment;
 
+import java.util.List;
+
 import jade.util.leap.Serializable;
 
 public class Position implements Serializable {
@@ -17,6 +19,14 @@ public class Position implements Serializable {
 
 	public Position step(Direction d) {
 		return new Position(row + d.rowVar(), col + d.colVar());
+	}
+	
+	public Position followPath(List<Direction> path) {
+		Position p = this;
+		for (Direction direction : path) {
+			p = p.step(direction);
+		}
+		return p;
 	}
 	
 	public Position bigStep(Direction d, int numSteps) {

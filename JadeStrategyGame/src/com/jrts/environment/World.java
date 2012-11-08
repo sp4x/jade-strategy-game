@@ -65,7 +65,7 @@ public class World {
 	 *            the direction
 	 * @return true if the movement has been performed
 	 */
-	public boolean move(Position source, Direction d) {
+	public synchronized boolean move(Position source, Direction d) {
 		ThreadMonitor.getInstance().doWait();
 		boolean result;
 		Position destination = source.step(d);
@@ -149,9 +149,7 @@ public class World {
 	}
 
 	boolean isAvailable(Position p) {
-		if (p.row > floor.rows || p.col > floor.cols)
-			return false;
-		return p != null && floor.get(p.row, p.col).type == CellType.FREE;
+		return floor.isValid(p) && floor.get(p).type == CellType.FREE;
 	}
 
 	/**
@@ -233,8 +231,9 @@ public class World {
 		return p;
 	}
 
-	public synchronized void addUnit(Position p, String id, IUnit unit) {
-		Cell unitCell = new Cell(id, unit, unit.getType());
+	public synchronized void addUnit(IUnit unit) {
+		Cell unitCell = new Cell(unit.getId(), unit, unit.getType());
+		Position p = unit.getPosition();
 		floor.set(p.row, p.col, unitCell);
 	}
 

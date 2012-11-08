@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import com.jrts.agents.Worker;
+import com.jrts.common.ThreadMonitor;
 
 
 public class WorldTest {
@@ -18,11 +19,11 @@ public class WorldTest {
 	@Test
 	public void concurrency() {
 		World.create(2, 2, 0);
-		World w = World.getInstance();
-		w1 = new Worker(new Position(0, 0));
-		w2 = new Worker(new Position(1, 0));
-		w.addUnit(w1.getPosition(), "w1", null);
-		w.addUnit(w2.getPosition(), "w2", null);
+		World w = World.getInstance(); 
+		w1 = new Worker("w1", new Position(0, 0));
+		w2 = new Worker("w2", new Position(1, 0));
+		w.addUnit(w1);
+		w.addUnit(w2);
 		
 		
 		Thread moveW1 = new Thread() {
@@ -44,6 +45,7 @@ public class WorldTest {
 		while (moveW1.isAlive() || moveW2.isAlive())
 			try {
 				Thread.sleep(1000);
+				ThreadMonitor.getInstance().sendNotifyAll();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 				fail();

@@ -1,7 +1,5 @@
 package com.jrts.behaviours;
 
-import jade.core.behaviours.Behaviour;
-
 import com.jrts.agents.Unit;
 import com.jrts.agents.Worker;
 import com.jrts.behaviours.structure.BaseBehaviour;
@@ -17,76 +15,34 @@ public class CollectResources extends BaseBehaviour {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private static final int STATUS_IDLE = 0;
-	private static final int STATUS_GOING_WORK = 1;
-	private static final int STATUS_BACK_HOME = 2;
-
 	Worker worker;
 	CellType resourceToCollect;
-	int behaviourStatus = STATUS_IDLE;
 
 	Position resourcePosition;
 	Position cityCenter;
-	Position pickUpPoint;
-	Position leavePoint;
 
 	public CollectResources(Worker worker, CellType resource) {
 		super(false);//low priority
 		this.worker = worker;
 		this.resourceToCollect = resource;
 		this.cityCenter = World.getInstance().getCityCenter(worker.getTeamName());
+		this.resourcePosition = worker.findNearest(resourceToCollect);
 	}
 
 	public void baseAction() {
-		switch (behaviourStatus) {
-		case STATUS_IDLE:
-			go();
-			break;
-		case STATUS_GOING_WORK:
-			pick();
-			break;
-		case STATUS_BACK_HOME:
-			carry();
-			break;
-		default:
-			break;
+		if (worker.getPosition().distance(resourcePosition) == 1) {
+			worker.spendTime();
+			worker.takeResources(resourcePosition);
+		} else if (worker.getPosition().distance(cityCenter) == 1 && worker.knapsackIsFull()) {
+			worker.dropResources();
+		} else if (worker.knapsackIsFull()) {
+			worker.goThere(cityCenter);
+		} else {
+			resourcePosition = worker.findNearest(resourceToCollect);
+			worker.goThere(resourcePosition);
 		}
 	}
 	
-	private void carry() {
-		if (worker.getPosition().equals(leavePoint)) {
-			worker.dropResources();
-			go();
-		}
-	}
-
-	private void pick() {
-		Position currentPosition = worker.getPosition();
-		if (currentPosition.equals(pickUpPoint)) {
-			worker.spendTime();
-			worker.takeResources(resourcePosition);
-			if (worker.knapsackIsFull()) {
-				leavePoint = World.getInstance().freePositionNextToTarget(currentPosition, cityCenter);
-				worker.goThere(leavePoint);
-				behaviourStatus = STATUS_BACK_HOME;
-			}
-		}
-	}
-
-	/**
-	 * Find a near resource and start to go there
-	 */
-	private void go() {
-		resourcePosition = worker.findNearest(resourceToCollect);
-		if (resourcePosition != null)
-			pickUpPoint = World.getInstance().freePositionNextToTarget(worker.getPosition(), resourcePosition);
-		if (resourcePosition != null && pickUpPoint != null) {
-			worker.goThere(pickUpPoint);
-			behaviourStatus = STATUS_GOING_WORK;
-		}
-		else
-			behaviourStatus = STATUS_IDLE;
-	}
 	
 	@Override
 	public boolean done() {
