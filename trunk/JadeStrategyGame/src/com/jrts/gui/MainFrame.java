@@ -63,6 +63,7 @@ public class MainFrame extends JFrame {
 	List<Team> teams;
 	
 	JPanel topPanel;
+	JPanel rightPanel;
 	
 	public static void start(Floor floor, List<Team> teams)
 	{
@@ -87,12 +88,6 @@ public class MainFrame extends JFrame {
 		this.worldViewPanel = new WorldViewPanel(floor);
 		this.floor = floor;
 		
-		topPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-		
-		for (Team t : teams) {
-			topPanel.add(new TeamPanel(t), BorderLayout.WEST);
-		}
-			    
 		JSlider speed = new JSlider(JSlider.HORIZONTAL, GameConfig.MIN_REFRESH_TIME, 
 				GameConfig.MAX_REFRESH_TIME, GameConfig.REFRESH_TIME);
 		speed.setPaintTicks(true);
@@ -128,6 +123,8 @@ public class MainFrame extends JFrame {
 	    group.add(emptyCell);
 	    group.add(selection);
 		
+	    /**********************************************************************/
+	    /************** CREATING LEFT PANEL ***********************************/
 		JPanel settingsPanel = new JPanel(new GridLayout(5, 1));
 		settingsPanel.add(speed);
 		settingsPanel.add(tree);
@@ -153,9 +150,6 @@ public class MainFrame extends JFrame {
 		infoPanel.add(new JLabel("Action:"));
 		labelAction = new JLabel("nothing");
 		infoPanel.add(labelAction);
-//		infoPanel.add(new JLabel("Knapsack:"));
-//		labelKnapsack = new JLabel("-");
-//		infoPanel.add(labelKnapsack);
 		
 		Dimension d = new Dimension(200, 150);
 		infoPanel.setPreferredSize(d);
@@ -164,19 +158,38 @@ public class MainFrame extends JFrame {
 		infoPanel.setMaximumSize(d);
 			
 		d = new Dimension(200, 300);
-		JPanel leftPanel = new JPanel();
-		leftPanel.setPreferredSize(d);
-		leftPanel.setSize(d);
-		leftPanel.setMinimumSize(d);
-		leftPanel.setMaximumSize(d);
+		JPanel leftInformationPanel = new JPanel();
+		leftInformationPanel.setPreferredSize(d);
+		leftInformationPanel.setSize(d);
+		leftInformationPanel.setMinimumSize(d);
+		leftInformationPanel.setMaximumSize(d);
 		
-		leftPanel.add(this.infoPanel);
-		leftPanel.add(settingsPanel);
+		leftInformationPanel.add(this.infoPanel);
+		leftInformationPanel.add(settingsPanel);
+		/************** END CREATING LEFT PANEL *******************************/
+	    /**********************************************************************/
+		
+		
+		topPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+		rightPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+
+		d = new Dimension(200, GameConfig.WORLD_COLS*GameConfig.WORLD_VISIBILITY_MAP_FACTOR + 20);
+		//JPanel rightVisibilityPanel = new JPanel();
+		rightPanel.setPreferredSize(d);
+		rightPanel.setSize(d);
+		rightPanel.setMinimumSize(d);
+		rightPanel.setMaximumSize(d);
+		
+		for (Team t : teams) {
+			topPanel.add(new TeamResourcePanel(t), BorderLayout.WEST);
+			rightPanel.add(new TeamVisibilityPanel(t), BorderLayout.WEST);
+		}
 		
 		getContentPane().add(topPanel, BorderLayout.NORTH);
-		getContentPane().add(leftPanel, BorderLayout.WEST);
-		
+		getContentPane().add(rightPanel, BorderLayout.EAST);
 		getContentPane().add(worldViewPanel, BorderLayout.CENTER);
+		getContentPane().add(leftInformationPanel, BorderLayout.WEST);
+		getContentPane().add(new JLabel("Jade Strategy Game - Loria Salvatore, Martire Andrea, Parisi Daniele, Pirrone Vincenzo", JLabel.CENTER), BorderLayout.SOUTH);
 		
 		pack();
 
@@ -205,8 +218,8 @@ public class MainFrame extends JFrame {
 				
 		/** update all teampanels */
 		for (int i = 0; i < topPanel.getComponentCount(); i++) {
-			if (topPanel.getComponent(i) instanceof TeamPanel)
-				((TeamPanel) topPanel.getComponent(i)).update();
+			if (topPanel.getComponent(i) instanceof TeamResourcePanel)
+				((TeamResourcePanel) topPanel.getComponent(i)).update();
 		}
 		
 		/** follow the selected unit */
