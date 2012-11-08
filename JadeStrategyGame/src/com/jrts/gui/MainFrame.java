@@ -173,7 +173,7 @@ public class MainFrame extends JFrame {
 		topPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 		rightPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
-		d = new Dimension(200, GameConfig.WORLD_COLS*GameConfig.WORLD_VISIBILITY_MAP_FACTOR + 20);
+		d = new Dimension(200, 400);
 		//JPanel rightVisibilityPanel = new JPanel();
 		rightPanel.setPreferredSize(d);
 		rightPanel.setSize(d);
