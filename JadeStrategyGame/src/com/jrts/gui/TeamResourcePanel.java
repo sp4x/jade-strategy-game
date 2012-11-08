@@ -11,19 +11,19 @@ import javax.swing.border.TitledBorder;
 
 import com.jrts.O2Ainterfaces.Team;
 
-public class TeamPanel extends JPanel{
+public class TeamResourcePanel extends JPanel{
 	private static final long serialVersionUID = 1L;
 	
 	JLabel food;
 	JLabel wood;
 	Team team;
 	
-	public TeamPanel(Team team) {
+	public TeamResourcePanel(Team team) {
 		super(new FlowLayout());
 		
 		this.team = team;
 		
-		TitledBorder border =BorderFactory.createTitledBorder(team.getTeamName());
+		TitledBorder border = BorderFactory.createTitledBorder(team.getTeamName());
 		
 		if(team.getTeamName().equals("team1")) border.setTitleColor(Color.RED);
 		if(team.getTeamName().equals("team2")) border.setTitleColor(Color.BLACK);

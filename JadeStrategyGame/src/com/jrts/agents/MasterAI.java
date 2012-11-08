@@ -170,6 +170,12 @@ public class MasterAI extends JrtsAgent implements Team {
 		}
 		send(msg);
 	}
+
+	@Override
+	public WorldMap getWorldMap() {
+		
+		return this.worldMap;
+	}
 	
 	
 }
