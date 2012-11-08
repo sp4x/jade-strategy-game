@@ -30,14 +30,16 @@ public class CollectResources extends BaseBehaviour {
 	}
 
 	public void baseAction() {
-		if (worker.getPosition().distance(resourcePosition) == 1) {
+		boolean nearResource = worker.getPosition().distance(resourcePosition) == 1;
+		boolean nearCityCenter = worker.getPosition().distance(cityCenter) == 1;
+		if (nearResource && !worker.knapsackIsFull()) {
 			worker.spendTime();
 			worker.takeResources(resourcePosition);
-		} else if (worker.getPosition().distance(cityCenter) == 1 && worker.knapsackIsFull()) {
+		} else if (nearCityCenter && worker.knapsackIsFull()) {
 			worker.dropResources();
 		} else if (worker.knapsackIsFull()) {
 			worker.goThere(cityCenter);
-		} else {
+		} else if (!worker.knapsackIsFull()) {
 			resourcePosition = worker.findNearest(resourceToCollect);
 			worker.goThere(resourcePosition);
 		}

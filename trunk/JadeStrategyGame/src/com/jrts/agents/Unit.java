@@ -95,7 +95,7 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 
 	public void goThere(int x, int y) {
 		logger.info(getAID().getName() + ":Go there " + new Position(x, y));
-		addBehaviour(new FollowPathBehaviour(this, x, y, GameConfig.UNIT_MOVING_ATTEMPTS, false));
+		addBehaviour(new FollowPathBehaviour(this, x, y, GameConfig.UNIT_MOVING_ATTEMPTS));
 	}
 
 	public AID getMasterAID() {

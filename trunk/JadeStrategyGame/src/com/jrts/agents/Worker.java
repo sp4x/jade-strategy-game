@@ -61,7 +61,6 @@ public class Worker extends Unit {
 			knapsack = 1;
 			resourceCarried = resource;
 		}
-		System.out.println("Worker (" + getId() + "," + getStatus() + "," + getKnapsack() + ")");
 	}
 	
 	public boolean knapsackIsFull() {

@@ -24,7 +24,7 @@ public class FollowPathBehaviour extends BaseBehaviour {
 	Floor worldCachedCopy = null;
 
 	public FollowPathBehaviour(Unit unit, int goalRow, int goalCol,
-			int remainingAttempts, boolean tolerance, Floor cachedCopy) {
+			int remainingAttempts, Floor cachedCopy) {
 		super(true);// high priority
 		this.unit = unit;
 		this.goalRow = goalRow;
@@ -32,7 +32,6 @@ public class FollowPathBehaviour extends BaseBehaviour {
 		this.remainingAttempts = remainingAttempts;
 		this.list = new ArrayList<Direction>();
 		this.worldCachedCopy = cachedCopy;
-		this.tolerance = tolerance;
 
 		// se prima invocazione del behaviour
 		if (remainingAttempts == GameConfig.UNIT_MOVING_ATTEMPTS
@@ -40,15 +39,16 @@ public class FollowPathBehaviour extends BaseBehaviour {
 			setWorldCachedCopy(unit.requestMap());
 		}
 
+		Position start = unit.getPosition();
 		this.list = Utils.calculatePath(getWorldCachedCopy(),
-				unit.getPosition(), new Position(goalRow, goalCol), tolerance);
+				start, new Position(goalRow, goalCol), true);
 		
 		unit.logger.info("path: " + list);
 	}
 
 	public FollowPathBehaviour(Unit unit, int goalRow, int goalCol,
-			int remainingAttempts, boolean tolerance) {
-		this(unit, goalRow, goalCol, remainingAttempts, tolerance, null);
+			int remainingAttempts) {
+		this(unit, goalRow, goalCol, remainingAttempts, null);
 	}
 
 	public void baseAction() {
@@ -67,7 +67,7 @@ public class FollowPathBehaviour extends BaseBehaviour {
 				if (remainingAttempts > 0) // solo se ho ancora tentativi a
 											// disposizione
 					unit.addBehaviour(new FollowPathBehaviour(unit, goalRow,
-							goalCol, remainingAttempts - 1, tolerance,
+							goalCol, remainingAttempts - 1,
 							worldCachedCopy));
 			} else
 				remainingAttempts = GameConfig.UNIT_MOVING_ATTEMPTS;
