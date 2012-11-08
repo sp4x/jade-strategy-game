@@ -123,7 +123,7 @@ public class Floor implements Serializable {
 	 * @param st	the Cell's state
 	 */
 	public void set(int i, int j, Cell st){
-		if(i>0 && j>0 && i<=rows && j<=cols)
+		if(i>=0 && j>=0 && i<=rows && j<=cols)
 			this.floor[i][j] = st;
 	}
 
@@ -143,13 +143,13 @@ public class Floor implements Serializable {
 		this.cols = cols;
 	}
 
-	public Floor getCopy() {
-		Floor newFloor = new Floor(rows, cols);
-		for (int i = 0; i < rows; i++)
-			for (int j = 0; j < cols; j++)
-				newFloor.set(i, j, floor[i][j]);
-		return newFloor;
-	}
+//	public Floor getCopy() {
+//		Floor newFloor = new Floor(rows, cols);
+//		for (int i = 0; i < rows; i++)
+//			for (int j = 0; j < cols; j++)
+//				newFloor.set(i, j, floor[i][j]);
+//		return newFloor;
+//	}
 	
 	public void mergeWith(Floor info) {
 		if (rows == info.rows && cols == info.cols) {
@@ -192,7 +192,7 @@ public class Floor implements Serializable {
 		for (int minDistance = 1; minDistance <= maxDistance; minDistance++) {
 			for (Direction d : Direction.ALL) {
 				Position candidate = nextTo(p.step(d), type, minDistance-1);
-				if (candidate != null && get(candidate).type == type)
+				if (isValid(candidate) && get(candidate).type == type)
 					return candidate;
 			}
 		}
@@ -203,6 +203,8 @@ public class Floor implements Serializable {
 		return new Cell(get(p));
 	}
 	
-	
+	public boolean isValid(Position p) {
+		return p != null && p.row >= 0 && p.col >= 0 && p.row <= rows && p.col <= cols; 
+	}
 	
 }

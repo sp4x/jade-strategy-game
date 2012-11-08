@@ -20,24 +20,26 @@ public class Utils {
 		int endRow = endPosition.getRow();
 		int endCol = endPosition.getCol();
 		
-		UndirectedWeightedGraph walkableGraph = createWalkableGraph(floor, startRow, startCol, endRow, endCol);
-		System.out.println("Initial EndPos:" + endPosition);
+//		UndirectedWeightedGraph walkableGraph = createWalkableGraph(floor, startRow, startCol, endRow, endCol);
+//		System.out.println("Initial EndPos:" + endPosition);
 		
 		if(tolerance){
-			Position correctedEndPosition = approximateEndPosition(walkableGraph, floor, startRow, startCol, endRow, endCol);
-			System.out.println("Corrected EndPos:" + correctedEndPosition);
+			Position correctedEndPosition = approximateEndPosition(/*walkableGraph,*/ floor, startRow, startCol, endRow, endCol);
+//			System.out.println("Corrected EndPos:" + correctedEndPosition);
+			if (correctedEndPosition == null)
+				return new ArrayList<Direction>();
 	
 			endRow = correctedEndPosition.getRow();
 			endCol = correctedEndPosition.getCol();
 		}
 		
-		walkableGraph = createWalkableGraph(floor, startRow, startCol, endRow, endCol);
+		UndirectedWeightedGraph walkableGraph = createWalkableGraph(floor, startRow, startCol, endRow, endCol);
 		
 		//calculate path on the graph
 		String sourceNode = startRow + "," + startCol;
 		String destNode = endRow + "," + endCol;
 		if(!walkableGraph.containsVertex(destNode)){
-			System.out.println("Dest Node not reachable");
+//			System.out.println("Dest Node not reachable");
 			return new ArrayList<Direction>();
 		}
 		List<DefaultWeightedEdge> list = new DijkstraShortestPath<String, DefaultWeightedEdge>
@@ -46,9 +48,9 @@ public class Utils {
 		ArrayList<String> cellList = edgeListToCellList(walkableGraph, sourceNode, list);
 //		System.out.println("Cells List:" + cellList);
 		ArrayList<Direction> directions = cellListToDirections(cellList);
-		System.out.println("Path's StartPos:" + startPosition);
-		System.out.println("Path's EndPos:" + endPosition);
-		System.out.println("Path's direction:" + directions);
+//		System.out.println("Path's StartPos:" + startPosition);
+//		System.out.println("Path's EndPos:" + endPosition);
+//		System.out.println("Path's direction:" + directions);
 		return directions;
 	}
 
@@ -63,26 +65,28 @@ public class Utils {
 	 * @param endCol
 	 * @return correctedEndPosition
 	 */
-	private static Position approximateEndPosition(UndirectedWeightedGraph walkableGraph, Floor floor, int startRow, int startCol, int endRow, int endCol) {
-		floor = floor.getCopy();
+	private static Position approximateEndPosition(/*UndirectedWeightedGraph walkableGraph,*/ Floor floor, int startRow, int startCol, int endRow, int endCol) {
+//		floor = floor.getCopy();
 		Position endPos = new Position(endRow, endCol);
-		if(walkableGraph.containsVertex(endPos.getRow() + "," + endPos.getCol()))
+//		if(walkableGraph.containsVertex(endPos.getRow() + "," + endPos.getCol()))
+//			return endPos;
+		if (floor.get(endPos).getType() == CellType.FREE)
 			return endPos;
-		else{
-			int counter = 0;
-			Position correctedEndPosition;
-			do {
-				correctedEndPosition = floor.nextTo(endPos, CellType.FREE, GameConfig.PATH_TOLERANCE);
-				if(correctedEndPosition == null || 
-						!walkableGraph.containsVertex(correctedEndPosition.getRow() + "," + correctedEndPosition.getCol())){
-					counter++;
-					floor.set(correctedEndPosition.getRow(), correctedEndPosition.getCol(), new Cell(CellType.WOOD));
-				}
-				else
-					return correctedEndPosition;
-			}while(counter <= GameConfig.PATH_TOLERANCE*GameConfig.PATH_TOLERANCE);//covered area
-			return null;
-		}
+		return floor.nextTo(endPos, CellType.FREE, GameConfig.PATH_TOLERANCE);
+//		else{
+//			int counter = 0;
+//			Position correctedEndPosition;
+//			do {
+//				if(correctedEndPosition == null || 
+//						!walkableGraph.containsVertex(correctedEndPosition.getRow() + "," + correctedEndPosition.getCol())){
+//					counter++;
+//					floor.set(correctedEndPosition.getRow(), correctedEndPosition.getCol(), new Cell(CellType.WOOD));
+//				}
+//				else
+//					return correctedEndPosition;
+//			}while(counter <= GameConfig.PATH_TOLERANCE*GameConfig.PATH_TOLERANCE);//covered area
+//			return null;
+//		}
 	}
 
 	private static UndirectedWeightedGraph createWalkableGraph(Floor floor, int startRow, int startCol, int endRow, int endCol) {
@@ -90,7 +94,7 @@ public class Utils {
 		UndirectedWeightedGraph walkableGraph = new UndirectedWeightedGraph();
 		//avoid exceptions
 		walkableGraph.addVertex(startRow + "," + startCol);
-		walkableGraph.addVertex(endRow + "," + endCol);
+//		walkableGraph.addVertex(endRow + "," + endCol);
 		for (int i = 0; i < floor.getRows(); i++)
 			for (int j = 0; j < floor.getCols(); j++){
 				//NB La cella di partenza anche se occupata dall'unita' fa parte del grafo
