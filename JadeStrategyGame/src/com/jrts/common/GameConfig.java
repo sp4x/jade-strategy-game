@@ -23,8 +23,8 @@ public class GameConfig {
 	public static final int SOLDIER_NUMBER_LIMIT = 10;
 	public static final int WORKER_NUMBER_LIMIT = 10;
 	
-	public static final int WORKER_SIGHT = 40; //TODO change
-	public static final int SOLDIER_SIGHT = 4;
+	public static final int WORKER_SIGHT = 1; //TODO change
+	public static final int SOLDIER_SIGHT = 1;
 	public static final int CITY_CENTER_SIGHT = 5;
 	
 	public static final int WORKER_KNAPSACK_CAPACITY = 10;

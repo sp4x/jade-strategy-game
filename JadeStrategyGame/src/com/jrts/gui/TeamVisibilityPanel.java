@@ -7,6 +7,8 @@ import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
+import java.util.GregorianCalendar;
+import java.util.Random;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
@@ -22,6 +24,8 @@ public class TeamVisibilityPanel extends JPanel {
 
 	//Team team;
 
+	Random r = new Random(GregorianCalendar.getInstance().getTimeInMillis());
+	
 	public TeamVisibilityPanel(Team team) {
 		super(new FlowLayout());
 
@@ -82,14 +86,13 @@ public class TeamVisibilityPanel extends JPanel {
 			for (int i = 0; i < GameConfig.WORLD_COLS; i++) {
 				for (int j = 0; j < GameConfig.WORLD_ROWS; j++) {
 				    
-					Cell cell = this.team.getWorldMap().get(i, j);
+					Cell cell = this.team.getWorldMap().get(j, i);
 					CellType type = cell.getType();
 					if(type.equals(CellType.UNKNOWN))
 						g2d.setPaint(Color.BLACK);
-					else if(type.equals(CellType.WOOD))
+					//TODO: Food color? not red
+					else if(type.equals(CellType.WOOD) || type.equals(CellType.FOOD))
 						g2d.setPaint(Color.GREEN);
-					else if(type.equals(CellType.FOOD))
-						g2d.setPaint(Color.RED);
 					else if(type.equals(CellType.FREE))
 						g2d.setPaint(Color.WHITE);
 					else if (team.getTeamName().contains("team1"))
@@ -103,9 +106,24 @@ public class TeamVisibilityPanel extends JPanel {
 					else 
 						g2d.setPaint(Color.WHITE);
 					
+					/*
+					switch (r.nextInt(50)) {
+					case 0:
+						g2d.setPaint(Color.BLACK);
+						break;
+					case 1:
+						g2d.setPaint(Color.BLUE);
+						break;
+					default:
+						g2d.setPaint(Color.WHITE);
+						break;
+					}
+					*/
+					
+					/*
 					if(j == GameConfig.WORLD_ROWS-1 || j == 0 || i == GameConfig.WORLD_COLS-1 || i == 0)
 						g2d.setPaint(Color.RED);
-					
+					*/
 					int scaledI = i*GameConfig.WORLD_VISIBILITY_MAP_FACTOR;
 					int scaledJ = j*GameConfig.WORLD_VISIBILITY_MAP_FACTOR;
 					
