@@ -19,7 +19,6 @@ public class Soldier extends Unit {
 		this(null, null);
 	}
 
-
 	public Soldier(String id, Position position) {
 		super(id, position);
 		setLife(GameConfig.SOLDIER_LIFE);
@@ -28,14 +27,14 @@ public class Soldier extends Unit {
 		setSight(GameConfig.SOLDIER_SIGHT);
 	}
 
-
 	@Override
 	protected void setup(){
 		super.setup();
 		
-		switchStatus(AgentStatus.FREE);
+		switchStatus(AgentStatus.FREE_SOLDIER);
 		
-		explore();
+		//explore();
+		//patrol(Direction.UP, PatrolBehaviour.DISTANCE_LITTLE);
 		
 //		addBehaviour(new SendAttack(this));
 	}
@@ -46,16 +45,20 @@ public class Soldier extends Unit {
 
 	/**
 	 * 
-	 * @param d must be one between TOP, RIGHT, DOWN, LEFT
+	 * @param direction must be one between TOP, RIGHT, DOWN, LEFT
 	 */
-	public void patrol(Direction d) {
-		//TODO: switchStatus(AgentStatus.);
-		addBehaviour(new PatrolBehaviour(this, d));
+	public void patrol() {
+		Direction direction = Direction.UP;
+		int distance = PatrolBehaviour.DISTANCE_LITTLE;
+		
+		addBehaviour(new PatrolBehaviour(this, direction, distance));
+		switchStatus(AgentStatus.PATROLING);
 	}
 
 	public void explore() {
 		logger.warning("STARTING EXPLORING");
 		addBehaviour(new ExploreBehaviour(this));
+		switchStatus(AgentStatus.EXPLORING);
 	}
 	
 	@Override

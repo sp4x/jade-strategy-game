@@ -43,9 +43,10 @@ public class GameConfig {
 	
 	public static final int UNIT_CREATION_TIME = 1;
 	public static final long WORKERS_TABLE_REFRESH_TIME = 100;
+	public static final long SOLDIERS_TABLE_REFRESH_TIME = 100;
 	
-	public static final int STARTUP_WOOD = 50;
-	public static final int STARTUP_FOOD = 50;
+	public static final int STARTUP_WOOD = 500;
+	public static final int STARTUP_FOOD = 500;
 	
 	public static final int PATH_TOLERANCE = 5;
 }

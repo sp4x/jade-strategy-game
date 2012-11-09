@@ -37,7 +37,7 @@ public class Worker extends Unit {
 	protected void setup(){
 		super.setup();
 		
-		switchStatus(AgentStatus.FREE);
+		switchStatus(AgentStatus.FREE_WORKER);
 		
 //		addBehaviour(new SendAttack(this));
 	}
