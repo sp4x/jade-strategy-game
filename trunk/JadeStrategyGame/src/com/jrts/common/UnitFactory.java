@@ -40,7 +40,6 @@ public class UnitFactory extends Thread {
 				logger.info(team + " unitfactory: takes a " + claz.getSimpleName());
 				createUnit(claz);
 			} catch (InterruptedException e) {
-				e.printStackTrace();
 			}
 		}
 	}
@@ -50,7 +49,6 @@ public class UnitFactory extends Thread {
 		try {
 			queue.put(claz);
 		} catch (InterruptedException e) {
-			e.printStackTrace();
 		}
 	}
 	
@@ -62,8 +60,6 @@ public class UnitFactory extends Thread {
 		try {
 			Thread.sleep(GameConfig.UNIT_CREATION_TIME*1000);
 		} catch (InterruptedException e1) {
-			e1.printStackTrace();
-			System.exit(1);
 		}
 		logger.info(team + " unit factory is creating a " + claz.getSimpleName());
 		World world = World.getInstance();

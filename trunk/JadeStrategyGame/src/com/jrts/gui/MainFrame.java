@@ -2,6 +2,7 @@ package com.jrts.gui;
 import jade.core.Runtime;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
@@ -51,6 +52,8 @@ public class MainFrame extends JFrame {
 	
 	private int selectedRow = 0, selectedCol = 0;
 	
+	private boolean finished = false;
+	
 	//public static int treeClick = 0;
 	
 	public static String addTreeClick = "Add Tree";
@@ -80,7 +83,8 @@ public class MainFrame extends JFrame {
 			@Override
 			public void windowClosing(WindowEvent e) {
 				Runtime.instance().shutDown();
-				//TODO killare tutti gli agenti e chiudere la runtime
+				finished = true;
+				dispose();
 				System.exit(0);
 			}
 		});
@@ -173,7 +177,7 @@ public class MainFrame extends JFrame {
 		topPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 		rightPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
-		d = new Dimension(200, 400);
+		d = new Dimension(200, 500);
 		//JPanel rightVisibilityPanel = new JPanel();
 		rightPanel.setPreferredSize(d);
 		rightPanel.setSize(d);
@@ -185,21 +189,32 @@ public class MainFrame extends JFrame {
 			rightPanel.add(new TeamVisibilityPanel(t), BorderLayout.WEST);
 		}
 		
+		JPanel center = new JPanel();
+		center.setLayout(new BorderLayout());
+		JPanel p = new JPanel();
+//		p.setBorder(BorderFactory.createLineBorder(Color.black, 1));
+		p.setSize(100, 40);
+		center.add(p, BorderLayout.SOUTH);
+		center.add(worldViewPanel, BorderLayout.CENTER);
+		
 		getContentPane().add(topPanel, BorderLayout.NORTH);
 		getContentPane().add(rightPanel, BorderLayout.EAST);
-		getContentPane().add(worldViewPanel, BorderLayout.CENTER);
+		getContentPane().add(center, BorderLayout.CENTER);
+//		getContentPane().add(worldViewPanel, BorderLayout.CENTER);
 		getContentPane().add(leftInformationPanel, BorderLayout.WEST);
 		getContentPane().add(new JLabel("Jade Strategy Game - Loria Salvatore, Martire Andrea, Parisi Daniele, Pirrone Vincenzo", JLabel.CENTER), BorderLayout.SOUTH);
 		
 		pack();
 
+		setResizable(false);
+		
 		//setSize((floor.getCols()+1)*ImageLoader.iconSize, (floor.getRows()+4)*ImageLoader.iconSize*3/5);
 		this.setVisible(true);
 
 		class RefreshGUI implements Runnable{
 			@Override
 			public void run() {
-				while(true) {
+				while(!finished) {
 					try {
 						Thread.sleep(10);
 					} catch (InterruptedException e) {

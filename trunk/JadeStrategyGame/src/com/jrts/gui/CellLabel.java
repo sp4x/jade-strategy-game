@@ -19,10 +19,13 @@ public class CellLabel extends JLabel {
 	int j;
 	
 	Border selectedBorder = BorderFactory.createLineBorder(Color.green, 2);
+	Border defaultBorder = BorderFactory.createLineBorder(Color.black, 0);
 	
 	public CellLabel(int row, int col) {
 		this.i = row;
 		this.j = col;
+		
+		setBorder(defaultBorder);
 		
 		super.addMouseListener(new MouseAdapter() {
 			@Override
@@ -81,7 +84,7 @@ public class CellLabel extends JLabel {
 		if (selected) {
 			setBorder(selectedBorder);
 		} else {
-			setBorder(null);
+			setBorder(defaultBorder);
 		}
 	}
 }
