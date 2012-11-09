@@ -1,6 +1,6 @@
 package com.jrts.agents;
 
-import com.jrts.behaviours.CollectResources;
+import com.jrts.behaviours.ExploreBehaviour;
 import com.jrts.behaviours.PatrolBehaviour;
 import com.jrts.common.AgentStatus;
 import com.jrts.common.GameConfig;
@@ -35,6 +35,8 @@ public class Soldier extends Unit {
 		
 		switchStatus(AgentStatus.FREE);
 		
+		explore();
+		
 //		addBehaviour(new SendAttack(this));
 	}
 	
@@ -49,6 +51,11 @@ public class Soldier extends Unit {
 	public void patrol(Direction d) {
 		//TODO: switchStatus(AgentStatus.);
 		addBehaviour(new PatrolBehaviour(this, d));
+	}
+
+	public void explore() {
+		logger.warning("STARTING EXPLORING");
+		addBehaviour(new ExploreBehaviour(this));
 	}
 	
 	@Override

@@ -1,13 +1,11 @@
 package com.jrts.behaviours;
 
-import jade.core.behaviours.Behaviour;
-
 import com.jrts.agents.Soldier;
 import com.jrts.environment.Direction;
 import com.jrts.environment.Position;
 import com.jrts.environment.World;
 
-public class PatrolBehaviour extends Behaviour {
+public class PatrolBehaviour extends UnitBehaviour {
 
 	/**
 	 * 
@@ -26,7 +24,8 @@ public class PatrolBehaviour extends Behaviour {
 	 * @param direction: TOP | RIGHT | DOWN | LEFT 
 	 */
 	public PatrolBehaviour(Soldier soldier, Direction direction) {
-		super(soldier);
+		super(false);
+		
 		this.soldier = soldier;
 		this.cityCenter = World.getInstance().getCityCenter(soldier.getTeamName());
 		
