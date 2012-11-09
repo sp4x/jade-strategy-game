@@ -3,7 +3,6 @@ package com.jrts.behaviours;
 import java.util.ArrayList;
 
 import com.jrts.agents.Unit;
-import com.jrts.behaviours.structure.BaseBehaviour;
 import com.jrts.common.GameConfig;
 import com.jrts.common.Utils;
 import com.jrts.environment.Cell;
@@ -13,22 +12,21 @@ import com.jrts.environment.Floor;
 import com.jrts.environment.Position;
 
 @SuppressWarnings("serial")
-public class FollowPathBehaviour extends BaseBehaviour {
-
+public class FollowPathBehaviour extends UnitBehaviour {
+	
 	ArrayList<Direction> list;
 	Unit unit;
-	private int goalRow, goalCol;
+	private Position goal;
 	int remainingAttempts;
 	boolean tolerance;
 
 	Floor worldCachedCopy = null;
 
-	public FollowPathBehaviour(Unit unit, int goalRow, int goalCol,
+	public FollowPathBehaviour(Unit unit, Position goal,
 			int remainingAttempts, Floor cachedCopy) {
 		super(true);// high priority
 		this.unit = unit;
-		this.goalRow = goalRow;
-		this.goalCol = goalCol;
+		this.goal = goal;
 		this.remainingAttempts = remainingAttempts;
 		this.list = new ArrayList<Direction>();
 		this.worldCachedCopy = cachedCopy;
@@ -39,19 +37,23 @@ public class FollowPathBehaviour extends BaseBehaviour {
 			setWorldCachedCopy(unit.requestMap());
 		}
 
+		calculatePath();
+	}
+
+	public FollowPathBehaviour(Unit unit, Position goal,
+			int remainingAttempts) {
+		this(unit, goal, remainingAttempts, null);
+	}
+	
+	private void calculatePath() {
 		Position start = unit.getPosition();
 		this.list = Utils.calculatePath(getWorldCachedCopy(),
-				start, new Position(goalRow, goalCol), true);
+				start, goal, true);
 		
-		unit.logger.info("path: " + list);
+		unit.logger.info(unit.getId() + ":path: " + list);
 	}
 
-	public FollowPathBehaviour(Unit unit, int goalRow, int goalCol,
-			int remainingAttempts) {
-		this(unit, goalRow, goalCol, remainingAttempts, null);
-	}
-
-	public void baseAction() {
+	public void action() {
 		unit.spendTime();
 
 		// se non riesco a spostarmi ricalcolo il path
@@ -59,18 +61,23 @@ public class FollowPathBehaviour extends BaseBehaviour {
 			Direction d = list.remove(0);
 			if (!unit.move(d)) {
 				Position destination = unit.getPosition().step(d);
-				worldCachedCopy.set(destination.getRow(), destination.getCol(),
-						new Cell(CellType.OBSTACLE));
-				unit.logger.info(unit.getLocalName()
+				worldCachedCopy.set(destination, new Cell(CellType.OBSTACLE));
+				unit.logger.info(unit.getId()
 						+ ":Need path recalculation");
-				list.clear();
-				if (remainingAttempts > 0) // solo se ho ancora tentativi a
+				if (remainingAttempts > 0) { // solo se ho ancora tentativi a
 											// disposizione
-					unit.addBehaviour(new FollowPathBehaviour(unit, goalRow,
-							goalCol, remainingAttempts - 1,
-							worldCachedCopy));
-			} else
+//					unit.addBehaviour(new FollowPathBehaviour(unit, goalRow,
+//							goalCol, remainingAttempts - 1,
+//							worldCachedCopy));
+					calculatePath();
+				} else {
+					unit.logger.info(unit.getId() + " no remaining attempts, failed");
+					list.clear();
+				}
+				
+			} else {
 				remainingAttempts = GameConfig.UNIT_MOVING_ATTEMPTS;
+			}
 		}
 	}
 
@@ -84,22 +91,6 @@ public class FollowPathBehaviour extends BaseBehaviour {
 		// goalCol)))
 		// unit.goThere(new Position(goalRow, goalCol));
 		return list.isEmpty();
-	}
-
-	public int getGoalRow() {
-		return goalRow;
-	}
-
-	public void setGoalRow(int goalRow) {
-		this.goalRow = goalRow;
-	}
-
-	public int getGoalCol() {
-		return goalCol;
-	}
-
-	public void setGoalCol(int goalCol) {
-		this.goalCol = goalCol;
 	}
 
 	public Floor getWorldCachedCopy() {

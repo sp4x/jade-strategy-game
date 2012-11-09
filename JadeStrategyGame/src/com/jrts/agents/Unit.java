@@ -2,7 +2,6 @@ package com.jrts.agents;
 
 import jade.core.AID;
 import jade.core.behaviours.Behaviour;
-import jade.core.behaviours.CyclicBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
@@ -15,11 +14,11 @@ import java.io.IOException;
 import java.util.Random;
 
 import com.jrts.O2Ainterfaces.IUnit;
+import com.jrts.behaviours.BehaviourWrapper;
 import com.jrts.behaviours.FollowPathBehaviour;
 import com.jrts.behaviours.LookForEnemy;
 import com.jrts.behaviours.ReceiveOrders;
-import com.jrts.behaviours.structure.BaseBehaviour;
-import com.jrts.behaviours.structure.BehaviourManager;
+import com.jrts.behaviours.UnitBehaviour;
 import com.jrts.common.GameConfig;
 import com.jrts.environment.CellType;
 import com.jrts.environment.Direction;
@@ -37,22 +36,24 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 	private DFAgentDescription agentDescription;
 	private ServiceDescription basicService;
 	
-	private BehaviourManager behaviourManager;
+	private BehaviourWrapper behaviourWrapper;
 
+	String id;
 	int life;
 	int speed;
 	int forceOfAttack;
 	int sight;
 
 	public Unit() {
-		super();
-		registerO2AInterface(IUnit.class, this);
-		behaviourManager = new BehaviourManager(this);
+		this(null, null);
 	}
 
-	public Unit(Position position) {
-		this();
+	public Unit(String id, Position position) {
+		super();
 		this.position = position;
+		this.id = id;
+		registerO2AInterface(IUnit.class, this);
+		behaviourWrapper = new BehaviourWrapper();
 	}
 
 	@Override
@@ -65,6 +66,7 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 		} else {
 
 		}
+		id = getAID().getLocalName();
 		agentDescription = new DFAgentDescription();
 		agentDescription.setName(getAID());
 		basicService = new ServiceDescription();
@@ -74,28 +76,20 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 		register(agentDescription, false);
 		addBehaviour(new LookForEnemy(this, 2000));
 		addBehaviour(new ReceiveOrders(this));
-		addBehaviour(new CyclicBehaviour() {
-			@Override
-			public void action() {
-				behaviourManager.refresh();
-			}
-		});
+		addBehaviour(behaviourWrapper);
 	}
 	
 	@Override
 	public void addBehaviour(Behaviour b) {
-		if(b instanceof BaseBehaviour)
-			behaviourManager.addBehaviour((BaseBehaviour) b);
-		super.addBehaviour(b);
+		if(b instanceof UnitBehaviour)
+			behaviourWrapper.wrap((UnitBehaviour) b);
+		else
+			super.addBehaviour(b);
 	}
 	
 	public void goThere(Position p) {
-		goThere(p.getRow(), p.getCol());
-	}
-
-	public void goThere(int x, int y) {
-		logger.info(getAID().getName() + ":Go there " + new Position(x, y));
-		addBehaviour(new FollowPathBehaviour(this, x, y, GameConfig.UNIT_MOVING_ATTEMPTS));
+		logger.info(getAID().getName() + ":Go there " + p);
+		addBehaviour(new FollowPathBehaviour(this, p, GameConfig.UNIT_MOVING_ATTEMPTS));
 	}
 
 	public AID getMasterAID() {
@@ -122,7 +116,12 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 	}
 
 	public boolean move(Direction dir) {
-		return World.getInstance().move(this.position, dir);
+		if (World.getInstance().move(position, dir)) {
+			position = position.step(dir);
+			logger.info(id + ":moved into " + position);
+			return true;
+		}
+		return false;
 	}
 
 	@Override
@@ -207,7 +206,7 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 
 	@Override
 	public String getId() {
-		return getAID().getLocalName();
+		return id;
 	}
 
 	public void switchStatus(String newStatus) {

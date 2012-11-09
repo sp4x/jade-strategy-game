@@ -8,6 +8,7 @@ import jade.lang.acl.MessageTemplate;
 
 import com.jrts.behaviours.UpdateWorkersMap;
 import com.jrts.common.AgentStatus;
+import com.jrts.common.GameConfig;
 import com.jrts.common.WorkersMap;
 import com.jrts.messages.AggiornaRisorse;
 
@@ -24,17 +25,17 @@ public class ResourceAI extends GoalBasedAI {
 	protected void setup() {
 		super.setup();
 
-		 unitFactory.trainUnit(Worker.class);
-		// unitFactory.trainUnit(Worker.class);
-		//
-		// // order someone to cut wood
-		 addBehaviour(new WakerBehaviour(this, 5000) {
-		 @Override
-			protected void handleElapsedTimeout() {
-				assignWoodcutter();
-//				assignFoodCollector();
-			}
-		});
+//		 unitFactory.trainUnit(Worker.class);
+//		// unitFactory.trainUnit(Worker.class);
+//		//
+//		// // order someone to cut wood
+//		 addBehaviour(new WakerBehaviour(this, 5000) {
+//		 @Override
+//			protected void handleElapsedTimeout() {
+//				assignWoodcutter();
+////				assignFoodCollector();
+//			}
+//		});
 
 		// listen for resources update by the workers
 		addBehaviour(new CyclicBehaviour(this) {
@@ -61,32 +62,32 @@ public class ResourceAI extends GoalBasedAI {
 		addBehaviour(new UpdateWorkersMap(this));
 
 		// trains and gives order to workers
-//		addBehaviour(new CyclicBehaviour() {
-//
-//			@Override
-//			public void action() {
-//				int numWorkers = (resourcesContainer.getFood() + resourcesContainer.getWood()) / 50 - workersCounter + 1;
-//				for (int i = 0; i < numWorkers; i++) {
-//					if (resourcesContainer.isThereEnoughFood(GameConfig.WORKER_FOOD_COST) && 
-//							resourcesContainer.isThereEnoughWood(GameConfig.WORKER_WOOD_COST) ) {
-//						
-//						resourcesContainer.removeFood(GameConfig.WORKER_FOOD_COST);
-//						resourcesContainer.removeWood(GameConfig.WORKER_WOOD_COST);
-//						unitFactory.trainUnit(Worker.class);
-//						workersCounter++;
-//					}
-//				}
-//				AID freeWorker = workersMap.getFreeWorker();
-//				if (freeWorker != null) {
-//					String newStatus = (resourcesContainer.getFood() > resourcesContainer.getWood() ? AgentStatus.WOOD_CUTTING
-//							: AgentStatus.FOOD_COLLECTING);
-//					changeAgentStatus(freeWorker, newStatus);
-//					workersMap.put(freeWorker, newStatus);
-//				} else {
-//					//logger.info("no free workers");
-//				}
-//			}
-//		});
+		addBehaviour(new CyclicBehaviour() {
+
+			@Override
+			public void action() {
+				int numWorkers = 3 - workersCounter; 
+				for (int i = 0; i < numWorkers; i++) {
+					if (resourcesContainer.isThereEnoughFood(GameConfig.WORKER_FOOD_COST) && 
+							resourcesContainer.isThereEnoughWood(GameConfig.WORKER_WOOD_COST) ) {
+						
+						resourcesContainer.removeFood(GameConfig.WORKER_FOOD_COST);
+						resourcesContainer.removeWood(GameConfig.WORKER_WOOD_COST);
+						unitFactory.trainUnit(Worker.class);
+						workersCounter++;
+					}
+				}
+				AID freeWorker = workersMap.getFreeWorker();
+				if (freeWorker != null) {
+					String newStatus = (resourcesContainer.getFood() > resourcesContainer.getWood() ? AgentStatus.WOOD_CUTTING
+							: AgentStatus.FOOD_COLLECTING);
+					changeAgentStatus(freeWorker, newStatus);
+					workersMap.put(freeWorker, newStatus);
+				} else {
+					//logger.info("no free workers");
+				}
+			}
+		});
 
 	}
 
