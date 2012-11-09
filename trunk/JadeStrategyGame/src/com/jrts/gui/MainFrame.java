@@ -1,5 +1,8 @@
 package com.jrts.gui;
 import jade.core.Runtime;
+import jade.wrapper.AgentContainer;
+import jade.wrapper.ControllerException;
+import jade.wrapper.StaleProxyException;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -68,12 +71,12 @@ public class MainFrame extends JFrame {
 	JPanel topPanel;
 	JPanel rightPanel;
 	
-	public static void start(Floor floor, List<Team> teams)
+	public static void start(Floor floor, List<Team> teams, AgentContainer ac)
 	{
-		mainFrame = new MainFrame(floor, teams);
+		mainFrame = new MainFrame(floor, teams, ac);
 	}
 	
-	protected MainFrame(Floor floor, List<Team> teams) {
+	protected MainFrame(Floor floor, List<Team> teams, final AgentContainer ac) {
 		super();
 		
 		this.teams = teams;
@@ -82,9 +85,14 @@ public class MainFrame extends JFrame {
 		super.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
-				Runtime.instance().shutDown();
 				finished = true;
 				dispose();
+				try {
+					ac.kill();
+					Runtime.instance().shutDown();
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
 				System.exit(0);
 			}
 		});
