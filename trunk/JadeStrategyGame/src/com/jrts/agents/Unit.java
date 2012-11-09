@@ -149,7 +149,7 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 	}
 
 	private void die() {
-		World.getInstance().agentDies(getPosition());
+		World.getInstance().killUnit(this);
 		doDelete();
 	}
 
@@ -239,7 +239,6 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 		send(msg);
 		ACLMessage response = blockingReceive(MessageTemplate
 				.MatchConversationId(id));
-		WorldMap map;
 		try {
 			return (WorldMap) response.getContentObject();
 		} catch (UnreadableException e) {

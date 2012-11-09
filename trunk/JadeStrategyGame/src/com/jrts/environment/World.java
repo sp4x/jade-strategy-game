@@ -56,6 +56,18 @@ public class World {
 		teams = new HashMap<String, Position>();
 	}
 
+	
+	public synchronized boolean doMovement(Position source, Direction d) {
+		Position destination = source.step(d);
+		Cell srcCell = floor.get(source);
+		if (isAvailable(destination)) {
+			clear(source);
+			floor.set(destination, srcCell);
+			return true;
+		} 
+		return false;
+	}
+	
 	/**
 	 * changes the position of an object using the specified direction
 	 * 
@@ -65,57 +77,24 @@ public class World {
 	 *            the direction
 	 * @return true if the movement has been performed
 	 */
-	public synchronized boolean move(Position source, Direction d) {
+	public boolean move(Position source, Direction d) {
 		ThreadMonitor.getInstance().doWait();
-		Position destination = source.step(d);
-		Cell srcCell = floor.get(source);
-		if (isAvailable(destination)) {
-			floor.set(source, new Cell(CellType.FREE));
-			floor.set(destination, srcCell);
-			return true;
-		} 
-		return false;
+		return doMovement(source, d);
 	}
 
 	boolean addObject(Cell objectType, Position p) {
 		if (isAvailable(p)) {
-			floor.set(p.row, p.col, objectType);
+			floor.set(p, objectType);
 			return true;
 		}
 		return false;
 	}
 
-	/**
-	 * returns the nearest free position from a source point next to a target.
-	 * 
-	 * @param src
-	 *            the source position
-	 * @param target
-	 *            the target position
-	 * @return the requested position
-	 */
-	public synchronized Position freePositionNextToTarget(Position src,
-			Position target) {
-		double distance = Double.MAX_VALUE;
-		Position chosen = null;
-		for (Direction d : Direction.VON_NEUMANN_NEIGH) {
-			Position candidate = target.step(d);
-			double candidateDistance = src.distance(candidate);
-			if (isAvailable(candidate) && candidateDistance < distance) {
-				chosen = candidate;
-				distance = candidateDistance;
-			}
-		}
-		return chosen;
-	}
 
 	public synchronized Cell getCell(Position p) {
 		return floor.getCopy(p);
 	}
 
-	/*
-	 * public Cell unSyncGetCell(Position p) { return floor.get(p); }
-	 */
 
 	/**
 	 * returns a random free position near a center between the specified
@@ -146,6 +125,10 @@ public class World {
 	boolean isAvailable(Position p) {
 		return floor.isValid(p) && floor.get(p).type == CellType.FREE;
 	}
+	
+	void clear(Position p) {
+		floor.set(p, new Cell(CellType.FREE));
+	}
 
 	/**
 	 * adds the city center in a random position for a new team with the
@@ -154,7 +137,7 @@ public class World {
 	 * @param name
 	 *            the name of the team, has to be unique
 	 */
-	public synchronized void addTeam(String name) {
+	public void addTeam(String name) {
 		// Prendo un angolo a caso tra 0 e 3
 		int angle = r.nextInt(4);
 
@@ -228,7 +211,7 @@ public class World {
 
 	public synchronized void addUnit(Position p, String unitId, IUnit unit) {
 		Cell unitCell = new Cell(unitId, unit, unit.getType());
-		floor.set(p.row, p.col, unitCell);
+		floor.set(p, unitCell);
 	}
 
 	/**
@@ -269,13 +252,11 @@ public class World {
 			return amount;
 		} else {
 			int taken = targetCell.resourceEnergy;
-			floor.set(target.row, target.col, new Cell(CellType.FREE));
+			clear(target);
+			if (targetCell.type == CellType.CITY_CENTER)
+				teams.remove(targetCell.id);
 			return taken;
 		}
-	}
-
-	public synchronized void clear(Position p) {
-		floor.set(p.row, p.col, new Cell(CellType.FREE));
 	}
 
 	public int getRows() {
@@ -286,12 +267,11 @@ public class World {
 		return cols;
 	}
 
-	public void agentDies(Position p) {
-		floor.set(p.getRow(), p.getCol(), new Cell(CellType.FREE));
-	}
-
-	public Map<String, Position> getTeams() {
-		return teams;
+	public synchronized void killUnit(IUnit u) {
+		Cell target = floor.get(u.getPosition());
+		if (u.getId().equals(target.id)) {
+			clear(u.getPosition());
+		}
 	}
 
 	public synchronized boolean isGameFinished() {

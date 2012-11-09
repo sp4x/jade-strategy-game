@@ -10,7 +10,7 @@ import com.jrts.agents.ResourceAI;
 import com.jrts.agents.Worker;
 import com.jrts.common.GameConfig;
 
-public class UpdateWorkersMap extends TickerBehaviour {
+public class UpdateWorkersTable extends TickerBehaviour {
 	
 	/**
 	 * 
@@ -20,8 +20,8 @@ public class UpdateWorkersMap extends TickerBehaviour {
 	
 	ResourceAI agent;
 
-	public UpdateWorkersMap(ResourceAI agent) {
-		super(agent, GameConfig.WORKERS_MAP_REFRESH_TIME);
+	public UpdateWorkersTable(ResourceAI agent) {
+		super(agent, GameConfig.WORKERS_TABLE_REFRESH_TIME);
 		this.agent = agent;
 	}
 

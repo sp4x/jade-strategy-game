@@ -45,5 +45,12 @@ public class Perception extends Floor {
 	int getAbsoluteCol(int relativeCol) {
 		return relativeCol + colTraslation;
 	}
+	
+	@Override
+	public Cell get(Position p) {
+		int row = getRelativeRow(p.row);
+		int col = getRelativeCol(p.col);
+		return get(row, col);
+	}
 
 }
