@@ -12,7 +12,11 @@ public class PatrolBehaviour extends UnitBehaviour {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private static final int RAY = 20;
+	private int distance = 20;
+	
+	public static final int DISTANCE_LITTLE = 5;
+	public static final int DISTANCE_MEDIUM = 10;
+	public static final int DISTANCE_BIG = 15;
 
 	Soldier soldier;
 	Position cityCenter;
@@ -23,28 +27,30 @@ public class PatrolBehaviour extends UnitBehaviour {
 	 * @param soldier
 	 * @param direction: TOP | RIGHT | DOWN | LEFT 
 	 */
-	public PatrolBehaviour(Soldier soldier, Direction direction) {
+	public PatrolBehaviour(Soldier soldier, Direction direction, int distance) {
 		super(false);
 		
 		this.soldier = soldier;
 		this.cityCenter = World.getInstance().getCityCenter(soldier.getTeamName());
 		
+		this.distance = distance;
+		
 		if(direction == Direction.LEFT)
 		{
-			p1 = cityCenter.bigStep(Direction.LEFT_UP, PatrolBehaviour.RAY);
-			p2 = cityCenter.bigStep(Direction.LEFT_DOWN, PatrolBehaviour.RAY);
+			p1 = cityCenter.bigStep(Direction.LEFT_UP, this.distance);
+			p2 = cityCenter.bigStep(Direction.LEFT_DOWN, this.distance);
 		} else if(direction == Direction.UP)
 		{
-			p1 = cityCenter.bigStep(Direction.LEFT_UP, PatrolBehaviour.RAY);
-			p2 = cityCenter.bigStep(Direction.RIGHT_UP, PatrolBehaviour.RAY);
+			p1 = cityCenter.bigStep(Direction.LEFT_UP, this.distance);
+			p2 = cityCenter.bigStep(Direction.RIGHT_UP, this.distance);
 		} else if(direction == Direction.RIGHT)
 		{
-			p1 = cityCenter.bigStep(Direction.RIGHT_UP, PatrolBehaviour.RAY);
-			p2 = cityCenter.bigStep(Direction.RIGHT_DOWN, PatrolBehaviour.RAY);
+			p1 = cityCenter.bigStep(Direction.RIGHT_UP, this.distance);
+			p2 = cityCenter.bigStep(Direction.RIGHT_DOWN, this.distance);
 		} else if(direction == Direction.DOWN)
 		{
-			p1 = cityCenter.bigStep(Direction.LEFT_DOWN, PatrolBehaviour.RAY);
-			p2 = cityCenter.bigStep(Direction.RIGHT_DOWN, PatrolBehaviour.RAY);
+			p1 = cityCenter.bigStep(Direction.LEFT_DOWN, this.distance);
+			p2 = cityCenter.bigStep(Direction.RIGHT_DOWN, this.distance);
 		}
 		
 	}

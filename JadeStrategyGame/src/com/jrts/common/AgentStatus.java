@@ -8,8 +8,13 @@ package com.jrts.common;
  */
 public class AgentStatus {
 	
-	public static final String FREE = "free";
+	public static final String FREE_WORKER = "free_worker";
+	public static final String FREE_SOLDIER = "free_soldier";
+
 	public static final String WOOD_CUTTING = "wood-cutting";
 	public static final String FOOD_COLLECTING = "food-collecting";
+
+	public static final String PATROLING = "patroling";
+	public static final String EXPLORING = "exploring";
 
 }

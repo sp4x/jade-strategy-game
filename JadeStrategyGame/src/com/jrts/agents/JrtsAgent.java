@@ -7,7 +7,6 @@ import jade.domain.DFService;
 import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.jrts.common.GameConfig;
@@ -20,7 +19,7 @@ public abstract class JrtsAgent extends Agent {
 	private String team;
 
 	public JrtsAgent() {
-		this.logger.setLevel(Level.WARNING);
+		//this.logger.setLevel(Level.WARNING);
 	}
 	
 	@Override

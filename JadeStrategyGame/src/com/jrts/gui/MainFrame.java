@@ -210,7 +210,13 @@ public class MainFrame extends JFrame {
 		getContentPane().add(center, BorderLayout.CENTER);
 //		getContentPane().add(worldViewPanel, BorderLayout.CENTER);
 		getContentPane().add(leftInformationPanel, BorderLayout.WEST);
-		getContentPane().add(new JLabel("Jade Strategy Game - Loria Salvatore, Martire Andrea, Parisi Daniele, Pirrone Vincenzo", JLabel.CENTER), BorderLayout.SOUTH);
+		
+		JPanel footer = new JPanel();
+		d = new Dimension(500, 30);
+		//JPanel rightVisibilityPanel = new JPanel();
+		footer.setPreferredSize(d);
+		footer.add(new JLabel("Jade Strategy Game - Loria Salvatore, Martire Andrea, Parisi Daniele, Pirrone Vincenzo", JLabel.CENTER));
+		getContentPane().add(footer, BorderLayout.SOUTH);
 		
 		pack();
 
