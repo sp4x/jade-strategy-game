@@ -6,7 +6,7 @@ import jade.core.behaviours.WakerBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 
-import com.jrts.behaviours.UpdateWorkersMap;
+import com.jrts.behaviours.UpdateWorkersTable;
 import com.jrts.common.AgentStatus;
 import com.jrts.common.GameConfig;
 import com.jrts.common.WorkersMap;
@@ -59,7 +59,7 @@ public class ResourceAI extends GoalBasedAI {
 			}
 		});
 
-		addBehaviour(new UpdateWorkersMap(this));
+		addBehaviour(new UpdateWorkersTable(this));
 
 		// trains and gives order to workers
 		addBehaviour(new CyclicBehaviour() {

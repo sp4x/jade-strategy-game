@@ -48,7 +48,7 @@ public class Worker extends Unit {
 	
 	public void takeResources(Position resourcePosition) {
 		logger.info("taking resource at " + resourcePosition);
-		CellType resource = World.getInstance().getCell(resourcePosition).getType();
+		CellType resource = getPerception().get(resourcePosition).getType();
 		boolean validResource = (resource == CellType.WOOD || resource == CellType.FOOD);
 		if (validResource)
 			World.getInstance().takeEnergy(resourcePosition, 1);
