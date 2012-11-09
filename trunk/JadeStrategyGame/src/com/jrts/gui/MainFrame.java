@@ -92,8 +92,8 @@ public class MainFrame extends JFrame {
 		this.worldViewPanel = new WorldViewPanel(floor);
 		this.floor = floor;
 		
-		JSlider speed = new JSlider(JSlider.HORIZONTAL, GameConfig.MIN_REFRESH_TIME, 
-				GameConfig.MAX_REFRESH_TIME, GameConfig.REFRESH_TIME);
+		JSlider speed = new JSlider(JSlider.HORIZONTAL, -GameConfig.MAX_REFRESH_TIME, 
+				-GameConfig.MIN_REFRESH_TIME, -GameConfig.REFRESH_TIME);
 		speed.setPaintTicks(true);
 		speed.setPaintLabels(true);
 		speed.setBorder(BorderFactory.createTitledBorder("Speed"));
@@ -102,7 +102,7 @@ public class MainFrame extends JFrame {
 			public void stateChanged(ChangeEvent ce) {
 			    JSlider source = (JSlider)ce.getSource();
 			    if (!source.getValueIsAdjusting())
-			        GameConfig.REFRESH_TIME = (int)source.getValue();
+			        GameConfig.REFRESH_TIME = (int)source.getValue()*(-1);
 			}
 		});
 
