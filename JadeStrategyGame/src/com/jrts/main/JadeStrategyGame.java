@@ -32,10 +32,10 @@ public class JadeStrategyGame {
 		ProfileImpl p = new ProfileImpl();
 		p.setParameter(Profile.LOCAL_HOST, Profile.LOOPBACK_ADDRESS_CONSTANT);
 		
-		Runtime.instance().setCloseVM(true);
+//		Runtime.instance().setCloseVM(true);
 		
 		AgentContainer ac = rt.createMainContainer(p);
-
+		
 		List<Team> teams = new ArrayList<Team>();
 		
 		World.create(GameConfig.WORLD_ROWS, GameConfig.WORLD_COLS, 0.01f);
@@ -54,7 +54,7 @@ public class JadeStrategyGame {
 		
 		
 		/** start graphics */
-		MainFrame.start(World.getInstance().getFloor(), teams);
+		MainFrame.start(World.getInstance().getFloor(), teams, ac);
 	}
 
 }
