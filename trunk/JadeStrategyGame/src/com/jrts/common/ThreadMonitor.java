@@ -8,13 +8,20 @@ public class ThreadMonitor {
 		return instance;
 	}
 	
+	public static void disable() {
+		instance.enabled = false;
+	}
+	
+	private boolean enabled = true;
+	
 	public synchronized void doWait() {
-		try {
-			wait();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		if (enabled)
+			try {
+				wait();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 	}
 	
 	public synchronized void sendNotifyAll() {

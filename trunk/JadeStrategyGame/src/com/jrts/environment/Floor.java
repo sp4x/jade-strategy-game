@@ -126,6 +126,11 @@ public class Floor implements Serializable {
 		if(i>=0 && j>=0 && i<=rows && j<=cols)
 			this.floor[i][j] = st;
 	}
+	
+	public void set(Position p, Cell st) {
+		if (isValid(p))
+			this.floor[p.row][p.col] = st;
+	}
 
 	public int getRows() {
 		return rows;
@@ -187,13 +192,23 @@ public class Floor implements Serializable {
 	 * @return the position of the closest matching cell, if any. otherwise null
 	 */
 	public Position nextTo(Position p, CellType type, int maxDistance) {
+		return nextTo(null, p, type, maxDistance);
+	}
+	
+	public Position nextTo(Position source, Position target, CellType type, int maxDistance) {
 		if (maxDistance == 0)
-			return p;
+			return target;
 		for (int minDistance = 1; minDistance <= maxDistance; minDistance++) {
+			LinkedList<Position> candidates = new LinkedList<Position>();
 			for (Direction d : Direction.ALL) {
-				Position candidate = nextTo(p.step(d), type, minDistance-1);
+				Position candidate = nextTo(source, target.step(d), type, minDistance-1);
 				if (isValid(candidate) && get(candidate).type == type)
-					return candidate;
+					candidates.add(candidate);
+			}
+			if (!candidates.isEmpty()) {
+				if (source == null)
+					return candidates.element();
+				return source.nearest(candidates);
 			}
 		}
 		return null;

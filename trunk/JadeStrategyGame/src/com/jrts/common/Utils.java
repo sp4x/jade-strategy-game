@@ -6,7 +6,6 @@ import java.util.List;
 import org.jgrapht.alg.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultWeightedEdge;
 
-import com.jrts.environment.Cell;
 import com.jrts.environment.CellType;
 import com.jrts.environment.Direction;
 import com.jrts.environment.Floor;
@@ -24,7 +23,7 @@ public class Utils {
 //		System.out.println("Initial EndPos:" + endPosition);
 		
 		if(tolerance){
-			Position correctedEndPosition = approximateEndPosition(/*walkableGraph,*/ floor, startRow, startCol, endRow, endCol);
+			Position correctedEndPosition = approximateEndPosition(/*walkableGraph,*/ floor, startPosition, endPosition);
 //			System.out.println("Corrected EndPos:" + correctedEndPosition);
 			if (correctedEndPosition == null)
 				return new ArrayList<Direction>();
@@ -65,14 +64,14 @@ public class Utils {
 	 * @param endCol
 	 * @return correctedEndPosition
 	 */
-	private static Position approximateEndPosition(/*UndirectedWeightedGraph walkableGraph,*/ Floor floor, int startRow, int startCol, int endRow, int endCol) {
+	private static Position approximateEndPosition(/*UndirectedWeightedGraph walkableGraph,*/ Floor floor, Position startPos, Position endPos) {
 //		floor = floor.getCopy();
-		Position endPos = new Position(endRow, endCol);
 //		if(walkableGraph.containsVertex(endPos.getRow() + "," + endPos.getCol()))
 //			return endPos;
-		if (floor.get(endPos).getType() == CellType.FREE)
+		CellType targetType = floor.get(endPos).getType();
+		if ( targetType == CellType.FREE || targetType == CellType.UNKNOWN )
 			return endPos;
-		return floor.nextTo(endPos, CellType.FREE, GameConfig.PATH_TOLERANCE);
+		return floor.nextTo(startPos, endPos, CellType.FREE, GameConfig.PATH_TOLERANCE);
 //		else{
 //			int counter = 0;
 //			Position correctedEndPosition;
@@ -130,7 +129,7 @@ public class Utils {
 					if( j-1 >= 0 && i-1 >= 0 && (floor.get(i-1, j-1).getType() == CellType.FREE || floor.get(i-1, j-1).getType() == CellType.UNKNOWN || (i-1==startRow && j-1==startCol)) ){
 						String v1 = i + "," + j;
 						String v2 = (i-1) + "," + (j-1);
-						walkableGraph.addWeightedEdge(v1, v2, 1);
+						walkableGraph.addWeightedEdge(v1, v2, 1.5);
 					}
 					
 					//   A
@@ -138,21 +137,21 @@ public class Utils {
 					if( j+1 < floor.getCols() && i-1 >= 0 && (floor.get(i-1, j+1).getType() == CellType.FREE || floor.get(i-1, j+1).getType() == CellType.UNKNOWN || (i-1==startRow && j+1==startCol)) ){
 						String v1 = i + "," + j;
 						String v2 = (i-1) + "," + (j+1);
-						walkableGraph.addWeightedEdge(v1, v2, 1);
+						walkableGraph.addWeightedEdge(v1, v2, 1.5);
 					}
 					//  /
 					// v
 					if( j-1 >= 0 && i+1 < floor.getRows() && (floor.get(i+1, j-1).getType() == CellType.FREE || floor.get(i+1, j-1).getType() == CellType.UNKNOWN || (i+1==startRow && j-1==startCol)) ){
 						String v1 = i + "," + j;
 						String v2 = (i+1) + "," + (j-1);
-						walkableGraph.addWeightedEdge(v1, v2, 1);
+						walkableGraph.addWeightedEdge(v1, v2, 1.5);
 					}
 					//  \
 					//   v
 					if( j+1 < floor.getCols() && i+1 < floor.getRows() && (floor.get(i+1, j+1).getType() == CellType.FREE || floor.get(i+1, j+1).getType() == CellType.UNKNOWN || (i+1==startRow && j+1==startCol)) ){
 						String v1 = i + "," + j;
 						String v2 = (i+1) + "," + (j+1);
-						walkableGraph.addWeightedEdge(v1, v2, 1);
+						walkableGraph.addWeightedEdge(v1, v2, 1.5);
 					}
 				}
 			}

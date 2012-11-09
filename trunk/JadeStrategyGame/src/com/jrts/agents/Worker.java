@@ -21,20 +21,21 @@ public class Worker extends Unit {
 	CellType resourceCarried;
 
 	public Worker() {
-		super();
+		this(null, null);
 	}
 
-	public Worker(Position position) {
-		super(position);
-	}
-
-	@Override
-	protected void setup(){
-		super.setup();
+	public Worker(String id, Position position) {
+		super(id, position);
 		setLife(GameConfig.WORKER_LIFE);
 		setSpeed(GameConfig.WORKER_SPEED);
 		setForceOfAttack(GameConfig.WORKER_DAMAGES);
 		setSight(GameConfig.WORKER_SIGHT);
+	}
+
+
+	@Override
+	protected void setup(){
+		super.setup();
 		
 		switchStatus(AgentStatus.FREE);
 		
@@ -45,11 +46,12 @@ public class Worker extends Unit {
 		AttacksManager.addHit(getPosition().clone(), direction, GameConfig.WORKER_DAMAGES);
 	}
 	
-	public void takeResources(Position pickUpPosition) {
-		CellType resource = World.getInstance().getCell(pickUpPosition).getType();
+	public void takeResources(Position resourcePosition) {
+		logger.info("taking resource at " + resourcePosition);
+		CellType resource = World.getInstance().getCell(resourcePosition).getType();
 		boolean validResource = (resource == CellType.WOOD || resource == CellType.FOOD);
 		if (validResource)
-			World.getInstance().takeEnergy(pickUpPosition, 1);
+			World.getInstance().takeEnergy(resourcePosition, 1);
 		if (knapsack == 0 && validResource) {
 			resourceCarried = resource;
 			knapsack++;
@@ -69,6 +71,7 @@ public class Worker extends Unit {
 
 	public void dropResources() {
 		//send the resource message to the resourceAI
+		logger.info("drop resources");
 		ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
 		msg.addReceiver(getResourceAID());
 		msg.setConversationId(AggiornaRisorse.class.getSimpleName());

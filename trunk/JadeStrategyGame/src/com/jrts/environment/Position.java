@@ -1,8 +1,10 @@
 package com.jrts.environment;
 
-import java.util.List;
-
 import jade.util.leap.Serializable;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.TreeMap;
 
 public class Position implements Serializable {
 	
@@ -59,6 +61,10 @@ public class Position implements Serializable {
 		return Math.hypot(x, y);
 	}
 	
+	public boolean isNextTo(Position other) {
+		return distance(other) < 2;
+	}
+	
 	@Override
 	public Position clone(){
 		return new Position(row, col);
@@ -73,5 +79,13 @@ public class Position implements Serializable {
 	public boolean equals(Object pos){
 		Position p = (Position) pos;
 		return getRow() == p.getRow() && getCol() == p.getCol();
+	}
+
+	public Position nearest(Collection<Position> candidates) {
+		TreeMap<Double, Position> sortedMap = new TreeMap<Double, Position>();
+		for (Position position : candidates) {
+			sortedMap.put(distance(position), position);
+		}
+		return sortedMap.firstEntry().getValue();
 	}
 }

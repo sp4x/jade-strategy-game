@@ -2,13 +2,12 @@ package com.jrts.behaviours;
 
 import com.jrts.agents.Unit;
 import com.jrts.agents.Worker;
-import com.jrts.behaviours.structure.BaseBehaviour;
 import com.jrts.common.AgentStatus;
 import com.jrts.environment.CellType;
 import com.jrts.environment.Position;
 import com.jrts.environment.World;
 
-public class CollectResources extends BaseBehaviour {
+public class CollectResources extends UnitBehaviour {
 
 	/**
 	 * 
@@ -22,16 +21,16 @@ public class CollectResources extends BaseBehaviour {
 	Position cityCenter;
 
 	public CollectResources(Worker worker, CellType resource) {
-		super(false);//low priority
+		super(false, worker);
 		this.worker = worker;
 		this.resourceToCollect = resource;
 		this.cityCenter = World.getInstance().getCityCenter(worker.getTeamName());
 		this.resourcePosition = worker.findNearest(resourceToCollect);
 	}
 
-	public void baseAction() {
-		boolean nearResource = worker.getPosition().distance(resourcePosition) == 1;
-		boolean nearCityCenter = worker.getPosition().distance(cityCenter) == 1;
+	public void action() {
+		boolean nearResource = worker.getPosition().isNextTo(resourcePosition);
+		boolean nearCityCenter = worker.getPosition().isNextTo(cityCenter);
 		if (nearResource && !worker.knapsackIsFull()) {
 			worker.spendTime();
 			worker.takeResources(resourcePosition);

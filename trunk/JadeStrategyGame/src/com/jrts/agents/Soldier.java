@@ -16,20 +16,22 @@ public class Soldier extends Unit {
 	CellType resourceCarried;
 
 	public Soldier() {
-		super();
+		this(null, null);
 	}
 
-	public Soldier(Position position) {
-		super(position);
-	}
 
-	@Override
-	protected void setup(){
-		super.setup();
+	public Soldier(String id, Position position) {
+		super(id, position);
 		setLife(GameConfig.SOLDIER_LIFE);
 		setSpeed(GameConfig.SOLDIER_SPEED);
 		setForceOfAttack(GameConfig.SOLDIER_DAMAGES);
 		setSight(GameConfig.SOLDIER_SIGHT);
+	}
+
+
+	@Override
+	protected void setup(){
+		super.setup();
 		
 		switchStatus(AgentStatus.FREE);
 		

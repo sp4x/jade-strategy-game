@@ -13,14 +13,14 @@ import com.jrts.environment.Floor;
 import com.jrts.environment.Position;
 
 public class PathfindingTest {
-	
-	//+ start
-	//X obstacle
-	//* end pos
-	//- free pos
+
+	// + start
+	// X obstacle
+	// * end pos
+	// - free pos
 
 	@Test
-	//+--*x
+	// +--*x
 	public void test1() {
 		Floor f = new Floor(1, 5);
 		f.set(0, 4, new Cell(CellType.OBSTACLE));
@@ -30,11 +30,11 @@ public class PathfindingTest {
 		Position end = start.followPath(path);
 		assertEquals(new Position(0, 3), end);
 	}
-	
+
 	@Test
-	//----*
-	//+--xx
-	//----*
+	// ----*
+	// +--xx
+	// ----*
 	public void test2() {
 		Floor f = new Floor(3, 5);
 		f.set(1, 4, new Cell(CellType.OBSTACLE));
@@ -43,7 +43,28 @@ public class PathfindingTest {
 		Position target = new Position(1, 4);
 		List<Direction> path = Utils.calculatePath(f, start, target, true);
 		Position end = start.followPath(path);
-		assertTrue(end.equals(new Position(0, 4)) || end.equals(new Position(2, 4)));
+		assertTrue(end.equals(new Position(0, 4))
+				|| end.equals(new Position(2, 4)));
+	}
+
+	@Test
+	// -----
+	// --xx-
+	// +-x*-
+	// --xx-
+	// -----
+	public void test3() {
+		Floor f = new Floor(5, 5);
+		Position[] obstacles = { new Position(1, 2), new Position(1, 3),
+				new Position(2, 2), new Position(3, 2), new Position(3, 3) };
+		for (int i = 0; i < obstacles.length; i++) {
+			f.set(obstacles[i], new Cell(CellType.OBSTACLE));
+		}
+		Position start = new Position(2, 0);
+		Position target = new Position(2, 3);
+		List<Direction> path = Utils.calculatePath(f, start, target, true);
+		Position end = start.followPath(path);
+		assertEquals(target, end);
 	}
 
 }

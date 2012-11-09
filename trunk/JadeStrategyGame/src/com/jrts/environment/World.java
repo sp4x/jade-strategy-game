@@ -67,19 +67,14 @@ public class World {
 	 */
 	public synchronized boolean move(Position source, Direction d) {
 		ThreadMonitor.getInstance().doWait();
-		boolean result;
 		Position destination = source.step(d);
-		Cell srcCell = floor.get(source.row, source.col);
+		Cell srcCell = floor.get(source);
 		if (isAvailable(destination)) {
-			floor.set(source.row, source.col, new Cell(CellType.FREE));
-			floor.set(destination.row, destination.col, srcCell);
-			source.row = destination.row;
-			source.col = destination.col;
-			result = true;
-		} else {
-			result = false;
-		}
-		return result;
+			floor.set(source, new Cell(CellType.FREE));
+			floor.set(destination, srcCell);
+			return true;
+		} 
+		return false;
 	}
 
 	boolean addObject(Cell objectType, Position p) {
@@ -274,7 +269,7 @@ public class World {
 			return amount;
 		} else {
 			int taken = targetCell.resourceEnergy;
-			targetCell.resourceEnergy = 0;
+			floor.set(target.row, target.col, new Cell(CellType.FREE));
 			return taken;
 		}
 	}
