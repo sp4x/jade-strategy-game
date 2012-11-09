@@ -18,10 +18,7 @@ public class ThreadMonitor {
 		if (enabled)
 			try {
 				wait();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			} catch (InterruptedException e) {}
 	}
 	
 	public synchronized void sendNotifyAll() {

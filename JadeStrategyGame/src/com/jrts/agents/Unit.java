@@ -186,7 +186,6 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 		try {
 			Thread.sleep(GameConfig.REFRESH_TIME / getSpeed());
 		} catch (InterruptedException e) {
-			e.printStackTrace();
 		}
 	}
 
@@ -195,7 +194,6 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 		try {
 			Thread.sleep(GameConfig.REFRESH_TIME * r.nextInt(5));
 		} catch (InterruptedException e) {
-			e.printStackTrace();
 		}
 	}
 
