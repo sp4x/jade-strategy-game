@@ -89,22 +89,23 @@ public class TeamVisibilityPanel extends JPanel {
 					Cell cell = this.team.getWorldMap().get(j, i);
 					CellType type = cell.getType();
 					if(type.equals(CellType.UNKNOWN))
-						g2d.setPaint(Color.BLACK);
-					//TODO: Food color? not red
-					else if(type.equals(CellType.WOOD) || type.equals(CellType.FOOD))
+						g2d.setPaint(Color.DARK_GRAY);
+					else if(type.equals(CellType.WOOD))
 						g2d.setPaint(Color.GREEN);
-					else if(type.equals(CellType.FREE))
-						g2d.setPaint(Color.WHITE);
-					else if (team.getTeamName().contains("team1"))
+					else if(type.equals(CellType.FOOD))
 						g2d.setPaint(Color.RED);
-					else if (team.getTeamName().contains("team2"))
-						g2d.setPaint(Color.BLACK);
-					else if (team.getTeamName().contains("team3"))
-						g2d.setPaint(Color.ORANGE);
-					else if (team.getTeamName().contains("team4"))
-						g2d.setPaint(Color.BLUE);
+					else if(type.equals(CellType.FREE))
+						g2d.setPaint(Color.GRAY);
+//					else if (team.getTeamName().contains("team1"))
+//						g2d.setPaint(Color.RED);
+//					else if (team.getTeamName().contains("team2"))
+//						g2d.setPaint(Color.BLACK);
+//					else if (team.getTeamName().contains("team3"))
+//						g2d.setPaint(Color.ORANGE);
+//					else if (team.getTeamName().contains("team4"))
+//						g2d.setPaint(Color.BLUE);
 					else 
-						g2d.setPaint(Color.WHITE);
+						g2d.setPaint(Color.BLUE);
 					
 					/*
 					switch (r.nextInt(50)) {

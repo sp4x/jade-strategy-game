@@ -28,6 +28,7 @@ import javax.swing.event.ChangeListener;
 import com.jrts.O2Ainterfaces.IUnit;
 import com.jrts.O2Ainterfaces.Team;
 import com.jrts.common.GameConfig;
+import com.jrts.common.ThreadMonitor;
 import com.jrts.environment.Cell;
 import com.jrts.environment.CellType;
 import com.jrts.environment.Floor;
@@ -81,7 +82,6 @@ public class MainFrame extends JFrame {
 		
 		this.teams = teams;
 		
-//		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		super.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
@@ -229,28 +229,40 @@ public class MainFrame extends JFrame {
 			@Override
 			public void run() {
 				while(!finished) {
-					try {
-						Thread.sleep(10);
-					} catch (InterruptedException e) {
-					}
+//					try {
+//						Thread.sleep(10);
+//					} catch (InterruptedException e) {
+//					}
 					update();
 				}
 			}
 		}
-
 		new Thread(new RefreshGUI()).start();
+		
+		class NotifyAgents implements Runnable {
+			@Override
+			public void run() {
+				while(!finished) {
+					try {
+						Thread.sleep(1000);
+					} catch (Exception e) {
+					}
+					/** update world panel */
+					worldViewPanel.update();
+					
+					/** update all teampanels */
+					for (int i = 0; i < topPanel.getComponentCount(); i++) {
+						if (topPanel.getComponent(i) instanceof TeamResourcePanel)
+							((TeamResourcePanel) topPanel.getComponent(i)).update();
+					}
+					ThreadMonitor.getInstance().sendNotifyAll();
+				}
+			}
+		}
+		new Thread(new NotifyAgents()).start();
 	}
 	
 	public void update() {
-		/** update world panel */
-		worldViewPanel.update();
-				
-		/** update all teampanels */
-		for (int i = 0; i < topPanel.getComponentCount(); i++) {
-			if (topPanel.getComponent(i) instanceof TeamResourcePanel)
-				((TeamResourcePanel) topPanel.getComponent(i)).update();
-		}
-		
 		/** follow the selected unit */
 		if(selectedUnit != null) {
 			showAgentInfo();

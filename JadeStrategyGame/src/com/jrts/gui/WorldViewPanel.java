@@ -80,7 +80,6 @@ public class WorldViewPanel extends JPanel {
 					labelMatrix[i][j].setIcon(ImageLoader.freeIcon);
 			}
 		}
-		ThreadMonitor.getInstance().sendNotifyAll();
 	}
 
 	public void paintComponent(Graphics g) {

@@ -31,9 +31,9 @@ public class GameConfig {
 	
 	public static final int UNIT_MOVING_ATTEMPTS = 20;
 	
-	public static int REFRESH_TIME = 4500;
-	public static final int MIN_REFRESH_TIME = 1000;
-	public static final int MAX_REFRESH_TIME = 8000;
+	public static int REFRESH_TIME = 8000;
+	public static final int MIN_REFRESH_TIME = 4000;
+	public static final int MAX_REFRESH_TIME = 12000;
 	
 	public static final float VERTICAL_OVERLAP = 1f;
 	public static final float HORIZONTAL_OVERLAP = 1.00f;
