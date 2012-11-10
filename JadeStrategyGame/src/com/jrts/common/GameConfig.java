@@ -49,4 +49,5 @@ public class GameConfig {
 	public static final int STARTUP_FOOD = 500;
 	
 	public static final int PATH_TOLERANCE = 5;
+	public static final int ICON_SIZE = 15;
 }

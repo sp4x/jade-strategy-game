@@ -5,13 +5,15 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 
 import javax.swing.BorderFactory;
+import javax.swing.Icon;
 import javax.swing.JPanel;
 
 import com.jrts.common.GameConfig;
-import com.jrts.common.ThreadMonitor;
+import com.jrts.environment.Cell;
 import com.jrts.environment.CellType;
 import com.jrts.environment.Floor;
 import com.jrts.environment.Position;
+import com.jrts.environment.World;
 import com.jrts.logic.AttacksManager;
 
 /**
@@ -43,7 +45,7 @@ public class WorldViewPanel extends JPanel {
 				super.add(label);
 			}
 
-		Dimension d = new Dimension((floor.getCols()) * ImageLoader.iconSize, (floor.getRows()) * ImageLoader.iconSize);
+		Dimension d = new Dimension((floor.getCols()) * GameConfig.ICON_SIZE, (floor.getRows()) * GameConfig.ICON_SIZE);
 		setPreferredSize(d);
 		setMinimumSize(d);
 		setMaximumSize(d);
@@ -52,32 +54,61 @@ public class WorldViewPanel extends JPanel {
 	}
 
 	public void update() {
-		AttacksManager.update();
+//		AttacksManager.update();
 		/** take a snapshot of the floor at this moment and dispay it */
+		floor = World.getInstance().getSnapshot();
 		for (int i = 0; i < floor.getRows(); i++) {
 			for (int j = 0; j < floor.getCols(); j++) {
 				CellLabel currCellLabel = labelMatrix[i][j];
-				int y = (int) (j * ImageLoader.iconSize * GameConfig.HORIZONTAL_OVERLAP);
-				int x = (int) (i * ImageLoader.iconSize * GameConfig.VERTICAL_OVERLAP);
-				currCellLabel.setBounds(y, x, ImageLoader.iconSize, ImageLoader.iconSize);
+				int y = (int) (j * GameConfig.ICON_SIZE);
+				int x = (int) (i * GameConfig.ICON_SIZE);
+				currCellLabel.setBounds(y, x, GameConfig.ICON_SIZE, GameConfig.ICON_SIZE);
 
-				if (floor.get(i, j).getType() == CellType.WORKER) {
-					labelMatrix[i][j].setIcon(ImageLoader.getWorkerImageIcon(floor.get(new Position(i, j)).getUnit().getTeamName()));
-					// labelMatrix[i][j].setIcon(ImageLoader.workerIcon);
-				} else if (floor.get(i, j).getType() == CellType.SOLDIER) {
-					labelMatrix[i][j].setIcon(ImageLoader.getSoldierImageIcon(floor.get(new Position(i, j)).getUnit().getTeamName()));
-					// labelMatrix[i][j].setIcon(ImageLoader.workerIcon);
-				} else if (floor.get(i, j).getType() == CellType.WOOD)
-					labelMatrix[i][j].setIcon(ImageLoader.treeIcon);
-				else if (floor.get(i, j).getType() == CellType.FOOD)
-					labelMatrix[i][j].setIcon(ImageLoader.foodIcon);
-				else if (floor.get(i, j).getType() == CellType.CITY_CENTER) {
-					labelMatrix[i][j].setIcon(ImageLoader.getWorkerFactoryImageIcon(floor.get(new Position(i, j)).getId()));
-					// labelMatrix[i][j].setIcon(ImageLoader.workerFactoryIcon);
-				} else if (AttacksManager.isThereAnHit(i, j))
-					labelMatrix[i][j].setIcon(ImageLoader.hitIcon);
-				else if (floor.get(i, j).getType() == CellType.FREE)
-					labelMatrix[i][j].setIcon(ImageLoader.freeIcon);
+				Icon icon = null;
+				Cell currCell = floor.get(i, j);
+				switch (currCell.getType()) {
+				case WORKER:
+					if (currCell.getUnit() == MainFrame.getInstance().selectedUnit)
+						icon = ImageLoader.getSelectedWorkerImageIcon(floor.get(new Position(i, j)).getUnit().getTeamName());
+					else
+						icon = ImageLoader.getWorkerImageIcon(floor.get(new Position(i, j)).getUnit().getTeamName());
+					break;
+				case SOLDIER:
+					if (currCell.getUnit() == MainFrame.getInstance().selectedUnit)
+						icon = ImageLoader.getSelectedSoldierImageIcon(floor.get(new Position(i, j)).getUnit().getTeamName());
+					else
+						icon = ImageLoader.getSoldierImageIcon(floor.get(new Position(i, j)).getUnit().getTeamName());
+					break;
+				case CITY_CENTER: 
+					if (currCellLabel.isSelected())
+						icon = ImageLoader.getSelectedWorkerFactoryImageIcon(floor.get(new Position(i, j)).getId());
+					else
+						icon = ImageLoader.getWorkerFactoryImageIcon(floor.get(new Position(i, j)).getId());
+					break;
+				case WOOD:
+					if (currCellLabel.isSelected())
+						icon = ImageLoader.treeIcon_s;
+					else
+						icon = ImageLoader.treeIcon;
+					break;
+				case FOOD:
+					if (currCellLabel.isSelected())
+						icon = ImageLoader.farmIcon_s;
+					else
+						icon = ImageLoader.farmIcon;
+					break;
+				default:
+					if (currCellLabel.isSelected())
+						icon = ImageLoader.freeIcon_s;
+					else
+						icon = ImageLoader.freeIcon;
+					break;
+				}
+				
+//				if (AttacksManager.isThereAnHit(i, j))
+//					icon = ImageLoader.hitIcon;
+				
+				currCellLabel.setIcon(icon);
 			}
 		}
 	}
