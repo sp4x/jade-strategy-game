@@ -17,15 +17,12 @@ public class CellLabel extends JLabel {
 	private static final long serialVersionUID = 1L;
 	int i;
 	int j;
-	
+	boolean selected;
 	Border selectedBorder = BorderFactory.createLineBorder(Color.green, 2);
-	Border defaultBorder = BorderFactory.createLineBorder(Color.black, 0);
 	
 	public CellLabel(int row, int col) {
 		this.i = row;
 		this.j = col;
-		
-		setBorder(defaultBorder);
 		
 		super.addMouseListener(new MouseAdapter() {
 			@Override
@@ -44,12 +41,12 @@ public class CellLabel extends JLabel {
 					if(cell.getType() != CellType.WORKER && cell.getType() != CellType.SOLDIER 
 							&& cell.getType() != CellType.CITY_CENTER)
 					{
-//						if(MainFrame.getInstance().clickType.equals(MainFrame.addTreeClick))
-//							World.getInstance().getFloor().set(CellLabel.this.i, CellLabel.this.j, new Cell(CellType.WOOD));
-//						else if(MainFrame.getInstance().clickType.equals(MainFrame.addFoodClick))
-//							World.getInstance().getFloor().set(CellLabel.this.i, CellLabel.this.j, new Cell(CellType.FOOD));
-//						else if(MainFrame.getInstance().clickType.equals(MainFrame.deleteCellClick))
-//							World.getInstance().getFloor().set(CellLabel.this.i, CellLabel.this.j, new Cell(CellType.FREE));
+						if(MainFrame.getInstance().clickType.equals(MainFrame.addTreeClick))
+							World.getInstance().getFloor().set(CellLabel.this.i, CellLabel.this.j, new Cell(CellType.WOOD));
+						else if(MainFrame.getInstance().clickType.equals(MainFrame.addFoodClick))
+							World.getInstance().getFloor().set(CellLabel.this.i, CellLabel.this.j, new Cell(CellType.FOOD));
+						else if(MainFrame.getInstance().clickType.equals(MainFrame.deleteCellClick))
+							World.getInstance().getFloor().set(CellLabel.this.i, CellLabel.this.j, new Cell(CellType.FREE));
 					}
 				}
 			}
@@ -76,12 +73,16 @@ public class CellLabel extends JLabel {
 		this.j = j;
 	}
 
-
+	public boolean isSelected() {
+		return selected;
+	}
+	
 	public void setSelected(boolean selected) {
-		if (selected) {
-			setBorder(selectedBorder);
-		} else {
-			setBorder(defaultBorder);
-		}
+		this.selected = selected;
+//		if (selected) {
+//			setBorder(selectedBorder);
+//		} else {
+//			setBorder(null);
+//		}
 	}
 }

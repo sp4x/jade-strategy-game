@@ -7,6 +7,7 @@ import java.util.Random;
 import java.util.logging.Logger;
 
 import com.jrts.O2Ainterfaces.IUnit;
+import com.jrts.common.ThreadMonitor;
 
 public class World {
 
@@ -20,7 +21,7 @@ public class World {
 
 	private static World instance = null;
 
-	final Floor floor;
+	private final Floor floor;
 
 	private final Map<String, Position> teams;
 
@@ -58,7 +59,7 @@ public class World {
 	}
 
 	
-	public boolean doMovement(Position source, Direction d) {
+	public synchronized boolean doMovement(Position source, Direction d) {
 		Position destination = source.step(d);
 		Cell srcCell = floor.get(source);
 		if (isAvailable(destination)) {
@@ -78,8 +79,10 @@ public class World {
 	 *            the direction
 	 * @return true if the movement has been performed
 	 */
-	public synchronized boolean move(Position source, Direction d) {
-		return doMovement(source, d);
+	public boolean move(Position source, Direction d) {
+		boolean b = doMovement(source, d);
+		ThreadMonitor.getInstance().doWait();
+		return b;
 	}
 
 	boolean addObject(Cell objectType, Position p) {
@@ -231,10 +234,9 @@ public class World {
 		return teams.get(teamName);
 	}
 
-	public synchronized Floor getSnapshot() {
-		return new Floor(floor);
+	public Floor getFloor() {
+		return floor;
 	}
-	
 
 	/**
 	 * Returns the perceived floor in a certain position with the specified
