@@ -16,11 +16,6 @@ import com.jrts.environment.World;
 
 public class FollowPathTest {
 	
-	@Before
-	public void setUp() {
-		ThreadMonitor.disable();
-	}
-	
 	
 	@Test
 	// -++++--

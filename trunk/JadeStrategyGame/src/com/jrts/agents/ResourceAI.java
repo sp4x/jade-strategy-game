@@ -5,17 +5,16 @@ import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 
-import com.jrts.behaviours.UpdateWorkersTable;
+import com.jrts.behaviours.UpdateUnitTable;
 import com.jrts.common.AgentStatus;
 import com.jrts.common.GameConfig;
 import com.jrts.common.Order;
-import com.jrts.common.WorkersMap;
+import com.jrts.common.UnitTable;
 import com.jrts.messages.AggiornaRisorse;
 
 @SuppressWarnings("serial")
 public class ResourceAI extends GoalBasedAI {
 
-	WorkersMap workersMap = new WorkersMap();
 	int workersCounter = 0;
 
 	public ResourceAI() {
@@ -59,7 +58,7 @@ public class ResourceAI extends GoalBasedAI {
 			}
 		});
 
-		addBehaviour(new UpdateWorkersTable(this));
+		addBehaviour(new UpdateUnitTable(this, Worker.class));
 
 		// trains and gives order to workers
 		addBehaviour(new CyclicBehaviour() {
@@ -77,7 +76,7 @@ public class ResourceAI extends GoalBasedAI {
 						workersCounter++;
 					}
 				}
-				AID freeWorker = workersMap.getFreeWorker();
+				AID freeWorker = unitTable.getFreeUnits();
 				if (freeWorker != null) {
 					/*
 					String newStatus = (resourcesContainer.getFood() > resourcesContainer.getWood() ? AgentStatus.WOOD_CUTTING
@@ -87,7 +86,7 @@ public class ResourceAI extends GoalBasedAI {
 					Order order = (resourcesContainer.getFood() > resourcesContainer.getWood() ? new Order(AgentStatus.WOOD_CUTTING)
 							: new Order(AgentStatus.FOOD_COLLECTING));
 					changeAgentStatus(freeWorker, order);
-					workersMap.put(freeWorker, order.getOrder());
+					unitTable.put(freeWorker, order.getOrder());
 				} else {
 					//logger.info("no free workers");
 				}
@@ -97,28 +96,28 @@ public class ResourceAI extends GoalBasedAI {
 	}
 
 	public boolean assignWoodcutter() {
-		AID worker = workersMap.getFreeWorker();
+		AID worker = unitTable.getFreeUnits();
 		if (worker != null) {
 			Order order = new Order(AgentStatus.WOOD_CUTTING);
 			changeAgentStatus(worker, order);
-			workersMap.put(worker, order.getOrder());
+			unitTable.put(worker, order.getOrder());
 			return true;
 		}
 		return false;
 	}
 
 	public boolean assignFoodCollector() {
-		AID worker = workersMap.getFreeWorker();
+		AID worker = unitTable.getFreeUnits();
 		if (worker != null) {
 			Order order = new Order(AgentStatus.FOOD_COLLECTING);
-			workersMap.put(worker, order.getOrder());
+			unitTable.put(worker, order.getOrder());
 			return true;
 		}
 		return false;
 	}
 
-	public WorkersMap getWorkersMap() {
-		return workersMap;
+	public UnitTable getWorkersMap() {
+		return unitTable;
 	}
 
 	@Override

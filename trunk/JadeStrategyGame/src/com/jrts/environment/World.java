@@ -55,7 +55,7 @@ public class World {
 	}
 
 	
-	public boolean doMovement(Position source, Direction d) {
+	boolean doMovement(Position source, Direction d) {
 		Position destination = source.step(d);
 		Cell srcCell = floor.get(source);
 		if (isAvailable(destination)) {

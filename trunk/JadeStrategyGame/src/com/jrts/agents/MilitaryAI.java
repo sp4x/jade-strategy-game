@@ -6,11 +6,10 @@ import jade.core.behaviours.WakerBehaviour;
 import java.util.HashMap;
 
 import com.jrts.behaviours.PatrolBehaviour;
-import com.jrts.behaviours.UpdateSoldiersTable;
+import com.jrts.behaviours.UpdateUnitTable;
 import com.jrts.common.AgentStatus;
 import com.jrts.common.GameConfig;
 import com.jrts.common.Order;
-import com.jrts.common.SoldiersMap;
 import com.jrts.common.Utils;
 import com.jrts.environment.Direction;
 import com.jrts.environment.Position;
@@ -20,7 +19,6 @@ import com.jrts.environment.World;
 public class MilitaryAI extends GoalBasedAI {
 	private static final long serialVersionUID = 9114684864072759345L;
 
-	SoldiersMap soldierMap = new SoldiersMap();
 	int soldierCounter = 0;
 	
 	@Override
@@ -29,7 +27,7 @@ public class MilitaryAI extends GoalBasedAI {
 		
 		// TODO che cazzo deve fare la milaryAI?
 		
-		addBehaviour(new UpdateSoldiersTable(this));
+		addBehaviour(new UpdateUnitTable(this, Soldier.class));
 
 		addBehaviour(new WakerBehaviour(this, 5000) {
 			private static final long serialVersionUID = 1746608629262055814L;
@@ -81,7 +79,7 @@ public class MilitaryAI extends GoalBasedAI {
 
 	public void addPatroler()
 	{
-		AID soldier = this.getSoldierMap().getFreeSoldier();
+		AID soldier = this.getUnitTable().getFreeUnits();
 		if(soldier != null){
 			
 			Position p = World.getInstance().getCityCenter(getTeamName());
@@ -138,7 +136,4 @@ public class MilitaryAI extends GoalBasedAI {
 		// TODO Auto-generated method stub
 	}
 
-	public SoldiersMap getSoldierMap() {
-		return soldierMap;
-	}
 }

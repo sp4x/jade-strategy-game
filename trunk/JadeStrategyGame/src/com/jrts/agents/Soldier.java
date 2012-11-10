@@ -31,7 +31,7 @@ public class Soldier extends Unit {
 	protected void setup(){
 		super.setup();
 		
-		switchStatus(AgentStatus.FREE_SOLDIER);
+		switchStatus(AgentStatus.FREE);
 		
 		//explore();
 		//patrol(Direction.UP, PatrolBehaviour.DISTANCE_LITTLE);
