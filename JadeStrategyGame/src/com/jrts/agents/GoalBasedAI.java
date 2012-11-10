@@ -10,6 +10,7 @@ import com.jrts.common.AgentStatus;
 import com.jrts.common.Order;
 import com.jrts.common.ResourcesContainer;
 import com.jrts.common.UnitFactory;
+import com.jrts.common.UnitTable;
 import com.jrts.messages.GoalLevels;
 
 public abstract class GoalBasedAI extends JrtsAgent {
@@ -21,6 +22,8 @@ public abstract class GoalBasedAI extends JrtsAgent {
 	GoalLevels goalLevels;
 	UnitFactory unitFactory;
 	ResourcesContainer resourcesContainer;
+	
+	UnitTable unitTable = new UnitTable();
 	
 	public GoalBasedAI() {
 		
@@ -89,8 +92,10 @@ public abstract class GoalBasedAI extends JrtsAgent {
 		
 		send(msg);
 	}
-	
-	
 
+	public UnitTable getUnitTable() {
+		return unitTable;
+	}
+	
 	
 }

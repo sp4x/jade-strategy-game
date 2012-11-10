@@ -5,19 +5,18 @@ import jade.core.AID;
 import java.util.HashMap;
 
 
-public class SoldiersMap extends HashMap<AID, String> {
+public class UnitTable extends HashMap<AID, String> {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	public AID getFreeSoldier() {
+	public AID getFreeUnits() {
 		for (AID agent : keySet()) {
-			if (get(agent).equals(AgentStatus.FREE_SOLDIER))
+			if (get(agent).equals(AgentStatus.FREE))
 				return agent;
 		}
-		
 		return null;
 	}
 
