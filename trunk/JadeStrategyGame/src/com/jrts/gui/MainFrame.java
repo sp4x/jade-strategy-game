@@ -30,6 +30,7 @@ import com.jrts.environment.Cell;
 import com.jrts.environment.CellType;
 import com.jrts.environment.Floor;
 import com.jrts.environment.Position;
+import com.jrts.environment.World;
 
 /**
  * Graphic interface, allow to create the environment configuration and display
@@ -272,6 +273,8 @@ public class MainFrame extends JFrame {
 		if (selectedUnit != null) {
 			showAgentInfo();
 			setSelectedCell(selectedUnit.getPosition().getRow(), selectedUnit.getPosition().getCol());
+		} else {
+			showCellInfo(selectedRow, selectedCol);
 		}
 
 		/** update world panel */
@@ -280,32 +283,24 @@ public class MainFrame extends JFrame {
 		repaint();
 	}
 
-	protected void showCellInfo(int i, int j, int energy) {
-		Cell cell = floor.get(new Position(i, j));
+	protected void showCellInfo(int i, int j) {
+		Cell cell = World.getInstance().getCell(new Position(i, j));
 
-		try {
-			if (cell.getId().isEmpty() || cell.getId().trim().equals(""))
+		if (cell.getUnit() == null) {
+			try {
+				if (cell.getId().isEmpty() || cell.getId().trim().equals(""))
+					labelTeam.setText("None");
+				else
+					labelTeam.setText(cell.getId());
+			} catch (NullPointerException e) {
 				labelTeam.setText("None");
-			else
-				labelTeam.setText(cell.getId());
-		} catch (NullPointerException e) {
-			labelTeam.setText("None");
+			}
+	
+			labelType.setText(cell.getType().toString());
+			labelPosition.setText(i + ", " + j);
+			labelEnergy.setText(String.valueOf(cell.getResourceEnergy()));
+			labelAction.setText("nothing");
 		}
-
-		if (cell.getType().equals(CellType.CITY_CENTER))
-			labelType.setText("Town Center");
-		else if (cell.getType().equals(CellType.FOOD))
-			labelType.setText("Food");
-		else if (cell.getType().equals(CellType.WOOD))
-			labelType.setText("Wood");
-		else if (cell.getType().equals(CellType.FREE))
-			labelType.setText("Ground");
-		else
-			labelType.setText("Cell");
-
-		labelPosition.setText(i + ", " + j);
-		labelEnergy.setText(String.valueOf(energy));
-		labelAction.setText("nothing");
 	}
 
 	protected void showAgentInfo() {
@@ -327,8 +322,10 @@ public class MainFrame extends JFrame {
 
 	public void setSelectedCell(int row, int col) {
 		worldViewPanel.labelMatrix[row][col].setSelected(true);
-		worldViewPanel.labelMatrix[selectedRow][selectedCol].setSelected(false);
-		selectedRow = row;
-		selectedCol = col;
+		if (selectedRow != row || selectedCol != col) {
+			worldViewPanel.labelMatrix[selectedRow][selectedCol].setSelected(false);
+			selectedRow = row;
+			selectedCol = col;
+		}
 	}
 }
