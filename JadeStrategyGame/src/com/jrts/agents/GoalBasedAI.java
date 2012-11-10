@@ -1,9 +1,9 @@
 package com.jrts.agents;
 
-import java.io.IOException;
-
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
+
+import java.io.IOException;
 
 import com.jrts.behaviours.CheckGoals;
 import com.jrts.common.AgentStatus;

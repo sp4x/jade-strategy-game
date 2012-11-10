@@ -2,6 +2,7 @@ package com.jrts.agents;
 
 import jade.core.AID;
 import jade.core.behaviours.CyclicBehaviour;
+import jade.core.behaviours.WakerBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 
@@ -25,17 +26,17 @@ public class ResourceAI extends GoalBasedAI {
 	protected void setup() {
 		super.setup();
 
+		 unitFactory.trainUnit(Worker.class);
 		// unitFactory.trainUnit(Worker.class);
-		// // unitFactory.trainUnit(Worker.class);
-		// //
-		// // // order someone to cut wood
-		// addBehaviour(new WakerBehaviour(this, 5000) {
-		// @Override
-		// protected void handleElapsedTimeout() {
-		// assignWoodcutter();
-		// // assignFoodCollector();
-		// }
-		// });
+		//
+		// // order someone to cut wood
+		 addBehaviour(new WakerBehaviour(this, 5000) {
+		 @Override
+			protected void handleElapsedTimeout() {
+				assignWoodcutter();
+//				assignFoodCollector();
+			}
+		});
 
 		// listen for resources update by the workers
 		addBehaviour(new CyclicBehaviour(this) {

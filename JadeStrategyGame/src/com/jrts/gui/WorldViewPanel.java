@@ -10,7 +10,6 @@ import javax.swing.JPanel;
 
 import com.jrts.common.GameConfig;
 import com.jrts.environment.Cell;
-import com.jrts.environment.CellType;
 import com.jrts.environment.Floor;
 import com.jrts.environment.Position;
 import com.jrts.environment.World;

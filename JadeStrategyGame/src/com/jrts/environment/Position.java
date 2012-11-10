@@ -85,13 +85,18 @@ public class Position implements Serializable {
 	public String toString() {
 		return "(" + Integer.toString(row) + "," + Integer.toString(col) + ")";
 	}
+	
+	@Override
+	public int hashCode() {
+		return row*1000 + col;
+	}
 
 	@Override
 	public boolean equals(Object pos){
 		Position p = (Position) pos;
 		return getRow() == p.getRow() && getCol() == p.getCol();
 	}
-
+	
 	public Position nearest(Collection<Position> candidates) {
 		TreeMap<Double, Position> sortedMap = new TreeMap<Double, Position>();
 		for (Position position : candidates) {

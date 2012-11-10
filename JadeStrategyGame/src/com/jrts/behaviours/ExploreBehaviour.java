@@ -1,8 +1,6 @@
 package com.jrts.behaviours;
 
-import java.util.GregorianCalendar;
 import java.util.LinkedList;
-import java.util.Random;
 
 import com.jrts.agents.Soldier;
 import com.jrts.common.Utils;

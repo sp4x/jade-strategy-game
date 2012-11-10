@@ -1,7 +1,5 @@
 package com.jrts.environment;
 
-import java.util.Random;
-
 import com.jrts.common.Utils;
 
 public enum Direction{

@@ -5,18 +5,21 @@ public class Hit {
 	Position pos;
 	int damage;
 	Direction dir;
+	int range;
 	boolean enabled = true;
 	
-	public Hit(Position pos, Direction dir, int damage) {
+	public Hit(Position pos, Direction dir, int damage, int hitRange) {
 		super();
 		this.pos = pos;
 		this.damage = damage;
 		this.dir = dir;
+		this.range = range + 1;
 	}
 	
 	public void step(){
 		pos.setCol(pos.col + dir.colVar());
 		pos.setRow(pos.row + dir.rowVar());
+		setRange(getRange()-1);
 	}
 
 	public Position getPos() {
@@ -49,6 +52,14 @@ public class Hit {
 
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
+	}
+	
+	public int getRange() {
+		return range;
+	}
+
+	public void setRange(int range) {
+		this.range = range;
 	}
 
 	public boolean respectLimits(int rows, int cols) {

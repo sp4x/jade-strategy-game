@@ -147,14 +147,15 @@ public class Floor implements Serializable {
 	public void setCols(int cols) {
 		this.cols = cols;
 	}
-
-//	public Floor getCopy() {
-//		Floor newFloor = new Floor(rows, cols);
-//		for (int i = 0; i < rows; i++)
-//			for (int j = 0; j < cols; j++)
-//				newFloor.set(i, j, floor[i][j]);
-//		return newFloor;
-//	}
+	
+	@Override
+	public Floor clone() {
+		Floor newFloor = new Floor(rows, cols);
+		for (int i = 0; i < rows; i++)
+			for (int j = 0; j < cols; j++)
+				newFloor.set(i, j, floor[i][j]);
+		return newFloor;
+	}
 	
 	public void mergeWith(Floor info) {
 		if (rows == info.rows && cols == info.cols) {
