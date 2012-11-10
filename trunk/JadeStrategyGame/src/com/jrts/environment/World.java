@@ -14,8 +14,10 @@ public class World {
 	private static int WOOD_ENERGY = 100;
 	private static int FOOD_ENERGY = 10000;
 	private static int BUILDING_ENERGY = 1000;
-	private static int FOOD_MIN_DISTANCE = 2;
-	private static int FOOD_MAX_DISTANCE = 4;
+	private static int FOOD_MIN_DISTANCE = 3;
+	private static int FOOD_MAX_DISTANCE = 5;
+	private static int WOOD_MIN_DISTANCE = 3;
+	private static int WOOD_MAX_DISTANCE = 5;
 
 	private static World instance = null;
 
@@ -78,8 +80,9 @@ public class World {
 	 * @return true if the movement has been performed
 	 */
 	public boolean move(Position source, Direction d) {
+		boolean b = doMovement(source, d);
 		ThreadMonitor.getInstance().doWait();
-		return doMovement(source, d);
+		return b;
 	}
 
 	boolean addObject(Cell objectType, Position p) {
@@ -184,11 +187,17 @@ public class World {
 		} while (!addObject(base, startP));
 		
 		teams.put(name, startP);
+		
+		// put a food and a wood resource near the city center
 		Position foodPosition = near(startP, FOOD_MIN_DISTANCE, FOOD_MAX_DISTANCE);
-
 		Cell food = new Cell(CellType.FOOD);
 		food.resourceEnergy = FOOD_ENERGY;
 		addObject(food, foodPosition);
+		
+		Position woodPosition = near(startP, WOOD_MIN_DISTANCE, WOOD_MAX_DISTANCE);
+		Cell wood = new Cell(CellType.WOOD);
+		wood.resourceEnergy = WOOD_ENERGY;
+		addObject(wood, woodPosition);
 
 		logger .info("TEAM " + name + " added in " + startP.toString());
 	}

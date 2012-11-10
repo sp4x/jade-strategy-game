@@ -39,14 +39,11 @@ public class CellLabel extends JLabel {
 						MainFrame.getInstance().selectedUnit = null;
 						MainFrame.getInstance().showCellInfo(i, j, cell.getResourceEnergy());
 						MainFrame.getInstance().setSelectedCell(i,j);
-						
 					}
 				} else {
-					if(cell.getType() != CellType.WORKER)
+					if(cell.getType() != CellType.WORKER && cell.getType() != CellType.SOLDIER 
+							&& cell.getType() != CellType.CITY_CENTER)
 					{
-//						JOptionPane.showMessageDialog(MainFrame.getInstance(), 
-//								"Tipo Cell:" + cell.toString() + " Posizione: " + i + " - " + j);
-						
 						if(MainFrame.getInstance().clickType.equals(MainFrame.addTreeClick))
 							World.getInstance().getFloor().set(CellLabel.this.i, CellLabel.this.j, new Cell(CellType.WOOD));
 						else if(MainFrame.getInstance().clickType.equals(MainFrame.addFoodClick))
