@@ -1,11 +1,8 @@
 package com.jrts.gui;
 import jade.core.Runtime;
 import jade.wrapper.AgentContainer;
-import jade.wrapper.ControllerException;
-import jade.wrapper.StaleProxyException;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
@@ -28,7 +25,6 @@ import javax.swing.event.ChangeListener;
 import com.jrts.O2Ainterfaces.IUnit;
 import com.jrts.O2Ainterfaces.Team;
 import com.jrts.common.GameConfig;
-import com.jrts.common.ThreadMonitor;
 import com.jrts.environment.Cell;
 import com.jrts.environment.CellType;
 import com.jrts.environment.Floor;
@@ -77,7 +73,7 @@ public class MainFrame extends JFrame {
 		mainFrame = new MainFrame(floor, teams, ac);
 	}
 	
-	protected MainFrame(Floor floor, List<Team> teams, final AgentContainer ac) {
+	protected MainFrame(final Floor floor, List<Team> teams, final AgentContainer ac) {
 		super();
 		
 		this.teams = teams;
@@ -247,6 +243,7 @@ public class MainFrame extends JFrame {
 						Thread.sleep(1000);
 					} catch (Exception e) {
 					}
+					floor.lock();
 					/** update world panel */
 					worldViewPanel.update();
 					
@@ -255,7 +252,7 @@ public class MainFrame extends JFrame {
 						if (topPanel.getComponent(i) instanceof TeamResourcePanel)
 							((TeamResourcePanel) topPanel.getComponent(i)).update();
 					}
-					ThreadMonitor.getInstance().sendNotifyAll();
+					floor.endUpdate();
 				}
 			}
 		}
