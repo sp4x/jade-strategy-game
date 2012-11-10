@@ -35,7 +35,7 @@ public class CellLabel extends JLabel {
 						MainFrame.getInstance().selectedUnit = cell.getUnit();
 					} else {
 						MainFrame.getInstance().selectedUnit = null;
-						MainFrame.getInstance().showCellInfo(i, j, cell.getResourceEnergy());
+						MainFrame.getInstance().showCellInfo(i, j);
 						MainFrame.getInstance().setSelectedCell(i,j);
 					}
 				} else {
