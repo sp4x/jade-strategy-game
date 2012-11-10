@@ -19,8 +19,8 @@ public class WorldTest {
 		World w = World.getInstance();
 		final Position p1 = new Position(0, 0);
 		final Position p2 = new Position(1, 0);
-		w.getFloor().set(p1, new Cell(CellType.SOLDIER));
-		w.getFloor().set(p2, new Cell(CellType.SOLDIER));
+		w.floor.set(p1, new Cell(CellType.SOLDIER));
+		w.floor.set(p2, new Cell(CellType.SOLDIER));
 
 		Thread moveW1 = new Thread() {
 
