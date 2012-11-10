@@ -54,7 +54,7 @@ public class WorldViewPanel extends JPanel {
 	}
 
 	public void update() {
-//		AttacksManager.update();
+		AttacksManager.update();
 		/** take a snapshot of the floor at this moment and dispay it */
 		floor = World.getInstance().getSnapshot();
 		for (int i = 0; i < floor.getRows(); i++) {

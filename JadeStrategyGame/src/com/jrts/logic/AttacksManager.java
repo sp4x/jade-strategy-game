@@ -1,18 +1,19 @@
 package com.jrts.logic;
 
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 import com.jrts.common.GameConfig;
 import com.jrts.environment.Cell;
 import com.jrts.environment.CellType;
 import com.jrts.environment.Direction;
-import com.jrts.environment.Floor;
 import com.jrts.environment.Hit;
 import com.jrts.environment.Position;
 import com.jrts.environment.World;
 
 public class AttacksManager {
 
+	static Logger logger = Logger.getLogger(AttacksManager.class.getName());
 	private static ArrayList<Hit> hits;
 	private static int counter;
 	
@@ -54,7 +55,7 @@ public class AttacksManager {
 			Position hp = hits.get(i).getPos();
 			Cell cell = World.getInstance().getCell(hp);
 			if(cell.getType() != CellType.FREE){
-				System.out.println("Detected collision");
+				logger.info("Detected collision");
 				Hit hit = hits.remove(i);
 				Position pos = hit.getPos();
 				int damage = hit.getDamage();

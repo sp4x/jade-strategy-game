@@ -82,7 +82,7 @@ public class UnitFactory extends Thread {
 			}
 		}
 		else{
-			System.out.println(team + ":Cannot instantiate the unit");
+			logger.severe(team + ":Cannot instantiate the unit");
 		}
 	}
 }

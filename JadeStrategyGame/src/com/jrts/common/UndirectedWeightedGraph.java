@@ -1,5 +1,8 @@
 package com.jrts.common;
 
+
+import java.util.logging.Logger;
+
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.SimpleWeightedGraph;
 
@@ -7,6 +10,8 @@ public class UndirectedWeightedGraph extends SimpleWeightedGraph<String, Default
 
 	private static final long serialVersionUID = 1L;
 
+	Logger logger = Logger.getLogger(UndirectedWeightedGraph.class.getName());
+	
 	public UndirectedWeightedGraph () {
 		super(DefaultWeightedEdge.class);
 	}
@@ -26,14 +31,14 @@ public class UndirectedWeightedGraph extends SimpleWeightedGraph<String, Default
 	
 	@Override
 	public String toString() {
-		System.out.println("Nodes");
+		logger.info("Nodes");
 		for( String v : vertexSet())
 			System.out.print(v + " ");
-		System.out.println(".");
+		logger.info(".");
 		
-		System.out.println("Edges");
+		logger.info("Edges");
 		for( DefaultWeightedEdge edge: edgeSet())
-			System.out.println(getEdgeSource(edge)+","+getEdgeTarget(edge)+"="+getEdgeWeight(edge));
+			logger.info(getEdgeSource(edge)+","+getEdgeTarget(edge)+"="+getEdgeWeight(edge));
 		return super.toString();
 	}
 }
