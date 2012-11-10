@@ -6,17 +6,18 @@ import java.util.logging.Logger;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.SimpleWeightedGraph;
 
-public class UndirectedWeightedGraph extends SimpleWeightedGraph<String, DefaultWeightedEdge> {
+import com.jrts.environment.Position;
 
-	private static final long serialVersionUID = 1L;
-
+@SuppressWarnings("serial")
+public class UndirectedWeightedGraph extends SimpleWeightedGraph<Position, DefaultWeightedEdge> {
+	
 	Logger logger = Logger.getLogger(UndirectedWeightedGraph.class.getName());
 	
 	public UndirectedWeightedGraph () {
 		super(DefaultWeightedEdge.class);
 	}
 	
-	public void addWeightedEdge (String v1, String v2, double weight) {
+	public void addWeightedEdge (Position v1, Position v2, double weight) {
 		if (!containsVertex(v1))
 			addVertex(v1);
 		if (!containsVertex(v2))
@@ -32,7 +33,7 @@ public class UndirectedWeightedGraph extends SimpleWeightedGraph<String, Default
 	@Override
 	public String toString() {
 		logger.info("Nodes");
-		for( String v : vertexSet())
+		for( Position v : vertexSet())
 			System.out.print(v + " ");
 		logger.info(".");
 		
@@ -40,5 +41,24 @@ public class UndirectedWeightedGraph extends SimpleWeightedGraph<String, Default
 		for( DefaultWeightedEdge edge: edgeSet())
 			logger.info(getEdgeSource(edge)+","+getEdgeTarget(edge)+"="+getEdgeWeight(edge));
 		return super.toString();
+	}
+	
+	@Override
+	public synchronized UndirectedWeightedGraph clone() {
+		UndirectedWeightedGraph graph = new UndirectedWeightedGraph();
+		for( Position v : vertexSet())
+			graph.addVertex(v);
+		for( DefaultWeightedEdge edge: edgeSet())
+			graph.addEdge(getEdgeSource(edge), getEdgeTarget(edge));
+		return graph;
+	}
+	
+	@Override
+	public synchronized boolean removeVertex(Position vertex) {
+//		for( DefaultWeightedEdge edge: edgeSet())
+//			if(getEdgeSource(edge).equals(vertex) || getEdgeTarget(edge).equals(vertex))
+//				removeEdge(edge);
+		removeVertex(vertex);
+		return true;
 	}
 }

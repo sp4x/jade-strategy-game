@@ -21,12 +21,11 @@ public class AttacksManager {
 		hits = new ArrayList<Hit>();
 	}
 
-	public synchronized static void addHit(Position pos, Direction dir, int damage){
-		Hit hit = new Hit(pos, dir, damage);
-		//Eseguo uno spostamento per evitare che il colpo danneggi l'unita'� sorgente stessa
+	public synchronized static void addHit(Position pos, Direction dir, int damage, int hitRange){
+		Hit hit = new Hit(pos, dir, damage, hitRange);
+		//Eseguo uno spostamento per evitare che il colpo danneggi l'unita' sorgente stessa
 		hit.step();
 		hits.add(hit);
-//		System.out.println("Added new hit" + hits.size());
 	}
 	
 	public synchronized static void update() {
@@ -43,13 +42,6 @@ public class AttacksManager {
 				hit.setEnabled(false);
 		}
 		
-		//remove disabled hits
-		for (int i = 0; i < hits.size(); i++)
-			if(!hits.get(i).isEnabled()){
-				hits.remove(i);
-//				System.out.println("Removed hit");
-			}
-		
 		//check if there is some collision
 		for (int i = 0; i < hits.size(); i++){
 			Position hp = hits.get(i).getPos();
@@ -62,7 +54,16 @@ public class AttacksManager {
 				if(cell.getType() == CellType.WORKER || cell.getType() == CellType.SOLDIER)
 					World.getInstance().getCell(pos).getUnit().decreaseLife(damage);
 			}
+			else if(hits.get(i).getRange() == 0){
+				//exceeded range limit
+				hits.get(i).setEnabled(false);
+			}
 		}
+		
+		//remove disabled hits
+		for (int i = 0; i < hits.size(); i++)
+			if(!hits.get(i).isEnabled())
+				hits.remove(i);
 	}
 
 	public synchronized static boolean isThereAnHit(int row, int col) {

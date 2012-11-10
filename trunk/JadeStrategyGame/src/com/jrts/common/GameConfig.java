@@ -49,6 +49,7 @@ public class GameConfig {
 	public static final int STARTUP_FOOD = 500;
 	
 	public static final int PATH_TOLERANCE = 5;
+	public static final int HIT_RANGE = 10;
 	public static final int ICON_SIZE = 15;
 	
 	public static final int TREE_ENERGY = 500;

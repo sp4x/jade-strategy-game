@@ -43,7 +43,7 @@ public class Worker extends Unit {
 	}
 	
 	public void sendHit(Direction direction) {
-		AttacksManager.addHit(getPosition().clone(), direction, GameConfig.WORKER_DAMAGES);
+		AttacksManager.addHit(getPosition().clone(), direction, GameConfig.WORKER_DAMAGES, GameConfig.HIT_RANGE);
 	}
 	
 	public void takeResources(Position resourcePosition) {
