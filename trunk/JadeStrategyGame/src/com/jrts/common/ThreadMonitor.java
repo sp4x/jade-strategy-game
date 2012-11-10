@@ -1,5 +1,6 @@
 package com.jrts.common;
 
+@Deprecated
 public class ThreadMonitor {
 	
 	private static final ThreadMonitor instance = new ThreadMonitor();

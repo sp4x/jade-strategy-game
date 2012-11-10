@@ -7,7 +7,6 @@ import java.util.Random;
 import java.util.logging.Logger;
 
 import com.jrts.O2Ainterfaces.IUnit;
-import com.jrts.common.ThreadMonitor;
 
 public class World {
 
@@ -59,7 +58,7 @@ public class World {
 	}
 
 	
-	public synchronized boolean doMovement(Position source, Direction d) {
+	public boolean doMovement(Position source, Direction d) {
 		Position destination = source.step(d);
 		Cell srcCell = floor.get(source);
 		if (isAvailable(destination)) {
@@ -80,8 +79,9 @@ public class World {
 	 * @return true if the movement has been performed
 	 */
 	public boolean move(Position source, Direction d) {
+		floor.lock();
 		boolean b = doMovement(source, d);
-		ThreadMonitor.getInstance().doWait();
+		floor.waitForUpdate();
 		return b;
 	}
 
