@@ -2,6 +2,7 @@ package com.jrts.behaviours;
 
 import jade.core.Agent;
 import jade.core.behaviours.TickerBehaviour;
+import jade.util.Logger;
 
 import com.jrts.agents.Unit;
 import com.jrts.environment.Cell;
@@ -39,6 +40,6 @@ public class LookForEnemy extends TickerBehaviour {
 	}
 
 	private void doSomething() {
-//		System.out.println("found enemy!");
+		
 	}
 }

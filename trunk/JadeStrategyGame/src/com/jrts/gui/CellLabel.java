@@ -8,6 +8,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.border.Border;
 
+import com.jrts.common.GameConfig;
 import com.jrts.environment.Cell;
 import com.jrts.environment.CellType;
 import com.jrts.environment.Position;
@@ -41,12 +42,12 @@ public class CellLabel extends JLabel {
 					if(cell.getType() != CellType.WORKER && cell.getType() != CellType.SOLDIER 
 							&& cell.getType() != CellType.CITY_CENTER)
 					{
-//						if(MainFrame.getInstance().clickType.equals(MainFrame.addTreeClick))
-//							World.getInstance().getFloor().set(CellLabel.this.i, CellLabel.this.j, new Cell(CellType.WOOD));
-//						else if(MainFrame.getInstance().clickType.equals(MainFrame.addFoodClick))
-//							World.getInstance().getFloor().set(CellLabel.this.i, CellLabel.this.j, new Cell(CellType.FOOD));
-//						else if(MainFrame.getInstance().clickType.equals(MainFrame.deleteCellClick))
-//							World.getInstance().getFloor().set(CellLabel.this.i, CellLabel.this.j, new Cell(CellType.FREE));
+						if(MainFrame.getInstance().clickType.equals(MainFrame.addTreeClick))
+							World.getInstance().changeCell(CellLabel.this.i, CellLabel.this.j, new Cell(CellType.WOOD, GameConfig.TREE_ENERGY));
+						else if(MainFrame.getInstance().clickType.equals(MainFrame.addFoodClick))
+							World.getInstance().changeCell(CellLabel.this.i, CellLabel.this.j, new Cell(CellType.FOOD, GameConfig.FARM_ENERGY));
+						else if(MainFrame.getInstance().clickType.equals(MainFrame.deleteCellClick))
+							World.getInstance().changeCell(CellLabel.this.i, CellLabel.this.j, new Cell(CellType.FREE));
 					}
 				}
 			}

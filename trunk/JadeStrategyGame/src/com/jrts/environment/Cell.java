@@ -21,6 +21,13 @@ public class Cell implements Serializable {
 		unit = null;
 	}
 	
+	public Cell(CellType t, int energy) {
+		type = t;
+		id = null;
+		unit = null;
+		resourceEnergy = energy;
+	}
+	
 	public Cell(CellType type, String id) {
 		super();
 		this.type = type;

@@ -1,6 +1,8 @@
 package com.jrts.gui;
 
+
 import java.awt.Dimension;
+import java.util.logging.Logger;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -8,6 +10,9 @@ import javax.swing.ImageIcon;
 import com.jrts.common.GameConfig;
 
 class ImageLoader {
+	
+	static Logger logger = Logger.getLogger(ImageLoader.class.getName());
+	
 	public static ImageIcon freeIcon, workerIcon1, workerIcon2, workerIcon3, workerIcon4, 
 							treeIcon, farmIcon, woodIcon, foodIcon, workerFactoryIcon1, soldierIcon1, 
 							soldierIcon2, soldierIcon3, soldierIcon4, background,
@@ -39,7 +44,7 @@ class ImageLoader {
 	
 	public static ImageIcon getWorkerImageIcon(String id){
 		if(id == null){
-			System.out.println("Requested id null!");
+			logger.severe("Requested id null!");
 			return null;
 		}
 		if(id.equals("team1")) return workerIcon1;
@@ -52,7 +57,7 @@ class ImageLoader {
 	
 	public static ImageIcon getSelectedWorkerImageIcon(String id){
 		if(id == null){
-			System.out.println("Requested id null!");
+			logger.severe("Requested id null!");
 			return null;
 		}
 		if(id.equals("team1")) return workerIcon1_s;
@@ -65,7 +70,7 @@ class ImageLoader {
 	
 	public static Icon getSoldierImageIcon(String id) {
 		if(id == null){
-			System.out.println("Requested id null!");
+			logger.severe("Requested id null!");
 			return null;
 		}
 		
@@ -79,7 +84,7 @@ class ImageLoader {
 	
 	public static Icon getSelectedSoldierImageIcon(String id) {
 		if(id == null){
-			System.out.println("Requested id null!");
+			logger.severe("Requested id null!");
 			return null;
 		}
 		

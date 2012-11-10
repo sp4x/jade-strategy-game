@@ -50,4 +50,13 @@ public class GameConfig {
 	
 	public static final int PATH_TOLERANCE = 5;
 	public static final int ICON_SIZE = 15;
+	
+	public static final int TREE_ENERGY = 500;
+	public static final int FARM_ENERGY = 500;
+	
+	public static int BUILDING_ENERGY = 1000;
+	public static int FOOD_MIN_DISTANCE = 3;
+	public static int FOOD_MAX_DISTANCE = 5;
+	public static int WOOD_MIN_DISTANCE = 3;
+	public static int WOOD_MAX_DISTANCE = 5;
 }
