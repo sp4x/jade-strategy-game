@@ -8,6 +8,7 @@ import jade.lang.acl.MessageTemplate;
 import com.jrts.behaviours.UpdateUnitTable;
 import com.jrts.common.AgentStatus;
 import com.jrts.common.GameConfig;
+import com.jrts.common.GoalPriority;
 import com.jrts.common.Order;
 import com.jrts.common.UnitTable;
 import com.jrts.messages.AggiornaRisorse;
@@ -24,26 +25,29 @@ public class ResourceAI extends GoalBasedAI {
 	protected void setup() {
 		super.setup();
 
-//		 unitFactory.trainUnit(Worker.class);
-//		// unitFactory.trainUnit(Worker.class);
-//		//
-//		// // order someone to cut wood
-//		 addBehaviour(new WakerBehaviour(this, 5000) {
-//		 @Override
-//			protected void handleElapsedTimeout() {
-//				assignWoodcutter();
-////				assignFoodCollector();
-//			}
-//		});
+		// unitFactory.trainUnit(Worker.class);
+		// // unitFactory.trainUnit(Worker.class);
+		// //
+		// // // order someone to cut wood
+		// addBehaviour(new WakerBehaviour(this, 5000) {
+		// @Override
+		// protected void handleElapsedTimeout() {
+		// assignWoodcutter();
+		// // assignFoodCollector();
+		// }
+		// });
 
 		// listen for resources update by the workers
 		addBehaviour(new CyclicBehaviour(this) {
 			@Override
 			public void action() {
-				ACLMessage msg = receive(MessageTemplate.MatchConversationId(AggiornaRisorse.class.getSimpleName()));
+				ACLMessage msg = receive(MessageTemplate
+						.MatchConversationId(AggiornaRisorse.class
+								.getSimpleName()));
 				if (msg != null) {
 					try {
-						AggiornaRisorse aggiornamento = (AggiornaRisorse) msg.getContentObject();
+						AggiornaRisorse aggiornamento = (AggiornaRisorse) msg
+								.getContentObject();
 						int collectedFood = aggiornamento.getFood();
 						int collectedWood = aggiornamento.getWood();
 						resourcesContainer.addFood(collectedFood);
@@ -65,36 +69,71 @@ public class ResourceAI extends GoalBasedAI {
 
 			@Override
 			public void action() {
-				int numWorkers = 3 - workersCounter; 
-				for (int i = 0; i < numWorkers; i++) {
-					if (resourcesContainer.isThereEnoughFood(GameConfig.WORKER_FOOD_COST) && 
-							resourcesContainer.isThereEnoughWood(GameConfig.WORKER_WOOD_COST) ) {
-						
-						resourcesContainer.removeFood(GameConfig.WORKER_FOOD_COST);
-						resourcesContainer.removeWood(GameConfig.WORKER_WOOD_COST);
-						unitFactory.trainUnit(Worker.class);
-						workersCounter++;
-					}
-				}
-				AID freeWorker = unitTable.getFreeUnits();
-				if (freeWorker != null) {
-					/*
-					String newStatus = (resourcesContainer.getFood() > resourcesContainer.getWood() ? AgentStatus.WOOD_CUTTING
-							: AgentStatus.FOOD_COLLECTING);
-					changeAgentStatus(freeWorker, newStatus);
-					*/
-					Order order = (resourcesContainer.getFood() > resourcesContainer.getWood() ? new Order(AgentStatus.WOOD_CUTTING)
-							: new Order(AgentStatus.FOOD_COLLECTING));
-					changeAgentStatus(freeWorker, order);
-					unitTable.put(freeWorker, order.getOrder());
-				} else {
-					//logger.info("no free workers");
+				if (goalLevels != null) {
+					trainWorkers();
+					employWorker();
 				}
 			}
 		});
 
 	}
 
+	protected void employWorker() {
+		AID freeWorker = unitTable.getFreeUnits();
+		if (freeWorker != null) {
+			Order order = new Order(extimateResourceToCollect());
+			changeAgentStatus(freeWorker, order);
+			unitTable.put(freeWorker, order.getOrder());
+		} else {
+			// logger.info("no free workers");
+		}
+	}
+
+	protected void trainWorkers() {
+		int numWorkers = extimateNumWorkers() - workersCounter;
+		for (int i = 0; i < numWorkers; i++) {
+			if (resourcesContainer
+					.isThereEnoughFood(GameConfig.WORKER_FOOD_COST)
+					&& resourcesContainer
+							.isThereEnoughWood(GameConfig.WORKER_WOOD_COST)) {
+
+				resourcesContainer
+						.removeFood(GameConfig.WORKER_FOOD_COST);
+				resourcesContainer
+						.removeWood(GameConfig.WORKER_WOOD_COST);
+				unitFactory.trainUnit(Worker.class);
+				workersCounter++;
+			}
+		}
+	}
+
+	public String extimateResourceToCollect() {
+		double foodRatio;
+		if (goalLevels.getResources() == GoalPriority.HIGH) {
+			foodRatio = 2;
+		} else {
+			foodRatio = 1;
+		}
+		double food = (double) resourcesContainer.getFood();
+		double wood = (double) resourcesContainer.getWood();
+		return foodRatio * food < wood ? AgentStatus.FOOD_COLLECTING
+				: AgentStatus.WOOD_CUTTING;
+	}
+
+	public int extimateNumWorkers() {
+		switch (goalLevels.getResources()) {
+		case HIGH:
+			return 6;
+		case MEDIUM:
+			return 4;
+		case LOW:
+			return 2;
+		default:
+			return 0;
+		}
+	}
+
+	@Deprecated
 	public boolean assignWoodcutter() {
 		AID worker = unitTable.getFreeUnits();
 		if (worker != null) {
@@ -106,6 +145,7 @@ public class ResourceAI extends GoalBasedAI {
 		return false;
 	}
 
+	@Deprecated
 	public boolean assignFoodCollector() {
 		AID worker = unitTable.getFreeUnits();
 		if (worker != null) {
