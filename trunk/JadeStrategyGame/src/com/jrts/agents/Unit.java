@@ -40,7 +40,7 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 
 	String id;
 	int life;
-	int speed;
+	int speed = 4;
 	int forceOfAttack;
 	int sight;
 
@@ -184,14 +184,14 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 
 	public void spendTime() {
 		try {
-			Thread.sleep(GameConfig.REFRESH_TIME / getSpeed());
+			Thread.sleep(GameConfig.REFRESH_TIME / speed);
 		} catch (InterruptedException e) {
 		}
 	}
 
 	public void spendRandomTime() {
 		try {
-			Thread.sleep(GameConfig.REFRESH_TIME * Utils.random.nextInt(5));
+			Thread.sleep(GameConfig.REFRESH_TIME * (Utils.random.nextInt(5)+1));
 		} catch (InterruptedException e) {
 		}
 	}
