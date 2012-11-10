@@ -54,7 +54,7 @@ public class JadeStrategyGame {
 		
 		
 		/** start graphics */
-		MainFrame.start(World.getInstance().getFloor(), teams, ac);
+		MainFrame.start(World.getInstance().getSnapshot(), teams, ac);
 	}
 
 }

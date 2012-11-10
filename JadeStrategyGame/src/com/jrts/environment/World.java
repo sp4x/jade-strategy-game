@@ -20,7 +20,7 @@ public class World {
 
 	private static World instance = null;
 
-	private final Floor floor;
+	final Floor floor;
 
 	private final Map<String, Position> teams;
 
@@ -78,11 +78,8 @@ public class World {
 	 *            the direction
 	 * @return true if the movement has been performed
 	 */
-	public boolean move(Position source, Direction d) {
-		floor.lock();
-		boolean b = doMovement(source, d);
-		floor.waitForUpdate();
-		return b;
+	public synchronized boolean move(Position source, Direction d) {
+		return doMovement(source, d);
 	}
 
 	boolean addObject(Cell objectType, Position p) {
@@ -234,9 +231,10 @@ public class World {
 		return teams.get(teamName);
 	}
 
-	public Floor getFloor() {
-		return floor;
+	public synchronized Floor getSnapshot() {
+		return new Floor(floor);
 	}
+	
 
 	/**
 	 * Returns the perceived floor in a certain position with the specified

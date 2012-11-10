@@ -3,6 +3,7 @@ package com.jrts.logic;
 import java.util.ArrayList;
 
 import com.jrts.common.GameConfig;
+import com.jrts.environment.Cell;
 import com.jrts.environment.CellType;
 import com.jrts.environment.Direction;
 import com.jrts.environment.Floor;
@@ -51,13 +52,13 @@ public class AttacksManager {
 		//check if there is some collision
 		for (int i = 0; i < hits.size(); i++){
 			Position hp = hits.get(i).getPos();
-			Floor floor = World.getInstance().getFloor();
-			if(floor.get(hp).getType() != CellType.FREE){
+			Cell cell = World.getInstance().getCell(hp);
+			if(cell.getType() != CellType.FREE){
 				System.out.println("Detected collision");
 				Hit hit = hits.remove(i);
 				Position pos = hit.getPos();
 				int damage = hit.getDamage();
-				if(floor.get(hp).getType() == CellType.WORKER || floor.get(hp).getType() == CellType.SOLDIER)
+				if(cell.getType() == CellType.WORKER || cell.getType() == CellType.SOLDIER)
 					World.getInstance().getCell(pos).getUnit().decreaseLife(damage);
 			}
 		}

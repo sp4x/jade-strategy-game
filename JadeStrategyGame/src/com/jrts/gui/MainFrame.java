@@ -243,7 +243,6 @@ public class MainFrame extends JFrame {
 						Thread.sleep(1000);
 					} catch (Exception e) {
 					}
-					floor.lock();
 					/** update world panel */
 					worldViewPanel.update();
 					
@@ -252,7 +251,6 @@ public class MainFrame extends JFrame {
 						if (topPanel.getComponent(i) instanceof TeamResourcePanel)
 							((TeamResourcePanel) topPanel.getComponent(i)).update();
 					}
-					floor.endUpdate();
 				}
 			}
 		}
