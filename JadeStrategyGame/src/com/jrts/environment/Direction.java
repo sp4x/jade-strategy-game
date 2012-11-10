@@ -2,6 +2,8 @@ package com.jrts.environment;
 
 import java.util.Random;
 
+import com.jrts.common.Utils;
+
 public enum Direction{
 	RIGHT(0,1),
 	LEFT(0,-1),
@@ -19,8 +21,7 @@ public enum Direction{
 	public static Direction[] VON_NEUMANN_NEIGH = {DOWN, LEFT, RIGHT, UP};
 	
 	public static Direction random(){
-		Random r = new Random();
-		return ALL[r.nextInt(ALL.length)];
+		return ALL[Utils.random.nextInt(ALL.length)];
 	}
 	
 	private int rowVar;

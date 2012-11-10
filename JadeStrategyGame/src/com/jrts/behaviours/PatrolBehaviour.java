@@ -15,8 +15,8 @@ public class PatrolBehaviour extends UnitBehaviour {
 	private int distance = 20;
 	
 	public static final int DISTANCE_LITTLE = 5;
-	public static final int DISTANCE_MEDIUM = 10;
-	public static final int DISTANCE_BIG = 15;
+	public static final int DISTANCE_MEDIUM = 8;
+	public static final int DISTANCE_BIG = 10;
 
 	Soldier soldier;
 	Position cityCenter;
@@ -60,8 +60,8 @@ public class PatrolBehaviour extends UnitBehaviour {
 
 		if(go1) this.soldier.goThere(p2);
 		else 	this.soldier.goThere(p1);
-		
-		go1 = !go1;		
+
+		go1 = !go1;
 	}
 
 	@Override

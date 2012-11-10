@@ -1,12 +1,11 @@
 package com.jrts.environment;
 
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 import java.util.logging.Logger;
 
 import com.jrts.O2Ainterfaces.IUnit;
+import com.jrts.common.Utils;
 
 public class World {
 
@@ -26,8 +25,6 @@ public class World {
 
 	private final int rows;
 	private final int cols;
-
-	Random r = new Random(GregorianCalendar.getInstance().getTimeInMillis());
 
 	/**
 	 * I 4 booleani rappresentano i 4 angoli della mappa, ogni qual volta la base di una squadra 
@@ -108,13 +105,12 @@ public class World {
 	Position near(Position center, int minDistance, int maxDistance) {
 		int maxIterations = 10;
 		int len = maxDistance - minDistance + 1;
-		Random r = new Random();
 		Position candidate = null;
 		do {
-			int rowOffset = r.nextInt(len) + minDistance;
-			int colOffset = r.nextInt(len) + minDistance;
-			int rowMultiplier = (r.nextInt(2) == 0 ? -1 : 1);
-			int colMultiplier = (r.nextInt(2) == 0 ? -1 : 1);
+			int rowOffset = Utils.random.nextInt(len) + minDistance;
+			int colOffset = Utils.random.nextInt(len) + minDistance;
+			int rowMultiplier = (Utils.random.nextInt(2) == 0 ? -1 : 1);
+			int colMultiplier = (Utils.random.nextInt(2) == 0 ? -1 : 1);
 			int row = center.row + rowOffset * rowMultiplier;
 			int col = center.col + colOffset * colMultiplier;
 			candidate = new Position(row, col);
@@ -139,7 +135,7 @@ public class World {
 	 */
 	public void addTeam(String name) {
 		// Prendo un angolo a caso tra 0 e 3
-		int angle = r.nextInt(4);
+		int angle = Utils.random.nextInt(4);
 
 		// se l'angolo non e' occupato da un'altra squadra 
 		// lo utilizzo per mettere la base della squadra corrente,
@@ -160,7 +156,7 @@ public class World {
 		
 		// A seconda dell'angolo della mappa scelto e del valore della var n
 		// scelgo la posizione della mappa ove posizionare la base
-		int n = r.nextInt(10) + 1;
+		int n = Utils.random.nextInt(10) + 1;
 		do {
 			switch (angle) {
 			case 0:

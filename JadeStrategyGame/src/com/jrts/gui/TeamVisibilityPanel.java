@@ -7,8 +7,6 @@ import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
-import java.util.GregorianCalendar;
-import java.util.Random;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
@@ -23,8 +21,6 @@ public class TeamVisibilityPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	//Team team;
-
-	Random r = new Random(GregorianCalendar.getInstance().getTimeInMillis());
 	
 	public TeamVisibilityPanel(Team team) {
 		super(new FlowLayout());

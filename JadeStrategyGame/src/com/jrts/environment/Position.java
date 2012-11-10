@@ -6,6 +6,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.TreeMap;
 
+import com.jrts.common.GameConfig;
+
 public class Position implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -20,7 +22,15 @@ public class Position implements Serializable {
 	}
 
 	public Position step(Direction d) {
-		return new Position(row + d.rowVar(), col + d.colVar());
+		
+		Position p = new Position(row + d.rowVar(), col + d.colVar());
+		if(p.getCol() < 0) p.setCol(0);
+		else if(p.getCol() >= GameConfig.WORLD_COLS) p.setCol(GameConfig.WORLD_COLS - 1);
+		
+		if(p.getRow() < 0) p.setRow(0);
+		else if(p.getRow() >= GameConfig.WORLD_ROWS) p.setCol(GameConfig.WORLD_ROWS - 1);
+		
+		return p; //new Position(row + d.rowVar(), col + d.colVar());
 	}
 	
 	public Position followPath(List<Direction> path) {
@@ -28,6 +38,7 @@ public class Position implements Serializable {
 		for (Direction direction : path) {
 			p = p.step(direction);
 		}
+		
 		return p;
 	}
 	
