@@ -3,7 +3,8 @@ package com.jrts.environment;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.LinkedList;
-import java.util.Random;
+
+import com.jrts.common.Utils;
 
 /**
  *  This class implement a Floor built of a Cell matrix where the agent acts.
@@ -80,7 +81,6 @@ public class Floor implements Serializable {
 					cells.add(new Square(i, j));
 
 		Collections.shuffle(cells);
-		Random randomGen = new Random();
 		int size = cells.size();
 
 		if (numObjects > size)
@@ -91,7 +91,7 @@ public class Floor implements Serializable {
 		
 
 		for (int i = 0; i < numObjects; i++) {
-			int random = Math.abs(randomGen.nextInt()) % cells.size();
+			int random = Math.abs(Utils.random.nextInt()) % cells.size();
 			Square myCell = cells.remove(random);
 			floor[myCell.x][myCell.y] = objectsType;
 		}

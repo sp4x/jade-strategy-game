@@ -16,6 +16,8 @@ import com.jrts.environment.WorldMap;
 
 public class Utils {
 	
+	public static Random random = new Random(GregorianCalendar.getInstance().getTimeInMillis());
+
 	public static ArrayList<Direction> calculatePath(Floor floor, Position startPosition, Position endPosition, boolean tolerance){
 		int startRow = startPosition.getRow();
 		int startCol = startPosition.getCol();

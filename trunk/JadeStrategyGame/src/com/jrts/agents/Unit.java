@@ -11,7 +11,6 @@ import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.UnreadableException;
 
 import java.io.IOException;
-import java.util.Random;
 
 import com.jrts.O2Ainterfaces.IUnit;
 import com.jrts.behaviours.BehaviourWrapper;
@@ -20,6 +19,7 @@ import com.jrts.behaviours.LookForEnemy;
 import com.jrts.behaviours.ReceiveOrders;
 import com.jrts.behaviours.UnitBehaviour;
 import com.jrts.common.GameConfig;
+import com.jrts.common.Utils;
 import com.jrts.environment.CellType;
 import com.jrts.environment.Direction;
 import com.jrts.environment.Perception;
@@ -190,9 +190,8 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 	}
 
 	public void spendRandomTime() {
-		Random r = new Random();
 		try {
-			Thread.sleep(GameConfig.REFRESH_TIME * r.nextInt(5));
+			Thread.sleep(GameConfig.REFRESH_TIME * Utils.random.nextInt(5));
 		} catch (InterruptedException e) {
 		}
 	}

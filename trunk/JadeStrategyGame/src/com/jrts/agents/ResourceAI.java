@@ -8,6 +8,7 @@ import jade.lang.acl.MessageTemplate;
 import com.jrts.behaviours.UpdateWorkersTable;
 import com.jrts.common.AgentStatus;
 import com.jrts.common.GameConfig;
+import com.jrts.common.Order;
 import com.jrts.common.WorkersMap;
 import com.jrts.messages.AggiornaRisorse;
 
@@ -78,10 +79,15 @@ public class ResourceAI extends GoalBasedAI {
 				}
 				AID freeWorker = workersMap.getFreeWorker();
 				if (freeWorker != null) {
+					/*
 					String newStatus = (resourcesContainer.getFood() > resourcesContainer.getWood() ? AgentStatus.WOOD_CUTTING
 							: AgentStatus.FOOD_COLLECTING);
 					changeAgentStatus(freeWorker, newStatus);
-					workersMap.put(freeWorker, newStatus);
+					*/
+					Order order = (resourcesContainer.getFood() > resourcesContainer.getWood() ? new Order(AgentStatus.WOOD_CUTTING)
+							: new Order(AgentStatus.FOOD_COLLECTING));
+					changeAgentStatus(freeWorker, order);
+					workersMap.put(freeWorker, order.getOrder());
 				} else {
 					//logger.info("no free workers");
 				}
@@ -93,8 +99,9 @@ public class ResourceAI extends GoalBasedAI {
 	public boolean assignWoodcutter() {
 		AID worker = workersMap.getFreeWorker();
 		if (worker != null) {
-			changeAgentStatus(worker, AgentStatus.WOOD_CUTTING);
-			workersMap.put(worker, AgentStatus.WOOD_CUTTING);
+			Order order = new Order(AgentStatus.WOOD_CUTTING);
+			changeAgentStatus(worker, order);
+			workersMap.put(worker, order.getOrder());
 			return true;
 		}
 		return false;
@@ -103,8 +110,8 @@ public class ResourceAI extends GoalBasedAI {
 	public boolean assignFoodCollector() {
 		AID worker = workersMap.getFreeWorker();
 		if (worker != null) {
-			changeAgentStatus(worker, AgentStatus.FOOD_COLLECTING);
-			workersMap.put(worker, AgentStatus.FOOD_COLLECTING);
+			Order order = new Order(AgentStatus.FOOD_COLLECTING);
+			workersMap.put(worker, order.getOrder());
 			return true;
 		}
 		return false;

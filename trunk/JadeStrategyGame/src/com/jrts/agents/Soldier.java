@@ -47,10 +47,11 @@ public class Soldier extends Unit {
 	 * 
 	 * @param direction must be one between TOP, RIGHT, DOWN, LEFT
 	 */
-	public void patrol() {
+	public void patrol(Direction direction, int distance) {
+		/*
 		Direction direction = Direction.UP;
 		int distance = PatrolBehaviour.DISTANCE_LITTLE;
-		
+		*/
 		addBehaviour(new PatrolBehaviour(this, direction, distance));
 		switchStatus(AgentStatus.PATROLING);
 	}

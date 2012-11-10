@@ -11,8 +11,6 @@ import com.jrts.environment.Position;
 import com.jrts.environment.World;
 
 public class ExploreBehaviour extends UnitBehaviour {
-
-	Random r = new Random(GregorianCalendar.getInstance().getTimeInMillis());
 	
 	/**
 	 * 
@@ -50,7 +48,7 @@ public class ExploreBehaviour extends UnitBehaviour {
 		boolean going = false;
 		for (int i = 0; i < 10 && !going ; i++)
 		{
-			Direction dirToGo = dir.get(r.nextInt(3));
+			Direction dirToGo = dir.get(Utils.random.nextInt(3));
 			
 			this.soldier.logger.warning("SOLDATO SI MUOVE IN " + dirToGo);
 			
