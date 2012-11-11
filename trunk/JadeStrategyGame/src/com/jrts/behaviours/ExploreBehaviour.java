@@ -6,7 +6,6 @@ import com.jrts.agents.Soldier;
 import com.jrts.common.Utils;
 import com.jrts.environment.Direction;
 import com.jrts.environment.Position;
-import com.jrts.environment.World;
 
 public class ExploreBehaviour extends UnitBehaviour {
 	
@@ -26,7 +25,7 @@ public class ExploreBehaviour extends UnitBehaviour {
 		super(false);
 		
 		this.soldier = soldier;
-		this.cityCenter = World.getInstance().getCityCenter(soldier.getTeamName());
+		this.cityCenter = soldier.requestCityCenterPosition();
 	}
 
 	@Override

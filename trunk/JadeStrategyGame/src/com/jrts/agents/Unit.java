@@ -7,7 +7,6 @@ import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
-import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.UnreadableException;
 
 import java.io.IOException;
@@ -25,6 +24,7 @@ import com.jrts.environment.Perception;
 import com.jrts.environment.Position;
 import com.jrts.environment.World;
 import com.jrts.environment.WorldMap;
+import com.jrts.messages.MessageSubject;
 import com.jrts.messages.Notification;
 
 public abstract class Unit extends JrtsAgent implements IUnit {
@@ -216,28 +216,31 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 		try {
 			return DFService.search(this, getTeamDF(), desc).length == 0;
 		} catch (FIPAException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return false;
 		}
 	}
 
 	public WorldMap requestMap() {
-		ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
-		String id = WorldMap.class.getSimpleName();
-		msg.setConversationId(id);
-		msg.addReceiver(getMasterAID());
-		send(msg);
-		ACLMessage response = blockingReceive(MessageTemplate.MatchConversationId(id));
+		ACLMessage response = sendRequest(MessageSubject.GET_WORLD_MAP, getMasterAID());
 		try {
 			return (WorldMap) response.getContentObject();
 		} catch (UnreadableException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.severe("Can't read message " + e);
+			return null;
 		}
-		return null;
 	}
 
+	public Position requestCityCenterPosition() {
+		ACLMessage response = sendRequest(MessageSubject.GET_CITY_CENTER_POSITION, getMasterAID());
+		try {
+			return (Position) response.getContentObject();
+		} catch (UnreadableException e) {
+			logger.severe("Can't read message " + e);
+			return null;
+		}
+	}
+	
 	public Position findNearest(CellType type) {
 		WorldMap map = requestMap();
 		return map.findNearest(getPosition(), type);
@@ -258,5 +261,11 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 	protected void handleNotification(Notification notification) {
 		// TODO Auto-generated method stub
 
+	}
+	
+	@Override
+	protected void handleRequest(ACLMessage msg) {
+		// TODO Auto-generated method stub
+		
 	}
 }

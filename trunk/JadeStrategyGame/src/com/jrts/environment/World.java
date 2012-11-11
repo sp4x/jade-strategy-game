@@ -124,8 +124,9 @@ public class World {
 	 * 
 	 * @param name
 	 *            the name of the team, has to be unique
+	 * @return 
 	 */
-	public void addTeam(String name) {
+	public Position addTeam(String name) {
 		// Prendo un angolo a caso tra 0 e 3
 		int angle = Utils.random.nextInt(4);
 
@@ -138,13 +139,11 @@ public class World {
 
 		this.occupiedAngles[angle] = true;
 		
-		logger.info("TEAM " + name + " in angolo " + angle);
-		
 		Cell base = new Cell(CellType.CITY_CENTER, name);
 		base.resourceEnergy = GameConfig.BUILDING_ENERGY;
 
 		//Inizializzo la var con una posizione inesistente
-		Position startP = new Position(-1, -1);
+		Position cityCenter = new Position(-1, -1);
 		
 		// A seconda dell'angolo della mappa scelto e del valore della var n
 		// scelgo la posizione della mappa ove posizionare la base
@@ -152,16 +151,16 @@ public class World {
 		do {
 			switch (angle) {
 			case 0:
-				startP = new Position(n, n);
+				cityCenter = new Position(n, n);
 				break;
 			case 1:
-				startP = new Position((this.rows - n), n);
+				cityCenter = new Position((this.rows - n), n);
 				break;
 			case 2:
-				startP = new Position((this.rows - n), (this.cols - n));
+				cityCenter = new Position((this.rows - n), (this.cols - n));
 				break;
 			case 3:
-				startP = new Position(n, (this.cols - n));
+				cityCenter = new Position(n, (this.cols - n));
 				break;
 			}
 			
@@ -169,20 +168,22 @@ public class World {
 			// dalla cella di riferimento dellangolo della mappa scelto
 			//startP.col += (r.nextInt(2) == 0)? r.nextInt(10) : - r.nextInt(10);
 		
-		} while (!addObject(base, startP));
+		} while (!addObject(base, cityCenter));
 		
-		teams.put(name, startP);
+		teams.put(name, cityCenter);
 		
 		// put a food and a wood resource near the city center
-		Position foodPosition = near(startP, GameConfig.FOOD_MIN_DISTANCE, GameConfig.FOOD_MAX_DISTANCE);
+		Position foodPosition = near(cityCenter, GameConfig.FOOD_MIN_DISTANCE, GameConfig.FOOD_MAX_DISTANCE);
 		Cell food = new Cell(CellType.FOOD, GameConfig.FARM_ENERGY);
 		addObject(food, foodPosition);
 		
-		Position woodPosition = near(startP, GameConfig.WOOD_MIN_DISTANCE, GameConfig.WOOD_MAX_DISTANCE);
+		Position woodPosition = near(cityCenter, GameConfig.WOOD_MIN_DISTANCE, GameConfig.WOOD_MAX_DISTANCE);
 		Cell wood = new Cell(CellType.WOOD, GameConfig.TREE_ENERGY);
 		addObject(wood, woodPosition);
 
-		logger.info("TEAM " + name + " added in " + startP.toString());
+		logger.info("TEAM " + name + " added in " + cityCenter.toString());
+		
+		return cityCenter;
 	}
 
 	/**
@@ -206,22 +207,10 @@ public class World {
 		floor.set(p, unitCell);
 	}
 
-	/**
-	 * gets the position of the city center of the team with the specified name
-	 * 
-	 * @param teamName
-	 *            the name of the team
-	 * @return the position of the main building
-	 */
-	public synchronized Position getCityCenter(String teamName) {
-		return teams.get(teamName);
-	}
-
 	public synchronized Floor getSnapshot() {
 		return new Floor(floor);
 	}
 	
-
 	/**
 	 * Returns the perceived floor in a certain position with the specified
 	 * range of sight

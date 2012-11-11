@@ -2,6 +2,7 @@ package com.jrts.agents;
 
 import jade.core.AID;
 import jade.core.Agent;
+import jade.core.behaviours.CyclicBehaviour;
 import jade.core.behaviours.TickerBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
@@ -37,9 +38,9 @@ public abstract class JrtsAgent extends Agent {
 				updatePerception();
 			}
 		});
-		addBehaviour(new TickerBehaviour(this, GameConfig.NOTIFICATION_REFRESH) {
+		addBehaviour(new CyclicBehaviour(this) {
 			@Override
-			protected void onTick() {
+			public void action() {
 				ACLMessage msg = receive(MessageTemplate.MatchConversationId(Notification.class.getSimpleName()));
 				if (msg != null) {
 					try {
@@ -54,7 +55,28 @@ public abstract class JrtsAgent extends Agent {
 				}
 			}
 		});
+		addBehaviour(new CyclicBehaviour(this) {
+			
+			@Override
+			public void action() {
+				ACLMessage msg = receive(MessageTemplate.MatchPerformative(ACLMessage.QUERY_REF));
+				if (msg != null) {
+					try {
+						ACLMessage response = msg.createReply();
+						handleRequest(response);
+						send(response);
+					} catch (Exception e) {
+						logger.severe("Can't read message");
+					}
+				} else {
+					// if no message is arrived, block the behaviour
+					block();
+				}
+			}
+		});
 	}
+
+	protected abstract void handleRequest(ACLMessage msg) throws IOException;
 
 	/**
 	 * updates the agent perception
@@ -120,7 +142,7 @@ public abstract class JrtsAgent extends Agent {
 	 * 			- contentObject = enemy_position;<br/>
 	 * 			- receiver = masterAID<br/>
 	 * 
-	 * @param messageSubject type of notification (e.g. MessageSubject.ENEMY_SIGHTED when sighting an enemy)
+	 * @param messageSubject type of notification (e.g. Notification.ENEMY_SIGHTED when sighting an enemy)
 	 * @param contentObject an object with more information about the notification (e.g. the position of the enemy)
 	 * @param receiver the AID of the receiver 
 	 */
@@ -134,6 +156,27 @@ public abstract class JrtsAgent extends Agent {
 			
 		} catch (IOException e) {
 			logger.severe("Can't send the " + messageSubject + " notification to " + receiver);
+		}
+	}
+	
+	/**
+	 * Send a request
+	 * 
+	 * @param requestSubject type of request (e.g. MessageSubject.GET_CITY_CENTER_POSITION)
+	 * @param receiver the AID of the receiver 
+	 */
+	public ACLMessage sendRequest(String requestSubject, AID receiver) {
+		try {
+			ACLMessage msg = new ACLMessage(ACLMessage.QUERY_REF);
+			msg.addReceiver(receiver);
+			msg.setConversationId(requestSubject);
+			send(msg);
+			ACLMessage response = blockingReceive(MessageTemplate.MatchConversationId(requestSubject));
+			return response;
+			
+		} catch (Exception e) {
+			logger.severe("Can't send the " + requestSubject + " request to " + receiver);
+			return null;
 		}
 	}
 

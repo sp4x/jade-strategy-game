@@ -2,6 +2,7 @@ package com.jrts.agents;
 
 import jade.core.AID;
 import jade.core.behaviours.WakerBehaviour;
+import jade.lang.acl.ACLMessage;
 
 import com.jrts.behaviours.PatrolBehaviour;
 import com.jrts.behaviours.UpdateUnitTable;
@@ -9,8 +10,6 @@ import com.jrts.common.AgentStatus;
 import com.jrts.common.GameConfig;
 import com.jrts.common.Utils;
 import com.jrts.environment.Direction;
-import com.jrts.environment.Position;
-import com.jrts.environment.World;
 import com.jrts.messages.Notification;
 import com.jrts.messages.Order;
 
@@ -79,8 +78,7 @@ public class MilitaryAI extends GoalBasedAI {
 		AID soldier = this.getUnitTable().getFreeUnits();
 		if(soldier != null){
 			
-			Position p = World.getInstance().getCityCenter(getTeamName());
-			Direction angle = Utils.getMapAnglePosition(p);
+			Direction angle = Utils.getMapAnglePosition(cityCenter);
 			
 			Order order = new Order(AgentStatus.PATROLING);
 			if(angle.equals(Direction.LEFT_UP))
@@ -134,6 +132,12 @@ public class MilitaryAI extends GoalBasedAI {
 
 	@Override
 	protected void handleNotification(Notification notification) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void handleRequest(ACLMessage msg) {
 		// TODO Auto-generated method stub
 		
 	}

@@ -3,7 +3,6 @@ package com.jrts.behaviours;
 import com.jrts.agents.Soldier;
 import com.jrts.environment.Direction;
 import com.jrts.environment.Position;
-import com.jrts.environment.World;
 
 public class PatrolBehaviour extends UnitBehaviour {
 
@@ -31,7 +30,7 @@ public class PatrolBehaviour extends UnitBehaviour {
 		super(false);
 		
 		this.soldier = soldier;
-		this.cityCenter = World.getInstance().getCityCenter(soldier.getTeamName());
+		this.cityCenter = soldier.requestCityCenterPosition();
 		
 		this.distance = distance;
 		

@@ -10,6 +10,8 @@ import com.jrts.common.AgentStatus;
 import com.jrts.common.ResourcesContainer;
 import com.jrts.common.UnitFactory;
 import com.jrts.common.UnitTable;
+import com.jrts.environment.Position;
+import com.jrts.environment.WorldMap;
 import com.jrts.messages.GoalLevels;
 import com.jrts.messages.Order;
 
@@ -22,6 +24,8 @@ public abstract class GoalBasedAI extends JrtsAgent {
 	GoalLevels goalLevels;
 	UnitFactory unitFactory;
 	ResourcesContainer resourcesContainer;
+	WorldMap worldMap;
+	Position cityCenter;
 	
 	UnitTable unitTable = new UnitTable();
 	
@@ -37,6 +41,8 @@ public abstract class GoalBasedAI extends JrtsAgent {
 			setTeamName((String) args[0]);
 			unitFactory = (UnitFactory) args[1];
 			resourcesContainer = (ResourcesContainer) args[2];
+			worldMap = (WorldMap) args[3];
+			cityCenter = (Position) args[4];
 		} else {
 			logger.severe("Needs team's name");
 			System.exit(1);
