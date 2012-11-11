@@ -3,17 +3,16 @@ package com.jrts.agents;
 import jade.core.AID;
 import jade.core.behaviours.WakerBehaviour;
 
-import java.util.HashMap;
-
 import com.jrts.behaviours.PatrolBehaviour;
 import com.jrts.behaviours.UpdateUnitTable;
 import com.jrts.common.AgentStatus;
 import com.jrts.common.GameConfig;
-import com.jrts.common.Order;
 import com.jrts.common.Utils;
 import com.jrts.environment.Direction;
 import com.jrts.environment.Position;
 import com.jrts.environment.World;
+import com.jrts.messages.Notification;
+import com.jrts.messages.Order;
 
 
 public class MilitaryAI extends GoalBasedAI {
@@ -24,8 +23,6 @@ public class MilitaryAI extends GoalBasedAI {
 	@Override
 	protected void setup() {
 		super.setup();
-		
-		// TODO che cazzo deve fare la milaryAI?
 		
 		addBehaviour(new UpdateUnitTable(this, Soldier.class));
 
@@ -86,7 +83,6 @@ public class MilitaryAI extends GoalBasedAI {
 			Direction angle = Utils.getMapAnglePosition(p);
 			
 			Order order = new Order(AgentStatus.PATROLING);
-			HashMap<String, Object> parameters = new HashMap<String, Object>();
 			if(angle.equals(Direction.LEFT_UP))
 			{
 				if(Utils.random.nextBoolean())
@@ -134,6 +130,12 @@ public class MilitaryAI extends GoalBasedAI {
 	@Override
 	public void onGoalsChanged() {
 		// TODO Auto-generated method stub
+	}
+
+	@Override
+	protected void handleNotification(Notification notification) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

@@ -26,16 +26,17 @@ import com.jrts.environment.Perception;
 import com.jrts.environment.Position;
 import com.jrts.environment.World;
 import com.jrts.environment.WorldMap;
+import com.jrts.messages.Notification;
 
-@SuppressWarnings("serial")
 public abstract class Unit extends JrtsAgent implements IUnit {
 
+	private static final long serialVersionUID = -1503577834258923742L;
 	private Position position = null;
 	private String status;
 	private Perception perception;
 	private DFAgentDescription agentDescription;
 	private ServiceDescription basicService;
-	
+
 	private BehaviourWrapper behaviourWrapper;
 
 	String id;
@@ -78,15 +79,15 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 		addBehaviour(new ReceiveOrders(this));
 		addBehaviour(behaviourWrapper);
 	}
-	
+
 	@Override
 	public void addBehaviour(Behaviour b) {
-		if(b instanceof UnitBehaviour)
+		if (b instanceof UnitBehaviour)
 			behaviourWrapper.wrap((UnitBehaviour) b);
 		else
 			super.addBehaviour(b);
 	}
-	
+
 	public void goThere(Position p) {
 		logger.info(getAID().getName() + ":Go there " + p);
 		addBehaviour(new FollowPathBehaviour(this, p, GameConfig.UNIT_MOVING_ATTEMPTS));
@@ -191,7 +192,7 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 
 	public void spendRandomTime() {
 		try {
-			Thread.sleep(GameConfig.REFRESH_TIME * (Utils.random.nextInt(5)+1));
+			Thread.sleep(GameConfig.REFRESH_TIME * (Utils.random.nextInt(5) + 1));
 		} catch (InterruptedException e) {
 		}
 	}
@@ -236,8 +237,7 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 		msg.setConversationId(id);
 		msg.addReceiver(getMasterAID());
 		send(msg);
-		ACLMessage response = blockingReceive(MessageTemplate
-				.MatchConversationId(id));
+		ACLMessage response = blockingReceive(MessageTemplate.MatchConversationId(id));
 		try {
 			return (WorldMap) response.getContentObject();
 		} catch (UnreadableException e) {
@@ -255,12 +255,17 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 	public Perception getPerception() {
 		return perception;
 	}
-	
+
 	public int getKnapsack() {
-		if (this instanceof Worker) 
+		if (this instanceof Worker)
 			return ((Worker) this).getKnapsack();
 		else
 			return -1;
 	}
 
+	@Override
+	protected void handleNotification(Notification notification) {
+		// TODO Auto-generated method stub
+
+	}
 }

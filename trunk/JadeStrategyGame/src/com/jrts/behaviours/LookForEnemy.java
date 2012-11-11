@@ -2,7 +2,6 @@ package com.jrts.behaviours;
 
 import jade.core.Agent;
 import jade.core.behaviours.TickerBehaviour;
-import jade.util.Logger;
 
 import com.jrts.agents.Unit;
 import com.jrts.environment.Cell;

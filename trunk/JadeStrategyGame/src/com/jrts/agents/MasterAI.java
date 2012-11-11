@@ -22,6 +22,7 @@ import com.jrts.environment.Position;
 import com.jrts.environment.World;
 import com.jrts.environment.WorldMap;
 import com.jrts.messages.GoalLevels;
+import com.jrts.messages.Notification;
 
 @SuppressWarnings("serial")
 public class MasterAI extends JrtsAgent implements Team {
@@ -199,6 +200,11 @@ public class MasterAI extends JrtsAgent implements Team {
 	public WorldMap getWorldMap() {
 
 		return this.worldMap;
+	}
+
+	@Override
+	protected void handleNotification(Notification notification) {
+		// TODO do something
 	}
 
 }

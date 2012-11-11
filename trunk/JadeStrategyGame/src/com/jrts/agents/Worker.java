@@ -1,9 +1,5 @@
 package com.jrts.agents;
 
-import jade.lang.acl.ACLMessage;
-
-import java.io.IOException;
-
 import com.jrts.behaviours.CollectResources;
 import com.jrts.common.AgentStatus;
 import com.jrts.common.GameConfig;
@@ -13,6 +9,7 @@ import com.jrts.environment.Position;
 import com.jrts.environment.World;
 import com.jrts.logic.AttacksManager;
 import com.jrts.messages.AggiornaRisorse;
+import com.jrts.messages.Notification;
 
 @SuppressWarnings("serial")
 public class Worker extends Unit {
@@ -71,19 +68,12 @@ public class Worker extends Unit {
 
 	public void dropResources() {
 		//send the resource message to the resourceAI
-		logger.info("drop resources");
-		ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
-		msg.addReceiver(getResourceAID());
-		msg.setConversationId(AggiornaRisorse.class.getSimpleName());
-		try {
-			int collectedWood = getStatus().equals(AgentStatus.WOOD_CUTTING) ? knapsack : 0;
-			int collectedFood = getStatus().equals(AgentStatus.FOOD_COLLECTING) ? knapsack : 0;
-			msg.setContentObject(new AggiornaRisorse(collectedWood, collectedFood));
-			
-			send(msg);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		logger.info(getId() + ": drop resources");
+		int collectedWood = getStatus().equals(AgentStatus.WOOD_CUTTING) ? knapsack : 0;
+		int collectedFood = getStatus().equals(AgentStatus.FOOD_COLLECTING) ? knapsack : 0;
+		
+		sendNotification(Notification.RESOURCES_UPDATE, new AggiornaRisorse(collectedWood, collectedFood), getResourceAID());
+		
 		knapsack = 0;
 	}
 

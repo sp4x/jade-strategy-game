@@ -3,16 +3,16 @@ package com.jrts.agents;
 import jade.core.AID;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.core.behaviours.WakerBehaviour;
-import jade.lang.acl.ACLMessage;
-import jade.lang.acl.MessageTemplate;
 
 import com.jrts.behaviours.UpdateUnitTable;
 import com.jrts.common.AgentStatus;
 import com.jrts.common.GameConfig;
 import com.jrts.common.GoalPriority;
-import com.jrts.common.Order;
 import com.jrts.common.UnitTable;
+import com.jrts.environment.CellType;
 import com.jrts.messages.AggiornaRisorse;
+import com.jrts.messages.Notification;
+import com.jrts.messages.Order;
 
 @SuppressWarnings("serial")
 public class ResourceAI extends GoalBasedAI {
@@ -26,40 +26,15 @@ public class ResourceAI extends GoalBasedAI {
 	protected void setup() {
 		super.setup();
 
-		 unitFactory.trainUnit(Worker.class);
+		unitFactory.trainUnit(Worker.class);
 		// unitFactory.trainUnit(Worker.class);
 		//
 		// // order someone to cut wood
-		 addBehaviour(new WakerBehaviour(this, 5000) {
-		 @Override
+		addBehaviour(new WakerBehaviour(this, 5000) {
+			@Override
 			protected void handleElapsedTimeout() {
 				assignWoodcutter();
-//				assignFoodCollector();
-			}
-		});
-
-		// listen for resources update by the workers
-		addBehaviour(new CyclicBehaviour(this) {
-			@Override
-			public void action() {
-				ACLMessage msg = receive(MessageTemplate
-						.MatchConversationId(AggiornaRisorse.class
-								.getSimpleName()));
-				if (msg != null) {
-					try {
-						AggiornaRisorse aggiornamento = (AggiornaRisorse) msg
-								.getContentObject();
-						int collectedFood = aggiornamento.getFood();
-						int collectedWood = aggiornamento.getWood();
-						resourcesContainer.addFood(collectedFood);
-						resourcesContainer.addWood(collectedWood);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				} else {
-					// if no message is arrived, block the behaviour
-					block();
-				}
+				// assignFoodCollector();
 			}
 		});
 
@@ -93,15 +68,10 @@ public class ResourceAI extends GoalBasedAI {
 	protected void trainWorkers() {
 		int numWorkers = extimateNumWorkers() - workersCounter;
 		for (int i = 0; i < numWorkers; i++) {
-			if (resourcesContainer
-					.isThereEnoughFood(GameConfig.WORKER_FOOD_COST)
-					&& resourcesContainer
-							.isThereEnoughWood(GameConfig.WORKER_WOOD_COST)) {
+			if (resourcesContainer.isThereEnoughFood(GameConfig.WORKER_FOOD_COST) && resourcesContainer.isThereEnoughWood(GameConfig.WORKER_WOOD_COST)) {
 
-				resourcesContainer
-						.removeFood(GameConfig.WORKER_FOOD_COST);
-				resourcesContainer
-						.removeWood(GameConfig.WORKER_WOOD_COST);
+				resourcesContainer.removeFood(GameConfig.WORKER_FOOD_COST);
+				resourcesContainer.removeWood(GameConfig.WORKER_WOOD_COST);
 				unitFactory.trainUnit(Worker.class);
 				workersCounter++;
 			}
@@ -117,8 +87,7 @@ public class ResourceAI extends GoalBasedAI {
 		}
 		double food = (double) resourcesContainer.getFood();
 		double wood = (double) resourcesContainer.getWood();
-		return foodRatio * food < wood ? AgentStatus.FOOD_COLLECTING
-				: AgentStatus.WOOD_CUTTING;
+		return foodRatio * food < wood ? AgentStatus.FOOD_COLLECTING : AgentStatus.WOOD_CUTTING;
 	}
 
 	public int extimateNumWorkers() {
@@ -168,5 +137,22 @@ public class ResourceAI extends GoalBasedAI {
 	@Override
 	public void onGoalsChanged() {
 
+	}
+
+	@Override
+	protected void handleNotification(Notification notification) {
+		if (notification.getSubject().equals(Notification.NO_MORE_RESOURCE)) {
+			CellType resourceType = (CellType) notification.getContentObject();
+			logger.info(getAID() + ": no more " + resourceType + " in our known world..");
+			//TODO what to do?
+			
+		} else if (notification.getSubject().equals(Notification.RESOURCES_UPDATE)) {
+			System.out.println("******************* HANDLE RESOURCES_UPDATE ************************");
+			AggiornaRisorse aggiornamento = (AggiornaRisorse) notification.getContentObject();
+			int collectedFood = aggiornamento.getFood();
+			int collectedWood = aggiornamento.getWood();
+			resourcesContainer.addFood(collectedFood);
+			resourcesContainer.addWood(collectedWood);
+		}
 	}
 }

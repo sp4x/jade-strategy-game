@@ -9,8 +9,8 @@ import jade.lang.acl.UnreadableException;
 import com.jrts.agents.Soldier;
 import com.jrts.agents.Worker;
 import com.jrts.common.AgentStatus;
-import com.jrts.common.Order;
 import com.jrts.environment.Direction;
+import com.jrts.messages.Order;
 
 public class ReceiveOrders extends CyclicBehaviour {
 
