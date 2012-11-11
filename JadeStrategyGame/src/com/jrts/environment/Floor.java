@@ -196,25 +196,53 @@ public class Floor implements Serializable {
 		return nextTo(null, p, type, maxDistance);
 	}
 	
-	public Position nextTo(Position source, Position target, CellType type, int maxDistance) {
-		if (maxDistance == 0)
+	public Position nextTo(Position source, Position target, CellType type,
+			int maxDistance) {
+		if (!isValid(target))
+			return null;
+		if (maxDistance == 0 && get(target).type == type)
 			return target;
-		for (int minDistance = 1; minDistance <= maxDistance; minDistance++) {
-			LinkedList<Position> candidates = new LinkedList<Position>();
-			for (Direction d : Direction.ALL) {
-				Position candidate = nextTo(source, target.step(d), type, minDistance-1);
-				if (isValid(candidate) && get(candidate).type == type)
-					candidates.add(candidate);
-			}
-			if (!candidates.isEmpty()) {
+		for (int d = 1; d <= maxDistance; d++) {
+			LinkedList<Position> frame = frameWithType(target, type, d);
+			if (!frame.isEmpty()) {
 				if (source == null)
-					return candidates.element();
-				return source.nearest(candidates);
+					return frame.element();
+				return source.nearest(frame);
 			}
 		}
 		return null;
 	}
-
+	
+	private LinkedList<Position> frameWithType(Position center, CellType type, int d) {
+		LinkedList<Position> frame = new LinkedList<Position>();
+		int i, j;
+		j = center.col - d;
+		for (i = center.row - d; i <= center.row + d; i++) {
+			Position candidate = new Position(i, j);
+			if (isValid(candidate) && get(candidate).type == type)
+				frame.add(candidate);
+		}
+		j = center.col + d;
+		for (i = center.row - d; i <= center.row + d; i++) {
+			Position candidate = new Position(i, j);
+			if (isValid(candidate) && get(candidate).type == type)
+				frame.add(candidate);
+		}
+		i = center.row - d + 1;
+		for (j = center.col - d; j <= center.col + d; j++) {
+			Position candidate = new Position(i, j);
+			if (isValid(candidate) && get(candidate).type == type)
+				frame.add(candidate);
+		}
+		i = center.row + d - 1;
+		for (j = center.col - d; j <= center.col + d; j++) {
+			Position candidate = new Position(i, j);
+			if (isValid(candidate) && get(candidate).type == type)
+				frame.add(candidate);
+		}
+		return frame;
+	}
+	
 	public Cell getCopy(Position p) {
 		return new Cell(get(p));
 	}
