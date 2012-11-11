@@ -19,7 +19,6 @@ import com.jrts.behaviours.LookForEnemy;
 import com.jrts.behaviours.ReceiveOrders;
 import com.jrts.behaviours.UnitBehaviour;
 import com.jrts.common.GameConfig;
-import com.jrts.common.Utils;
 import com.jrts.environment.CellType;
 import com.jrts.environment.Direction;
 import com.jrts.environment.Perception;
@@ -186,15 +185,7 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 	public void spendTime() {
 		try {
 			Thread.sleep(GameConfig.REFRESH_TIME / speed);
-		} catch (InterruptedException e) {
-		}
-	}
-
-	public void spendRandomTime() {
-		try {
-			Thread.sleep(GameConfig.REFRESH_TIME * (Utils.random.nextInt(5) + 1));
-		} catch (InterruptedException e) {
-		}
+		} catch (InterruptedException e) {}
 	}
 
 	@Override
