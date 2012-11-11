@@ -17,7 +17,6 @@ import com.jrts.environment.WorldMap;
 public class Utils {
 	
 	public static Random random = new Random(GregorianCalendar.getInstance().getTimeInMillis());
-	static boolean firstExecution = true;
 	static UndirectedWeightedGraph mainWalkableGraph;
 	
 	public static ArrayList<Direction> calculatePath(Floor floor, Position startPosition, Position endPosition, boolean tolerance){
@@ -30,25 +29,23 @@ public class Utils {
 			endPosition = correctedEndPosition;
 		}
 		
-		if(firstExecution){
-			firstExecution = false;
+		if(mainWalkableGraph == null){
+			System.out.println("Creo grafo");
 			mainWalkableGraph = createWalkableGraph(floor, new Position(0, 0),
-					new Position(GameConfig.WORLD_ROWS, GameConfig.WORLD_COLS));
+					new Position(GameConfig.WORLD_ROWS-1, GameConfig.WORLD_COLS-1),true);
 		}
 
-//todo Da rivedere
-//		UndirectedWeightedGraph walkableGraph = mainWalkableGraph.clone();
-//		
-//		//adapt current walkableGraph from global
-//		for(int row=0; row<floor.getRows(); row++)
-//			for(int col=0; col<floor.getCols(); col++){
-//				Position p = new Position(row, col);
-//				if(!p.equals(startPosition) && floor.get(p).getType() != CellType.FREE)
-//					walkableGraph.removeVertex(row + "," + col);
-//			}
+		UndirectedWeightedGraph walkableGraph = mainWalkableGraph.clone();
 		
-		UndirectedWeightedGraph walkableGraph = createWalkableGraph(floor, startPosition, endPosition);
-
+		//adapt current walkableGraph from global
+		for(int row=0; row<floor.getRows(); row++)
+			for(int col=0; col<floor.getCols(); col++){
+				Position p = new Position(row, col);
+				if(!p.equals(startPosition) && floor.get(p).getType() != CellType.FREE
+						&& floor.get(p).getType() != CellType.UNKNOWN)
+					walkableGraph.removeVertex(p);
+			}
+		
 		if(!walkableGraph.containsVertex(endPosition)){
 //			System.out.println("Dest Node not reachable");
 			return new ArrayList<Direction>();
@@ -83,7 +80,7 @@ public class Utils {
 		return floor.nextTo(startPos, endPos, CellType.FREE, GameConfig.PATH_TOLERANCE);
 	}
 
-	private static UndirectedWeightedGraph createWalkableGraph(Floor floor, Position startPos, Position endPos) {
+	private static UndirectedWeightedGraph createWalkableGraph(Floor floor, Position startPos, Position endPos, boolean includeCellWithUnit) {
 		Integer startRow = startPos.getRow();
 		Integer startCol = startPos.getCol();
 		//create walkable graph
@@ -93,45 +90,55 @@ public class Utils {
 		//walkableGraph.addVertex(endRow + "," + endCol);
 		for (int i = 0; i < floor.getRows(); i++)
 			for (int j = 0; j < floor.getCols(); j++){
+				CellType cellType = floor.get(i, j).getType();
 				//NB La cella di partenza anche se occupata dall'unita' fa parte del grafo
-				if(floor.get(i, j).getType() == CellType.FREE || floor.get(i, j).getType() == CellType.UNKNOWN){
+				if(cellType == CellType.FREE || cellType == CellType.UNKNOWN ||
+						(includeCellWithUnit && (cellType == CellType.WORKER || cellType == CellType.SOLDIER))){
 					// A
 					// |
-					if( i-1 >= 0 && (floor.get(i-1, j).getType() == CellType.FREE || floor.get(i-1, j).getType() == CellType.UNKNOWN || (i-1==startRow && j==startCol)) ){
+					if( i-1 >= 0 && (cellType == CellType.FREE || cellType == CellType.UNKNOWN ||
+							(includeCellWithUnit && (cellType == CellType.WORKER || cellType == CellType.SOLDIER)) || (i-1==startRow && j==startCol)) ){
 						walkableGraph.addWeightedEdge(new Position(i,j), new Position(i-1,j), 1);
 					}
 					// |
 					// v
-					if( i+1 < floor.getRows() && (floor.get(i+1, j).getType() == CellType.FREE || floor.get(i+1, j).getType() == CellType.UNKNOWN || (i+1==startRow && j==startCol)) ){
+					if( i+1 < floor.getRows() && (cellType == CellType.FREE || cellType == CellType.UNKNOWN || 
+							(includeCellWithUnit && (cellType == CellType.WORKER || cellType == CellType.SOLDIER)) || (i+1==startRow && j==startCol)) ){
 						walkableGraph.addWeightedEdge(new Position(i,j), new Position(i+1,j), 1);
 					}
 					// <-
-					if( j-1 >= 0 && (floor.get(i, j-1).getType() == CellType.FREE || floor.get(i, j-1).getType() == CellType.UNKNOWN || (i==startRow && j-1==startCol)) ){
+					if( j-1 >= 0 && (cellType == CellType.FREE || cellType == CellType.UNKNOWN ||
+							(includeCellWithUnit && (cellType == CellType.WORKER || cellType == CellType.SOLDIER)) || (i==startRow && j-1==startCol)) ){
 						walkableGraph.addWeightedEdge(new Position(i,j), new Position(i,j-1), 1);
 					}
 					// ->
-					if( j+1 <= floor.getCols() && (floor.get(i, j+1).getType() == CellType.FREE || floor.get(i, j+1).getType() == CellType.UNKNOWN || (i==startRow && j+1==startCol)) ){
+					if( j+1 <= floor.getCols() && (cellType == CellType.FREE || cellType == CellType.UNKNOWN || 
+							(includeCellWithUnit && (cellType == CellType.WORKER || cellType == CellType.SOLDIER)) || (i==startRow && j+1==startCol)) ){
 						walkableGraph.addWeightedEdge(new Position(i,j), new Position(i,j+1), 1);
 					}
 					// A
 					//  \
-					if( j-1 >= 0 && i-1 >= 0 && (floor.get(i-1, j-1).getType() == CellType.FREE || floor.get(i-1, j-1).getType() == CellType.UNKNOWN || (i-1==startRow && j-1==startCol)) ){
+					if( j-1 >= 0 && i-1 >= 0 && (cellType == CellType.FREE || cellType == CellType.UNKNOWN || 
+							(includeCellWithUnit && (cellType == CellType.WORKER || cellType == CellType.SOLDIER)) || (i-1==startRow && j-1==startCol)) ){
 						walkableGraph.addWeightedEdge(new Position(i,j), new Position(i-1,j-1), 1.5);
 					}
 					
 					//   A
 					//  /
-					if( j+1 < floor.getCols() && i-1 >= 0 && (floor.get(i-1, j+1).getType() == CellType.FREE || floor.get(i-1, j+1).getType() == CellType.UNKNOWN || (i-1==startRow && j+1==startCol)) ){
+					if( j+1 < floor.getCols() && i-1 >= 0 && (cellType == CellType.FREE || cellType == CellType.UNKNOWN || 
+							(includeCellWithUnit && (cellType == CellType.WORKER || cellType == CellType.SOLDIER)) || (i-1==startRow && j+1==startCol)) ){
 						walkableGraph.addWeightedEdge(new Position(i,j), new Position(i-1,j+1), 1.5);
 					}
 					//  /
 					// v
-					if( j-1 >= 0 && i+1 < floor.getRows() && (floor.get(i+1, j-1).getType() == CellType.FREE || floor.get(i+1, j-1).getType() == CellType.UNKNOWN || (i+1==startRow && j-1==startCol)) ){
+					if( j-1 >= 0 && i+1 < floor.getRows() && (cellType == CellType.FREE || cellType == CellType.UNKNOWN || 
+							(includeCellWithUnit && (cellType == CellType.WORKER || cellType == CellType.SOLDIER)) || (i+1==startRow && j-1==startCol)) ){
 						walkableGraph.addWeightedEdge(new Position(i,j), new Position(i+1,j-1), 1.5);
 					}
 					//  \
 					//   v
-					if( j+1 < floor.getCols() && i+1 < floor.getRows() && (floor.get(i+1, j+1).getType() == CellType.FREE || floor.get(i+1, j+1).getType() == CellType.UNKNOWN || (i+1==startRow && j+1==startCol)) ){
+					if( j+1 < floor.getCols() && i+1 < floor.getRows() && (cellType == CellType.FREE || cellType == CellType.UNKNOWN || 
+							(includeCellWithUnit && (cellType == CellType.WORKER || cellType == CellType.SOLDIER)) || (i+1==startRow && j+1==startCol)) ){
 						walkableGraph.addWeightedEdge(new Position(i,j), new Position(i+1,j+1), 1.5);
 					}
 				}
@@ -142,20 +149,17 @@ public class Utils {
 	public static ArrayList<Position> edgeListToCellList(UndirectedWeightedGraph walkableGraph, Position sourceNode, List<DefaultWeightedEdge> list) {
 		ArrayList<Position> cellList = new ArrayList<Position>();
 		cellList.add(sourceNode);
-		Position curr = sourceNode;
 		if(list == null)
 			return cellList;
+		Position curr = sourceNode;
 		for (int i = 0; i < list.size(); i++) {
 			Position source = walkableGraph.getEdgeSource(list.get(i));
 			Position target = walkableGraph.getEdgeTarget(list.get(i));
-			if(source.equals(curr)){
+			if(source.equals(curr))
 				curr = target;
-				cellList.add(target);
-			}
-			else{
+			else
 				curr = source;
-				cellList.add(source);
-			}
+			cellList.add(curr);
 		}
 		return cellList;
 	}

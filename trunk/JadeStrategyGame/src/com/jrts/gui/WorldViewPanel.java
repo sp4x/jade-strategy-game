@@ -56,14 +56,12 @@ public class WorldViewPanel extends JPanel {
 		AttacksManager.update();
 		/** take a snapshot of the floor at this moment and dispay it */
 		floor = World.getInstance().getSnapshot();
+		Icon icon;
 		for (int i = 0; i < floor.getRows(); i++) {
 			for (int j = 0; j < floor.getCols(); j++) {
 				CellLabel currCellLabel = labelMatrix[i][j];
-				int y = (int) (j * GameConfig.ICON_SIZE);
-				int x = (int) (i * GameConfig.ICON_SIZE);
-				currCellLabel.setBounds(y, x, GameConfig.ICON_SIZE, GameConfig.ICON_SIZE);
-
-				Icon icon = null;
+				currCellLabel.setBounds(j * GameConfig.ICON_SIZE, i * GameConfig.ICON_SIZE, GameConfig.ICON_SIZE, GameConfig.ICON_SIZE);
+				icon = null;
 				Cell currCell = floor.get(i, j);
 				switch (currCell.getType()) {
 				case WORKER:
@@ -104,8 +102,8 @@ public class WorldViewPanel extends JPanel {
 					break;
 				}
 				
-//				if (AttacksManager.isThereAnHit(i, j))
-//					icon = ImageLoader.hitIcon;
+				if (AttacksManager.isThereAnHit(i, j))
+					icon = ImageLoader.hitIcon;
 				
 				currCellLabel.setIcon(icon);
 			}
