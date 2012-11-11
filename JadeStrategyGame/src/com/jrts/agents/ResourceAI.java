@@ -11,6 +11,7 @@ import com.jrts.common.GameConfig;
 import com.jrts.common.GoalPriority;
 import com.jrts.common.UnitTable;
 import com.jrts.environment.CellType;
+import com.jrts.environment.Position;
 import com.jrts.messages.AggiornaRisorse;
 import com.jrts.messages.Notification;
 import com.jrts.messages.Order;
@@ -57,9 +58,12 @@ public class ResourceAI extends GoalBasedAI {
 	protected void employWorker() {
 		AID freeWorker = unitTable.getFreeUnits();
 		if (freeWorker != null) {
-			Order order = new Order(extimateResourceToCollect());
-			changeAgentStatus(freeWorker, order);
-			unitTable.put(freeWorker, order.getOrder());
+			String orderString = extimateResourceToCollect();
+			if (orderString != null ) {
+				Order order = new Order(orderString);
+				changeAgentStatus(freeWorker, order);
+				unitTable.put(freeWorker, order.getOrder());
+			}
 		} else {
 			// logger.info("no free workers");
 		}
@@ -79,6 +83,13 @@ public class ResourceAI extends GoalBasedAI {
 	}
 
 	public String extimateResourceToCollect() {
+		if (noMoreFood && !noMoreWood) 
+			return AgentStatus.WOOD_CUTTING;
+		if (!noMoreFood && noMoreWood) 
+			return AgentStatus.FOOD_COLLECTING;
+		if (noMoreFood && noMoreWood) 
+			return null;
+		
 		double foodRatio;
 		if (goalLevels.getResources() == GoalPriority.HIGH) {
 			foodRatio = 2;
@@ -87,6 +98,7 @@ public class ResourceAI extends GoalBasedAI {
 		}
 		double food = (double) resourcesContainer.getFood();
 		double wood = (double) resourcesContainer.getWood();
+
 		return foodRatio * food < wood ? AgentStatus.FOOD_COLLECTING : AgentStatus.WOOD_CUTTING;
 	}
 
@@ -132,7 +144,14 @@ public class ResourceAI extends GoalBasedAI {
 
 	@Override
 	protected void updatePerception() {
-		
+		if (noMoreFood) {
+			Position p = worldMap.findNearest(cityCenter, CellType.FOOD);
+			if (p != null) noMoreFood = false;
+		}
+		if (noMoreWood) {
+			Position p = worldMap.findNearest(cityCenter, CellType.WOOD);
+			if (p != null) noMoreWood = false;
+		}
 	}
 
 	@Override
@@ -145,7 +164,11 @@ public class ResourceAI extends GoalBasedAI {
 		if (notification.getSubject().equals(Notification.NO_MORE_RESOURCE)) {
 			CellType resourceType = (CellType) notification.getContentObject();
 			logger.info(getAID() + ": no more " + resourceType + " in our known world..");
-			//TODO what to do?
+//			sendNotification(Notification.NO_MORE_RESOURCE, resourceType, getMasterAID());
+			if (resourceType.equals(CellType.FOOD))
+				noMoreFood = true;
+			else
+				noMoreWood = true;
 			
 		} else if (notification.getSubject().equals(Notification.RESOURCES_UPDATE)) {
 			AggiornaRisorse aggiornamento = (AggiornaRisorse) notification.getContentObject();
