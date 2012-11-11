@@ -33,12 +33,9 @@ public class UnitFactory extends Thread {
 
 	@Override
 	public void run() {
-		logger.info(team + " fa partire la unit factory");
 		while (true) {
 			try {
-				logger.info(team + " unitfactory: try to take from the queue");
 				Class<? extends Unit> claz = queue.take();
-				logger.info(team + " unitfactory: takes a " + claz.getSimpleName());
 				createUnit(claz);
 			} catch (InterruptedException e) {
 			}
@@ -62,7 +59,6 @@ public class UnitFactory extends Thread {
 			Thread.sleep(GameConfig.UNIT_CREATION_TIME*1000);
 		} catch (InterruptedException e1) {
 		}
-		logger.info(team + " unit factory is creating a " + claz.getSimpleName());
 		World world = World.getInstance();
 		String unitName = team + "-" + claz.getSimpleName() + counter();
 		Position unitPosition = world.neighPosition(cityCenter);

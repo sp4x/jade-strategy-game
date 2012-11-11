@@ -18,18 +18,23 @@ public class BehaviourWrapper extends CyclicBehaviour {
 			highPriority = b;
 		else
 			backgrond = b;
+		restart();
 	}
 
 	@Override
 	public void action() {
-		if (highPriority != null) {
-			highPriority.action();
-			if (highPriority.done())
-				highPriority = null;
-		} else if (backgrond != null) {
-			backgrond.action();
-			if (backgrond.done())
-				backgrond = null;
+		if (highPriority == null && backgrond == null) {
+			block();
+		} else {
+			if (highPriority != null) {
+				highPriority.action();
+				if (highPriority.done())
+					highPriority = null;
+			} else {
+				backgrond.action();
+				if (backgrond.done())
+					backgrond = null;
+			}
 		}
 	}
 

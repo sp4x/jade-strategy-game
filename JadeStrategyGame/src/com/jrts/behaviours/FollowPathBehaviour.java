@@ -13,7 +13,7 @@ import com.jrts.environment.Position;
 
 @SuppressWarnings("serial")
 public class FollowPathBehaviour extends UnitBehaviour {
-	
+
 	ArrayList<Direction> list;
 	Unit unit;
 	private Position goal;
@@ -22,8 +22,7 @@ public class FollowPathBehaviour extends UnitBehaviour {
 
 	Floor worldCachedCopy = null;
 
-	public FollowPathBehaviour(Unit unit, Position goal,
-			int remainingAttempts, Floor cachedCopy) {
+	public FollowPathBehaviour(Unit unit, Position goal, int remainingAttempts, Floor cachedCopy) {
 		super(true);// high priority
 		this.unit = unit;
 		this.goal = goal;
@@ -32,25 +31,22 @@ public class FollowPathBehaviour extends UnitBehaviour {
 		this.worldCachedCopy = cachedCopy;
 
 		// se prima invocazione del behaviour
-		if (remainingAttempts == GameConfig.UNIT_MOVING_ATTEMPTS
-				|| worldCachedCopy == null) {
+		if (remainingAttempts == GameConfig.UNIT_MOVING_ATTEMPTS || worldCachedCopy == null) {
 			setWorldCachedCopy(unit.requestMap());
 		}
 
 		calculatePath();
 	}
 
-	public FollowPathBehaviour(Unit unit, Position goal,
-			int remainingAttempts) {
+	public FollowPathBehaviour(Unit unit, Position goal, int remainingAttempts) {
 		this(unit, goal, remainingAttempts, null);
 	}
-	
+
 	private void calculatePath() {
 		Position start = unit.getPosition();
-		this.list = Utils.calculatePath(getWorldCachedCopy(),
-				start, goal, true);
-		
-		unit.logger.info(unit.getId() + ":path: " + list);
+		this.list = Utils.calculatePath(getWorldCachedCopy(), start, goal, true);
+
+		// unit.logger.info(unit.getId() + ":path: " + list);
 	}
 
 	public void action() {
@@ -62,19 +58,15 @@ public class FollowPathBehaviour extends UnitBehaviour {
 			if (!unit.move(d)) {
 				Position destination = unit.getPosition().step(d);
 				worldCachedCopy.set(destination, new Cell(CellType.OBSTACLE));
-				unit.logger.info(unit.getId()
-						+ ":Need path recalculation");
-				if (remainingAttempts > 0) { // solo se ho ancora tentativi a
-											// disposizione
-//					unit.addBehaviour(new FollowPathBehaviour(unit, goalRow,
-//							goalCol, remainingAttempts - 1,
-//							worldCachedCopy));
+//				unit.logger.info(unit.getId() + ":Need path recalculation");
+				if (remainingAttempts > 0) { // solo se ho ancora tentativi a disposizione
+					// unit.addBehaviour(new FollowPathBehaviour(unit, goalRow, goalCol, remainingAttempts - 1, worldCachedCopy));
 					calculatePath();
 				} else {
-					unit.logger.info(unit.getId() + " no remaining attempts, failed");
+//					unit.logger.severe(unit.getId() + " no remaining attempts, failed");
 					list.clear();
 				}
-				
+
 			} else {
 				remainingAttempts = GameConfig.UNIT_MOVING_ATTEMPTS;
 			}
