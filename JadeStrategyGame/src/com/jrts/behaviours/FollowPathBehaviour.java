@@ -1,6 +1,7 @@
 package com.jrts.behaviours;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.jrts.agents.Unit;
 import com.jrts.common.GameConfig;
@@ -14,7 +15,7 @@ import com.jrts.environment.Position;
 @SuppressWarnings("serial")
 public class FollowPathBehaviour extends UnitBehaviour {
 
-	ArrayList<Direction> list;
+	List<Direction> list;
 	Unit unit;
 	private Position goal;
 	int remainingAttempts;
@@ -44,9 +45,11 @@ public class FollowPathBehaviour extends UnitBehaviour {
 
 	private void calculatePath() {
 		Position start = unit.getPosition();
-		this.list = Utils.calculatePath(getWorldCachedCopy(), start, goal, true);
+		this.list = Utils.calculatePath(getWorldCachedCopy(),
+				start, goal);
+		
+		unit.logger.info(unit.getId() + ":path: " + list);
 
-		// unit.logger.info(unit.getId() + ":path: " + list);
 	}
 
 	public void action() {

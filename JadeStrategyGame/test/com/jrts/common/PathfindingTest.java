@@ -26,7 +26,7 @@ public class PathfindingTest {
 		f.set(0, 4, new Cell(CellType.OBSTACLE));
 		Position start = new Position(0, 0);
 		Position target = new Position(0, 4);
-		List<Direction> path = Utils.calculatePath(f, start, target, true);
+		List<Direction> path = Utils.calculatePath(f, start, target);
 		Position end = start.followPath(path);
 		assertEquals(new Position(0, 3), end);
 	}
@@ -41,10 +41,9 @@ public class PathfindingTest {
 		f.set(1, 3, new Cell(CellType.OBSTACLE));
 		Position start = new Position(1, 0);
 		Position target = new Position(1, 4);
-		List<Direction> path = Utils.calculatePath(f, start, target, true);
+		List<Direction> path = Utils.calculatePath(f, start, target);
 		Position end = start.followPath(path);
-		assertTrue(end.equals(new Position(0, 4))
-				|| end.equals(new Position(2, 4)));
+		assertTrue(end.isNextTo(target));
 	}
 
 	@Test
@@ -62,7 +61,7 @@ public class PathfindingTest {
 		}
 		Position start = new Position(2, 0);
 		Position target = new Position(2, 3);
-		List<Direction> path = Utils.calculatePath(f, start, target, true);
+		List<Direction> path = Utils.calculatePath(f, start, target);
 		Position end = start.followPath(path);
 		assertEquals(target, end);
 	}

@@ -7,5 +7,6 @@
 	<classpathentry kind="lib" path="lib/commons-codec-1.3.jar"/>
 	<classpathentry kind="lib" path="lib/jade.jar" sourcepath="lib/jade-src"/>
 	<classpathentry kind="lib" path="lib/jgrapht-jdk1.6.jar"/>
+	<classpathentry kind="lib" path="lib/jsl.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
