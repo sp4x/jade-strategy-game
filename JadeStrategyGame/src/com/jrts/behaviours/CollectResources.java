@@ -1,11 +1,15 @@
 package com.jrts.behaviours;
 
-import com.jrts.agents.Unit;
+import java.util.logging.Logger;
+
 import com.jrts.agents.Worker;
 import com.jrts.common.AgentStatus;
+import com.jrts.environment.Cell;
 import com.jrts.environment.CellType;
 import com.jrts.environment.Position;
 import com.jrts.environment.World;
+import com.jrts.environment.WorldMap;
+import com.jrts.messages.Notification;
 
 public class CollectResources extends UnitBehaviour {
 
@@ -13,6 +17,8 @@ public class CollectResources extends UnitBehaviour {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	Logger logger = Logger.getLogger(CollectResources.class.getName());
 	
 	Worker worker;
 	CellType resourceToCollect;
@@ -25,47 +31,47 @@ public class CollectResources extends UnitBehaviour {
 		this.worker = worker;
 		this.resourceToCollect = resource;
 		this.cityCenter = World.getInstance().getCityCenter(worker.getTeamName());
-		this.resourcePosition = worker.findNearest(resourceToCollect);
 	}
 
 	public void action() {
-		if (worker.getPerception() == null) {
-			return;
-		} 
-		boolean nearResource = worker.getPosition().isNextTo(resourcePosition);
-		boolean nearCityCenter = worker.getPosition().isNextTo(cityCenter);
-		if (nearResource && !worker.knapsackIsFull()) {
-			System.out.println("nearResource && !worker.knapsackIsFull()");
-			// check if there is still some resource to collect in resourcePosition
-			if (worker.getPerception().get(resourcePosition).getType() != resourceToCollect) {
-				System.out.println("no resource !!!");
-				// if not try to find an equal resource nearby 
-				resourcePosition = worker.findNearest(resourceToCollect);
-				// if there isn't an equal resource, then inform the resourceAi and set the status to free 
-				if (resourcePosition == null) {
-					System.out.println("NIENTE QUI VICINO");
-					worker.switchStatus(AgentStatus.FREE);
-					// TODO inform the resourceAi that there is no resource of that type in the known world
-				} else {
-					System.out.println("TROVATA RISORSA IN " + resourcePosition);
-					worker.goThere(resourcePosition);
-				}
+		WorldMap map = worker.requestMap();
+		
+		// check if there is still some resource to collect in resourcePosition
+		if (resourcePosition == null || map.get(resourcePosition).getType() != resourceToCollect) {
+			logger.info("No more " + resourceToCollect + " in " + resourcePosition + "; searching for " + resourceToCollect + " in our worldmap"); 
+			// if not try to find an equal resource nearby 
+			resourcePosition = worker.findNearest(resourceToCollect);
+			// if there isn't an equal resource, then inform the resourceAi and set the status to free 
+			if (resourcePosition == null) {
+				logger.info("No " + resourceToCollect + " our worlmap; swith my status to free");
+				worker.switchStatus(AgentStatus.FREE);
+				// inform the resourceAi that there is no resource of that type in the known world
+				worker.sendNotification(Notification.NO_MORE_RESOURCE, resourceToCollect, worker.getResourceAID());
 			} else {
-				System.out.println("RESOURCE HERE");
+				logger.info("Found " + resourceToCollect + " in " + resourcePosition + "; I'm going there");
+				worker.goThere(resourcePosition);
+			}
+		} else { // there is still resourceToCollect in resourcePosition
+			boolean nearResource = worker.getPosition().isNextTo(resourcePosition);
+			boolean nearCityCenter = worker.getPosition().isNextTo(cityCenter);
+			if (nearResource && !worker.knapsackIsFull()) {
 				worker.spendTime();
 				worker.takeResources(resourcePosition);
-			}
-		} else if (nearCityCenter && worker.knapsackIsFull()) {
-			worker.dropResources();
-		} else if (worker.knapsackIsFull()) {
-			worker.goThere(cityCenter);
-		} else if (!worker.knapsackIsFull()) {
-			resourcePosition = worker.findNearest(resourceToCollect);
-			if (resourcePosition == null) {
-				worker.switchStatus(AgentStatus.FREE);
-				// TODO inform the resourceAi that there is no resource of that type in the known world
-			} else {
-				worker.goThere(resourcePosition);
+			} else if (nearCityCenter && worker.knapsackIsFull()) {
+				worker.dropResources();
+			} else if (worker.knapsackIsFull()) {
+				worker.goThere(cityCenter);
+			} else if (!worker.knapsackIsFull()) {
+				// segno questa cella come non raggiungibile e cerco un'altra risorsa uguale
+				map.set(resourcePosition, new Cell(CellType.FREE));
+				resourcePosition = worker.findNearest(resourceToCollect);
+				if (resourcePosition == null) {
+					worker.switchStatus(AgentStatus.FREE);
+					// inform the resourceAi that there is no resource of that type in the known world
+					worker.sendNotification(Notification.NO_MORE_RESOURCE, resourceToCollect, worker.getResourceAID());
+				} else {
+					worker.goThere(resourcePosition);
+				}
 			}
 		}
 	}
@@ -73,7 +79,7 @@ public class CollectResources extends UnitBehaviour {
 	
 	@Override
 	public boolean done() {
-		String agentStatus = ((Unit) myAgent).getStatus();
+		String agentStatus = worker.getStatus();
 		if (!agentStatus.equals(AgentStatus.FOOD_COLLECTING) && resourceToCollect == CellType.FOOD)
 			return true;
 		if (!agentStatus.equals(AgentStatus.WOOD_CUTTING) && resourceToCollect == CellType.WOOD)

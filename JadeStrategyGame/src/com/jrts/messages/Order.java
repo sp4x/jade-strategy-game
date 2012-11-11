@@ -1,4 +1,4 @@
-package com.jrts.common;
+package com.jrts.messages;
 
 import java.io.Serializable;
 import java.util.HashMap;

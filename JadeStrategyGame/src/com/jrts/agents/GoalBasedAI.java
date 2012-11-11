@@ -7,11 +7,11 @@ import java.io.IOException;
 
 import com.jrts.behaviours.CheckGoals;
 import com.jrts.common.AgentStatus;
-import com.jrts.common.Order;
 import com.jrts.common.ResourcesContainer;
 import com.jrts.common.UnitFactory;
 import com.jrts.common.UnitTable;
 import com.jrts.messages.GoalLevels;
+import com.jrts.messages.Order;
 
 public abstract class GoalBasedAI extends JrtsAgent {
 

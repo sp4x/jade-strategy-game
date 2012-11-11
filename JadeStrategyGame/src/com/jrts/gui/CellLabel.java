@@ -1,6 +1,7 @@
 package com.jrts.gui;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -27,7 +28,22 @@ public class CellLabel extends JLabel {
 		
 		super.addMouseListener(new MouseAdapter() {
 			@Override
+			public void mouseEntered(MouseEvent e) {
+				e.getComponent().setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+				super.mouseEntered(e);
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				e.getComponent().setCursor(Cursor.getDefaultCursor());
+				super.mouseExited(e);
+			}
+			
+			@Override
 			public void mouseClicked(MouseEvent e) {
+				if (e.getButton() != MouseEvent.BUTTON1)
+					return;
+				
 				Cell cell = World.getInstance().getCell(new Position(i, j));
 				if(MainFrame.getInstance().clickType.equals(MainFrame.selectionClick))
 				{
