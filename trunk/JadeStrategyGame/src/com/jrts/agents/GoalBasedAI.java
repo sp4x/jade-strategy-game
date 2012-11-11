@@ -103,5 +103,7 @@ public abstract class GoalBasedAI extends JrtsAgent {
 		return unitTable;
 	}
 	
-	
+	public AID getMasterAID() {
+		return new AID(getTeamName(), AID.ISLOCALNAME);
+	}
 }

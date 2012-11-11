@@ -44,21 +44,21 @@ public class WorldMap extends Floor {
 	// }
 
 	public Position findNearest(Position center, CellType type) {
-//		return nextTo(center, type, (rows + cols) / 2);
-
-		Position nearest = null;
-		double distance = Double.MAX_VALUE;
-		for (int i=0; i < getRows(); i++) {
-			for (int j=0; j < getCols(); j++) {
-				if (get(i, j).getType() == type) {
-					Position currPos = new Position(i, j);
-					if (center.distance(currPos) < distance) 
-						nearest = currPos;
-				}
-			}
-		}
-		
-		return nearest;
+		return nextTo(center, type, (rows + cols) / 2);
+//
+//		Position nearest = null;
+//		double distance = Double.MAX_VALUE;
+//		for (int i=0; i < getRows(); i++) {
+//			for (int j=0; j < getCols(); j++) {
+//				if (get(i, j).getType() == type) {
+//					Position currPos = new Position(i, j);
+//					if (center.distance(currPos) < distance) 
+//						nearest = currPos;
+//				}
+//			}
+//		}
+//		
+//		return nearest;
 	}
 
 }
