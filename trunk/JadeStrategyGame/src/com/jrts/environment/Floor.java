@@ -128,8 +128,9 @@ public class Floor implements Serializable {
 	}
 	
 	public void set(Position p, Cell st) {
-		if (isValid(p))
+		if (isValid(p)) {
 			this.floor[p.row][p.col] = st;
+		}
 	}
 
 	public int getRows() {
@@ -248,7 +249,11 @@ public class Floor implements Serializable {
 	}
 	
 	public boolean isValid(Position p) {
-		return p != null && p.row >= 0 && p.col >= 0 && p.row <= rows && p.col <= cols; 
+		return p != null && p.row >= 0 && p.col >= 0 && p.row < rows && p.col < cols; 
+	}
+	
+	public boolean isWalkable(Position p) {
+		return isValid(p) && (get(p).type == CellType.FREE || get(p).type == CellType.UNKNOWN);
 	}
 	
 }

@@ -1,12 +1,10 @@
 package com.jrts.behaviours;
 import junit.framework.Assert;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import com.jrts.agents.Unit;
 import com.jrts.agents.Worker;
-import com.jrts.common.ThreadMonitor;
 import com.jrts.environment.Cell;
 import com.jrts.environment.CellType;
 import com.jrts.environment.Floor;
@@ -38,7 +36,7 @@ public class FollowPathTest {
 		simulate(5, 7, agents, target);
 	}
 	
-	@Test
+//	@Test
 	// -------
 	// ----+--
 	// ----++-
@@ -54,7 +52,7 @@ public class FollowPathTest {
 	}
 	
 
-	@Test
+//	@Test
 	// -------
 	// ---x---
 	// --+----
