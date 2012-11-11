@@ -18,15 +18,16 @@ public class UnitFactory extends Thread {
 	
 	String team;
 	PlatformController controller;
-	
+	Position cityCenter;
 	long unitCounter = 0;
 	
 	LinkedBlockingQueue<Class<? extends Unit>> queue;
 	
-	public UnitFactory(String team, PlatformController controller) {
+	public UnitFactory(String team, PlatformController controller, Position cityCenter) {
 		this.team = team;
 		this.controller = controller;
-		queue = new LinkedBlockingQueue<Class<? extends Unit>>();
+		this.queue = new LinkedBlockingQueue<Class<? extends Unit>>();
+		this.cityCenter = cityCenter;
 	}
 	
 
@@ -64,7 +65,7 @@ public class UnitFactory extends Thread {
 		logger.info(team + " unit factory is creating a " + claz.getSimpleName());
 		World world = World.getInstance();
 		String unitName = team + "-" + claz.getSimpleName() + counter();
-		Position unitPosition = world.neighPosition(world.getCityCenter(team));
+		Position unitPosition = world.neighPosition(cityCenter);
 		if(unitPosition != null){
 			//Instantiate the unit
 			AgentController agentController;

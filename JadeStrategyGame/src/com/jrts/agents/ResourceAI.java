@@ -3,6 +3,7 @@ package com.jrts.agents;
 import jade.core.AID;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.core.behaviours.WakerBehaviour;
+import jade.lang.acl.ACLMessage;
 
 import com.jrts.behaviours.UpdateUnitTable;
 import com.jrts.common.AgentStatus;
@@ -19,6 +20,8 @@ public class ResourceAI extends GoalBasedAI {
 
 	int workersCounter = 0;
 
+	boolean noMoreFood = false, noMoreWood = false;
+	
 	public ResourceAI() {
 		super();
 	}
@@ -26,9 +29,6 @@ public class ResourceAI extends GoalBasedAI {
 	protected void setup() {
 		super.setup();
 
-		unitFactory.trainUnit(Worker.class);
-		// unitFactory.trainUnit(Worker.class);
-		//
 		// // order someone to cut wood
 		addBehaviour(new WakerBehaviour(this, 5000) {
 			@Override
@@ -132,6 +132,7 @@ public class ResourceAI extends GoalBasedAI {
 
 	@Override
 	protected void updatePerception() {
+		
 	}
 
 	@Override
@@ -147,12 +148,17 @@ public class ResourceAI extends GoalBasedAI {
 			//TODO what to do?
 			
 		} else if (notification.getSubject().equals(Notification.RESOURCES_UPDATE)) {
-			System.out.println("******************* HANDLE RESOURCES_UPDATE ************************");
 			AggiornaRisorse aggiornamento = (AggiornaRisorse) notification.getContentObject();
 			int collectedFood = aggiornamento.getFood();
 			int collectedWood = aggiornamento.getWood();
 			resourcesContainer.addFood(collectedFood);
 			resourcesContainer.addWood(collectedWood);
 		}
+	}
+
+	@Override
+	protected void handleRequest(ACLMessage msg) {
+		// TODO Auto-generated method stub
+		
 	}
 }

@@ -14,6 +14,7 @@ import javax.swing.JOptionPane;
 import com.jrts.O2Ainterfaces.Team;
 import com.jrts.agents.MasterAI;
 import com.jrts.common.GameConfig;
+import com.jrts.environment.Position;
 import com.jrts.environment.World;
 import com.jrts.gui.MainFrame;
 
@@ -44,12 +45,15 @@ public class JadeStrategyGame {
 		/** create and start all the team's masterAi */
 		for (int i = 1; i <= teamNumber; i++) {
 			String teamName = "team" + i;
-			AgentController controller = ac.createNewAgent(teamName, MasterAI.class.getName(), new Object[0]);
+			
+			Position cityCenter = World.getInstance().addTeam(teamName);
+			
+			Object[] masterAiArgs = {cityCenter};
+			AgentController controller = ac.createNewAgent(teamName, MasterAI.class.getName(), masterAiArgs);
 			controller.start();
 
 			Team team = controller.getO2AInterface(Team.class);
 			teams.add(team);
-			World.getInstance().addTeam(teamName);
 		}
 
 		/** start graphics */

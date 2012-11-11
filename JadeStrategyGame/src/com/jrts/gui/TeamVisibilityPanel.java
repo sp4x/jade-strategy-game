@@ -57,6 +57,7 @@ public class TeamVisibilityPanel extends JPanel {
 
 	class VisibilityPanel extends JPanel {
 		
+		private static final long serialVersionUID = 1L;
 		Team team;
 		
 		public VisibilityPanel(Team t) {

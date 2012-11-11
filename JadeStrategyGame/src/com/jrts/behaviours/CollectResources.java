@@ -7,7 +7,6 @@ import com.jrts.common.AgentStatus;
 import com.jrts.environment.Cell;
 import com.jrts.environment.CellType;
 import com.jrts.environment.Position;
-import com.jrts.environment.World;
 import com.jrts.environment.WorldMap;
 import com.jrts.messages.Notification;
 
@@ -30,7 +29,7 @@ public class CollectResources extends UnitBehaviour {
 		super(false, worker);
 		this.worker = worker;
 		this.resourceToCollect = resource;
-		this.cityCenter = World.getInstance().getCityCenter(worker.getTeamName());
+		this.cityCenter = worker.requestCityCenterPosition();
 	}
 
 	public void action() {
