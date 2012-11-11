@@ -93,7 +93,7 @@ public class Floor implements Serializable {
 		for (int i = 0; i < numObjects; i++) {
 			int random = Math.abs(Utils.random.nextInt()) % cells.size();
 			Square myCell = cells.remove(random);
-			floor[myCell.x][myCell.y] = objectsType;
+			floor[myCell.x][myCell.y] = new Cell(objectsType);
 		}
 	}
 
