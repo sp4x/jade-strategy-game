@@ -63,8 +63,6 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 		if (args != null) {
 			setPosition((Position) args[0]);
 			setTeamName((String) args[1]);
-		} else {
-
 		}
 		id = getAID().getLocalName();
 		agentDescription = new DFAgentDescription();

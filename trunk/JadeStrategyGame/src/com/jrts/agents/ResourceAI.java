@@ -2,7 +2,6 @@ package com.jrts.agents;
 
 import jade.core.AID;
 import jade.core.behaviours.CyclicBehaviour;
-import jade.core.behaviours.WakerBehaviour;
 import jade.lang.acl.ACLMessage;
 
 import com.jrts.behaviours.UpdateUnitTable;
@@ -29,15 +28,6 @@ public class ResourceAI extends GoalBasedAI {
 
 	protected void setup() {
 		super.setup();
-
-		// // order someone to cut wood
-		addBehaviour(new WakerBehaviour(this, 5000) {
-			@Override
-			protected void handleElapsedTimeout() {
-				assignWoodcutter();
-				// assignFoodCollector();
-			}
-		});
 
 		addBehaviour(new UpdateUnitTable(this, Worker.class));
 
@@ -72,7 +62,8 @@ public class ResourceAI extends GoalBasedAI {
 	protected void trainWorkers() {
 		int numWorkers = extimateNumWorkers() - workersCounter;
 		for (int i = 0; i < numWorkers; i++) {
-			if (resourcesContainer.isThereEnoughFood(GameConfig.WORKER_FOOD_COST) && resourcesContainer.isThereEnoughWood(GameConfig.WORKER_WOOD_COST)) {
+			if (resourcesContainer.isThereEnoughFood(GameConfig.WORKER_FOOD_COST) && 
+					resourcesContainer.isThereEnoughWood(GameConfig.WORKER_WOOD_COST)) {
 
 				resourcesContainer.removeFood(GameConfig.WORKER_FOOD_COST);
 				resourcesContainer.removeWood(GameConfig.WORKER_WOOD_COST);
@@ -163,8 +154,8 @@ public class ResourceAI extends GoalBasedAI {
 	protected void handleNotification(Notification notification) {
 		if (notification.getSubject().equals(Notification.NO_MORE_RESOURCE)) {
 			CellType resourceType = (CellType) notification.getContentObject();
-			logger.info(getAID() + ": no more " + resourceType + " in our known world..");
-//			sendNotification(Notification.NO_MORE_RESOURCE, resourceType, getMasterAID());
+			logger.info(getAID().getName() + ": no more " + resourceType + " in our known world..");
+			sendNotification(Notification.NO_MORE_RESOURCE, resourceType, getMasterAID());
 			if (resourceType.equals(CellType.FOOD))
 				noMoreFood = true;
 			else
