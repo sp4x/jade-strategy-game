@@ -5,7 +5,7 @@ import jade.lang.acl.ACLMessage;
 
 import java.io.IOException;
 
-import com.jrts.behaviours.CheckGoals;
+import com.jrts.agents.MasterAI.Nature;
 import com.jrts.common.AgentStatus;
 import com.jrts.common.ResourcesContainer;
 import com.jrts.common.UnitFactory;
@@ -13,6 +13,7 @@ import com.jrts.common.UnitTable;
 import com.jrts.environment.Position;
 import com.jrts.environment.WorldMap;
 import com.jrts.messages.GoalLevels;
+import com.jrts.messages.Notification;
 import com.jrts.messages.Order;
 
 public abstract class GoalBasedAI extends JrtsAgent {
@@ -26,6 +27,7 @@ public abstract class GoalBasedAI extends JrtsAgent {
 	ResourcesContainer resourcesContainer;
 	WorldMap worldMap;
 	Position cityCenter;
+	Nature nature;
 	
 	UnitTable unitTable = new UnitTable();
 	
@@ -43,54 +45,19 @@ public abstract class GoalBasedAI extends JrtsAgent {
 			resourcesContainer = (ResourcesContainer) args[2];
 			worldMap = (WorldMap) args[3];
 			cityCenter = (Position) args[4];
+			nature = (Nature) args[5];
 		} else {
 			logger.severe("Needs team's name");
 			System.exit(1);
 		}
-		
-		addBehaviour(new CheckGoals());
-	}
-	
-//	public AID trainUnit(Class<? extends Unit> claz)  {
-//		World world = World.getInstance();
-//		String unitName = getTeamName() + "-" + claz.getSimpleName() + unitCounter++;
-//		Position unitPosition = world.neighPosition(world.getCityCenter(getTeamName()));
-//		if(unitPosition != null){
-//			//Instantiate the unit
-//			PlatformController container = getContainerController();
-//			AgentController agentController;
-//			try {
-//				Object[] args = {unitPosition, getTeamName()};
-//				agentController = container.createNewAgent(unitName, claz.getName(), args);
-//				agentController.start();
-//				IUnit o2a = agentController.getO2AInterface(IUnit.class);
-//				World.getInstance().addUnit(unitPosition, unitName, o2a);
-//				
-//				AID unitAID = new AID(unitName, AID.ISLOCALNAME);
-//				return unitAID;
-//			} catch (ControllerException e) {
-//				e.printStackTrace();
-//			}
-//		}
-//		else{
-//			logger.severe(getTeamName() + ":Cannot instantiate the unit");
-//		}
-//		return null;
-//	}
-	
-	public void updateGoalLevels(GoalLevels goals) {
-		this.goalLevels = goals;
-		onGoalsChanged();
 	}
 	
 	public abstract void onGoalsChanged();
 
-	//public void changeAgentStatus(AID target, String newStatus) {
-	public void changeAgentStatus(AID target, Order order) {
+	public void giveOrder(AID target, Order order) {
 		ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
 		msg.setConversationId(AgentStatus.class.getSimpleName());
 		msg.addReceiver(target);
-		//msg.setContent(newStatus);
 		
 		try {
 			msg.setContentObject(order);
@@ -105,5 +72,13 @@ public abstract class GoalBasedAI extends JrtsAgent {
 	
 	public AID getMasterAID() {
 		return new AID(getTeamName(), AID.ISLOCALNAME);
+	}
+	
+	@Override
+	protected void handleNotification(Notification n) {
+		if (n.getSubject().equals(Notification.GOAL_LEVELS)) {
+			this.goalLevels = (GoalLevels) n.getContentObject();
+			onGoalsChanged();
+		}
 	}
 }

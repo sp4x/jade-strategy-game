@@ -29,8 +29,6 @@ public class GoalLevels implements Serializable {
 		this.exploration = exploration;
 	}
 
-
-
 	public GoalPriority getResources() {
 		return resources;
 	}

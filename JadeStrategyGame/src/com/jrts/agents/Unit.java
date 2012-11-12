@@ -24,6 +24,7 @@ import com.jrts.environment.Perception;
 import com.jrts.environment.Position;
 import com.jrts.environment.World;
 import com.jrts.environment.WorldMap;
+import com.jrts.messages.EnemySighting;
 import com.jrts.messages.MessageSubject;
 import com.jrts.messages.Notification;
 
@@ -72,7 +73,7 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 		basicService.setType(getClass().getSimpleName());
 		agentDescription.addServices(basicService);
 		register(agentDescription, false);
-		addBehaviour(new LookForEnemy(this, 2000));
+		addBehaviour(new LookForEnemy(this, 1000));
 		addBehaviour(new ReceiveOrders(this));
 		addBehaviour(behaviourWrapper);
 	}
@@ -98,6 +99,10 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 		return new AID(getTeamName() + "-resourceAI", AID.ISLOCALNAME);
 	}
 
+	public AID getMilitaryAID() {
+		return new AID(getTeamName() + "-militaryAI", AID.ISLOCALNAME);
+	}
+	
 	@Override
 	protected void updatePerception() {
 		perception = World.getInstance().getPerception(getPosition(), sight);
@@ -266,4 +271,6 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 		// TODO Auto-generated method stub
 		
 	}
+
+	public abstract void onEnemySighted(EnemySighting list);
 }
