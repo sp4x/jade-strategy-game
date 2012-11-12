@@ -33,10 +33,8 @@ public class DijkstraPathfinder implements Pathfinder {
 		}
 
 		if (mainWalkableGraph == null) {
-			System.out.println("Creo grafo");
 			mainWalkableGraph = createWalkableGraph(floor, new Position(0, 0),
-					new Position(GameConfig.WORLD_ROWS - 1,
-							GameConfig.WORLD_COLS - 1), true);
+					new Position(GameConfig.WORLD_ROWS - 1, GameConfig.WORLD_COLS - 1), true);
 		}
 
 		UndirectedWeightedGraph walkableGraph = mainWalkableGraph.clone();
@@ -45,9 +43,9 @@ public class DijkstraPathfinder implements Pathfinder {
 		for (int row = 0; row < floor.getRows(); row++)
 			for (int col = 0; col < floor.getCols(); col++) {
 				Position p = new Position(row, col);
-				if (!p.equals(startPosition)
+				if (floor.get(p).getType() != CellType.UNKNOWN
 						&& floor.get(p).getType() != CellType.FREE
-						&& floor.get(p).getType() != CellType.UNKNOWN)
+						&& !p.equals(startPosition))
 					walkableGraph.removeVertex(p);
 			}
 
@@ -58,10 +56,8 @@ public class DijkstraPathfinder implements Pathfinder {
 		List<DefaultWeightedEdge> list = new DijkstraShortestPath<Position, DefaultWeightedEdge>(
 				walkableGraph, startPosition, endPosition).getPathEdgeList();
 		// System.out.println("List Edges:" + list);
-		ArrayList<Position> cellList = edgeListToCellList(walkableGraph,
-				startPosition, list);
+		ArrayList<Direction> directions = edgeListToDirectionList(walkableGraph, startPosition, list);
 		// System.out.println("Cells List:" + cellList);
-		ArrayList<Direction> directions = cellListToDirections(cellList);
 		// System.out.println("Path's StartPos:" + startPosition);
 		// System.out.println("Path's EndPos:" + endPosition);
 		// System.out.println("Path's direction:" + directions);
@@ -185,13 +181,14 @@ public class DijkstraPathfinder implements Pathfinder {
 		return walkableGraph;
 	}
 
-	public ArrayList<Position> edgeListToCellList(
+	public ArrayList<Direction> edgeListToDirectionList(
 			UndirectedWeightedGraph walkableGraph, Position sourceNode,
 			List<DefaultWeightedEdge> list) {
 		ArrayList<Position> cellList = new ArrayList<Position>();
+		ArrayList<Direction> directionList = new ArrayList<Direction>();
 		cellList.add(sourceNode);
 		if (list == null)
-			return cellList;
+			return directionList;
 		Position curr = sourceNode;
 		for (int i = 0; i < list.size(); i++) {
 			Position source = walkableGraph.getEdgeSource(list.get(i));
@@ -201,47 +198,44 @@ public class DijkstraPathfinder implements Pathfinder {
 			else
 				curr = source;
 			cellList.add(curr);
-		}
-		return cellList;
-	}
-
-	public ArrayList<Direction> cellListToDirections(
-			ArrayList<Position> cellList) {
-		ArrayList<Direction> directionList = new ArrayList<Direction>();
-		for (int i = 0; i < cellList.size() - 1; i++) {
-			// System.out.println("Current edge " + cellList.get(i) + "-" +
-			// cellList.get(i+1));
-			int i1 = cellList.get(i).getRow();
-			int j1 = cellList.get(i).getCol();
-			int i2 = cellList.get(i + 1).getRow();
-			int j2 = cellList.get(i + 1).getCol();
-
-			if (i1 != i2) {// dall'alto in basso o viceversa
-				if (i1 < i2) {// scende
-					if (j1 == j2)// stessa colonna
-						directionList.add(Direction.DOWN);
-					else if (j1 < j2)// scende verso destra
-						directionList.add(Direction.RIGHT_DOWN);
-					else if (j1 > j2)// scende verso sinistra
-						directionList.add(Direction.LEFT_DOWN);
-				} else {// sale
-					if (j1 == j2)// stessa colonna
-						directionList.add(Direction.UP);
-					else if (j1 < j2)// sale verso destra
-						directionList.add(Direction.RIGHT_UP);
-					else if (j1 > j2)// sale verso sinistra
-						directionList.add(Direction.LEFT_UP);
-				}
-			} else // stessa riga
-			if (j1 != j2) {
-				if (j1 < j2)
-					directionList.add(Direction.RIGHT);
-				else
-					directionList.add(Direction.LEFT);
+			if(cellList.size()>1){
+				Position previous = cellList.get(cellList.size()-2);
+				Position last = cellList.get(cellList.size()-1);
+				directionList.add(getDirection(previous, last));
 			}
-			// System.out.println("Direction choosed " +
-			// directionList.get(directionList.size()-1));
 		}
 		return directionList;
+	}
+	
+	public Direction getDirection(Position start, Position end) {
+		int i1 = start.getRow();
+		int j1 = start.getCol();
+		int i2 = end.getRow();
+		int j2 = end.getCol();
+
+		if (i1 != i2) {// dall'alto in basso o viceversa
+			if (i1 < i2) {// scende
+				if (j1 == j2)// stessa colonna
+					return Direction.DOWN;
+				else if (j1 < j2)// scende verso destra
+					return Direction.RIGHT_DOWN;
+				else if (j1 > j2)// scende verso sinistra
+					return Direction.LEFT_DOWN;
+			} else {// sale
+				if (j1 == j2)// stessa colonna
+					return Direction.UP;
+				else if (j1 < j2)// sale verso destra
+					return Direction.RIGHT_UP;
+				else if (j1 > j2)// sale verso sinistra
+					return Direction.LEFT_UP;
+			}
+		} else // stessa riga
+		if (j1 != j2) {
+			if (j1 < j2)
+				return Direction.RIGHT;
+			else
+				return Direction.LEFT;
+		}
+		return Direction.DOWN;
 	}
 }
