@@ -8,6 +8,7 @@ import com.jrts.environment.CellType;
 import com.jrts.environment.Direction;
 import com.jrts.environment.Position;
 import com.jrts.logic.AttacksManager;
+import com.jrts.messages.EnemySighting;
 
 @SuppressWarnings("serial")
 public class Soldier extends Unit {
@@ -65,5 +66,10 @@ public class Soldier extends Unit {
 	@Override
 	public CellType getType() {
 		return CellType.SOLDIER;
+	}
+
+	@Override
+	public void onEnemySighted(EnemySighting list) {
+		
 	}
 }

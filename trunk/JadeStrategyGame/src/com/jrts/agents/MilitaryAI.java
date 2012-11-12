@@ -1,5 +1,7 @@
 package com.jrts.agents;
 
+import java.util.ArrayList;
+
 import jade.core.AID;
 import jade.core.behaviours.WakerBehaviour;
 import jade.lang.acl.ACLMessage;
@@ -10,6 +12,7 @@ import com.jrts.common.AgentStatus;
 import com.jrts.common.GameConfig;
 import com.jrts.common.Utils;
 import com.jrts.environment.Direction;
+import com.jrts.messages.EnemySighting;
 import com.jrts.messages.Notification;
 import com.jrts.messages.Order;
 
@@ -75,7 +78,7 @@ public class MilitaryAI extends GoalBasedAI {
 
 	public void addPatroler()
 	{
-		AID soldier = this.getUnitTable().getFreeUnits();
+		AID soldier = this.getUnitTable().getAFreeUnit();
 		if(soldier != null){
 			
 			Direction angle = Utils.getMapAnglePosition(cityCenter);
@@ -117,7 +120,7 @@ public class MilitaryAI extends GoalBasedAI {
 				break;
 			}
 			
-			changeAgentStatus(soldier, order);
+			giveOrder(soldier, order);
 		}
 	}
 	
@@ -131,9 +134,40 @@ public class MilitaryAI extends GoalBasedAI {
 	}
 
 	@Override
-	protected void handleNotification(Notification notification) {
-		// TODO Auto-generated method stub
+	protected void handleNotification(Notification n) {
+		super.handleNotification(n);
+		if (n.getSubject().equals(Notification.ENEMY_SIGHTED)) {
+			EnemySighting e = (EnemySighting) n.getContentObject();
+			// forward notification to masterAi
+			sendNotification(n.getSubject(), n.getContentObject(), getMasterAID());
+			// numSightedSoldiers * x - distance * goalDifesa / y + numMyFreeSoldier * z
+			//          2/3				10/20		        5/6
+			int numSightedSoldiers = e.getSoldierNumber();
+			double distance = e.getUnitPosition().distance(cityCenter);
+			ArrayList<AID> freeSoldiers = unitTable.getFreeUnits();
+			int numMyFreeSoldier = freeSoldiers.size();
+			int x, y, z;
+			switch (nature) {
+			case AGGRESSIVE:
+				x = 3;
+				y = 3;
+				z = 3;
+				break;
+			case AVERAGE:
+				x = 2;
+				y = 2;
+				z = 1;
+				break;
+			case DEFENSIVE:
+				x = 1;
+				y = 1;
+				z = 1;
+				break;
+			default:
+				break;
+			}
 		
+		}
 	}
 
 	@Override

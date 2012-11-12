@@ -46,12 +46,12 @@ public class ResourceAI extends GoalBasedAI {
 	}
 
 	protected void employWorker() {
-		AID freeWorker = unitTable.getFreeUnits();
+		AID freeWorker = unitTable.getAFreeUnit();
 		if (freeWorker != null) {
 			String orderString = extimateResourceToCollect();
 			if (orderString != null ) {
 				Order order = new Order(orderString);
-				changeAgentStatus(freeWorker, order);
+				giveOrder(freeWorker, order);
 				unitTable.put(freeWorker, order.getOrder());
 			}
 		} else {
@@ -108,10 +108,10 @@ public class ResourceAI extends GoalBasedAI {
 
 	@Deprecated
 	public boolean assignWoodcutter() {
-		AID worker = unitTable.getFreeUnits();
+		AID worker = unitTable.getAFreeUnit();
 		if (worker != null) {
 			Order order = new Order(AgentStatus.WOOD_CUTTING);
-			changeAgentStatus(worker, order);
+			giveOrder(worker, order);
 			unitTable.put(worker, order.getOrder());
 			return true;
 		}
@@ -120,7 +120,7 @@ public class ResourceAI extends GoalBasedAI {
 
 	@Deprecated
 	public boolean assignFoodCollector() {
-		AID worker = unitTable.getFreeUnits();
+		AID worker = unitTable.getAFreeUnit();
 		if (worker != null) {
 			Order order = new Order(AgentStatus.FOOD_COLLECTING);
 			unitTable.put(worker, order.getOrder());
@@ -151,9 +151,11 @@ public class ResourceAI extends GoalBasedAI {
 	}
 
 	@Override
-	protected void handleNotification(Notification notification) {
-		if (notification.getSubject().equals(Notification.NO_MORE_RESOURCE)) {
-			CellType resourceType = (CellType) notification.getContentObject();
+	protected void handleNotification(Notification n) {
+		super.handleNotification(n);
+		
+		if (n.getSubject().equals(Notification.NO_MORE_RESOURCE)) {
+			CellType resourceType = (CellType) n.getContentObject();
 			logger.info(getAID().getName() + ": no more " + resourceType + " in our known world..");
 			sendNotification(Notification.NO_MORE_RESOURCE, resourceType, getMasterAID());
 			if (resourceType.equals(CellType.FOOD))
@@ -161,8 +163,8 @@ public class ResourceAI extends GoalBasedAI {
 			else
 				noMoreWood = true;
 			
-		} else if (notification.getSubject().equals(Notification.RESOURCES_UPDATE)) {
-			AggiornaRisorse aggiornamento = (AggiornaRisorse) notification.getContentObject();
+		} else if (n.getSubject().equals(Notification.RESOURCES_UPDATE)) {
+			AggiornaRisorse aggiornamento = (AggiornaRisorse) n.getContentObject();
 			int collectedFood = aggiornamento.getFood();
 			int collectedWood = aggiornamento.getWood();
 			resourcesContainer.addFood(collectedFood);

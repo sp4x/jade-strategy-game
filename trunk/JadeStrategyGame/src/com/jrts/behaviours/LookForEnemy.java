@@ -6,6 +6,9 @@ import jade.core.behaviours.TickerBehaviour;
 import com.jrts.agents.Unit;
 import com.jrts.environment.Cell;
 import com.jrts.environment.CellType;
+import com.jrts.environment.Position;
+import com.jrts.messages.EnemySighting;
+import com.jrts.messages.Notification;
 
 public class LookForEnemy extends TickerBehaviour {
 
@@ -24,21 +27,18 @@ public class LookForEnemy extends TickerBehaviour {
 		int row = unit.getPosition().getRow();
 		int col = unit.getPerception().getCols();
 		int sight = unit.getSight();
+		EnemySighting list = new EnemySighting(new Position(row,col));
 		for (int i = row - sight; i < row + sight; i++) {
 			for (int j = col - sight; j < col + sight; j++) {
-				check(unit.getPerception().get(i, j));
+				Cell cell = unit.getPerception().get(i,j);
+				if ((cell.getType() == CellType.SOLDIER || cell.getType() == CellType.WORKER) && !unit.isFriend(cell.getId())) {
+					list.addEnemy(cell.getUnit());
+				} 
 			}
 		}
-	}
-
-	private void check(Cell cell) {
-		Unit unit = (Unit) myAgent;
-		// TODO: E se celltype è WORKER?
-		if (cell.getType() == CellType.SOLDIER && !unit.isFriend(cell.getId()))
-			doSomething();
-	}
-
-	private void doSomething() {
-		
+		if (!list.isEmpty()) {
+			unit.sendNotification(Notification.ENEMY_SIGHTED, list, unit.getMilitaryAID());
+			unit.onEnemySighted(list);
+		}
 	}
 }

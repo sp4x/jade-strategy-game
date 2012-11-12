@@ -9,6 +9,7 @@ import com.jrts.environment.Position;
 import com.jrts.environment.World;
 import com.jrts.logic.AttacksManager;
 import com.jrts.messages.AggiornaRisorse;
+import com.jrts.messages.EnemySighting;
 import com.jrts.messages.Notification;
 
 @SuppressWarnings("serial")
@@ -94,6 +95,12 @@ public class Worker extends Unit {
 	
 	public int getKnapsack() {
 		return knapsack;
+	}
+
+	@Override
+	public void onEnemySighted(EnemySighting list) {
+		// TODO Auto-generated method stub
+		
 	}
 }
 ;

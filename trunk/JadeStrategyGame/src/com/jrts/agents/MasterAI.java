@@ -29,7 +29,9 @@ import com.jrts.messages.Notification;
 public class MasterAI extends JrtsAgent implements Team {
 
 	public enum Nature {
-		AGGRESSIVE, AVERAGE, DEFENSIVE
+		AGGRESSIVE, 
+		AVERAGE, 
+		DEFENSIVE
 	}
 
 	AID resourceAID, militaryAID;
@@ -88,7 +90,7 @@ public class MasterAI extends JrtsAgent implements Team {
 
 			resourcesContainer = new ResourcesContainer(GameConfig.STARTUP_WOOD, GameConfig.STARTUP_FOOD);
 
-			Object[] arg = {getTeamName(), unitFactory, resourcesContainer, worldMap, cityCenter};
+			Object[] arg = {getTeamName(), unitFactory, resourcesContainer, worldMap, cityCenter, nature};
 
 			resourceAI = container.createNewAgent(resourceAID.getLocalName(), ResourceAI.class.getName(), arg);
 			resourceAI.start();
@@ -150,17 +152,8 @@ public class MasterAI extends JrtsAgent implements Team {
 	}
 
 	private void notifyGoalChanges() {
-		ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
-		msg.setConversationId(GoalLevels.class.getSimpleName());
-		msg.addReceiver(militaryAID);
-		msg.addReceiver(resourceAID);
-		try {
-			msg.setContentObject(goalLevels);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		send(msg);
+		sendNotification(Notification.GOAL_LEVELS, goalLevels, militaryAID);
+		sendNotification(Notification.GOAL_LEVELS, goalLevels, resourceAID);
 	}
 
 	@Override

@@ -23,7 +23,7 @@ public class UpdateUnitTable extends TickerBehaviour {
 	String unitTypeName;
 
 	public UpdateUnitTable(GoalBasedAI agent, Class<? extends Unit> clazz) {
-		super(agent, GameConfig.WORKERS_TABLE_REFRESH_TIME);
+		super(agent, GameConfig.UNIT_TABLE_REFRESH_TIME);
 		this.table = agent.getUnitTable();
 		this.unitTypeName = clazz.getSimpleName();
 	}
