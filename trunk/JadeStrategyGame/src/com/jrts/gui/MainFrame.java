@@ -26,6 +26,7 @@ import javax.swing.event.ChangeListener;
 import com.jrts.O2Ainterfaces.IUnit;
 import com.jrts.O2Ainterfaces.Team;
 import com.jrts.common.GameConfig;
+import com.jrts.common.GameStatistics;
 import com.jrts.environment.Cell;
 import com.jrts.environment.CellType;
 import com.jrts.environment.Floor;
@@ -49,7 +50,7 @@ public class MainFrame extends JFrame {
 
 	protected JPanel infoPanel;
 
-	private JLabel labelTeam, labelType, labelPosition, labelEnergy, labelAction;
+	private JLabel labelTeam, labelType, labelPosition, labelEnergy, labelAction, apsCounter;
 
 	private int selectedRow = 0, selectedCol = 0;
 
@@ -158,7 +159,7 @@ public class MainFrame extends JFrame {
 		infoPanel.add(new JLabel("Action:"));
 		labelAction = new JLabel("nothing");
 		infoPanel.add(labelAction);
-
+		
 		Dimension d = new Dimension(200, 150);
 		infoPanel.setPreferredSize(d);
 		infoPanel.setSize(d);
@@ -174,6 +175,13 @@ public class MainFrame extends JFrame {
 
 		leftInformationPanel.add(this.infoPanel);
 		leftInformationPanel.add(settingsPanel);
+		
+		JPanel statisticsPanel = new JPanel();
+		leftInformationPanel.add(statisticsPanel);
+		
+		statisticsPanel.add(new JLabel("Actions per seconds:"));
+		apsCounter = new JLabel("nothing");
+		statisticsPanel.add(apsCounter);
 		/************** END CREATING LEFT PANEL *******************************/
 		/**********************************************************************/
 
@@ -263,6 +271,7 @@ public class MainFrame extends JFrame {
 	}
 
 	public void update() {
+		apsCounter.setText(GameStatistics.getCounter() + "");
 		/** update all teampanels */
 		for (int i = 0; i < topPanel.getComponentCount(); i++) {
 			if (topPanel.getComponent(i) instanceof TeamResourcePanel)

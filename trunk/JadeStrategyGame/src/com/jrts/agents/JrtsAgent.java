@@ -56,6 +56,7 @@ public abstract class JrtsAgent extends Agent {
 				}
 			}
 		});
+		
 		addBehaviour(new CyclicBehaviour(this) {
 			
 			@Override

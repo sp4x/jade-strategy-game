@@ -158,7 +158,6 @@ public class MasterAI extends JrtsAgent implements Team {
 
 	@Override
 	public WorldMap getWorldMap() {
-
 		return this.worldMap;
 	}
 
@@ -170,11 +169,9 @@ public class MasterAI extends JrtsAgent implements Team {
 	@Override
 	protected void handleRequest(ACLMessage msg) throws IOException {
 		String messageSubject = msg.getConversationId();
-		if (messageSubject.equals(MessageSubject.GET_CITY_CENTER_POSITION)) {
+		if (messageSubject.equals(MessageSubject.GET_CITY_CENTER_POSITION))
 			msg.setContentObject(cityCenter);
-		} else if (messageSubject.equals(MessageSubject.GET_WORLD_MAP)) {
+		else if (messageSubject.equals(MessageSubject.GET_WORLD_MAP))
 			msg.setContentObject(worldMap);
-		}
 	}
-
 }

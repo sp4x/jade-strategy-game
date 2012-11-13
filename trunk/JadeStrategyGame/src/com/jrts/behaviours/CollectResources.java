@@ -32,7 +32,8 @@ public class CollectResources extends UnitBehaviour {
 		this.cityCenter = worker.requestCityCenterPosition();
 	}
 
-	public void action() {
+	@Override
+	public void myAction() {
 		WorldMap map = worker.requestMap();
 		
 		// check if there is still some resource to collect in resourcePosition

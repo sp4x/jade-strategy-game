@@ -55,7 +55,7 @@ public class PatrolBehaviour extends UnitBehaviour {
 	}
 
 	@Override
-	public void action() {
+	public void myAction() {
 
 		if(go1) this.soldier.goThere(p2);
 		else 	this.soldier.goThere(p1);
