@@ -32,7 +32,7 @@ public class FollowPathBehaviour extends UnitBehaviour {
 		this.worldCachedCopy = cachedCopy;
 
 		// se prima invocazione del behaviour
-		if (remainingAttempts == GameConfig.UNIT_MOVING_ATTEMPTS || worldCachedCopy == null) {
+		if (worldCachedCopy == null || remainingAttempts == GameConfig.UNIT_MOVING_ATTEMPTS) {
 			setWorldCachedCopy(unit.requestMap());
 		}
 
@@ -45,14 +45,14 @@ public class FollowPathBehaviour extends UnitBehaviour {
 
 	private void calculatePath() {
 		Position start = unit.getPosition();
-		this.list = Utils.calculatePath(getWorldCachedCopy(),
-				start, goal);
+		this.list = Utils.calculatePath(getWorldCachedCopy(), start, goal);
 		
 		unit.logger.info(unit.getId() + ":path: " + list);
 
 	}
-
-	public void action() {
+	
+	@Override
+	public void myAction() {
 		unit.spendTime();
 
 		// se non riesco a spostarmi ricalcolo il path
@@ -78,13 +78,6 @@ public class FollowPathBehaviour extends UnitBehaviour {
 
 	@Override
 	public boolean done() {
-		// Se il path � stato eseguito correttamente ma la posizione raggiunta
-		// non � quella giusta
-		// significa che � stata fatta un'approssimazione della posizione
-		// obiettivo
-		// if(list.isEmpty() && !unit.getPosition().equals(new Position(goalRow,
-		// goalCol)))
-		// unit.goThere(new Position(goalRow, goalCol));
 		return list.isEmpty();
 	}
 

@@ -18,6 +18,7 @@ import com.jrts.behaviours.LookForEnemy;
 import com.jrts.behaviours.ReceiveOrders;
 import com.jrts.behaviours.UnitBehaviour;
 import com.jrts.common.GameConfig;
+import com.jrts.common.GameStatistics;
 import com.jrts.environment.CellType;
 import com.jrts.environment.Direction;
 import com.jrts.environment.Perception;

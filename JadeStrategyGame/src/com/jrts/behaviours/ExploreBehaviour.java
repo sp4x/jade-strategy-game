@@ -29,7 +29,7 @@ public class ExploreBehaviour extends UnitBehaviour {
 	}
 
 	@Override
-	public void action() {
+	public void myAction() {
 		
 		this.soldier.logger.warning("BASE ACTION");
 		

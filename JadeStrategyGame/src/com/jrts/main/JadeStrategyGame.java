@@ -14,6 +14,7 @@ import javax.swing.JOptionPane;
 import com.jrts.O2Ainterfaces.Team;
 import com.jrts.agents.MasterAI;
 import com.jrts.common.GameConfig;
+import com.jrts.common.GameStatistics;
 import com.jrts.environment.Position;
 import com.jrts.environment.World;
 import com.jrts.gui.MainFrame;
@@ -21,6 +22,8 @@ import com.jrts.gui.MainFrame;
 public class JadeStrategyGame {
 
 	public static void main(String[] args) throws Exception {
+		new Thread(new GameStatistics()).start();
+		
 		String teamsString = "";
 		do {
 			teamsString = JOptionPane.showInputDialog("Number of teams (max 4)", "2");
