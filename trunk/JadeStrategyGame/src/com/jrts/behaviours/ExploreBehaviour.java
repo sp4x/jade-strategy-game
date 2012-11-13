@@ -40,27 +40,20 @@ public class ExploreBehaviour extends UnitBehaviour {
 		dir.add(Direction.RIGHT_DOWN);
 		
 		dir.remove(Utils.getMapAnglePosition(this.soldier.getPosition()));
-		this.soldier.logger.warning("SOLDATO IN " + Utils.getMapAnglePosition(this.soldier.getPosition()));
 		
 		boolean going = false;
 		for (int i = 0; i < 10 && !going ; i++)
 		{
 			Direction dirToGo = dir.get(Utils.random.nextInt(3));
-			
-			this.soldier.logger.warning("SOLDATO SI MUOVE IN " + dirToGo);
-			
 			Position posToGo = Utils.getRandomUnknownCellPosition(this.soldier.requestMap(), dirToGo);
 			
 			if(posToGo != null) 
 			{
-				this.soldier.logger.warning("SOLDATO VA " + posToGo);
-
 				this.soldier.goThere(posToGo);
 				going = true;
-			} else 
-				this.soldier.logger.warning("POSTOGO NULLL");
+			}
 		}
-		this.soldier.logger.warning("ESCO DAL FOR");
+		
 	}
 
 	@Override

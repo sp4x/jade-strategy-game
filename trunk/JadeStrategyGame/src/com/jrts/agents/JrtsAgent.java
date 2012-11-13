@@ -13,6 +13,7 @@ import jade.lang.acl.UnreadableException;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.jrts.common.GameConfig;
@@ -26,7 +27,7 @@ public abstract class JrtsAgent extends Agent {
 	private String team;
 
 	public JrtsAgent() {
-		//this.logger.setLevel(Level.WARNING);
+		this.logger.setLevel(Level.WARNING);
 	}
 	
 	@Override

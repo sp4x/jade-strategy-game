@@ -10,9 +10,11 @@ import com.jrts.behaviours.PatrolBehaviour;
 import com.jrts.behaviours.UpdateUnitTable;
 import com.jrts.common.AgentStatus;
 import com.jrts.common.GameConfig;
+import com.jrts.common.GoalPriority;
 import com.jrts.common.Utils;
 import com.jrts.environment.Direction;
 import com.jrts.messages.EnemySighting;
+import com.jrts.messages.GoalLevels;
 import com.jrts.messages.Notification;
 import com.jrts.messages.Order;
 
@@ -49,7 +51,7 @@ public class MilitaryAI extends GoalBasedAI {
 
 			@Override
 			protected void handleElapsedTimeout() {
-				addPatroler();
+				addExplorer();
 			}
 		});
 		
@@ -76,6 +78,13 @@ public class MilitaryAI extends GoalBasedAI {
 		}
 	}
 
+	public void addExplorer()
+	{
+		AID soldier = this.getUnitTable().getAFreeUnit();
+		if(soldier != null)
+			giveOrder(soldier, new Order(AgentStatus.EXPLORING));
+	}
+	
 	public void addPatroler()
 	{
 		AID soldier = this.getUnitTable().getAFreeUnit();
@@ -140,13 +149,12 @@ public class MilitaryAI extends GoalBasedAI {
 			EnemySighting e = (EnemySighting) n.getContentObject();
 			// forward notification to masterAi
 			sendNotification(n.getSubject(), n.getContentObject(), getMasterAID());
-			// numSightedSoldiers * x - distance * goalDifesa / y + numMyFreeSoldier * z
-			//          2/3				10/20		        5/6
+			
 			int numSightedSoldiers = e.getSoldierNumber();
-			double distance = e.getUnitPosition().distance(cityCenter);
+			int distance = (int)e.getUnitPosition().distance(cityCenter);
 			ArrayList<AID> freeSoldiers = unitTable.getFreeUnits();
 			int numMyFreeSoldier = freeSoldiers.size();
-			int x, y, z;
+			int x=1, y=1, z=1;
 			switch (nature) {
 			case AGGRESSIVE:
 				x = 3;
@@ -166,7 +174,21 @@ public class MilitaryAI extends GoalBasedAI {
 			default:
 				break;
 			}
-		
+			
+			// numSightedSoldiers * x - distance * goalDifesa / y + numMyFreeSoldier * z
+						//          2/3				10/20		        5/6
+			
+			//TODO: Un numero che che rappresneti il livelo dovrebbe essere messo altrove, visto che sarà utilizzato spesso
+			int defence = 1;
+			if(goalLevels.getDefence().equals(GoalPriority.LOW))
+				defence = 1;
+			else if(goalLevels.getDefence().equals(GoalPriority.MEDIUM))
+				defence = 2;
+			else if(goalLevels.getDefence().equals(GoalPriority.HIGH))
+				defence = 3;
+			
+			int heuristic = numSightedSoldiers*x - distance*defence/y + numMyFreeSoldier*z;
+			System.out.println("CALCOLO EURISTICA, VALORE: " + heuristic);
 		}
 	}
 

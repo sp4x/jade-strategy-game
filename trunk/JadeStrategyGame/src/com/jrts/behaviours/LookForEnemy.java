@@ -3,6 +3,7 @@ package com.jrts.behaviours;
 import jade.core.Agent;
 import jade.core.behaviours.TickerBehaviour;
 
+import com.jrts.agents.JrtsAgent;
 import com.jrts.agents.Unit;
 import com.jrts.environment.Cell;
 import com.jrts.environment.CellType;
@@ -32,6 +33,9 @@ public class LookForEnemy extends TickerBehaviour {
 			for (int j = col - sight; j < col + sight; j++) {
 				Cell cell = unit.getPerception().get(i,j);
 				if ((cell.getType() == CellType.SOLDIER || cell.getType() == CellType.WORKER) && !unit.isFriend(cell.getId())) {
+					
+					JrtsAgent a = (JrtsAgent)myAgent;
+					System.out.println(a.getTeamName() + ": AGGIUNGO UN " + cell.getType() + " di " + cell.getId());
 					list.addEnemy(cell.getUnit());
 				} 
 			}
