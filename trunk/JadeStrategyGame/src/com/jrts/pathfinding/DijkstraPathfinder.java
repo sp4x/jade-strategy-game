@@ -40,14 +40,8 @@ public class DijkstraPathfinder implements Pathfinder {
 		UndirectedWeightedGraph walkableGraph = mainWalkableGraph.clone();
 
 		// adapt current walkableGraph from global
-		for (int row = 0; row < floor.getRows(); row++)
-			for (int col = 0; col < floor.getCols(); col++) {
-				Position p = new Position(row, col);
-				if (floor.get(p).getType() != CellType.UNKNOWN
-						&& floor.get(p).getType() != CellType.FREE
-						&& !p.equals(startPosition))
-					walkableGraph.removeVertex(p);
-			}
+		for (int index = 0; index < floor.getBusyCells().size(); index++)
+			walkableGraph.removeVertex(floor.getBusyCells().get(index));
 
 		if (!walkableGraph.containsVertex(endPosition)) {
 			// System.out.println("Dest Node not reachable");

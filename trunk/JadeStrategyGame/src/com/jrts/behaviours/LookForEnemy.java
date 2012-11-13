@@ -36,7 +36,8 @@ public class LookForEnemy extends TickerBehaviour {
 					
 					JrtsAgent a = (JrtsAgent)myAgent;
 					System.out.println(a.getTeamName() + ": AGGIUNGO UN " + cell.getType() + " di " + cell.getId());
-					list.addEnemy(cell.getUnit());
+					if(cell.getUnit() != null)//todo questa è solo un cerotto
+						list.addEnemy(cell.getUnit());
 				} 
 			}
 		}

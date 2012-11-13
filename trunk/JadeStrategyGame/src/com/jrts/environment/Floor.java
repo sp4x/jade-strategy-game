@@ -1,6 +1,7 @@
 package com.jrts.environment;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 
@@ -25,10 +26,12 @@ public class Floor implements Serializable {
 
 	private Cell [][] floor;
 	
+	ArrayList<Position> busyCells = new ArrayList<Position>();
+	
 	public Floor(int rows, int cols, CellType defaultCell){
 		this.rows = rows;
 		this.cols = cols;
-		this.floor = new Cell[rows][cols];
+		floor = new Cell[rows][cols];
 		setAll(new Cell(defaultCell));
 	}
 	
@@ -43,18 +46,18 @@ public class Floor implements Serializable {
 
 
 	public Floor(Floor floor) {
-		this.rows = floor.getRows();
-		this.cols = floor.getCols();
+		rows = floor.getRows();
+		cols = floor.getCols();
 		this.floor = new Cell[rows][cols];
 		for (int i = 0; i < rows; i++)
 			for (int j = 0; j < cols; j++)
-				this.floor[i][j] = new Cell(floor.get(i, j));
+				set(i, j, new Cell(floor.get(i, j)));
 	}
 
 	public void setAll(Cell objectsType) {
 		for (int i = 0; i < rows; i++)
 			for (int j = 0; j < cols; j++)
-				this.floor[i][j] = objectsType;
+				set(i, j, objectsType);
 	}
 	
 	/**
@@ -93,14 +96,14 @@ public class Floor implements Serializable {
 		for (int i = 0; i < numObjects; i++) {
 			int random = Math.abs(Utils.random.nextInt()) % cells.size();
 			Square myCell = cells.remove(random);
-			floor[myCell.x][myCell.y] = new Cell(objectsType);
+			set(myCell.x, myCell.y, objectsType);
 		}
 	}
 
 	public void load(Floor floor){
 		this.floor = floor.floor;
-		this.cols = floor.cols;
-		this.rows = floor.rows;
+		cols = floor.cols;
+		rows = floor.rows;
 	}
 
 	/**
@@ -112,7 +115,7 @@ public class Floor implements Serializable {
 	public Cell get(int i, int j){
 		if(i<0 || j<0 || i>=rows || j>=cols)
 			return new Cell(CellType.UNKNOWN);
-		return this.floor[i][j];
+		return floor[i][j];
 	}
 
 	/**
@@ -122,15 +125,26 @@ public class Floor implements Serializable {
 	 * @param j 	the Cell's column
 	 * @param st	the Cell's state
 	 */
-	public void set(int i, int j, Cell st){
-		if(i>=0 && j>=0 && i<=rows && j<=cols)
-			this.floor[i][j] = st;
+	public void set(int i, int j, Cell newCell){
+		Position position = new Position(i, j);
+		CellType newType = newCell.getType();
+		CellType currType = CellType.FREE;
+		if(floor[i][j] != null)
+			currType = floor[i][j].getType();
+		
+		if(i>=0 && j>=0 && i<=rows && j<=cols){
+			//se sto per settare una cella occupata
+			if(!isTypeWalkable(newType) && !busyCells.contains(position))
+				busyCells.add(position);
+			//se sto per liberare una cella occupata
+			if(isTypeWalkable(currType) && !isTypeWalkable(newType) && busyCells.contains(position))
+				busyCells.remove(position);
+			floor[i][j] = newCell;
+		}
 	}
 	
 	public void set(Position p, Cell st) {
-		if (isValid(p)) {
-			this.floor[p.row][p.col] = st;
-		}
+		set(p.getRow(), p.getCol(), st);
 	}
 
 	public int getRows() {
@@ -253,7 +267,14 @@ public class Floor implements Serializable {
 	}
 	
 	public boolean isWalkable(Position p) {
-		return isValid(p) && (get(p).type == CellType.FREE || get(p).type == CellType.UNKNOWN);
+		return isValid(p) && isTypeWalkable(get(p).type);
 	}
 	
+	public boolean isTypeWalkable(CellType type) {
+		return type == CellType.FREE || type == CellType.UNKNOWN;
+	}
+
+	public ArrayList<Position> getBusyCells() {
+		return busyCells;
+	}
 }
