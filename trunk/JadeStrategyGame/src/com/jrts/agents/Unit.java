@@ -11,7 +11,6 @@ import com.jrts.O2Ainterfaces.IUnit;
 import com.jrts.behaviours.BehaviourWrapper;
 import com.jrts.behaviours.FollowPathBehaviour;
 import com.jrts.behaviours.LookForEnemy;
-import com.jrts.behaviours.ReceiveOrders;
 import com.jrts.behaviours.UnitBehaviour;
 import com.jrts.common.GameConfig;
 import com.jrts.environment.CellType;
@@ -70,7 +69,6 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 		agentDescription.addServices(basicService);
 		register(agentDescription, false);
 		addBehaviour(new LookForEnemy(this, 500));
-		addBehaviour(new ReceiveOrders(this));
 		addBehaviour(behaviourWrapper);
 	}
 
