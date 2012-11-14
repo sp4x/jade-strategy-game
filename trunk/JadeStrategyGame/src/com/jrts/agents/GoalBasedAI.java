@@ -1,12 +1,8 @@
 package com.jrts.agents;
 
 import jade.core.AID;
-import jade.lang.acl.ACLMessage;
-
-import java.io.IOException;
 
 import com.jrts.agents.MasterAI.Nature;
-import com.jrts.common.AgentStatus;
 import com.jrts.common.ResourcesContainer;
 import com.jrts.common.UnitFactory;
 import com.jrts.common.UnitTable;
@@ -55,15 +51,7 @@ public abstract class GoalBasedAI extends JrtsAgent {
 	public abstract void onGoalsChanged();
 
 	public void giveOrder(AID target, Order order) {
-		ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
-		msg.setConversationId(AgentStatus.class.getSimpleName());
-		msg.addReceiver(target);
-		
-		try {
-			msg.setContentObject(order);
-		} catch (IOException e) { e.printStackTrace(); }
-		
-		send(msg);
+		sendNotification(Notification.ORDER, order, target);
 	}
 
 	public UnitTable getUnitTable() {

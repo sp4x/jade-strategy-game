@@ -11,6 +11,7 @@ import com.jrts.logic.AttacksManager;
 import com.jrts.messages.AggiornaRisorse;
 import com.jrts.messages.EnemySighting;
 import com.jrts.messages.Notification;
+import com.jrts.messages.Order;
 
 @SuppressWarnings("serial")
 public class Worker extends Unit {
@@ -45,7 +46,8 @@ public class Worker extends Unit {
 	}
 	
 	public void takeResources(Position resourcePosition) {
-		logger.info("taking resource at " + resourcePosition);
+		if (getPerception() == null) 
+			return;
 		CellType resource = getPerception().get(resourcePosition).getType();
 		boolean validResource = (resource == CellType.WOOD || resource == CellType.FOOD);
 		if (validResource)
@@ -102,5 +104,16 @@ public class Worker extends Unit {
 		// TODO Auto-generated method stub
 		
 	}
+	
+	@Override
+	protected void handleNotification(Notification n) {
+		if (n.getSubject().equals(Notification.ORDER)) {
+			Order order = (Order) n.getContentObject();
+			if (order.getOrder().equals(AgentStatus.WOOD_CUTTING)) {
+				collectWood();
+			} else if (order.getOrder().equals(AgentStatus.FOOD_COLLECTING)) {
+				collectFood();
+			}
+		}
+	}
 }
-;

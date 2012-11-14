@@ -14,6 +14,8 @@ public class Notification implements Serializable {
 	public static final String NO_MORE_RESOURCE = "no_more_resource";
 	public static final String RESOURCES_UPDATE = "resources_update";
 	public static final String GOAL_LEVELS = "goal_levels";
+	public static final String PERCEPTION = "perception";
+	public static final String ORDER = "order";
 
 	String subject;
 	Serializable contentObject;

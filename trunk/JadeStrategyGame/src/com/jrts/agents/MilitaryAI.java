@@ -1,10 +1,10 @@
 package com.jrts.agents;
 
-import java.util.ArrayList;
-
 import jade.core.AID;
 import jade.core.behaviours.WakerBehaviour;
 import jade.lang.acl.ACLMessage;
+
+import java.util.ArrayList;
 
 import com.jrts.behaviours.PatrolBehaviour;
 import com.jrts.behaviours.UpdateUnitTable;
@@ -14,7 +14,6 @@ import com.jrts.common.GoalPriority;
 import com.jrts.common.Utils;
 import com.jrts.environment.Direction;
 import com.jrts.messages.EnemySighting;
-import com.jrts.messages.GoalLevels;
 import com.jrts.messages.Notification;
 import com.jrts.messages.Order;
 
@@ -142,6 +141,48 @@ public class MilitaryAI extends GoalBasedAI {
 		// TODO Auto-generated method stub
 	}
 
+	public void onEnemySighting(EnemySighting e) {
+		int numSightedSoldiers = e.getSoldierNumber();
+		int distance = (int)e.getUnitPosition().distance(cityCenter);
+		ArrayList<AID> freeSoldiers = unitTable.getFreeUnits();
+		int numMyFreeSoldier = freeSoldiers.size();
+		int x=1, y=1, z=1;
+		switch (nature) {
+		case AGGRESSIVE:
+			x = 3;
+			y = 3;
+			z = 3;
+			break;
+		case AVERAGE:
+			x = 2;
+			y = 2;
+			z = 1;
+			break;
+		case DEFENSIVE:
+			x = 1;
+			y = 1;
+			z = 1;
+			break;
+		default:
+			break;
+		}
+		
+		// numSightedSoldiers * x - distance * goalDifesa / y + numMyFreeSoldier * z
+		//          2/3				  10/20		                      5/6
+		
+		//TODO: Un numero che che rappresneti il livelo dovrebbe essere messo altrove, visto che sarà utilizzato spesso
+		int defence = 1;
+		if(goalLevels.getDefence().equals(GoalPriority.LOW))
+			defence = 1;
+		else if(goalLevels.getDefence().equals(GoalPriority.MEDIUM))
+			defence = 2;
+		else if(goalLevels.getDefence().equals(GoalPriority.HIGH))
+			defence = 3;
+		
+		int heuristic = numSightedSoldiers*x - distance*defence/y + numMyFreeSoldier*z;
+		System.out.println("CALCOLO EURISTICA, VALORE: " + heuristic);
+	}
+	
 	@Override
 	protected void handleNotification(Notification n) {
 		super.handleNotification(n);
@@ -149,46 +190,8 @@ public class MilitaryAI extends GoalBasedAI {
 			EnemySighting e = (EnemySighting) n.getContentObject();
 			// forward notification to masterAi
 			sendNotification(n.getSubject(), n.getContentObject(), getMasterAID());
-			
-			int numSightedSoldiers = e.getSoldierNumber();
-			int distance = (int)e.getUnitPosition().distance(cityCenter);
-			ArrayList<AID> freeSoldiers = unitTable.getFreeUnits();
-			int numMyFreeSoldier = freeSoldiers.size();
-			int x=1, y=1, z=1;
-			switch (nature) {
-			case AGGRESSIVE:
-				x = 3;
-				y = 3;
-				z = 3;
-				break;
-			case AVERAGE:
-				x = 2;
-				y = 2;
-				z = 1;
-				break;
-			case DEFENSIVE:
-				x = 1;
-				y = 1;
-				z = 1;
-				break;
-			default:
-				break;
-			}
-			
-			// numSightedSoldiers * x - distance * goalDifesa / y + numMyFreeSoldier * z
-						//          2/3				10/20		        5/6
-			
-			//TODO: Un numero che che rappresneti il livelo dovrebbe essere messo altrove, visto che sarà utilizzato spesso
-			int defence = 1;
-			if(goalLevels.getDefence().equals(GoalPriority.LOW))
-				defence = 1;
-			else if(goalLevels.getDefence().equals(GoalPriority.MEDIUM))
-				defence = 2;
-			else if(goalLevels.getDefence().equals(GoalPriority.HIGH))
-				defence = 3;
-			
-			int heuristic = numSightedSoldiers*x - distance*defence/y + numMyFreeSoldier*z;
-			System.out.println("CALCOLO EURISTICA, VALORE: " + heuristic);
+			// decide what to do
+			onEnemySighting(e);
 		}
 	}
 

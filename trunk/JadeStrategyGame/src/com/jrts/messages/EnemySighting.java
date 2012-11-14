@@ -3,7 +3,6 @@ package com.jrts.messages;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import com.jrts.O2Ainterfaces.IUnit;
 import com.jrts.environment.CellType;
 import com.jrts.environment.Position;
 
@@ -11,15 +10,15 @@ public class EnemySighting implements Serializable {
 	private static final long serialVersionUID = 6794563996661095367L;
 	
 	Position unitPosition;
-	ArrayList<IUnit> enemies;
+	ArrayList<EnemySightingItem> enemies;
 	int soldierNum = 0, workerNum = 0;
 	
 	public EnemySighting(Position unitPosition) {
-		enemies = new ArrayList<IUnit>();
+		enemies = new ArrayList<EnemySightingItem>();
 		this.unitPosition = unitPosition;
 	}
 	
-	public void addEnemy(IUnit enemy) {
+	public void addEnemy(EnemySightingItem enemy) {
 		this.enemies.add(enemy);
 		if (enemy.getType() == CellType.SOLDIER)
 			soldierNum++;
@@ -27,7 +26,7 @@ public class EnemySighting implements Serializable {
 			workerNum++;
 	}
 	
-	public ArrayList<IUnit> getEnemies() {
+	public ArrayList<EnemySightingItem> getEnemies() {
 		return enemies;
 	}
 	

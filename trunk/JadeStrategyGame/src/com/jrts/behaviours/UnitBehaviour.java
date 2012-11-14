@@ -1,7 +1,5 @@
 package com.jrts.behaviours;
 
-import javax.xml.ws.Action;
-
 import jade.core.behaviours.Behaviour;
 
 import com.jrts.agents.Unit;

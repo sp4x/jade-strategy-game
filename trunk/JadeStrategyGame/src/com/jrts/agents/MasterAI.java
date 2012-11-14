@@ -1,10 +1,7 @@
 package com.jrts.agents;
 
 import jade.core.AID;
-import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
-import jade.lang.acl.MessageTemplate;
-import jade.lang.acl.UnreadableException;
 import jade.wrapper.AgentController;
 import jade.wrapper.ControllerException;
 import jade.wrapper.PlatformController;
@@ -17,10 +14,12 @@ import com.jrts.common.GoalPriority;
 import com.jrts.common.ResourcesContainer;
 import com.jrts.common.UnitFactory;
 import com.jrts.common.Utils;
+import com.jrts.environment.CellType;
 import com.jrts.environment.Perception;
 import com.jrts.environment.Position;
 import com.jrts.environment.World;
 import com.jrts.environment.WorldMap;
+import com.jrts.messages.EnemySighting;
 import com.jrts.messages.GoalLevels;
 import com.jrts.messages.MessageSubject;
 import com.jrts.messages.Notification;
@@ -50,22 +49,6 @@ public class MasterAI extends JrtsAgent implements Team {
 		nature = die == 0 ? Nature.AGGRESSIVE : die == 1 ? Nature.AVERAGE : Nature.DEFENSIVE;
 	}
 
-	public void setDefaultGoals() {
-		switch (nature) {
-		case AGGRESSIVE:
-			goalLevels = new GoalLevels(GoalPriority.HIGH, GoalPriority.MEDIUM, GoalPriority.LOW, GoalPriority.HIGH);
-			break;
-		case AVERAGE:
-			goalLevels = new GoalLevels(GoalPriority.HIGH, GoalPriority.LOW, GoalPriority.MEDIUM, GoalPriority.MEDIUM);
-			break;
-		case DEFENSIVE:
-			goalLevels = new GoalLevels(GoalPriority.HIGH, GoalPriority.LOW, GoalPriority.HIGH, GoalPriority.LOW);
-		default:
-			break;
-		}
-		notifyGoalChanges();
-	}
-
 	protected void setup() {
 		super.setup();
 		World world = World.getInstance();
@@ -77,8 +60,6 @@ public class MasterAI extends JrtsAgent implements Team {
 		resourceAID = new AID(getTeamName() + "-resourceAI", AID.ISLOCALNAME);
 		militaryAID = new AID(getTeamName() + "-militaryAI", AID.ISLOCALNAME);
 
-		// create ResourceAI
-		// get a container controller for creating new agents
 		PlatformController container = getContainerController();
 		AgentController militaryAI, resourceAI, df;
 		try {
@@ -100,30 +81,25 @@ public class MasterAI extends JrtsAgent implements Team {
 			e.printStackTrace();
 		}
 
-		// updated world map according to unit messages
-		addBehaviour(new CyclicBehaviour() {
-			@Override
-			public void action() {
-				MessageTemplate mt = MessageTemplate.MatchConversationId(Perception.class.getSimpleName());
-				ACLMessage msg = receive(mt);
-				if (msg != null) {
-					try {
-						Perception info = (Perception) msg.getContentObject();
-						worldMap.update(info);
-					} catch (UnreadableException e) {
-						e.printStackTrace();
-					}
-				} else {
-					block();
-				}
-
-			}
-		});
-
 		setDefaultGoals();
-
 	}
 
+	public void setDefaultGoals() {
+		switch (nature) {
+		case AGGRESSIVE:
+			goalLevels = new GoalLevels(GoalPriority.HIGH, GoalPriority.MEDIUM, GoalPriority.LOW, GoalPriority.HIGH);
+			break;
+		case AVERAGE:
+			goalLevels = new GoalLevels(GoalPriority.HIGH, GoalPriority.LOW, GoalPriority.MEDIUM, GoalPriority.MEDIUM);
+			break;
+		case DEFENSIVE:
+			goalLevels = new GoalLevels(GoalPriority.HIGH, GoalPriority.LOW, GoalPriority.HIGH, GoalPriority.LOW);
+		default:
+			break;
+		}
+		notifyGoalChanges();
+	}
+	
 	@Override
 	protected void updatePerception() {
 		World world = World.getInstance();
@@ -162,8 +138,19 @@ public class MasterAI extends JrtsAgent implements Team {
 	}
 
 	@Override
-	protected void handleNotification(Notification notification) {
-		// TODO do something
+	protected void handleNotification(Notification n) {
+		if (n.getSubject().equals(Notification.PERCEPTION)) {
+			Perception info = (Perception) n.getContentObject();
+			worldMap.update(info);
+			
+		} else if (n.getSubject().equals(Notification.ENEMY_SIGHTED)) {
+			EnemySighting e = (EnemySighting) n.getContentObject();
+			// TODO save it
+			
+		} else if (n.getSubject().equals(Notification.NO_MORE_RESOURCE)) {
+			CellType resourceType = (CellType) n.getContentObject();
+			// TODO save it
+		}
 	}
 
 	@Override
