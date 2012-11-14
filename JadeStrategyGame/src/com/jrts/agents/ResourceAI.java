@@ -1,7 +1,7 @@
 package com.jrts.agents;
 
 import jade.core.AID;
-import jade.core.behaviours.CyclicBehaviour;
+import jade.core.behaviours.TickerBehaviour;
 import jade.lang.acl.ACLMessage;
 
 import com.jrts.behaviours.UpdateUnitTable;
@@ -32,17 +32,15 @@ public class ResourceAI extends GoalBasedAI {
 		addBehaviour(new UpdateUnitTable(this, Worker.class));
 
 		// trains and gives order to workers
-		addBehaviour(new CyclicBehaviour() {
-
+		addBehaviour(new TickerBehaviour(this, 1000) {
 			@Override
-			public void action() {
+			protected void onTick() {
 				if (goalLevels != null) {
 					trainWorkers();
 					employWorker();
 				}
 			}
 		});
-
 	}
 
 	protected void employWorker() {
