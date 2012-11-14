@@ -49,8 +49,11 @@ public class WorldMap extends Floor {
 			for (int j=0; j < getCols(); j++) {
 				if (get(i, j).getType() == type) {
 					Position currPos = new Position(i, j);
-					if (center.distance(currPos) < distance) 
+					double currDistance = center.distance(currPos);
+					if (currDistance < distance) {
 						nearest = currPos;
+						distance = currDistance;
+					}
 				}
 			}
 		}

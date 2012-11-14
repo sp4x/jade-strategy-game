@@ -9,6 +9,8 @@ import com.jrts.environment.Direction;
 import com.jrts.environment.Position;
 import com.jrts.logic.AttacksManager;
 import com.jrts.messages.EnemySighting;
+import com.jrts.messages.Notification;
+import com.jrts.messages.Order;
 
 @SuppressWarnings("serial")
 public class Soldier extends Unit {
@@ -58,7 +60,6 @@ public class Soldier extends Unit {
 	}
 
 	public void explore() {
-		logger.warning("STARTING EXPLORING");
 		addBehaviour(new ExploreBehaviour(this));
 		switchStatus(AgentStatus.EXPLORING);
 	}
@@ -71,5 +72,20 @@ public class Soldier extends Unit {
 	@Override
 	public void onEnemySighted(EnemySighting list) {
 		
+	}
+	
+	@Override
+	protected void handleNotification(Notification n) {
+		if (n.getSubject().equals(Notification.ORDER)) {
+			Order order = (Order) n.getContentObject();
+			if (order.getOrder().equals(AgentStatus.PATROLING)) {
+				Direction dir = order.getPatrolDirection();
+				int distance = order.getPatrolDistance();
+				patrol(dir, distance);
+				
+			} else if (order.getOrder().equals(AgentStatus.EXPLORING)) {
+				explore();
+			}
+		}
 	}
 }

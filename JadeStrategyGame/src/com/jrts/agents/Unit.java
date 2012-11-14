@@ -2,14 +2,10 @@ package com.jrts.agents;
 
 import jade.core.AID;
 import jade.core.behaviours.Behaviour;
-import jade.domain.DFService;
-import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.UnreadableException;
-
-import java.io.IOException;
 
 import com.jrts.O2Ainterfaces.IUnit;
 import com.jrts.behaviours.BehaviourWrapper;
@@ -18,7 +14,6 @@ import com.jrts.behaviours.LookForEnemy;
 import com.jrts.behaviours.ReceiveOrders;
 import com.jrts.behaviours.UnitBehaviour;
 import com.jrts.common.GameConfig;
-import com.jrts.common.GameStatistics;
 import com.jrts.environment.CellType;
 import com.jrts.environment.Direction;
 import com.jrts.environment.Perception;
@@ -74,7 +69,7 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 		basicService.setType(getClass().getSimpleName());
 		agentDescription.addServices(basicService);
 		register(agentDescription, false);
-		addBehaviour(new LookForEnemy(this, 1000));
+		addBehaviour(new LookForEnemy(this, 500));
 		addBehaviour(new ReceiveOrders(this));
 		addBehaviour(behaviourWrapper);
 	}
@@ -107,16 +102,8 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 	@Override
 	protected void updatePerception() {
 		perception = World.getInstance().getPerception(getPosition(), sight);
-		// send perception to Master
-		ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
-		msg.setConversationId(Perception.class.getSimpleName());
-		msg.addReceiver(getMasterAID());
-		try {
-			msg.setContentObject(perception);
-			send(msg);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		// send perception to MasterAi
+		sendNotification(Notification.PERCEPTION, perception, getMasterAID());
 	}
 
 	public boolean move(Direction dir) {
@@ -215,14 +202,17 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 	}
 
 	public boolean isFriend(String aid) {
-		DFAgentDescription desc = new DFAgentDescription();
-		desc.setName(new AID(aid, AID.ISLOCALNAME));
-		try {
-			return DFService.search(this, getTeamDF(), desc).length == 0;
-		} catch (FIPAException e) {
-			e.printStackTrace();
-			return false;
-		}
+//		DFAgentDescription desc = new DFAgentDescription();
+//		desc.setName(new AID(aid, AID.ISLOCALNAME));
+//		try {
+//			
+//			return DFService.search(this, getTeamDF(), desc).length == 0;
+//		} catch (FIPAException e) {
+//			e.printStackTrace();
+//			return false;
+//		}
+	
+		return aid.contains(getTeamName());
 	}
 
 	public WorldMap requestMap() {
@@ -261,12 +251,6 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 			return -1;
 	}
 
-	@Override
-	protected void handleNotification(Notification notification) {
-		// TODO Auto-generated method stub
-
-	}
-	
 	@Override
 	protected void handleRequest(ACLMessage msg) {
 		// TODO Auto-generated method stub

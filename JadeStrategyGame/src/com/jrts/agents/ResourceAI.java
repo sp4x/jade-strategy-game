@@ -96,11 +96,11 @@ public class ResourceAI extends GoalBasedAI {
 	public int extimateNumWorkers() {
 		switch (goalLevels.getResources()) {
 		case HIGH:
-			return 10;
-		case MEDIUM:
-			return 6;
-		case LOW:
 			return 4;
+		case MEDIUM:
+			return 3;
+		case LOW:
+			return 2;
 		default:
 			return 0;
 		}

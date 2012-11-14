@@ -47,8 +47,7 @@ public class FollowPathBehaviour extends UnitBehaviour {
 		Position start = unit.getPosition();
 		this.list = Utils.calculatePath(getWorldCachedCopy(), start, goal);
 		
-		unit.logger.info(unit.getId() + ":path: " + list);
-
+//		unit.logger.info(unit.getId() + ":path: " + list);
 	}
 	
 	@Override
