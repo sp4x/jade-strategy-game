@@ -10,9 +10,9 @@ import jade.lang.acl.UnreadableException;
 import com.jrts.O2Ainterfaces.IUnit;
 import com.jrts.behaviours.BehaviourWrapper;
 import com.jrts.behaviours.FollowPathBehaviour;
-import com.jrts.behaviours.LookForEnemy;
 import com.jrts.behaviours.UnitBehaviour;
 import com.jrts.common.GameConfig;
+import com.jrts.environment.Cell;
 import com.jrts.environment.CellType;
 import com.jrts.environment.Direction;
 import com.jrts.environment.Perception;
@@ -20,6 +20,7 @@ import com.jrts.environment.Position;
 import com.jrts.environment.World;
 import com.jrts.environment.WorldMap;
 import com.jrts.messages.EnemySighting;
+import com.jrts.messages.EnemySightingItem;
 import com.jrts.messages.MessageSubject;
 import com.jrts.messages.Notification;
 
@@ -68,7 +69,6 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 		basicService.setType(getClass().getSimpleName());
 		agentDescription.addServices(basicService);
 		register(agentDescription, false);
-		addBehaviour(new LookForEnemy(this, 500));
 		addBehaviour(behaviourWrapper);
 	}
 
@@ -100,8 +100,36 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 	@Override
 	protected void updatePerception() {
 		perception = World.getInstance().getPerception(getPosition(), sight);
+		
 		// send perception to MasterAi
 		sendNotification(Notification.PERCEPTION, perception, getMasterAID());
+		
+		// look for enemies
+		int row = position.getRow();
+		int col = position.getCol();
+		EnemySighting enemies = new EnemySighting(position);
+//		System.out.println(id + " : " + position);
+		for (int i = row - sight; i <= row + sight; i++) {
+			for (int j = col - sight; j <= col + sight; j++) {
+				Cell cell = perception.get(i,j);
+				CellType type = cell.getType();
+//				System.out.println(id + " : " + i + "," + j + " - " + type);
+				String enemyId = cell.getId();
+				if (type == CellType.SOLDIER || type == CellType.WORKER) {
+//					System.out.println("Sono " + id + " e vicino a me c'e' " + enemyId);
+					if (!isFriend(enemyId)) {
+//						System.out.println("E noi ("+id+" e " + enemyId + " NON siamo della stessa squadra!!");
+						enemies.addEnemy(new EnemySightingItem(new Position(i, j), enemyId, type));
+					} else {
+//						System.out.println("Ma noi ("+id+" e " + enemyId + " siamo della stessa squadra..");
+					}
+				} 
+			}
+		}
+		if (!enemies.isEmpty()) {
+			sendNotification(Notification.ENEMY_SIGHTED, enemies, getMilitaryAID());
+			onEnemySighted(enemies);
+		}
 	}
 
 	public boolean move(Direction dir) {
