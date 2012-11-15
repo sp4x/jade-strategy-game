@@ -271,7 +271,7 @@ public class MainFrame extends JFrame {
 	}
 
 	public void update() {
-		apsCounter.setText(GameStatistics.getCounter() + "");
+		apsCounter.setText(GameStatistics.getFrameRate() + "");
 		/** update all teampanels */
 		for (int i = 0; i < topPanel.getComponentCount(); i++) {
 			if (topPanel.getComponent(i) instanceof TeamResourcePanel)

@@ -2,7 +2,8 @@ package com.jrts.common;
 
 public class GameStatistics implements Runnable {
 		
-	static int counter = 0;
+	static private int counter = 0;
+	static int frameRate = 0;
 	
 	public GameStatistics() {}
 
@@ -10,6 +11,7 @@ public class GameStatistics implements Runnable {
 	public void run() {
 		while (true) {
 //			System.err.println("Counter: " + counter);
+			frameRate = counter;
 			counter = 0;
 			try {
 				Thread.sleep(1000);
@@ -24,7 +26,7 @@ public class GameStatistics implements Runnable {
 //		System.out.println("Increase counter " + counter);
 	}
 	
-	public static int getCounter(){
-		return GameStatistics.counter;
+	public static int getFrameRate(){
+		return GameStatistics.frameRate;
 	}
 }
