@@ -59,4 +59,8 @@ public class Perception extends Floor {
 		int col = getRelativeCol(j);
 		return super.get(row, col);
 	}
+	
+	public Cell getRelative(int i, int j) {
+		return super.get(i, j);
+	}
 }

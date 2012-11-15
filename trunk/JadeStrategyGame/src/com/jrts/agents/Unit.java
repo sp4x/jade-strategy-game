@@ -99,7 +99,7 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 	
 	@Override
 	protected void updatePerception() {
-		perception = World.getInstance().getPerception(getPosition(), sight);
+		perception = World.getInstance().getPerception(position, sight);
 		
 		// send perception to MasterAi
 		sendNotification(Notification.PERCEPTION, perception, getMasterAID());

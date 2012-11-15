@@ -15,9 +15,13 @@ public class WorldMap extends Floor {
 	public void update(Perception perception) {
 		for (int i = 0; i < perception.rows; i++) {
 			for (int j = 0; j < perception.cols; j++) {
-				CellType curr = perception.get(i, j).getType();
-				if (curr != CellType.UNKNOWN && curr != CellType.WORKER && curr != CellType.SOLDIER)
-					set(perception.getAbsoluteRow(i), perception.getAbsoluteCol(j), perception.get(i, j));
+				Cell cell = new Cell(perception.getRelative(i, j));
+				CellType curr = cell.getType();
+				if (curr != CellType.UNKNOWN) {
+					if (curr == CellType.WORKER || curr == CellType.SOLDIER) 
+						cell.setType(CellType.FREE);
+					set(perception.getAbsoluteRow(i), perception.getAbsoluteCol(j), cell);
+				}
 			}
 		}
 	}

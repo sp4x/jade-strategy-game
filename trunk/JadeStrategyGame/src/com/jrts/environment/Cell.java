@@ -10,9 +10,9 @@ public class Cell implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	final CellType type;
-	final String id;
-	final IUnit unit;
+	CellType type;
+	String id;
+	IUnit unit;
 	int resourceEnergy = 0;
 	
 	public Cell(CellType t) {
@@ -63,5 +63,21 @@ public class Cell implements Serializable {
 	
 	public int getResourceEnergy() {
 		return resourceEnergy;
+	}
+
+	public void setType(CellType type) {
+		this.type = type;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public void setUnit(IUnit unit) {
+		this.unit = unit;
+	}
+
+	public void setResourceEnergy(int resourceEnergy) {
+		this.resourceEnergy = resourceEnergy;
 	}
 }
