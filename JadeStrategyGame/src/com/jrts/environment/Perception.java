@@ -50,7 +50,13 @@ public class Perception extends Floor {
 	public Cell get(Position p) {
 		int row = getRelativeRow(p.row);
 		int col = getRelativeCol(p.col);
-		return get(row, col);
+		return super.get(row, col);
 	}
-
+	
+	@Override
+	public Cell get(int i, int j) {
+		int row = getRelativeRow(i);
+		int col = getRelativeCol(j);
+		return super.get(row, col);
+	}
 }
