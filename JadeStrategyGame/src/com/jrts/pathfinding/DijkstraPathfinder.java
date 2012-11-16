@@ -8,6 +8,7 @@ import org.jgrapht.graph.DefaultWeightedEdge;
 
 import com.jrts.common.GameConfig;
 import com.jrts.common.UndirectedWeightedGraph;
+import com.jrts.common.VisualGraph;
 import com.jrts.environment.CellType;
 import com.jrts.environment.Direction;
 import com.jrts.environment.Floor;
@@ -42,6 +43,8 @@ public class DijkstraPathfinder implements Pathfinder {
 		// adapt current walkableGraph from global
 		for (int index = 0; index < floor.getBusyCells().size(); index++)
 			walkableGraph.removeVertex(floor.getBusyCells().get(index));
+		
+		//VisualGraph.show(walkableGraph, 30);
 
 		if (!walkableGraph.containsVertex(endPosition)) {
 			// System.out.println("Dest Node not reachable");
@@ -122,7 +125,7 @@ public class DijkstraPathfinder implements Pathfinder {
 								new Position(i, j - 1), 1);
 					}
 					// ->
-					if (j + 1 <= floor.getCols()
+					if (j + 1 < floor.getCols()
 							&& (cellType == CellType.FREE
 									|| cellType == CellType.UNKNOWN
 									|| (includeCellWithUnit && (cellType == CellType.WORKER || cellType == CellType.SOLDIER)) || (i == startRow && j + 1 == startCol))) {
