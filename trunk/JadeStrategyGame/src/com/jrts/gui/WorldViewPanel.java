@@ -37,8 +37,8 @@ public class WorldViewPanel extends JPanel {
 		setLayout(null);
 
 		labelMatrix = new CellLabel[floor.getRows()][floor.getCols()];
-		for (int i = floor.getRows() - 1; i >= 0; i--)
-			for (int j = floor.getCols() - 1; j >= 0; j--) {
+		for (int j = 0; j < floor.getRows(); j++)
+			for (int i = 0; i < floor.getCols(); i++) {
 				CellLabel label = new CellLabel(i, j);
 				labelMatrix[i][j] = label;
 				super.add(label);
@@ -57,8 +57,8 @@ public class WorldViewPanel extends JPanel {
 		/** take a snapshot of the floor at this moment and dispay it */
 		floor = World.getInstance().getSnapshot();
 		Icon icon;
-		for (int i = 0; i < floor.getRows(); i++) {
-			for (int j = 0; j < floor.getCols(); j++) {
+		for (int j = 0; j < floor.getRows(); j++) {
+			for (int i = 0; i < floor.getCols(); i++) {
 				CellLabel currCellLabel = labelMatrix[i][j];
 				currCellLabel.setBounds(j * GameConfig.ICON_SIZE, i * GameConfig.ICON_SIZE, GameConfig.ICON_SIZE, GameConfig.ICON_SIZE);
 				icon = null;

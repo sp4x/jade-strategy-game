@@ -3,6 +3,7 @@ package com.jrts.behaviours;
 import jade.core.behaviours.CyclicBehaviour;
 
 import com.jrts.agents.Worker;
+import com.jrts.common.GameStatistics;
 import com.jrts.environment.Direction;
 
 public class SendAttack extends CyclicBehaviour {
@@ -20,6 +21,7 @@ public class SendAttack extends CyclicBehaviour {
 
 	@Override
 	public void action() {
+		GameStatistics.increaseCounter();
 		try {
 			Thread.sleep(3000);
 		} catch (InterruptedException e) {
