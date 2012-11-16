@@ -143,9 +143,18 @@ public class MilitaryAI extends GoalBasedAI {
 
 	public void onEnemySighting(EnemySighting e) {
 		int numSightedSoldiers = e.getSoldierNumber();
-		int distance = (int)e.getUnitPosition().distance(cityCenter);
+		int distance = (int)e.getSightingPosition().distance(cityCenter);
 		ArrayList<AID> freeSoldiers = unitTable.getFreeUnits();
 		int numMyFreeSoldier = freeSoldiers.size();
+		
+		System.out.println(
+				"\n----------------- Start OnEnemySighting ----------------\n" +
+				"EnemySighting received: \n" + 
+					e +
+				"numSightedSoldiers = "+numSightedSoldiers+"\n"+
+				"distance = " + distance +"\n"+
+				"numMyFreeSoldier = "+numMyFreeSoldier+"\n");
+		
 		int x=1, y=1, z=1;
 		switch (nature) {
 		case AGGRESSIVE:
@@ -180,7 +189,8 @@ public class MilitaryAI extends GoalBasedAI {
 			defence = 3;
 		
 		int heuristic = numSightedSoldiers*x - distance*defence/y + numMyFreeSoldier*z;
-		System.out.println("CALCOLO EURISTICA, VALORE: " + heuristic);
+		System.out.println("CALCOLO EURISTICA, VALORE: " + heuristic + "\n" +
+				"----------------- End OnEnemySighting ----------------\n");
 	}
 	
 	@Override
