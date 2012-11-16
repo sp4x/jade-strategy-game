@@ -57,6 +57,10 @@ public class GameConfig {
 	public static final int TREE_ENERGY = 500;
 	public static final int FARM_ENERGY = 500;
 	
+	public static final int ATTACKS_SLEEP_TIME = 3000;
+	
+	public static final boolean STATISTICS = true;
+	
 	public static int BUILDING_ENERGY = 1000;
 	public static int FOOD_MIN_DISTANCE = 3;
 	public static int FOOD_MAX_DISTANCE = 5;

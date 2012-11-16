@@ -1,7 +1,5 @@
 package com.jrts.behaviours;
 
-import java.util.LinkedList;
-
 import com.jrts.agents.Soldier;
 import com.jrts.common.Utils;
 import com.jrts.environment.Direction;
@@ -16,7 +14,7 @@ public class ExploreBehaviour extends UnitBehaviour {
 
 	Soldier soldier;
 	Position cityCenter;
-	boolean going;
+	boolean exploring;
 	FollowPathBehaviour exploreBehaviour;
 
 	/**
@@ -32,22 +30,20 @@ public class ExploreBehaviour extends UnitBehaviour {
 	}
 	
 	public void explore(){
-		if(!going){
-			Position posToGo = Utils.getRandomUnknownCellPosition(this.soldier.requestMap(), Direction.random());
+		exploring = false;
+		Position posToGo = Utils.getRandomUnknownCellPosition(this.soldier.requestMap(), Direction.random());
 
-			if (posToGo != null) {
-				exploreBehaviour = new FollowPathBehaviour(soldier, posToGo, 1);
-				going = true;
-			}
+		if (posToGo != null) {
+			exploreBehaviour = new FollowPathBehaviour(soldier, posToGo, 1);
+			exploring = true;
 		}
 	}
 
 	@Override
 	public void myAction() {
-		if(going){
+		if(exploring){
 			exploreBehaviour.myAction();
 			if(exploreBehaviour.done()){
-				going = false;
 				explore();
 			}
 		}

@@ -1,16 +1,13 @@
 package com.jrts.behaviours;
 
-import jade.core.behaviours.Behaviour;
-
 import com.jrts.agents.Unit;
 import com.jrts.common.GameStatistics;
 
 @SuppressWarnings("serial")
-public abstract class UnitBehaviour extends Behaviour {
+public abstract class UnitBehaviour extends JrtsBehaviour{
 	
 	boolean idle = false;
 	final boolean highPriority;
-	
 
 	public UnitBehaviour(boolean highPriority, Unit u) {
 		super(u);
@@ -27,7 +24,7 @@ public abstract class UnitBehaviour extends Behaviour {
 	}
 	
 	@Override
-	public void action(){
+	public void unitAction(){
 		GameStatistics.increaseCounter();
 		myAction();
 	}
