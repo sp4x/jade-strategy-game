@@ -9,13 +9,13 @@ import com.jrts.environment.Position;
 public class EnemySighting implements Serializable {
 	private static final long serialVersionUID = 6794563996661095367L;
 	
-	Position unitPosition;
+	Position sightingPosition;
 	ArrayList<EnemySightingItem> enemies;
 	int soldierNum = 0, workerNum = 0;
 	
-	public EnemySighting(Position unitPosition) {
+	public EnemySighting(Position position) {
 		enemies = new ArrayList<EnemySightingItem>();
-		this.unitPosition = unitPosition;
+		this.sightingPosition = position;
 	}
 	
 	public void addEnemy(EnemySightingItem enemy) {
@@ -42,7 +42,17 @@ public class EnemySighting implements Serializable {
 		return workerNum;
 	}
 	
-	public Position getUnitPosition() {
-		return unitPosition;
+	public Position getSightingPosition() {
+		return sightingPosition;
+	}
+	
+	@Override
+	public String toString() {
+		String s = "";
+		for (EnemySightingItem e : enemies) {
+			s += "\t" + e.getId() + " in " + e.getPosition() + "\n"; 
+		}
+		
+		return s;
 	}
 }
