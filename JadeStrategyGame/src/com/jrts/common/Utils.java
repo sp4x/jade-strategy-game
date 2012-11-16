@@ -9,7 +9,6 @@ import com.jrts.environment.Direction;
 import com.jrts.environment.Floor;
 import com.jrts.environment.Position;
 import com.jrts.environment.WorldMap;
-import com.jrts.pathfinding.AStarPathfinder;
 import com.jrts.pathfinding.DijkstraPathfinder;
 import com.jrts.pathfinding.Pathfinder;
 

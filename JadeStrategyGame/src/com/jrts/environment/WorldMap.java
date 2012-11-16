@@ -3,9 +3,6 @@ package com.jrts.environment;
 
 public class WorldMap extends Floor {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	public WorldMap(int rows, int cols) {

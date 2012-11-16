@@ -8,7 +8,6 @@ import org.jgrapht.graph.DefaultWeightedEdge;
 
 import com.jrts.common.GameConfig;
 import com.jrts.common.UndirectedWeightedGraph;
-import com.jrts.common.VisualGraph;
 import com.jrts.environment.CellType;
 import com.jrts.environment.Direction;
 import com.jrts.environment.Floor;
