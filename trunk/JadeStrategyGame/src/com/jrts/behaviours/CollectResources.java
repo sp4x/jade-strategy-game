@@ -12,9 +12,6 @@ import com.jrts.messages.Notification;
 
 public class CollectResources extends UnitBehaviour {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	
 	Logger logger = Logger.getLogger(CollectResources.class.getName());
