@@ -1,5 +1,7 @@
 package com.jrts.behaviours;
 
+import java.util.ArrayList;
+
 import com.jrts.agents.Soldier;
 import com.jrts.common.Utils;
 import com.jrts.environment.Direction;
@@ -16,6 +18,7 @@ public class ExploreBehaviour extends UnitBehaviour {
 	Position cityCenter;
 	boolean exploring;
 	FollowPathBehaviour exploreBehaviour;
+	ArrayList<Direction> directions;
 
 	/**
 	 * 
@@ -26,12 +29,21 @@ public class ExploreBehaviour extends UnitBehaviour {
 		this.soldier = soldier;
 		this.cityCenter = soldier.requestCityCenterPosition();
 		
+		directions = new ArrayList<Direction>();
+		
+		directions.add(Direction.LEFT_UP);
+		directions.add(Direction.LEFT_DOWN);
+		directions.add(Direction.RIGHT_UP);
+		directions.add(Direction.RIGHT_DOWN);
+
+		directions.remove(Utils.getMapAnglePosition(this.soldier.getPosition()));
+		
 		explore();
 	}
 	
 	public void explore(){
-		exploring = false;
-		Position posToGo = Utils.getRandomUnknownCellPosition(this.soldier.requestMap(), Direction.random());
+		Direction dir = directions.get(Utils.random.nextInt(3));
+		Position posToGo = Utils.getRandomUnknownCellPosition(this.soldier.requestMap(), dir);
 
 		if (posToGo != null) {
 			exploreBehaviour = new FollowPathBehaviour(soldier, posToGo, 1);
@@ -41,11 +53,9 @@ public class ExploreBehaviour extends UnitBehaviour {
 
 	@Override
 	public void myAction() {
-		if(exploring){
-			exploreBehaviour.myAction();
-			if(exploreBehaviour.done()){
-				explore();
-			}
+		exploreBehaviour.myAction();
+		if(exploreBehaviour.done()){
+			explore();
 		}
 	}
 
