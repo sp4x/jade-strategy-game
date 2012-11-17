@@ -33,12 +33,11 @@ public class GameConfig {
 	
 	public static final int NOTIFICATION_REFRESH = 10;
 	
-	public static int REFRESH_TIME = 8000;
-	public static final int MIN_REFRESH_TIME = 4000;
-	public static final int MAX_REFRESH_TIME = 12000;
+	public static int UNIT_WAIT_TIME = 4000;
 	
-	public static final float VERTICAL_OVERLAP = 0.8f;
-	public static final float HORIZONTAL_OVERLAP = 1.00f;
+	public static int REFRESH_TIME = 800;
+	public static final int MIN_REFRESH_TIME = 400;
+	public static final int MAX_REFRESH_TIME = 1200;
 	
 	public static final int ATTACKS_REFRESH = 50;
 	public static final int PERCEPTION_REFRESH = 500;

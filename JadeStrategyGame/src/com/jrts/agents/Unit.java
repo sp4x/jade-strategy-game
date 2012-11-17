@@ -201,7 +201,7 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 
 	public void spendTime() {
 		try {
-			Thread.sleep(GameConfig.REFRESH_TIME / speed);
+			Thread.sleep(GameConfig.UNIT_WAIT_TIME / speed);
 		} catch (InterruptedException e) {}
 	}
 
