@@ -68,7 +68,7 @@ public class MasterAI extends JrtsAgent implements Team {
 
 			resourcesContainer = new ResourcesContainer(GameConfig.STARTUP_WOOD, GameConfig.STARTUP_FOOD);
 
-			Object[] arg = {getTeamName(), unitFactory, resourcesContainer, worldMap, cityCenter, nature};
+			Object[] arg = {getTeamName(), unitFactory, resourcesContainer, cityCenter, nature};
 
 			resourceAI = container.createNewAgent(resourceAID.getLocalName(), ResourceAI.class.getName(), arg);
 			resourceAI.start();

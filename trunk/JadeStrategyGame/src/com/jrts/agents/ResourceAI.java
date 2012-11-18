@@ -133,11 +133,11 @@ public class ResourceAI extends GoalBasedAI {
 	@Override
 	protected void updatePerception() {
 		if (noMoreFood) {
-			Position p = worldMap.findNearest(cityCenter, CellType.FOOD);
+			Position p = requestMap().findNearest(cityCenter, CellType.FOOD);
 			if (p != null) noMoreFood = false;
 		}
 		if (noMoreWood) {
-			Position p = worldMap.findNearest(cityCenter, CellType.WOOD);
+			Position p = requestMap().findNearest(cityCenter, CellType.WOOD);
 			if (p != null) noMoreWood = false;
 		}
 	}
