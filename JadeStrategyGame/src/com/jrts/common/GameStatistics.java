@@ -1,9 +1,6 @@
 package com.jrts.common;
 
 import java.util.HashMap;
-import java.util.Iterator;
-
-import javax.xml.ws.Action;
 
 public class GameStatistics implements Runnable {
 		

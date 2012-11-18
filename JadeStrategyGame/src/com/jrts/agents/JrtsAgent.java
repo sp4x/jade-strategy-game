@@ -42,7 +42,7 @@ public abstract class JrtsAgent extends Agent {
 		addBehaviour(new CyclicBehaviour(this) {
 			@Override
 			public void action() {
-				ACLMessage msg = receive(MessageTemplate.MatchConversationId(Notification.class.getSimpleName()));
+				ACLMessage msg = receive(MessageTemplate.MatchPerformative(ACLMessage.INFORM));
 				if (msg != null) {
 					try {
 						Notification notification = (Notification) msg.getContentObject();
@@ -64,11 +64,12 @@ public abstract class JrtsAgent extends Agent {
 				ACLMessage msg = receive(MessageTemplate.MatchPerformative(ACLMessage.QUERY_REF));
 				if (msg != null) {
 					try {
+						Serializable content = (Serializable) handleRequest(msg.getConversationId());
 						ACLMessage response = msg.createReply();
-						handleRequest(response);
+						response.setContentObject(content);
 						send(response);
-					} catch (Exception e) {
-						logger.severe("Can't read message");
+					} catch (IOException e) {
+						logger.severe("Can't send message");
 					}
 				} else {
 					// if no message is arrived, block the behaviour
@@ -78,7 +79,7 @@ public abstract class JrtsAgent extends Agent {
 		});
 	}
 
-	protected abstract void handleRequest(ACLMessage msg) throws IOException;
+	protected abstract Object handleRequest(String requestSubject);
 
 	/**
 	 * updates the agent perception
@@ -152,7 +153,6 @@ public abstract class JrtsAgent extends Agent {
 		try {
 			ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
 			msg.addReceiver(receiver);
-			msg.setConversationId(Notification.class.getSimpleName());
 			msg.setContentObject(new Notification(messageSubject, contentObject));
 			send(msg);
 			
@@ -167,19 +167,19 @@ public abstract class JrtsAgent extends Agent {
 	 * @param requestSubject type of request (e.g. MessageSubject.GET_CITY_CENTER_POSITION)
 	 * @param receiver the AID of the receiver 
 	 */
-	public ACLMessage sendRequest(String requestSubject, AID receiver) {
+	public Object sendRequest(String requestSubject, AID receiver) {
 		try {
 			ACLMessage msg = new ACLMessage(ACLMessage.QUERY_REF);
 			msg.addReceiver(receiver);
 			msg.setConversationId(requestSubject);
 			send(msg);
 			ACLMessage response = blockingReceive(MessageTemplate.MatchConversationId(requestSubject));
-			return response;
-			
-		} catch (Exception e) {
-			logger.severe("Can't send the " + requestSubject + " request to " + receiver);
+			return response.getContentObject();
+		} catch (UnreadableException e1) {
+			logger.severe("Can't read message ");
 			return null;
 		}
+		
 	}
 
 }

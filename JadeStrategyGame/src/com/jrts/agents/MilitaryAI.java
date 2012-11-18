@@ -2,7 +2,6 @@ package com.jrts.agents;
 
 import jade.core.AID;
 import jade.core.behaviours.WakerBehaviour;
-import jade.lang.acl.ACLMessage;
 
 import java.util.ArrayList;
 
@@ -206,9 +205,11 @@ public class MilitaryAI extends GoalBasedAI {
 	}
 
 	@Override
-	protected void handleRequest(ACLMessage msg) {
+	protected Object handleRequest(String requestSubject) {
 		// TODO Auto-generated method stub
-		
+		return null;
 	}
+
+	
 
 }
