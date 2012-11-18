@@ -23,24 +23,6 @@ public class WorldMap extends Floor {
 		}
 	}
 
-	// public Position findNearest(Position center, CellType type) {
-	// double distance = Double.MAX_VALUE;
-	// Position nearestPosition = null;
-	// for (int i = 0; i < rows; i++) {
-	// for (int j = 0; j < cols; j++) {
-	// Position p = new Position(i, j);
-	// if (get(p).getType() == type) {
-	// double currentDistance = center.distance(p);
-	// if (currentDistance < distance) {
-	// nearestPosition = p;
-	// distance = currentDistance;
-	// }
-	// }
-	// }
-	// }
-	// return nearestPosition;
-	// }
-
 	public Position findNearest(Position center, CellType type) {
 //		return nextTo(center, type, (rows + cols) / 2);
 
@@ -61,5 +43,20 @@ public class WorldMap extends Floor {
 		
 		return nearest;
 	}
+	
+	
+	public double exploredPercentage() {
+		double totalCells = rows*cols, unknown = 0;
+		for (int i=0; i < getRows(); i++) {
+			for (int j=0; j < getCols(); j++) {
+				if (get(i, j).type == CellType.UNKNOWN)
+					unknown += 1;
+			}
+		}
+		return unknown*100.0/totalCells;
+	}
+	
+	
+	
 
 }

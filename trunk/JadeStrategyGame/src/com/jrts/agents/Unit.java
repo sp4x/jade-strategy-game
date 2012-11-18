@@ -4,8 +4,6 @@ import jade.core.AID;
 import jade.core.behaviours.Behaviour;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
-import jade.lang.acl.ACLMessage;
-import jade.lang.acl.UnreadableException;
 
 import com.jrts.O2Ainterfaces.IUnit;
 import com.jrts.behaviours.BehaviourWrapper;
@@ -242,23 +240,11 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 	}
 
 	public WorldMap requestMap() {
-		ACLMessage response = sendRequest(MessageSubject.GET_WORLD_MAP, getMasterAID());
-		try {
-			return (WorldMap) response.getContentObject();
-		} catch (UnreadableException e) {
-			logger.severe("Can't read message " + e);
-			return null;
-		}
+		return (WorldMap) sendRequest(MessageSubject.GET_WORLD_MAP, getMasterAID());
 	}
 
 	public Position requestCityCenterPosition() {
-		ACLMessage response = sendRequest(MessageSubject.GET_CITY_CENTER_POSITION, getMasterAID());
-		try {
-			return (Position) response.getContentObject();
-		} catch (UnreadableException e) {
-			logger.severe("Can't read message " + e);
-			return null;
-		}
+		return (Position) sendRequest(MessageSubject.GET_CITY_CENTER_POSITION, getMasterAID());
 	}
 	
 	public Position findNearest(CellType type) {
@@ -278,9 +264,9 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 	}
 
 	@Override
-	protected void handleRequest(ACLMessage msg) {
+	protected Object handleRequest(String requestSubject) {
 		// TODO Auto-generated method stub
-		
+		return null;
 	}
 
 	public abstract void onEnemySighted(EnemySighting list);

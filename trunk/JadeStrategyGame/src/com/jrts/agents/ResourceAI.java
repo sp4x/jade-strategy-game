@@ -2,7 +2,6 @@ package com.jrts.agents;
 
 import jade.core.AID;
 import jade.core.behaviours.TickerBehaviour;
-import jade.lang.acl.ACLMessage;
 
 import com.jrts.behaviours.UpdateUnitTable;
 import com.jrts.common.AgentStatus;
@@ -171,8 +170,10 @@ public class ResourceAI extends GoalBasedAI {
 	}
 
 	@Override
-	protected void handleRequest(ACLMessage msg) {
+	protected Object handleRequest(String requestSubject) {
 		// TODO Auto-generated method stub
-		
+		return null;
 	}
+
+	
 }

@@ -1,12 +1,9 @@
 package com.jrts.agents;
 
 import jade.core.AID;
-import jade.lang.acl.ACLMessage;
 import jade.wrapper.AgentController;
 import jade.wrapper.ControllerException;
 import jade.wrapper.PlatformController;
-
-import java.io.IOException;
 
 import com.jrts.O2Ainterfaces.Team;
 import com.jrts.common.GameConfig;
@@ -154,11 +151,11 @@ public class MasterAI extends JrtsAgent implements Team {
 	}
 
 	@Override
-	protected void handleRequest(ACLMessage msg) throws IOException {
-		String messageSubject = msg.getConversationId();
-		if (messageSubject.equals(MessageSubject.GET_CITY_CENTER_POSITION))
-			msg.setContentObject(cityCenter);
-		else if (messageSubject.equals(MessageSubject.GET_WORLD_MAP))
-			msg.setContentObject(worldMap);
+	protected Object handleRequest(String requestSubject) {
+		if (requestSubject.equals(MessageSubject.GET_CITY_CENTER_POSITION))
+			return cityCenter;
+		else if (requestSubject.equals(MessageSubject.GET_WORLD_MAP))
+			return worldMap;
+		return null;
 	}
 }
