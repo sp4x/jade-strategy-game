@@ -59,6 +59,7 @@ public class GameConfig {
 	public static final int ATTACKS_SLEEP_TIME = 3000;
 	
 	public static final boolean STATISTICS = true;
+	public static final long GOALS_UPDATE = 1000;
 	
 	public static int BUILDING_ENERGY = 1000;
 	public static int FOOD_MIN_DISTANCE = 3;

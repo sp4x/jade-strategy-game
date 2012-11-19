@@ -1,6 +1,7 @@
 package com.jrts.agents;
 
 import jade.core.AID;
+import jade.core.behaviours.TickerBehaviour;
 import jade.wrapper.AgentController;
 import jade.wrapper.ControllerException;
 import jade.wrapper.PlatformController;
@@ -20,6 +21,10 @@ import com.jrts.messages.EnemySighting;
 import com.jrts.messages.GoalLevels;
 import com.jrts.messages.MessageSubject;
 import com.jrts.messages.Notification;
+import com.jrts.scorer.AttackScorer;
+import com.jrts.scorer.DefenceScorer;
+import com.jrts.scorer.ExplorationScorer;
+import com.jrts.scorer.ResourceScorer;
 
 @SuppressWarnings("serial")
 public class MasterAI extends JrtsAgent implements Team {
@@ -34,6 +39,12 @@ public class MasterAI extends JrtsAgent implements Team {
 
 	final Nature nature;
 	GoalLevels goalLevels;
+	
+	ResourceScorer resourceScorer;
+	AttackScorer attackScorer;
+	DefenceScorer defenceScorer;
+	ExplorationScorer explorationScorer;
+	
 	ResourcesContainer resourcesContainer;
 	UnitFactory unitFactory;
 	WorldMap worldMap;
@@ -74,11 +85,29 @@ public class MasterAI extends JrtsAgent implements Team {
 			resourceAI.start();
 			militaryAI = container.createNewAgent(militaryAID.getLocalName(), MilitaryAI.class.getName(), arg);
 			militaryAI.start();
+			
 		} catch (ControllerException e) {
 			e.printStackTrace();
 		}
 
 		setDefaultGoals();
+		
+		this.attackScorer = new AttackScorer(this);
+		this.defenceScorer = new DefenceScorer(this);
+		this.explorationScorer = new ExplorationScorer(this);
+		this.resourceScorer = new ResourceScorer(this);
+		
+		addBehaviour(new TickerBehaviour(this, GameConfig.GOALS_UPDATE) {
+			
+			@Override
+			protected void onTick() {
+				goalLevels.setAttack(attackScorer.calculatePriority());
+				goalLevels.setDefence(defenceScorer.calculatePriority());
+				goalLevels.setExploration(explorationScorer.calculatePriority());
+				goalLevels.setResources(resourceScorer.calculatePriority());
+				notifyGoalChanges();
+			}
+		});
 	}
 
 	public void setDefaultGoals() {
@@ -157,5 +186,9 @@ public class MasterAI extends JrtsAgent implements Team {
 		else if (requestSubject.equals(MessageSubject.GET_WORLD_MAP))
 			return worldMap;
 		return null;
+	}
+	
+	public ResourcesContainer getResourcesContainer() {
+		return resourcesContainer;
 	}
 }

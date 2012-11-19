@@ -1,24 +1,21 @@
 package com.jrts.scorer;
 
-import com.jrts.common.ResourcesContainer;
-import com.jrts.environment.WorldMap;
+import com.jrts.agents.MasterAI;
 
 public class ExplorationScorer extends GoalScorer {
 
-	public ExplorationScorer(final WorldMap worldMap,
-			ResourcesContainer resourcesContainer) {
-		super(worldMap, resourcesContainer);
-		
+	public ExplorationScorer(final MasterAI masterAI) {
+		super(masterAI);
 		
 		addRule(new Rule() {
 			
 			@Override
 			public double value() {
-				return 100.0 - worldMap.exploredPercentage();
+				return 100.0 - masterAI.getWorldMap().exploredPercentage();
 			}
 		});
-		
-		
 	}
+	
+	
 
 }
