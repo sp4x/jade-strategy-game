@@ -9,6 +9,7 @@ import java.util.Iterator;
 import com.jrts.agents.GoalBasedAI;
 import com.jrts.agents.Unit;
 import com.jrts.common.GameConfig;
+import com.jrts.common.TeamDF;
 import com.jrts.common.UnitTable;
 
 public class UpdateUnitTable extends TickerBehaviour {
@@ -20,24 +21,22 @@ public class UpdateUnitTable extends TickerBehaviour {
 	
 	UnitTable table;
 
-	String unitTypeName;
+	Class<? extends Unit> unitType;
 
 	public UpdateUnitTable(GoalBasedAI agent, Class<? extends Unit> clazz) {
 		super(agent, GameConfig.UNIT_TABLE_REFRESH_TIME);
 		this.table = agent.getUnitTable();
-		this.unitTypeName = clazz.getSimpleName();
+		this.unitType = clazz;
 	}
 
 	@Override
 	@SuppressWarnings("rawtypes")
 	protected void onTick() {
 		table.clear();
-		DFAgentDescription desc = new DFAgentDescription();
-		ServiceDescription unitType = new ServiceDescription();
-		unitType.setType(unitTypeName);
-		DFAgentDescription[] results = ((GoalBasedAI) myAgent).search(desc);
+		TeamDF teamDF = ((GoalBasedAI) myAgent).getTeamDF();
+		DFAgentDescription[] results = teamDF.searchByUnitType(unitType);
 		for (int i = 0; i < results.length; i++) {
-			desc = results[i];
+			DFAgentDescription desc = results[i];
 			Iterator it = desc.getAllServices();
 			it.next(); //basic service
 			if (it.hasNext()) {

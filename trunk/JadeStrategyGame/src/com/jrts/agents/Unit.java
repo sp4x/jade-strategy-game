@@ -2,8 +2,6 @@ package com.jrts.agents;
 
 import jade.core.AID;
 import jade.core.behaviours.Behaviour;
-import jade.domain.FIPAAgentManagement.DFAgentDescription;
-import jade.domain.FIPAAgentManagement.ServiceDescription;
 
 import com.jrts.O2Ainterfaces.IUnit;
 import com.jrts.behaviours.BehaviourWrapper;
@@ -28,8 +26,6 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 	private Position position = null;
 	private String status;
 	private Perception perception;
-	private DFAgentDescription agentDescription;
-	private ServiceDescription basicService;
 
 	private BehaviourWrapper behaviourWrapper;
 
@@ -60,13 +56,8 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 			setTeamName((String) args[1]);
 		}
 		id = getAID().getLocalName();
-		agentDescription = new DFAgentDescription();
-		agentDescription.setName(getAID());
-		basicService = new ServiceDescription();
-		basicService.setName(getAID().getName());
-		basicService.setType(getClass().getSimpleName());
-		agentDescription.addServices(basicService);
-		register(agentDescription, false);
+
+		getTeamDF().registerUnit(this);
 		addBehaviour(behaviourWrapper);
 	}
 
@@ -214,14 +205,7 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 	}
 
 	public void switchStatus(String newStatus) {
-		ServiceDescription sd = new ServiceDescription();
-		sd.setName(getAID().getName());
-		sd.setType(newStatus);
-		agentDescription.clearAllServices();
-		agentDescription.addServices(basicService);
-		agentDescription.addServices(sd);
-		// register the description with the DF
-		register(agentDescription, true);
+		getTeamDF().registerUnit(this, newStatus);
 		status = newStatus;
 	}
 

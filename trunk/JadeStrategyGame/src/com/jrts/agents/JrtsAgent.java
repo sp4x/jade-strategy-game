@@ -17,6 +17,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.jrts.common.GameConfig;
+import com.jrts.common.TeamDF;
 import com.jrts.messages.Notification;
 
 @SuppressWarnings("serial")
@@ -102,36 +103,13 @@ public abstract class JrtsAgent extends Agent {
 	/**
 	 * gets the AID of the team directory facilitator
 	 */
-	protected AID getTeamDF() {
-		return new AID(getTeamName() + "-df", AID.ISLOCALNAME);
+	public TeamDF getTeamDF() {
+		return new TeamDF(this, getTeamName());
 	}
 
-	/**
-	 * register this agent description to the team directory facilitator
-	 * 
-	 * @param desc
-	 *            the agent description
-	 * @param deletePrevious
-	 *            deregister any previous description associated to the agent
-	 */
-	protected void register(DFAgentDescription desc, boolean deletePrevious) {
-		try {
-			if (deletePrevious)
-				DFService.deregister(this, getTeamDF());
-			DFService.register(this, getTeamDF(), desc);
-		} catch (FIPAException e) {
-			e.printStackTrace();
-		}
-	}
+	
 
-	public DFAgentDescription[] search(DFAgentDescription desc) {
-		try {
-			return DFService.search(this, getTeamDF(), desc);
-		} catch (FIPAException e) {
-			e.printStackTrace();
-		}
-		return new DFAgentDescription[0];
-	}
+	
 
 	protected void setTeamName(String team) {
 		this.team = team;
