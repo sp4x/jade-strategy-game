@@ -3,10 +3,8 @@ package com.jrts.scorer;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.jrts.agents.MasterAI.Nature;
+import com.jrts.agents.MasterAI;
 import com.jrts.common.GoalPriority;
-import com.jrts.common.ResourcesContainer;
-import com.jrts.environment.WorldMap;
 
 public class GoalScorer {
 
@@ -15,21 +13,17 @@ public class GoalScorer {
 	}
 
 	public static final double MIN_SCORE = 0;
-	public static final double MAX_SCORE = 0;
+	public static final double MAX_SCORE = 100;
 
 	List<Rule> rules = new LinkedList<GoalScorer.Rule>();
 
-	Nature nature;
+	MasterAI masterAI;
 
-	// everything is needed to make decisions
-	// basically MasterAI's perception
-	WorldMap worldMap;
-	ResourcesContainer resourcesContainer;
+	
 
-	public GoalScorer(WorldMap worldMap, ResourcesContainer resourcesContainer) {
+	public GoalScorer(MasterAI masterAI) {
 		super();
-		this.worldMap = worldMap;
-		this.resourcesContainer = resourcesContainer;
+		this.masterAI = masterAI;
 	}
 
 	public void addRule(Rule r) {
