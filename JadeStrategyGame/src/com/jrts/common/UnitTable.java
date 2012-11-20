@@ -14,11 +14,7 @@ public class UnitTable extends HashMap<AID, String> {
 	private static final long serialVersionUID = 1L;
 	
 	public AID getAFreeUnit() {
-		for (AID agent : keySet()) {
-			if (get(agent).equals(AgentStatus.FREE))
-				return agent;
-		}
-		return null;
+		return getAUnitWithStatus(AgentStatus.FREE);
 	}
 	
 	public ArrayList<AID> getFreeUnits() {
@@ -28,6 +24,23 @@ public class UnitTable extends HashMap<AID, String> {
 				freeUnits.add(agent);
 		}
 		return freeUnits;
+	}
+	
+	public ArrayList<AID> getBusyUnits() {
+		ArrayList<AID> busyUnits = new ArrayList<AID>();
+		for (AID agent : keySet()) {
+			if (!get(agent).equals(AgentStatus.FREE))
+				busyUnits.add(agent);
+		}
+		return busyUnits;
+	}
+	
+	public AID getAUnitWithStatus(String status) {
+		for (AID agent : keySet()) {
+			if (get(agent).equals(status))
+				return agent;
+		}
+		return null;
 	}
 
 	public ArrayList<AID> getAllUnits() {
