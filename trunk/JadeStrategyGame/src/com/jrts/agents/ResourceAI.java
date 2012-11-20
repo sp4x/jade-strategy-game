@@ -3,6 +3,8 @@ package com.jrts.agents;
 import jade.core.AID;
 import jade.core.behaviours.TickerBehaviour;
 
+import java.util.logging.Level;
+
 import com.jrts.behaviours.UpdateUnitTable;
 import com.jrts.common.AgentStatus;
 import com.jrts.common.GameConfig;
@@ -23,6 +25,7 @@ public class ResourceAI extends GoalBasedAI {
 
 	public ResourceAI() {
 		super();
+		logLevel = Level.INFO;
 	}
 
 	protected void setup() {
@@ -46,13 +49,18 @@ public class ResourceAI extends GoalBasedAI {
 		AID worker = null;
 		String orderString = extimateResourceToCollect();
 		int freeWorkers = unitTable.getFreeUnits().size();
-		int busyWorkers = workersCounter - freeWorkers;
-		if (busyWorkers > extimateNumWorkers()) {
+		int busyWorkers = unitTable.getBusyUnits().size();
+		int neededWorkers = extimateNumWorkers();
+		if (busyWorkers > neededWorkers) {
 			String orderToCancel = orderString.equals(AgentStatus.FOOD_COLLECTING) ? AgentStatus.WOOD_CUTTING
 					: AgentStatus.FOOD_COLLECTING;
 			worker = unitTable.getAUnitWithStatus(orderToCancel);
+			if (worker == null) {
+				orderToCancel = orderString;
+				worker = unitTable.getAUnitWithStatus(orderToCancel);
+			}
 			orderString = AgentStatus.FREE;
-		} else if (freeWorkers > 0) {
+		} else if (freeWorkers > 0 && busyWorkers < neededWorkers) {
 			worker = unitTable.getAFreeUnit();
 		}
 		
@@ -162,7 +170,6 @@ public class ResourceAI extends GoalBasedAI {
 
 	@Override
 	public void onGoalsChanged() {
-
 	}
 
 	@Override
