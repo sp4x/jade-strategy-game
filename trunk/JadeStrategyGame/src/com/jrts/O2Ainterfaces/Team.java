@@ -11,4 +11,6 @@ public interface Team {
 	public String getTeamName();
 	
 	public WorldMap getWorldMap();
+
+	public int getEnergy();
 }

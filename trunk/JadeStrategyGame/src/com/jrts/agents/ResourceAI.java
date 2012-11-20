@@ -167,7 +167,8 @@ public class ResourceAI extends GoalBasedAI {
 			int collectedWood = aggiornamento.getWood();
 			resourcesContainer.addFood(collectedFood);
 			resourcesContainer.addWood(collectedWood);
-		}
+		
+		} 
 	}
 
 	@Override

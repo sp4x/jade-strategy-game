@@ -64,6 +64,13 @@ public class CellLabel extends JLabel {
 						else if(MainFrame.getInstance().clickType.equals(MainFrame.deleteCellClick))
 							World.getInstance().changeCell(CellLabel.this.i, CellLabel.this.j, new Cell(CellType.FREE));
 					}
+					// JUST DEBUG
+					if (cell.getType() == CellType.CITY_CENTER) {
+						if(MainFrame.getInstance().clickType.equals(MainFrame.deleteCellClick)) {
+							MainFrame.getInstance().removeTeam(cell.getId());
+							World.getInstance().takeEnergy(new Position(i, j), 1000);
+						}
+					}
 				}
 			}
 		});

@@ -109,6 +109,7 @@ public class Worker extends Unit {
 	
 	@Override
 	protected void handleNotification(Notification n) {
+		super.handleNotification(n);
 		if (n.getSubject().equals(Notification.ORDER)) {
 			Order order = (Order) n.getContentObject();
 			if (order.getOrder().equals(AgentStatus.WOOD_CUTTING)) {

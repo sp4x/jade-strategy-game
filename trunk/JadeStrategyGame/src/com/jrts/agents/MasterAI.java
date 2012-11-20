@@ -12,6 +12,7 @@ import com.jrts.common.GoalPriority;
 import com.jrts.common.ResourcesContainer;
 import com.jrts.common.UnitFactory;
 import com.jrts.common.Utils;
+import com.jrts.environment.Cell;
 import com.jrts.environment.CellType;
 import com.jrts.environment.Perception;
 import com.jrts.environment.Position;
@@ -131,8 +132,29 @@ public class MasterAI extends JrtsAgent implements Team {
 		World world = World.getInstance();
 		// the area near the building is always visible
 		Perception center = world.getPerception(cityCenter, GameConfig.CITY_CENTER_SIGHT);
+		
+		// check if city center was destroyed  
+		Cell cityCenterCell = world.getCell(cityCenter);
+		System.out.println(getTeamName() + " energy: " + cityCenterCell.getResourceEnergy());
+		if (cityCenterCell.getResourceEnergy() <= 0) {
+			System.out.println("TEAM DELETED");
+			
+			// TODO maybe send a notification to other teams (like age of empires)
+			
+			// send notification of decease to military an resource ai (they will forward it to their units)
+			sendNotification(Notification.TEAM_DECEASED, null, militaryAID);
+			sendNotification(Notification.TEAM_DECEASED, null, resourceAID);
+			
+			// clean the cell of citycenter in the floor
+			world.removeTeam(getTeamName());
+			
+			// wait for resource,military and units death messages and then delete the agent
+			removeAllBehaviours();
+			this.doDelete();
+		}
+		
 		// TODO maybe do something if an enemy is detected
-		// TODO check if the main building has been destroyed
+		
 		worldMap.update(center);
 	}
 
@@ -190,5 +212,10 @@ public class MasterAI extends JrtsAgent implements Team {
 	
 	public ResourcesContainer getResourcesContainer() {
 		return resourcesContainer;
+	}
+
+	@Override
+	public int getEnergy() {
+		return World.getInstance().getCell(cityCenter).getResourceEnergy();
 	}
 }

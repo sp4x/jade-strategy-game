@@ -252,8 +252,16 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 
 	@Override
 	protected Object handleRequest(String requestSubject) {
-		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	@Override
+	protected void handleNotification(Notification n) {
+		if (n.getSubject().equals(Notification.TEAM_DECEASED)) {
+			removeAllBehaviours();
+			this.doDelete();
+			World.getInstance().killUnit(this);
+		}
 	}
 
 	public abstract void onEnemySighted(EnemySighting list);
