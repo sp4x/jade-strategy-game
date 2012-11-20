@@ -18,7 +18,6 @@ import java.util.logging.Logger;
 import com.jrts.common.GameConfig;
 import com.jrts.common.TeamDF;
 import com.jrts.environment.Cell;
-import com.jrts.environment.CellType;
 import com.jrts.environment.Perception;
 import com.jrts.environment.Position;
 import com.jrts.messages.EnemySighting;
@@ -194,11 +193,10 @@ public abstract class JrtsAgent extends Agent {
 		for (int i = row - sight; i <= row + sight; i++) {
 			for (int j = col - sight; j <= col + sight; j++) {
 				Cell cell = perception.get(i,j);
-				CellType type = cell.getType();
 				String enemyId = cell.getId();
-				if (type == CellType.SOLDIER || type == CellType.WORKER) {
+				if (cell.isUnit()) {
 					if (!isFriend(enemyId)) {
-						enemies.addEnemy(new EnemySightingItem(new Position(i, j), enemyId, type));
+						enemies.addEnemy(new EnemySightingItem(new Position(i, j), enemyId, cell.getType()));
 					}
 				} 
 			}

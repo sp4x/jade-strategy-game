@@ -16,9 +16,8 @@ public class WorldMap extends Floor {
 		for (int i = 0; i < perception.rows; i++) {
 			for (int j = 0; j < perception.cols; j++) {
 				Cell cell = new Cell(perception.getRelative(i, j));
-				CellType curr = cell.getType();
-				if (curr != CellType.UNKNOWN) {
-					if (curr == CellType.WORKER || curr == CellType.SOLDIER) 
+				if (!cell.isUnknown()) {
+					if (cell.isUnit()) 
 						cell.setType(CellType.FREE);
 					set(perception.getAbsoluteRow(i), perception.getAbsoluteCol(j), cell);
 				}
@@ -69,6 +68,20 @@ public class WorldMap extends Floor {
 			}
 		}
 		return positions;
+	}
+
+	public Position bigStep(Position start, Direction d, int numSteps) {
+		Position newPosition = start;
+		for (int i = 0; i < numSteps; i++) {
+			Position p = newPosition.step(d);
+			if(p.getCol() < 0) p.setCol(0);
+			else if(p.getCol() >= cols) p.setCol(cols - 1 );
+			
+			if(p.getRow() < 0) p.setRow(0);
+			else if(p.getRow() >= rows) p.setRow(rows - 1);
+		}
+		
+		return newPosition;
 	}
 	
 	

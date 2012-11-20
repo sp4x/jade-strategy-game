@@ -307,7 +307,7 @@ public class MainFrame extends JFrame {
 	
 			labelType.setText(cell.getType().toString());
 			labelPosition.setText(i + ", " + j);
-			labelEnergy.setText(String.valueOf(cell.getResourceEnergy()));
+			labelEnergy.setText(String.valueOf(cell.getEnergy()));
 			labelAction.setText("nothing");
 		}
 	}

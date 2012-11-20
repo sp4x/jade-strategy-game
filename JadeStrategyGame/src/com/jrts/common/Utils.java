@@ -4,7 +4,6 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Random;
 
-import com.jrts.environment.CellType;
 import com.jrts.environment.Direction;
 import com.jrts.environment.Floor;
 import com.jrts.environment.Position;
@@ -69,7 +68,7 @@ public class Utils {
 			int x = w + getRandom().nextInt(GameConfig.WORLD_COLS/2);
 			int y = h + getRandom().nextInt(GameConfig.WORLD_ROWS/2);
 			Position pos = new Position(x, y);
-			if(map.get(pos).getType().equals(CellType.UNKNOWN))
+			if(map.get(pos).isUnknown())
 				return pos;
 		}
 		

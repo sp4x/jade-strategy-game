@@ -23,14 +23,15 @@ public class Position implements Serializable {
 
 	public Position step(Direction d) {
 		
-		Position p = new Position(row + d.rowVar(), col + d.colVar());
-		if(p.getCol() < 0) p.setCol(0);
-		else if(p.getCol() >= GameConfig.WORLD_COLS) p.setCol(GameConfig.WORLD_COLS - 1);
-		
-		if(p.getRow() < 0) p.setRow(0);
-		else if(p.getRow() >= GameConfig.WORLD_ROWS) p.setCol(GameConfig.WORLD_ROWS - 1);
-		
-		return p; //new Position(row + d.rowVar(), col + d.colVar());
+//		Position p = new Position(row + d.rowVar(), col + d.colVar());
+//		if(p.getCol() < 0) p.setCol(0);
+//		else if(p.getCol() >= GameConfig.WORLD_COLS) p.setCol(GameConfig.WORLD_COLS - 1);
+//		
+//		if(p.getRow() < 0) p.setRow(0);
+//		else if(p.getRow() >= GameConfig.WORLD_ROWS) p.setCol(GameConfig.WORLD_ROWS - 1);
+//		
+//		return p;
+		return new Position(row + d.rowVar(), col + d.colVar());
 	}
 	
 	public Position followPath(List<Direction> path) {
@@ -42,13 +43,14 @@ public class Position implements Serializable {
 		return p;
 	}
 	
-	public Position bigStep(Direction d, int numSteps) {
-		Position newPosition = this;
-		for (int i = 0; i < numSteps; i++)
-			newPosition = newPosition.step(d);	
-		
-		return newPosition;
-	}
+	
+//	public Position bigStep(Direction d, int numSteps) {
+//		Position newPosition = this;
+//		for (int i = 0; i < numSteps; i++)
+//			newPosition = newPosition.step(d);	
+//		
+//		return newPosition;
+//	}
 	
 	public int getRow() {
 		return row;

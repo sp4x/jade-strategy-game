@@ -120,8 +120,8 @@ public class MasterAI extends JrtsAgent implements Team {
 		World world = World.getInstance();
 		// check if city center was destroyed
 		Cell cityCenterCell = world.getCell(masterPerception.getCityCenter());
-		logger.log(logLevel, getTeamName() + " energy: " + cityCenterCell.getResourceEnergy());
-		if (cityCenterCell.getResourceEnergy() <= 0) {
+		logger.log(logLevel, getTeamName() + " energy: " + cityCenterCell.getEnergy());
+		if (cityCenterCell.getEnergy() <= 0) {
 			logger.log(logLevel, "TEAM DELETED");
 			decease();
 		}
@@ -214,6 +214,6 @@ public class MasterAI extends JrtsAgent implements Team {
 	@Override
 	public int getEnergy() {
 		Position cityCenter = masterPerception.getCityCenter();
-		return World.getInstance().getCell(cityCenter).getResourceEnergy();
+		return World.getInstance().getCell(cityCenter).getEnergy();
 	}
 }

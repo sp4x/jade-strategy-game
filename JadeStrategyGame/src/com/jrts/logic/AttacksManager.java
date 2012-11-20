@@ -49,14 +49,14 @@ public class AttacksManager {
 		for (int i = 0; i < hits.size(); i++){
 			Position hp = hits.get(i).getPos();
 			Cell cell = World.getInstance().getCell(hp);
-			if(cell.getType() != CellType.FREE){
+			if(!cell.isFree()){
 				logger.log(logLevel, "Detected collision");
 				Hit hit = hits.remove(i);
 				Position pos = hit.getPos();
 				int damage = hit.getDamage();
-				if(cell.getType() == CellType.WORKER || cell.getType() == CellType.SOLDIER)
+				if(cell.isUnit())
 					World.getInstance().getCell(pos).getUnit().decreaseLife(damage);
-				if(cell.getType() == CellType.CITY_CENTER)
+				if(cell.isCityCenter())
 					World.getInstance().takeEnergy(pos, damage);
 			}
 			else if(hits.get(i).getRange() == 0){
