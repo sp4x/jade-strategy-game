@@ -36,6 +36,47 @@ public class Utils {
 		}
 	}
 	
+	public static Position getBattalionCenter(WorldMap map, Position cityCenter, int ray)
+	{
+		Direction angle = getMapAnglePosition(cityCenter);
+		int startI = 1;
+		int startJ = 1;
+		
+		if(angle.equals(Direction.LEFT_UP))
+		{
+			startI = cityCenter.getCol() + Utils.random.nextInt(5) + 4;
+			startJ = cityCenter.getRow() + Utils.random.nextInt(5) + 4;
+		} else if(angle.equals(Direction.LEFT_DOWN))
+		{
+			startI = cityCenter.getRow() - Utils.random.nextInt(10) - 3;
+			startJ = Utils.random.nextInt(10);
+		} else if(angle.equals(Direction.RIGHT_UP)){
+			startI = cityCenter.getRow() + Utils.random.nextInt(5) + 3;
+			startJ = GameConfig.WORLD_COLS/2 + Utils.random.nextInt(10) + 3;
+		} else if(angle.equals(Direction.RIGHT_DOWN)){
+			startI = GameConfig.WORLD_COLS/2 + Utils.random.nextInt(10) + 5;
+			startJ = GameConfig.WORLD_ROWS/2 + Utils.random.nextInt(10) + 5;
+		}
+		
+		int maxI = startI + GameConfig.WORLD_ROWS/2 - 1;
+		int maxJ = startJ + GameConfig.WORLD_COLS/2 - 1;
+		for (int i = startI; i < maxI; i++) {
+			for (int j = startJ; j < maxJ; j++) {
+				
+				boolean stop = false;
+				for (int w = i-1; w < i + ray - 1 && !stop; w++)
+					for (int h = j-1; h < j + ray - 1; h++)
+						if(!map.isWalkable(new Position(w, h)))
+							stop = true;
+				
+				if(!stop)
+					return new Position(i, j);
+			}
+		}
+		
+		return null;
+	}
+	
 	/**
 	 * Get the position of a random unknown cell located in one of the angles of the map
 	 * @param a worldmap of a team
@@ -65,8 +106,8 @@ public class Utils {
 		
 		for (int i = 0; i < 10; i++) {
 
-			int x = w + getRandom().nextInt(GameConfig.WORLD_COLS/2);
-			int y = h + getRandom().nextInt(GameConfig.WORLD_ROWS/2);
+			int x = w + getRandom().nextInt(GameConfig.WORLD_COLS/2 - 1);
+			int y = h + getRandom().nextInt(GameConfig.WORLD_ROWS/2 - 1);
 			Position pos = new Position(x, y);
 			if(map.get(pos).isUnknown())
 				return pos;

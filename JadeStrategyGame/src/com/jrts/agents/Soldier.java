@@ -82,12 +82,15 @@ public class Soldier extends Unit {
 		if (n.getSubject().equals(Notification.ORDER)) {
 			Order order = (Order) n.getContentObject();
 			if (order.getOrder().equals(AgentStatus.PATROLING)) {
-				Direction dir = order.getPatrolDirection();
-				int distance = order.getPatrolDistance();
+				Direction dir = order.getDirection();
+				int distance = order.getDistance();
 				patrol(dir, distance);
 				
 			} else if (order.getOrder().equals(AgentStatus.EXPLORING)) {
 				explore();
+			} else if (order.getOrder().equals(AgentStatus.GO_AND_WAIT_TO_FIGHT)) {
+				goThere(order.getPosition());
+				switchStatus(AgentStatus.GO_AND_WAIT_TO_FIGHT);
 			}
 		}
 	}

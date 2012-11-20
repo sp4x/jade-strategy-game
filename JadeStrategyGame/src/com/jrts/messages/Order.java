@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 
 import com.jrts.environment.Direction;
+import com.jrts.environment.Position;
 
 public class Order implements Serializable {
 
@@ -12,8 +13,9 @@ public class Order implements Serializable {
 	private String order;
 	private HashMap<String, Object> parameters;
 	
-	public static final String PATROL_DIRECTION = "patrol_direction";
-	public static final String PATROL_DISTANCE = "patrol_distance";
+	public static final String POSITION = "position";
+	public static final String DIRECTION = "direction";
+	public static final String DISTANCE = "_distance";
 	
 	public Order() {}
 	
@@ -23,13 +25,6 @@ public class Order implements Serializable {
 		this.parameters = new HashMap<String, Object>();
 	}
 
-	/*
-	public Order(String order, HashMap<String, Object> parameters) {
-		this.order = order;
-		this.parameters = parameters;
-	}
-	*/
-	
 	public String getOrder() {
 		return order;
 	}
@@ -38,19 +33,27 @@ public class Order implements Serializable {
 		this.order = order;
 	}
 
-	public Direction getPatrolDirection() {
-		return (Direction)parameters.get(PATROL_DIRECTION);
+	public Direction getDirection() {
+		return (Direction)parameters.get(DIRECTION);
 	}
 
-	public void setPatrolDirection(Direction direction) {
-		this.parameters.put(PATROL_DIRECTION, direction);
+	public void setDirection(Direction direction) {
+		this.parameters.put(DIRECTION, direction);
 	}
 	
-	public int getPatrolDistance() {
-		return (Integer)parameters.get(PATROL_DISTANCE);
+	public int getDistance() {
+		return (Integer)parameters.get(DISTANCE);
 	}
 
-	public void setPatrolDistance(int distance) {
-		this.parameters.put(PATROL_DISTANCE, distance);
+	public void setDistance(int distance) {
+		this.parameters.put(DISTANCE, distance);
+	}
+
+	public Position getPosition() {
+		return (Position)parameters.get(POSITION);
+	}
+
+	public void setPosition(Position position) {
+		this.parameters.put(POSITION, position);
 	}
 }

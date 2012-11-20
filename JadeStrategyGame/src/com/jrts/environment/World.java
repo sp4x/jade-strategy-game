@@ -150,7 +150,7 @@ public class World {
 		
 		// A seconda dell'angolo della mappa scelto e del valore della var n
 		// scelgo la posizione della mappa ove posizionare la base
-		int n = Utils.random.nextInt(10) + 1;
+		int n = Utils.random.nextInt(5) + 1;
 		do {
 			switch (angle) {
 			case 0:

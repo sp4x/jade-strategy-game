@@ -5,6 +5,7 @@ import com.jrts.environment.Direction;
 import com.jrts.environment.Position;
 import com.jrts.environment.WorldMap;
 
+
 public class PatrolBehaviour extends UnitBehaviour {
 
 	/**
@@ -22,7 +23,7 @@ public class PatrolBehaviour extends UnitBehaviour {
 	Position cityCenter;
 	Position p1, p2;
 	boolean go1 = true;
-	
+	/**
 	/**
 	 * 
 	 * @param soldier
@@ -53,7 +54,6 @@ public class PatrolBehaviour extends UnitBehaviour {
 			p1 = worldMap.bigStep(cityCenter, Direction.LEFT_DOWN, this.distance);
 			p2 = worldMap.bigStep(cityCenter, Direction.RIGHT_DOWN, this.distance);
 		}
-		
 	}
 
 	@Override
