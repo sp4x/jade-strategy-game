@@ -143,8 +143,8 @@ public class Floor implements Serializable {
 		}
 	}
 	
-	public void set(Position p, Cell st) {
-		set(p.getRow(), p.getCol(), st);
+	public void set(Position p, Cell cell) {
+		set(p.getRow(), p.getCol(), cell);
 	}
 
 	public int getRows() {

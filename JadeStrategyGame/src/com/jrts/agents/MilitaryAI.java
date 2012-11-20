@@ -6,6 +6,7 @@ import jade.core.behaviours.WakerBehaviour;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 import com.jrts.behaviours.PatrolBehaviour;
 import com.jrts.behaviours.UpdateUnitTable;
@@ -21,7 +22,6 @@ import com.jrts.environment.World;
 import com.jrts.messages.EnemySighting;
 import com.jrts.messages.Notification;
 import com.jrts.messages.Order;
-
 
 public class MilitaryAI extends GoalBasedAI {
 	private static final long serialVersionUID = 9114684864072759345L;
@@ -247,6 +247,9 @@ public class MilitaryAI extends GoalBasedAI {
 		int heuristic = numSightedSoldiers*x - distance*defence/y + numMyFreeSoldier*z;
 		logger.log(logLevel, "CALCOLO EURISTICA, VALORE: " + heuristic + "\n" +
 				"----------------- End OnEnemySighting ----------------\n");
+		
+		if(heuristic > GameConfig.ENEMY_SIGHTING_BOUND)
+			attackEnemy(e.getEnemies().get(0).getId());
 	}
 	
 	@Override
@@ -276,7 +279,54 @@ public class MilitaryAI extends GoalBasedAI {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 	
+	public void attackEnemy(String enemyId){
+		//get enemy position
+		Position enemyPosition = getUnitPosition(enemyId);
+		Double currDistance = Double.MAX_VALUE;
+		String attackerId = "";
+		
+		Collection<AID> soldiers = getUnitTable().getSoldiers();
+		
+		if(!soldiers.isEmpty()){
+			//choose soldier near then enemy's position
+			for(AID soldier : soldiers){
+				Position soldierPosition = getUnitPosition(soldier.toString());
+				Double distance = enemyPosition.distance(soldierPosition);
+				if(distance < currDistance){
+					currDistance = distance;
+					attackerId = soldier.toString();
+				}
+			}
+		}
+		else{
+			Collection<AID> workers = getUnitTable().getWorkers();
+			
+			if(!workers.isEmpty()){
+				//choose soldier near then enemy's position
+				for(AID worker : workers){
+					Position workerPosition = getUnitPosition(worker.toString());
+					Double distance = enemyPosition.distance(workerPosition);
+					if(distance < currDistance){
+						currDistance = distance;
+						attackerId = worker.toString();
+					}
+				}
+			}else{
+				logger.severe("No unit available for attack!");
+			}
+		}
+		
+		orderAttack(attackerId, enemyPosition);
+	}
 
+	private void orderAttack(String attacker, Position enemyPosition) {
+		//todo completare
+		sendNotification("attack", enemyPosition, new AID(attacker));
+	}
+
+	private Position getUnitPosition(String enemyId) {
+		//todo completare
+		return null;
+	}
 }

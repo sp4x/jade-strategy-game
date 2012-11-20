@@ -1,8 +1,8 @@
 package com.jrts.behaviours;
 
-import java.util.Calendar;
-
 import jade.core.behaviours.Behaviour;
+
+import java.util.Calendar;
 
 import com.jrts.agents.Unit;
 import com.jrts.common.GameStatistics;

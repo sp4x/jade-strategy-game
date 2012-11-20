@@ -62,6 +62,8 @@ public class GameConfig {
 	public static final long GOALS_UPDATE = 1000;
 	public static final int POPULATION_LIMIT = 30;
 	
+	public static final int ENEMY_SIGHTING_BOUND = 10;
+	
 	public static int BUILDING_ENERGY = 1000;
 	public static int FOOD_MIN_DISTANCE = 3;
 	public static int FOOD_MAX_DISTANCE = 5;
