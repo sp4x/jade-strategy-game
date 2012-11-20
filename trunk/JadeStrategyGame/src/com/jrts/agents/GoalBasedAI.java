@@ -1,8 +1,8 @@
 package com.jrts.agents;
 
-import java.util.ArrayList;
-
 import jade.core.AID;
+
+import java.util.Collection;
 
 import com.jrts.agents.MasterAI.Nature;
 import com.jrts.common.ResourcesContainer;
@@ -72,7 +72,7 @@ public abstract class GoalBasedAI extends JrtsAgent {
 			onGoalsChanged();
 			
 		} else if (n.getSubject().equals(Notification.TEAM_DECEASED)) {
-			ArrayList<AID> units = unitTable.getAllUnits();
+			Collection<AID> units = unitTable.getAllUnits();
 			for (AID unit : units) {
 				sendNotification(Notification.TEAM_DECEASED, null, unit);
 			}

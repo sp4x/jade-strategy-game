@@ -91,10 +91,10 @@ public class MasterAI extends JrtsAgent implements Team {
 
 		setDefaultGoals();
 
-		this.attackScorer = new AttackScorer(masterPerception);
-		this.defenceScorer = new DefenceScorer(masterPerception);
-		this.explorationScorer = new ExplorationScorer(masterPerception);
-		this.resourceScorer = new ResourceScorer(masterPerception);
+		this.attackScorer = new AttackScorer(nature, masterPerception);
+		this.defenceScorer = new DefenceScorer(nature, masterPerception);
+		this.explorationScorer = new ExplorationScorer(nature, masterPerception);
+		this.resourceScorer = new ResourceScorer(nature, masterPerception);
 
 		addBehaviour(new TickerBehaviour(this, GameConfig.GOALS_UPDATE) {
 

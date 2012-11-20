@@ -3,6 +3,7 @@ package com.jrts.scorer;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.jrts.agents.MasterAI.Nature;
 import com.jrts.common.GoalPriority;
 import com.jrts.environment.MasterPerception;
 
@@ -17,12 +18,13 @@ public class GoalScorer {
 
 	List<Rule> rules = new LinkedList<GoalScorer.Rule>();
 
+	Nature nature;
 	MasterPerception perception;
 
-	
 
-	public GoalScorer(MasterPerception perception) {
+	public GoalScorer(Nature nature, MasterPerception perception) {
 		super();
+		this.nature = nature;
 		this.perception = perception;
 	}
 

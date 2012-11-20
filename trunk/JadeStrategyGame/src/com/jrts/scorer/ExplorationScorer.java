@@ -1,11 +1,12 @@
 package com.jrts.scorer;
 
+import com.jrts.agents.MasterAI.Nature;
 import com.jrts.environment.MasterPerception;
 
 public class ExplorationScorer extends GoalScorer {
 
-	public ExplorationScorer(final MasterPerception perception) {
-		super(perception);
+	public ExplorationScorer(final Nature nature, final MasterPerception perception) {
+		super(nature, perception);
 		
 		addRule(new Rule() {
 			
