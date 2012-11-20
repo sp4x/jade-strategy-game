@@ -60,6 +60,7 @@ public class GameConfig {
 	
 	public static final boolean STATISTICS = true;
 	public static final long GOALS_UPDATE = 1000;
+	public static final int POPULATION_LIMIT = 15;
 	
 	public static int BUILDING_ENERGY = 1000;
 	public static int FOOD_MIN_DISTANCE = 3;

@@ -60,7 +60,8 @@ public class ResourceAI extends GoalBasedAI {
 		int numWorkers = extimateNumWorkers() - workersCounter;
 		for (int i = 0; i < numWorkers; i++) {
 			if (resourcesContainer.isThereEnoughFood(GameConfig.WORKER_FOOD_COST) && 
-					resourcesContainer.isThereEnoughWood(GameConfig.WORKER_WOOD_COST)) {
+					resourcesContainer.isThereEnoughWood(GameConfig.WORKER_WOOD_COST)
+					&& getTeamDF().countUnits() < GameConfig.POPULATION_LIMIT) {
 
 				resourcesContainer.removeFood(GameConfig.WORKER_FOOD_COST);
 				resourcesContainer.removeWood(GameConfig.WORKER_WOOD_COST);

@@ -67,7 +67,8 @@ public class MilitaryAI extends GoalBasedAI {
 	public void createSoldier()
 	{
 		if (resourcesContainer.isThereEnoughFood(GameConfig.SOLDIER_FOOD_COST) && 
-				resourcesContainer.isThereEnoughWood(GameConfig.SOLDIER_WOOD_COST) ) {
+				resourcesContainer.isThereEnoughWood(GameConfig.SOLDIER_WOOD_COST)
+				&& getTeamDF().countUnits() < GameConfig.POPULATION_LIMIT) {
 			
 			resourcesContainer.removeFood(GameConfig.SOLDIER_FOOD_COST);
 			resourcesContainer.removeWood(GameConfig.SOLDIER_WOOD_COST);
