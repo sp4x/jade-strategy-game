@@ -40,6 +40,8 @@ public class Soldier extends Unit {
 		//patrol(Direction.UP, PatrolBehaviour.DISTANCE_LITTLE);
 		
 //		addBehaviour(new SendAttack(this));
+		
+		sendNotification(Notification.NEW_SOLDIER, null, getMilitaryAID());
 	}
 	
 	public void sendHit(Direction direction) {
@@ -87,5 +89,11 @@ public class Soldier extends Unit {
 				explore();
 			}
 		}
+	}
+
+	@Override
+	protected void die() {
+		sendNotification(Notification.UNIT_DEATH, getType(), getMilitaryAID());
+		terminate();
 	}
 }

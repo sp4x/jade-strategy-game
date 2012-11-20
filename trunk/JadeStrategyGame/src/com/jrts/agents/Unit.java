@@ -154,14 +154,17 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 		}
 	}
 
-	private void die() {
+	public void terminate() {
 		World.getInstance().killUnit(this);
 		doDelete();
 	}
+	
+	protected abstract void die(); 
 
 	@Override
 	public void decreaseLife(int damage) {
 		setLife(getLife() - damage);
+		sendNotification(Notification.UNDER_ATTACK, getAID(), getMilitaryAID());
 	}
 
 	public int getSpeed() {

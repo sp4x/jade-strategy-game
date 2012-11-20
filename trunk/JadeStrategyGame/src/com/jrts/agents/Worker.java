@@ -38,6 +38,8 @@ public class Worker extends Unit {
 		
 		switchStatus(AgentStatus.FREE);
 		
+		sendNotification(Notification.NEW_WORKER, null, getResourceAID());
+		
 //		addBehaviour(new SendAttack(this));
 	}
 	
@@ -115,5 +117,11 @@ public class Worker extends Unit {
 				collectFood();
 			}
 		}
+	}
+
+	@Override
+	protected void die() {
+		sendNotification(Notification.UNIT_DEATH, getType(), getResourceAID());
+		terminate();
 	}
 }

@@ -1,5 +1,8 @@
 package com.jrts.environment;
 
+import java.util.Collection;
+import java.util.LinkedList;
+
 
 public class WorldMap extends Floor {
 
@@ -54,6 +57,18 @@ public class WorldMap extends Floor {
 			}
 		}
 		return unknown*100.0/totalCells;
+	}
+	
+	
+	public Collection<Position> getKnownCityCenters() {
+		Collection<Position> positions = new LinkedList<Position>();
+		for (int i=0; i < getRows(); i++) {
+			for (int j=0; j < getCols(); j++) {
+				if (get(i, j).type == CellType.CITY_CENTER)
+					positions.add(new Position(i, j));
+			}
+		}
+		return positions;
 	}
 	
 	
