@@ -23,15 +23,15 @@ public class GameConfig {
 	public static final int SOLDIER_NUMBER_LIMIT = 10;
 	public static final int WORKER_NUMBER_LIMIT = 10;
 	
-	public static final int WORKER_SIGHT = 1; //TODO change
-	public static final int SOLDIER_SIGHT = 1;
-	public static final int CITY_CENTER_SIGHT = 5;
+	public static final int WORKER_SIGHT = 2; //TODO change
+	public static final int SOLDIER_SIGHT = 5;
+	public static final int CITY_CENTER_SIGHT = 8;
 	
 	public static final int WORKER_KNAPSACK_CAPACITY = 10;
 	
 	public static final int UNIT_MOVING_ATTEMPTS = 20;
 	
-	public static final int NOTIFICATION_REFRESH = 10;
+	public static final int NOTIFICATION_REFRESH = 1;
 	
 	public static int UNIT_WAIT_TIME = 4000;
 	
