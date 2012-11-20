@@ -275,8 +275,13 @@ public class MainFrame extends JFrame {
 		
 		/** follow the selected unit */
 		if (selectedUnit != null) {
-			showAgentInfo();
-			setSelectedCell(selectedUnit.getPosition().getRow(), selectedUnit.getPosition().getCol());
+			try {
+				showAgentInfo();
+				setSelectedCell(selectedUnit.getPosition().getRow(), selectedUnit.getPosition().getCol());
+			} catch (Exception e) {
+				setSelectedCell(0,0);
+				selectedUnit = null;
+			}
 		} else {
 			showCellInfo(selectedRow, selectedCol);
 		}
@@ -308,7 +313,6 @@ public class MainFrame extends JFrame {
 	}
 
 	protected void showAgentInfo() {
-		// IUnit
 		// World.getInstance().getCell(selectedUnit.getPosition()).getUnit();
 		labelTeam.setText(selectedUnit.getTeamName());
 		if (selectedUnit.getType().equals(CellType.WORKER))

@@ -29,7 +29,7 @@ public class MilitaryAI extends GoalBasedAI {
 		
 		addBehaviour(new UpdateUnitTable(this, Soldier.class));
 
-		addBehaviour(new WakerBehaviour(this, 5000) {
+		addBehaviour(new WakerBehaviour(this, 15000) {
 			private static final long serialVersionUID = 1746608629262055814L;
 			@Override
 			protected void handleElapsedTimeout() {
@@ -37,21 +37,21 @@ public class MilitaryAI extends GoalBasedAI {
 			}
 		});
 		
-		addBehaviour(new WakerBehaviour(this, 5000) {
-			private static final long serialVersionUID = 1746608629262055814L;
-			@Override
-			protected void handleElapsedTimeout() {
-				requestSoldierCreation();
-			}
-		});
-		
-		addBehaviour(new WakerBehaviour(this, 7000) {
-			private static final long serialVersionUID = 1746608629262055814L;
-			@Override
-			protected void handleElapsedTimeout() {
-				requestSoldierCreation();
-			}
-		});
+//		addBehaviour(new WakerBehaviour(this, 5000) {
+//			private static final long serialVersionUID = 1746608629262055814L;
+//			@Override
+//			protected void handleElapsedTimeout() {
+//				requestSoldierCreation();
+//			}
+//		});
+//		
+//		addBehaviour(new WakerBehaviour(this, 7000) {
+//			private static final long serialVersionUID = 1746608629262055814L;
+//			@Override
+//			protected void handleElapsedTimeout() {
+//				requestSoldierCreation();
+//			}
+//		});
 		
 		addBehaviour(new WakerBehaviour(this, 10000) {
 			private static final long serialVersionUID = 1746608629262055814L;
@@ -61,15 +61,15 @@ public class MilitaryAI extends GoalBasedAI {
 				addExplorer();
 			}
 		});
-		
-		addBehaviour(new WakerBehaviour(this, 15000) {
-			private static final long serialVersionUID = 1746608629262055814L;
-
-			@Override
-			protected void handleElapsedTimeout() {
-				addPatroler();
-			}
-		});
+//		
+//		addBehaviour(new WakerBehaviour(this, 15000) {
+//			private static final long serialVersionUID = 1746608629262055814L;
+//
+//			@Override
+//			protected void handleElapsedTimeout() {
+//				addPatroler();
+//			}
+//		});
 		
 	}
 
