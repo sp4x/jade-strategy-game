@@ -6,7 +6,6 @@ import java.util.logging.Logger;
 
 import com.jrts.common.GameConfig;
 import com.jrts.environment.Cell;
-import com.jrts.environment.CellType;
 import com.jrts.environment.Direction;
 import com.jrts.environment.Hit;
 import com.jrts.environment.Position;
@@ -54,9 +53,7 @@ public class AttacksManager {
 				Hit hit = hits.remove(i);
 				Position pos = hit.getPos();
 				int damage = hit.getDamage();
-				if(cell.isUnit())
-					World.getInstance().getCell(pos).getUnit().decreaseLife(damage);
-				if(cell.isCityCenter())
+				if(cell.isCityCenter() || cell.isUnit())
 					World.getInstance().takeEnergy(pos, damage);
 			}
 			else if(hits.get(i).getRange() == 0){
