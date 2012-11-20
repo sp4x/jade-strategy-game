@@ -32,6 +32,8 @@ public class CollectResources extends UnitBehaviour {
 	@Override
 	public void myAction() {
 		WorldMap map = worker.requestMap();
+		if (map == null) 
+			return;
 		
 		// check if there is still some resource to collect in resourcePosition
 		if (resourcePosition == null || map.get(resourcePosition).getType() != resourceToCollect) {

@@ -30,4 +30,12 @@ public class UnitTable extends HashMap<AID, String> {
 		return freeUnits;
 	}
 
+	public ArrayList<AID> getAllUnits() {
+		ArrayList<AID> units = new ArrayList<AID>();
+		for (AID agent : keySet()) {
+			units.add(agent);
+		}
+		return units;
+	}
+
 }

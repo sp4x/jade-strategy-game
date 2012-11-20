@@ -11,7 +11,6 @@ import javax.swing.JPanel;
 import com.jrts.common.GameConfig;
 import com.jrts.environment.Cell;
 import com.jrts.environment.Floor;
-import com.jrts.environment.Position;
 import com.jrts.environment.World;
 import com.jrts.logic.AttacksManager;
 
@@ -63,43 +62,47 @@ public class WorldViewPanel extends JPanel {
 				currCellLabel.setBounds(j * GameConfig.ICON_SIZE, i * GameConfig.ICON_SIZE, GameConfig.ICON_SIZE, GameConfig.ICON_SIZE);
 				icon = null;
 				Cell currCell = floor.get(i, j);
-				switch (currCell.getType()) {
-				case WORKER:
-					if (currCell.getUnit() == MainFrame.getInstance().selectedUnit)
-						icon = ImageLoader.getSelectedWorkerImageIcon(floor.get(new Position(i, j)).getUnit().getTeamName());
-					else
-						icon = ImageLoader.getWorkerImageIcon(floor.get(new Position(i, j)).getUnit().getTeamName());
-					break;
-				case SOLDIER:
-					if (currCell.getUnit() == MainFrame.getInstance().selectedUnit)
-						icon = ImageLoader.getSelectedSoldierImageIcon(floor.get(new Position(i, j)).getUnit().getTeamName());
-					else
-						icon = ImageLoader.getSoldierImageIcon(floor.get(new Position(i, j)).getUnit().getTeamName());
-					break;
-				case CITY_CENTER: 
-					if (currCellLabel.isSelected())
-						icon = ImageLoader.getSelectedWorkerFactoryImageIcon(floor.get(new Position(i, j)).getId());
-					else
-						icon = ImageLoader.getWorkerFactoryImageIcon(floor.get(new Position(i, j)).getId());
-					break;
-				case WOOD:
-					if (currCellLabel.isSelected())
-						icon = ImageLoader.treeIcon_s;
-					else
-						icon = ImageLoader.treeIcon;
-					break;
-				case FOOD:
-					if (currCellLabel.isSelected())
-						icon = ImageLoader.farmIcon_s;
-					else
-						icon = ImageLoader.farmIcon;
-					break;
-				default:
-					if (currCellLabel.isSelected())
-						icon = ImageLoader.freeIcon_s;
-					else
-						icon = ImageLoader.freeIcon;
-					break;
+				try {
+					switch (currCell.getType()) {
+					case WORKER:
+						if (currCell.getUnit() == MainFrame.getInstance().selectedUnit)
+							icon = ImageLoader.getSelectedWorkerImageIcon(currCell.getUnit().getTeamName());
+						else
+							icon = ImageLoader.getWorkerImageIcon(currCell.getUnit().getTeamName());
+						break;
+					case SOLDIER:
+						if (currCell.getUnit() == MainFrame.getInstance().selectedUnit)
+							icon = ImageLoader.getSelectedSoldierImageIcon(currCell.getUnit().getTeamName());
+						else
+							icon = ImageLoader.getSoldierImageIcon(currCell.getUnit().getTeamName());
+						break;
+					case CITY_CENTER: 
+						if (currCellLabel.isSelected())
+							icon = ImageLoader.getSelectedWorkerFactoryImageIcon(currCell.getId());
+						else
+							icon = ImageLoader.getWorkerFactoryImageIcon(currCell.getId());
+						break;
+					case WOOD:
+						if (currCellLabel.isSelected())
+							icon = ImageLoader.treeIcon_s;
+						else
+							icon = ImageLoader.treeIcon;
+						break;
+					case FOOD:
+						if (currCellLabel.isSelected())
+							icon = ImageLoader.farmIcon_s;
+						else
+							icon = ImageLoader.farmIcon;
+						break;
+					default:
+						if (currCellLabel.isSelected())
+							icon = ImageLoader.freeIcon_s;
+						else
+							icon = ImageLoader.freeIcon;
+						break;
+					}
+				} catch (Exception e) {
+					
 				}
 				
 				if (AttacksManager.isThereAnHit(i, j))

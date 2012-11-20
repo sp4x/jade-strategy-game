@@ -83,7 +83,7 @@ public class TeamVisibilityPanel extends JPanel {
 			for (int i = 0; i < GameConfig.WORLD_COLS; i++) {
 				for (int j = 0; j < GameConfig.WORLD_ROWS; j++) {
 				    
-					Cell cell = this.team.getWorldMap().get(j, i);
+					Cell cell = team.getWorldMap().get(j, i);
 					CellType type = cell.getType();
 					if(type.equals(CellType.UNKNOWN))
 						g2d.setPaint(Color.DARK_GRAY);

@@ -45,8 +45,6 @@ public class TeamResourcePanel extends JPanel{
 		if (team != null) {
 			this.food.setText(""+team.getFood()); 
 			this.wood.setText(""+team.getWood());
-		} else {
-			System.err.println("CHE SUCCEDE?");
 		}
 	}
 	

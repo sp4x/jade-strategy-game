@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -56,6 +57,9 @@ public class MainFrame extends JFrame {
 
 	private boolean finished = false;
 
+	HashMap<String, JPanel> teamResourcePanels = new HashMap<String, JPanel>();
+	HashMap<String, JPanel> teamVisibilityPanels = new HashMap<String, JPanel>();
+	
 	// public static int treeClick = 0;
 
 	public static String addTreeClick = "Add Tree";
@@ -196,8 +200,13 @@ public class MainFrame extends JFrame {
 		rightPanel.setMaximumSize(d);
 
 		for (Team t : teams) {
-			topPanel.add(new TeamResourcePanel(t), BorderLayout.WEST);
-			rightPanel.add(new TeamVisibilityPanel(t), BorderLayout.WEST);
+			TeamResourcePanel trp = new TeamResourcePanel(t);
+			teamResourcePanels.put(t.getTeamName(), trp);
+			topPanel.add(trp, BorderLayout.WEST);
+			
+			TeamVisibilityPanel tvp = new TeamVisibilityPanel(t);
+			teamVisibilityPanels.put(t.getTeamName(), tvp);
+			rightPanel.add(tvp, BorderLayout.WEST);
 		}
 
 		JPanel center = new JPanel();
@@ -242,32 +251,6 @@ public class MainFrame extends JFrame {
 			}
 		}
 		new Thread(new RefreshGUI()).start();
-		
-//		class NotifyAgents implements Runnable {
-//			@Override
-//			public void run() {
-//				while(!finished) {
-//					try {
-//						Thread.sleep(1000);
-//					} catch (Exception e) {
-//					}
-//					/** update world panel */
-//					worldViewPanel.update();
-//					
-//					/** update all teampanels */
-//					for (int i = 0; i < topPanel.getComponentCount(); i++) {
-//						if (topPanel.getComponent(i) instanceof TeamResourcePanel)
-//							((TeamResourcePanel) topPanel.getComponent(i)).update();
-//					}
-//<<<<<<< .mine
-//					repaint();
-//					ThreadMonitor.getInstance().sendNotifyAll();
-//=======
-//>>>>>>> .r127
-//				}
-//			}
-//		}
-//		new Thread(new NotifyAgents()).start();
 	}
 
 	public void update() {
@@ -336,5 +319,17 @@ public class MainFrame extends JFrame {
 			selectedRow = row;
 			selectedCol = col;
 		}
+	}
+
+	public synchronized void removeTeam(String teamName) {
+		for (Team t : teams) {
+			if (t.getTeamName().equals(teamName)) {
+				teams.remove(t);
+				break;
+			}
+		}
+		rightPanel.remove(teamVisibilityPanels.get(teamName));
+		topPanel.remove(teamResourcePanels.get(teamName));
+		repaint();
 	}
 }

@@ -2,17 +2,16 @@ package com.jrts.agents;
 
 import jade.core.AID;
 import jade.core.Agent;
+import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.core.behaviours.TickerBehaviour;
-import jade.domain.DFService;
-import jade.domain.FIPAException;
-import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.UnreadableException;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -30,6 +29,8 @@ public abstract class JrtsAgent extends Agent {
 	public JrtsAgent() {
 		this.logger.setLevel(Level.WARNING);
 	}
+	
+	LinkedList<Behaviour> behaviours = new LinkedList<Behaviour>();
 	
 	@Override
 	protected void setup() {
@@ -80,6 +81,23 @@ public abstract class JrtsAgent extends Agent {
 		});
 	}
 
+	@Override
+	public void addBehaviour(Behaviour b) {
+		behaviours.add(b);
+		super.addBehaviour(b);
+	}
+	
+	public LinkedList<Behaviour> getBehaviours() {
+		return behaviours;
+	}
+	
+	public void removeAllBehaviours() {
+		for (Behaviour b : behaviours) {
+			b.block();
+			removeBehaviour(b);
+		}
+	}
+	
 	protected abstract Object handleRequest(String requestSubject);
 
 	/**

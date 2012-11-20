@@ -114,7 +114,7 @@ public class World {
 		return floor.isValid(p) && floor.get(p).type == CellType.FREE;
 	}
 	
-	void clear(Position p) {
+	public  void clear(Position p) {
 		floor.set(p, new Cell(CellType.FREE));
 	}
 
@@ -184,6 +184,11 @@ public class World {
 		logger.info("TEAM " + name + " added in " + cityCenter.toString());
 		
 		return cityCenter;
+	}
+	
+	public synchronized void removeTeam(String teamName) {
+		clear(teams.get(teamName));
+		teams.remove(teamName);
 	}
 
 	/**
@@ -263,4 +268,6 @@ public class World {
 	public synchronized void changeCell(int i, int j, Cell cell) {
 		floor.set(i,j,cell);
 	}
+
+	
 }
