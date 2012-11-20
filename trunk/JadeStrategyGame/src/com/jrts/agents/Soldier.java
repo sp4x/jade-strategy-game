@@ -94,7 +94,7 @@ public class Soldier extends Unit {
 
 	@Override
 	protected void die() {
-		sendNotification(Notification.UNIT_DEATH, getType(), getMilitaryAID());
+		sendNotification(Notification.UNIT_DEATH, getPosition(), getMilitaryAID());
 		terminate();
 	}
 }
