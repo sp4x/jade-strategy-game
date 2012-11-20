@@ -74,7 +74,7 @@ public class Worker extends Unit {
 
 	public void dropResources() {
 		//send the resource message to the resourceAI
-		logger.info(getId() + ": drop resources");
+		logger.log(logLevel, getId() + ": drop resources");
 		int collectedWood = getStatus().equals(AgentStatus.WOOD_CUTTING) ? knapsack : 0;
 		int collectedFood = getStatus().equals(AgentStatus.FOOD_COLLECTING) ? knapsack : 0;
 		

@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.jgrapht.graph.DefaultWeightedEdge;
@@ -17,6 +18,7 @@ public class UndirectedWeightedGraph extends SimpleWeightedGraph<Position, Defau
 	Lock l = new ReentrantLock();
 	
 	Logger logger = Logger.getLogger(UndirectedWeightedGraph.class.getName());
+	Level logLevel = Level.FINE;
 	
 	public UndirectedWeightedGraph () {
 		super(DefaultWeightedEdge.class);
@@ -55,14 +57,14 @@ public class UndirectedWeightedGraph extends SimpleWeightedGraph<Position, Defau
 	
 	@Override
 	public String toString() {
-		logger.info("Nodes");
+		logger.log(logLevel, "Nodes");
 		for( Position v : vertexSet())
 			System.out.print(v + " ");
-		logger.info(".");
+		logger.log(logLevel, ".");
 		
-		logger.info("Edges");
+		logger.log(logLevel, "Edges");
 		for( DefaultWeightedEdge edge: edgeSet())
-			logger.info(getEdgeSource(edge)+","+getEdgeTarget(edge)+"="+getEdgeWeight(edge));
+			logger.log(logLevel, getEdgeSource(edge)+","+getEdgeTarget(edge)+"="+getEdgeWeight(edge));
 		return super.toString();
 	}
 	

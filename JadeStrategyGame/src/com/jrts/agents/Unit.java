@@ -68,9 +68,9 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 		else
 			super.addBehaviour(b);
 	}
-
+ 
 	public void goThere(Position p) {
-		logger.info(getAID().getName() + ":Go there " + p);
+		logger.log(logLevel, getAID().getName() + ":Go there " + p);
 		addBehaviour(new FollowPathBehaviour(this, p, GameConfig.UNIT_MOVING_ATTEMPTS));
 	}
 
@@ -97,20 +97,20 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 		int row = position.getRow();
 		int col = position.getCol();
 		EnemySighting enemies = new EnemySighting(position);
-//		System.out.println(id + " : " + position);
+//		logger.log(logLevel, id + " : " + position);
 		for (int i = row - sight; i <= row + sight; i++) {
 			for (int j = col - sight; j <= col + sight; j++) {
 				Cell cell = perception.get(i,j);
 				CellType type = cell.getType();
-//				System.out.println(id + " : " + i + "," + j + " - " + type);
+//				logger.log(logLevel, id + " : " + i + "," + j + " - " + type);
 				String enemyId = cell.getId();
 				if (type == CellType.SOLDIER || type == CellType.WORKER) {
-//					System.out.println("Sono " + id + " e vicino a me c'e' " + enemyId);
+//					logger.log(logLevel, "Sono " + id + " e vicino a me c'e' " + enemyId);
 					if (!isFriend(enemyId)) {
-//						System.out.println("E noi ("+id+" e " + enemyId + " NON siamo della stessa squadra!!");
+//						logger.log(logLevel, "E noi ("+id+" e " + enemyId + " NON siamo della stessa squadra!!");
 						enemies.addEnemy(new EnemySightingItem(new Position(i, j), enemyId, type));
 					} else {
-//						System.out.println("Ma noi ("+id+" e " + enemyId + " siamo della stessa squadra..");
+//						logger.log(logLevel, "Ma noi ("+id+" e " + enemyId + " siamo della stessa squadra..");
 					}
 				} 
 			}
@@ -124,7 +124,7 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 	public boolean move(Direction dir) {
 		if (World.getInstance().move(position, dir)) {
 			position = position.step(dir);
-			logger.info(id + ":moved into " + position);
+			logger.log(logLevel, id + ":moved into " + position);
 			return true;
 		}
 		return false;

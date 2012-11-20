@@ -171,7 +171,7 @@ public class ResourceAI extends GoalBasedAI {
 
 		if (n.getSubject().equals(Notification.NO_MORE_RESOURCE)) {
 			CellType resourceType = (CellType) n.getContentObject();
-			logger.info(getAID().getName() + ": no more " + resourceType
+			logger.log(logLevel, getAID().getName() + ": no more " + resourceType
 					+ " in our known world..");
 			sendNotification(Notification.NO_MORE_RESOURCE, resourceType,
 					getMasterAID());

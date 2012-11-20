@@ -135,7 +135,22 @@ public class MasterAI extends JrtsAgent implements Team {
 		
 		// check if city center was destroyed  
 		Cell cityCenterCell = world.getCell(cityCenter);
+		logger.log(logLevel, getTeamName() + " energy: " + cityCenterCell.getResourceEnergy());
 		if (cityCenterCell.getResourceEnergy() <= 0) {
+			logger.log(logLevel, "TEAM DELETED");
+			
+			// TODO maybe send a notification to other teams (like age of empires)
+			
+			// send notification of decease to military an resource ai (they will forward it to their units)
+			sendNotification(Notification.TEAM_DECEASED, null, militaryAID);
+			sendNotification(Notification.TEAM_DECEASED, null, resourceAID);
+			
+			// clean the cell of citycenter in the floor
+			world.removeTeam(getTeamName());
+			
+			// wait for resource,military and units death messages and then delete the agent
+			removeAllBehaviours();
+			this.doDelete();
 			decease();
 		}
 		
