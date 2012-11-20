@@ -20,6 +20,8 @@ public class AttackScorer extends GoalScorer {
 				return freeSoldiers*10;
 			}
 		});
+		
+		//TODO valutare avvistamenti nemici
 	}
 
 	

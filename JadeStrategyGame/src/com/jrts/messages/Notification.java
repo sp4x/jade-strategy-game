@@ -16,6 +16,10 @@ public class Notification implements Serializable {
 	public static final String GOAL_LEVELS = "goal_levels";
 	public static final String PERCEPTION = "perception";
 	public static final String ORDER = "order";
+	public static final String UNIT_DEATH = "unit_death";
+	public static final String UNDER_ATTACK = "under_attack";
+	public static final String NEW_WORKER = "new_worker";
+	public static final String NEW_SOLDIER = "new_soldier";
 
 	String subject;
 	Serializable contentObject;
