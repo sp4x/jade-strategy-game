@@ -3,6 +3,7 @@ package com.jrts.common;
 import jade.core.AID;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 
 
@@ -18,12 +19,7 @@ public class UnitTable extends HashMap<AID, String> {
 	}
 	
 	public ArrayList<AID> getFreeUnits() {
-		ArrayList<AID> freeUnits = new ArrayList<AID>();
-		for (AID agent : keySet()) {
-			if (get(agent).equals(AgentStatus.FREE))
-				freeUnits.add(agent);
-		}
-		return freeUnits;
+		return getUnitsWithStatus(AgentStatus.FREE);
 	}
 	
 	public ArrayList<AID> getBusyUnits() {
@@ -42,13 +38,18 @@ public class UnitTable extends HashMap<AID, String> {
 		}
 		return null;
 	}
-
-	public ArrayList<AID> getAllUnits() {
-		ArrayList<AID> units = new ArrayList<AID>();
+	
+	public ArrayList<AID> getUnitsWithStatus(String status) {
+		ArrayList<AID> freeUnits = new ArrayList<AID>();
 		for (AID agent : keySet()) {
-			units.add(agent);
+			if (get(agent).equals(status))
+				freeUnits.add(agent);
 		}
-		return units;
+		return freeUnits;
+	}
+
+	public Collection<AID> getAllUnits() {
+		return keySet();
 	}
 
 }
