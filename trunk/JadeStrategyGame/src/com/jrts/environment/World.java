@@ -143,7 +143,7 @@ public class World {
 		this.occupiedAngles[angle] = true;
 		
 		Cell base = new Cell(CellType.CITY_CENTER, name);
-		base.resourceEnergy = GameConfig.BUILDING_ENERGY;
+		base.energy = GameConfig.BUILDING_ENERGY;
 
 		//Inizializzo la var con una posizione inesistente
 		Position cityCenter = new Position(-1, -1);
@@ -237,11 +237,11 @@ public class World {
 
 	public synchronized int takeEnergy(Position target, int amount) {
 		Cell targetCell = floor.get(target);
-		if (targetCell.resourceEnergy >= amount) {
-			targetCell.resourceEnergy -= amount;
+		if (targetCell.energy >= amount) {
+			targetCell.energy -= amount;
 			return amount;
 		} else {
-			int taken = targetCell.resourceEnergy;
+			int taken = targetCell.energy;
 			clear(target);
 			if (targetCell.type == CellType.CITY_CENTER)
 				teams.remove(targetCell.id);

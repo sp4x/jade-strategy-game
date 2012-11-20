@@ -80,7 +80,7 @@ public class Floor implements Serializable {
 
 		for (int i = 0; i < getRows(); i++)
 			for (int j = 0; j < getCols(); j++)
-				if(floor[i][j].getType() == CellType.FREE)
+				if(floor[i][j].isFree())
 					cells.add(new Square(i, j));
 
 		Collections.shuffle(cells);
@@ -127,14 +127,14 @@ public class Floor implements Serializable {
 	 */
 	public void set(int i, int j, Cell newCell){
 		Position position = new Position(i, j);
-		CellType newType = newCell.getType();
+		CellType newType = newCell.type;
 		CellType currType = CellType.FREE;
 		if(floor[i][j] != null)
-			currType = floor[i][j].getType();
+			currType = floor[i][j].type;
 		
 		if(i>=0 && j>=0 && i<=rows && j<=cols){
 			//se sto per settare una cella occupata
-			if(!isTypeWalkable(newType) && !busyCells.contains(position))
+			if(!newCell.isWalkable() && !busyCells.contains(position))
 				busyCells.add(position);
 			//se sto per liberare una cella occupata
 			if(isTypeWalkable(currType) && !isTypeWalkable(newType) && busyCells.contains(position))
@@ -177,7 +177,7 @@ public class Floor implements Serializable {
 			for (int i = 0; i < rows; i++) {
 				for (int j = 0; j < cols; j++) {
 					Cell current = info.get(i, j);
-					if (current.getType() != CellType.UNKNOWN)
+					if (!current.isUnknown())
 						set(i, j, current);
 				}
 			}
@@ -267,7 +267,7 @@ public class Floor implements Serializable {
 	}
 	
 	public boolean isWalkable(Position p) {
-		return isValid(p) && isTypeWalkable(get(p).type);
+		return isValid(p) && get(p).isWalkable();
 	}
 	
 	public boolean isTypeWalkable(CellType type) {

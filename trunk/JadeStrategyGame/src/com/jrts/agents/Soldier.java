@@ -57,7 +57,7 @@ public class Soldier extends Unit {
 		Direction direction = Direction.UP;
 		int distance = PatrolBehaviour.DISTANCE_LITTLE;
 		*/
-		addBehaviour(new PatrolBehaviour(this, direction, distance));
+		addBehaviour(new PatrolBehaviour(this, direction, distance, requestMap()));
 		switchStatus(AgentStatus.PATROLING);
 	}
 

@@ -3,6 +3,7 @@ package com.jrts.behaviours;
 import com.jrts.agents.Soldier;
 import com.jrts.environment.Direction;
 import com.jrts.environment.Position;
+import com.jrts.environment.WorldMap;
 
 public class PatrolBehaviour extends UnitBehaviour {
 
@@ -21,12 +22,13 @@ public class PatrolBehaviour extends UnitBehaviour {
 	Position cityCenter;
 	Position p1, p2;
 	boolean go1 = true;
+	
 	/**
 	 * 
 	 * @param soldier
 	 * @param direction: TOP | RIGHT | DOWN | LEFT 
 	 */
-	public PatrolBehaviour(Soldier soldier, Direction direction, int distance) {
+	public PatrolBehaviour(Soldier soldier, Direction direction, int distance, WorldMap worldMap) {
 		super(false);
 		
 		this.soldier = soldier;
@@ -36,20 +38,20 @@ public class PatrolBehaviour extends UnitBehaviour {
 		
 		if(direction == Direction.LEFT)
 		{
-			p1 = cityCenter.bigStep(Direction.LEFT_UP, this.distance);
-			p2 = cityCenter.bigStep(Direction.LEFT_DOWN, this.distance);
+			p1 = worldMap.bigStep(cityCenter, Direction.LEFT_UP, this.distance);
+			p2 = worldMap.bigStep(cityCenter, Direction.LEFT_DOWN, this.distance);
 		} else if(direction == Direction.UP)
 		{
-			p1 = cityCenter.bigStep(Direction.LEFT_UP, this.distance);
-			p2 = cityCenter.bigStep(Direction.RIGHT_UP, this.distance);
+			p1 = worldMap.bigStep(cityCenter, Direction.LEFT_UP, this.distance);
+			p2 = worldMap.bigStep(cityCenter, Direction.RIGHT_UP, this.distance);
 		} else if(direction == Direction.RIGHT)
 		{
-			p1 = cityCenter.bigStep(Direction.RIGHT_UP, this.distance);
-			p2 = cityCenter.bigStep(Direction.RIGHT_DOWN, this.distance);
+			p1 = worldMap.bigStep(cityCenter, Direction.RIGHT_UP, this.distance);
+			p2 = worldMap.bigStep(cityCenter, Direction.RIGHT_DOWN, this.distance);
 		} else if(direction == Direction.DOWN)
 		{
-			p1 = cityCenter.bigStep(Direction.LEFT_DOWN, this.distance);
-			p2 = cityCenter.bigStep(Direction.RIGHT_DOWN, this.distance);
+			p1 = worldMap.bigStep(cityCenter, Direction.LEFT_DOWN, this.distance);
+			p2 = worldMap.bigStep(cityCenter, Direction.RIGHT_DOWN, this.distance);
 		}
 		
 	}

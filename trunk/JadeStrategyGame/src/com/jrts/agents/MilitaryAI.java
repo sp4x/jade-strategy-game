@@ -169,7 +169,7 @@ public class MilitaryAI extends GoalBasedAI {
 			onEnemySighting(enemies);
 		}
 		
-		int cityCenterLife = cityCenterPerception.get(cityCenter).getResourceEnergy();
+		int cityCenterLife = cityCenterPerception.get(cityCenter).getEnergy();
 		if (cityCenterLife < lastCityCenterLife) {
 			lastCityCenterLife = cityCenterLife;
 			underAttack();

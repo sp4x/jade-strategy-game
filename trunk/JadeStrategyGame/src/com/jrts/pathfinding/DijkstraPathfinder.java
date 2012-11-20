@@ -8,6 +8,7 @@ import org.jgrapht.graph.DefaultWeightedEdge;
 
 import com.jrts.common.GameConfig;
 import com.jrts.common.UndirectedWeightedGraph;
+import com.jrts.environment.Cell;
 import com.jrts.environment.CellType;
 import com.jrts.environment.Direction;
 import com.jrts.environment.Floor;
@@ -73,8 +74,8 @@ public class DijkstraPathfinder implements Pathfinder {
 	 */
 	private Position approximateEndPosition(Floor floor, Position startPos,
 			Position endPos) {
-		CellType targetType = floor.get(endPos).getType();
-		if (targetType == CellType.FREE || targetType == CellType.UNKNOWN)
+		Cell target = floor.get(endPos);
+		if (target.isWalkable())
 			return endPos;
 		return floor.nextTo(startPos, endPos, CellType.FREE,
 				GameConfig.PATH_TOLERANCE);
@@ -91,43 +92,36 @@ public class DijkstraPathfinder implements Pathfinder {
 		// walkableGraph.addVertex(endRow + "," + endCol);
 		for (int i = 0; i < floor.getRows(); i++)
 			for (int j = 0; j < floor.getCols(); j++) {
-				CellType cellType = floor.get(i, j).getType();
+				Cell cell = floor.get(i, j);
 				// NB La cella di partenza anche se occupata dall'unita' fa
 				// parte del grafo
-				if (cellType == CellType.FREE
-						|| cellType == CellType.UNKNOWN
-						|| (includeCellWithUnit && (cellType == CellType.WORKER || cellType == CellType.SOLDIER))) {
+				boolean includeCell = cell.isWalkable()|| (includeCellWithUnit && cell.isUnit());
+				if (includeCell) {
 					// A
 					// |
-					if (i - 1 >= 0
-							&& (cellType == CellType.FREE
-									|| cellType == CellType.UNKNOWN
-									|| (includeCellWithUnit && (cellType == CellType.WORKER || cellType == CellType.SOLDIER)) || (i - 1 == startRow && j == startCol))) {
+					if (i - 1 >= 0 && includeCell || (i - 1 == startRow && j == startCol)) {
 						walkableGraph.addWeightedEdge(new Position(i, j),
 								new Position(i - 1, j), 1);
 					}
 					// |
 					// v
 					if (i + 1 < floor.getRows()
-							&& (cellType == CellType.FREE
-									|| cellType == CellType.UNKNOWN
-									|| (includeCellWithUnit && (cellType == CellType.WORKER || cellType == CellType.SOLDIER)) || (i + 1 == startRow && j == startCol))) {
+							&& includeCell || (i - 1 == startRow && j == startCol)
+									|| (i + 1 == startRow && j == startCol)) {
 						walkableGraph.addWeightedEdge(new Position(i, j),
 								new Position(i + 1, j), 1);
 					}
 					// <-
 					if (j - 1 >= 0
-							&& (cellType == CellType.FREE
-									|| cellType == CellType.UNKNOWN
-									|| (includeCellWithUnit && (cellType == CellType.WORKER || cellType == CellType.SOLDIER)) || (i == startRow && j - 1 == startCol))) {
+							&& includeCell || (i - 1 == startRow && j == startCol)
+									|| (i == startRow && j - 1 == startCol)) {
 						walkableGraph.addWeightedEdge(new Position(i, j),
 								new Position(i, j - 1), 1);
 					}
 					// ->
 					if (j + 1 < floor.getCols()
-							&& (cellType == CellType.FREE
-									|| cellType == CellType.UNKNOWN
-									|| (includeCellWithUnit && (cellType == CellType.WORKER || cellType == CellType.SOLDIER)) || (i == startRow && j + 1 == startCol))) {
+							&& includeCell || (i - 1 == startRow && j == startCol)
+									|| (i == startRow && j + 1 == startCol)) {
 						walkableGraph.addWeightedEdge(new Position(i, j),
 								new Position(i, j + 1), 1);
 					}
@@ -135,9 +129,8 @@ public class DijkstraPathfinder implements Pathfinder {
 					// \
 					if (j - 1 >= 0
 							&& i - 1 >= 0
-							&& (cellType == CellType.FREE
-									|| cellType == CellType.UNKNOWN
-									|| (includeCellWithUnit && (cellType == CellType.WORKER || cellType == CellType.SOLDIER)) || (i - 1 == startRow && j - 1 == startCol))) {
+							&& includeCell || (i - 1 == startRow && j == startCol)
+									|| (i - 1 == startRow && j - 1 == startCol)) {
 						walkableGraph.addWeightedEdge(new Position(i, j),
 								new Position(i - 1, j - 1), 1.5);
 					}
@@ -146,9 +139,8 @@ public class DijkstraPathfinder implements Pathfinder {
 					// /
 					if (j + 1 < floor.getCols()
 							&& i - 1 >= 0
-							&& (cellType == CellType.FREE
-									|| cellType == CellType.UNKNOWN
-									|| (includeCellWithUnit && (cellType == CellType.WORKER || cellType == CellType.SOLDIER)) || (i - 1 == startRow && j + 1 == startCol))) {
+							&& includeCell || (i - 1 == startRow && j == startCol)
+									|| (i - 1 == startRow && j + 1 == startCol)) {
 						walkableGraph.addWeightedEdge(new Position(i, j),
 								new Position(i - 1, j + 1), 1.5);
 					}
@@ -156,9 +148,8 @@ public class DijkstraPathfinder implements Pathfinder {
 					// v
 					if (j - 1 >= 0
 							&& i + 1 < floor.getRows()
-							&& (cellType == CellType.FREE
-									|| cellType == CellType.UNKNOWN
-									|| (includeCellWithUnit && (cellType == CellType.WORKER || cellType == CellType.SOLDIER)) || (i + 1 == startRow && j - 1 == startCol))) {
+							&& includeCell || (i - 1 == startRow && j == startCol)
+									|| (i + 1 == startRow && j - 1 == startCol)) {
 						walkableGraph.addWeightedEdge(new Position(i, j),
 								new Position(i + 1, j - 1), 1.5);
 					}
@@ -166,9 +157,8 @@ public class DijkstraPathfinder implements Pathfinder {
 					// v
 					if (j + 1 < floor.getCols()
 							&& i + 1 < floor.getRows()
-							&& (cellType == CellType.FREE
-									|| cellType == CellType.UNKNOWN
-									|| (includeCellWithUnit && (cellType == CellType.WORKER || cellType == CellType.SOLDIER)) || (i + 1 == startRow && j + 1 == startCol))) {
+							&& includeCell || (i - 1 == startRow && j == startCol)
+									|| (i + 1 == startRow && j + 1 == startCol)) {
 						walkableGraph.addWeightedEdge(new Position(i, j),
 								new Position(i + 1, j + 1), 1.5);
 					}

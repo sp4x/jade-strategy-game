@@ -4,6 +4,7 @@ import com.jrts.behaviours.CollectResources;
 import com.jrts.behaviours.GoUpgradingBehaviour;
 import com.jrts.common.AgentStatus;
 import com.jrts.common.GameConfig;
+import com.jrts.environment.Cell;
 import com.jrts.environment.CellType;
 import com.jrts.environment.Direction;
 import com.jrts.environment.Position;
@@ -51,8 +52,9 @@ public class Worker extends Unit {
 	public void takeResources(Position resourcePosition) {
 		if (getPerception() == null) 
 			return;
-		CellType resource = getPerception().get(resourcePosition).getType();
-		boolean validResource = (resource == CellType.WOOD || resource == CellType.FOOD);
+		Cell cell = getPerception().get(resourcePosition);
+		CellType resource = cell.getType();
+		boolean validResource = cell.isResource();
 		if (validResource)
 			World.getInstance().takeEnergy(resourcePosition, 1);
 		if (knapsack == 0 && validResource) {

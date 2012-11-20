@@ -36,7 +36,7 @@ public class FollowPathTest {
 		simulate(5, 7, agents, target);
 	}
 	
-//	@Test
+	@Test
 	// -------
 	// ----+--
 	// ----++-
@@ -52,7 +52,7 @@ public class FollowPathTest {
 	}
 	
 
-//	@Test
+	@Test
 	// -------
 	// ---x---
 	// --+----

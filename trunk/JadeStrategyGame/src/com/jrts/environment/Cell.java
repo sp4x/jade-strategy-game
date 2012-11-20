@@ -13,7 +13,7 @@ public class Cell implements Serializable {
 	CellType type;
 	String id;
 	IUnit unit;
-	int resourceEnergy = 0;
+	int energy = 0;
 	
 	public Cell(CellType t) {
 		type = t;
@@ -22,10 +22,10 @@ public class Cell implements Serializable {
 	}
 	
 	public Cell(CellType t, int energy) {
-		type = t;
-		id = null;
-		unit = null;
-		resourceEnergy = energy;
+		this.type = t;
+		this.id = null;
+		this.unit = null;
+		this.energy = energy;
 	}
 	
 	public Cell(CellType type, String id) {
@@ -46,7 +46,7 @@ public class Cell implements Serializable {
 		this.type = cell.type;
 		this.id = cell.id;
 		this.unit = cell.unit;
-		this.resourceEnergy = cell.resourceEnergy;
+		this.energy = cell.energy;
 	}
 
 	public String getId() {
@@ -61,8 +61,8 @@ public class Cell implements Serializable {
 		return unit;
 	}
 	
-	public int getResourceEnergy() {
-		return resourceEnergy;
+	public int getEnergy() {
+		return energy;
 	}
 
 	public void setType(CellType type) {
@@ -77,7 +77,39 @@ public class Cell implements Serializable {
 		this.unit = unit;
 	}
 
-	public void setResourceEnergy(int resourceEnergy) {
-		this.resourceEnergy = resourceEnergy;
+	public void setEnergy(int resourceEnergy) {
+		this.energy = resourceEnergy;
+	}
+	
+	public boolean isFree() {
+		return type == CellType.FREE;
+	}
+	
+	public boolean isWalkable() {
+		return type == CellType.FREE || type == CellType.UNKNOWN;
+	}
+	
+	public boolean isCityCenter() {
+		return type == CellType.CITY_CENTER;
+	}
+	
+	public boolean isFood() {
+		return type == CellType.FOOD;
+	}
+	
+	public boolean isWood() {
+		return type == CellType.WOOD;
+	}
+	
+	public boolean isUnit() {
+		return type == CellType.SOLDIER || type == CellType.WORKER;
+	}
+	
+	public boolean isUnknown() {
+		return type == CellType.UNKNOWN;
+	}
+	
+	public boolean isResource() {
+		return isFood() || isWood();
 	}
 }
