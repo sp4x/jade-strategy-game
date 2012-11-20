@@ -46,11 +46,13 @@ public class ResourceAI extends GoalBasedAI {
 		AID freeWorker = unitTable.getAFreeUnit();
 		if (freeWorker != null) {
 			String orderString = extimateResourceToCollect();
+			
 			if (orderString != null ) {
 				Order order = new Order(orderString);
 				giveOrder(freeWorker, order);
 				unitTable.put(freeWorker, order.getOrder());
 			}
+			
 		} else {
 			// logger.info("no free workers");
 		}

@@ -2,6 +2,7 @@ package com.jrts.agents;
 
 import jade.core.AID;
 import jade.core.behaviours.WakerBehaviour;
+import jade.domain.FIPAAgentManagement.DFAgentDescription;
 
 import java.util.ArrayList;
 
@@ -32,15 +33,23 @@ public class MilitaryAI extends GoalBasedAI {
 			private static final long serialVersionUID = 1746608629262055814L;
 			@Override
 			protected void handleElapsedTimeout() {
-				createSoldier();
+				requestSoldierCreation();
 			}
 		});
 		
-		addBehaviour(new WakerBehaviour(this, 10000) {
+		addBehaviour(new WakerBehaviour(this, 5000) {
 			private static final long serialVersionUID = 1746608629262055814L;
 			@Override
 			protected void handleElapsedTimeout() {
-				createSoldier();
+				requestSoldierCreation();
+			}
+		});
+		
+		addBehaviour(new WakerBehaviour(this, 7000) {
+			private static final long serialVersionUID = 1746608629262055814L;
+			@Override
+			protected void handleElapsedTimeout() {
+				requestSoldierCreation();
 			}
 		});
 		
@@ -64,19 +73,32 @@ public class MilitaryAI extends GoalBasedAI {
 		
 	}
 
-	public void createSoldier()
+	public void requestSoldierCreation()
 	{
 		if (resourcesContainer.isThereEnoughFood(GameConfig.SOLDIER_FOOD_COST) && 
 				resourcesContainer.isThereEnoughWood(GameConfig.SOLDIER_WOOD_COST)
-				&& getTeamDF().countUnits() < GameConfig.POPULATION_LIMIT) {
-			
-			resourcesContainer.removeFood(GameConfig.SOLDIER_FOOD_COST);
-			resourcesContainer.removeWood(GameConfig.SOLDIER_WOOD_COST);
-			unitFactory.trainUnit(Soldier.class);
-			soldierCounter++;
+				/*&& getTeamDF().countUnits() < GameConfig.POPULATION_LIMIT*/) {
+						
+			DFAgentDescription[] workers = this.getTeamDF().searchByUnitStatus(Worker.class, AgentStatus.FREE);
+			if(workers.length > 0)
+			{
+				System.out.println("ABBASTANZA LAVORATORI");
+				
+				DFAgentDescription worker = workers[0];	
+				giveOrder(worker.getName(), new Order(AgentStatus.GO_UPGRADING));
+				
+				resourcesContainer.removeFood(GameConfig.SOLDIER_FOOD_COST);
+				resourcesContainer.removeWood(GameConfig.SOLDIER_WOOD_COST);
+			}
 		}
 	}
 
+	public void trainSoldier()
+	{		
+		unitFactory.trainUnit(Soldier.class);
+		soldierCounter++;
+	}
+	
 	public void addExplorer()
 	{
 		AID soldier = this.getUnitTable().getAFreeUnit();
@@ -203,8 +225,12 @@ public class MilitaryAI extends GoalBasedAI {
 			// decide what to do
 			onEnemySighting(e);
 		}
+		if (n.getSubject().equals(Notification.READY_TO_BE_UPGRADED)) 
+		{
+			this.trainSoldier();
+		}
 	}
-
+	
 	@Override
 	protected Object handleRequest(String requestSubject) {
 		// TODO Auto-generated method stub
