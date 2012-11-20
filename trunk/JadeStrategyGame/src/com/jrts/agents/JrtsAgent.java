@@ -194,10 +194,8 @@ public abstract class JrtsAgent extends Agent {
 			for (int j = col - sight; j <= col + sight; j++) {
 				Cell cell = perception.get(i,j);
 				String enemyId = cell.getId();
-				if (cell.isUnit()) {
-					if (!isFriend(enemyId)) {
-						enemies.addEnemy(new EnemySightingItem(new Position(i, j), enemyId, cell.getType()));
-					}
+				if (cell.isUnit() && !isFriend(enemyId) ) {
+					enemies.addEnemy(new EnemySightingItem(new Position(i, j), enemyId, cell.getType()));
 				} 
 			}
 		}

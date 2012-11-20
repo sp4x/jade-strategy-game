@@ -19,9 +19,4 @@ public class ResourceScorer extends GoalScorer {
 			}
 		});
 	}
-	
-	
-	
-	
-
 }

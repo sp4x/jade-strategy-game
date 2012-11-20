@@ -1,15 +1,15 @@
 package com.jrts.common;
 
-import com.jrts.agents.Soldier;
-import com.jrts.agents.Unit;
-import com.jrts.agents.Worker;
-
 import jade.core.AID;
 import jade.core.Agent;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
+
+import com.jrts.agents.Soldier;
+import com.jrts.agents.Unit;
+import com.jrts.agents.Worker;
 
 public class TeamDF {
 
