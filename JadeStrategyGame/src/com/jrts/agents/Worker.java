@@ -1,6 +1,7 @@
 package com.jrts.agents;
 
 import com.jrts.behaviours.CollectResources;
+import com.jrts.behaviours.GoUpgradingBehaviour;
 import com.jrts.common.AgentStatus;
 import com.jrts.common.GameConfig;
 import com.jrts.environment.CellType;
@@ -82,6 +83,11 @@ public class Worker extends Unit {
 		knapsack = 0;
 	}
 
+	public void goUpgrading() {
+		switchStatus(AgentStatus.GO_UPGRADING);
+		addBehaviour(new GoUpgradingBehaviour(this));
+	}
+	
 	public void collectWood() {
 		switchStatus(AgentStatus.WOOD_CUTTING);
 		addBehaviour(new CollectResources(this, CellType.WOOD));
@@ -112,7 +118,9 @@ public class Worker extends Unit {
 		super.handleNotification(n);
 		if (n.getSubject().equals(Notification.ORDER)) {
 			Order order = (Order) n.getContentObject();
-			if (order.getOrder().equals(AgentStatus.WOOD_CUTTING)) {
+			if (order.getOrder().equals(AgentStatus.GO_UPGRADING)) {
+				this.goUpgrading();
+			} else if (order.getOrder().equals(AgentStatus.WOOD_CUTTING)) {
 				collectWood();
 			} else if (order.getOrder().equals(AgentStatus.FOOD_COLLECTING)) {
 				collectFood();

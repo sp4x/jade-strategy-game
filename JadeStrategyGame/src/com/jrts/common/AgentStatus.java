@@ -16,4 +16,5 @@ public class AgentStatus {
 	public static final String PATROLING = "patroling";
 	public static final String EXPLORING = "exploring";
 
+	public static final String GO_UPGRADING = "go_upgrading";	
 }
