@@ -234,13 +234,16 @@ public class MilitaryAI extends GoalBasedAI {
 			sendNotification(n.getSubject(), n.getContentObject(), getMasterAID());
 			// decide what to do
 			onEnemySighting(e);
+			
 		} else if (n.getSubject().equals(Notification.UNIT_DEATH)) {
 			soldierCounter--;
 			sendNotification(Notification.UNIT_DEATH, n.getContentObject(), getMasterAID());
-		}
-		if (n.getSubject().equals(Notification.READY_TO_BE_UPGRADED)) 
-		{
+			
+		} else if (n.getSubject().equals(Notification.READY_TO_BE_UPGRADED)) {
 			this.trainSoldier();
+			
+		} else if (n.getSubject().equals(Notification.UNDER_ATTACK)) {
+			sendNotification(Notification.UNDER_ATTACK, n.getContentObject(), getMasterAID());
 		}
 	}
 	

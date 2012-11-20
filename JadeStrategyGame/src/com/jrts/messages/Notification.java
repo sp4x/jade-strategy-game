@@ -24,6 +24,8 @@ public class Notification implements Serializable {
 
 	public static final String READY_TO_BE_UPGRADED = "ready_to_be_upgraded";
 
+	public static final String RESOURCES_FOUND = "resources_found";
+
 	String subject;
 	Serializable contentObject;
 

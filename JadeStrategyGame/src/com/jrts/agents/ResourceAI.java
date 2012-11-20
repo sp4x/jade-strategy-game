@@ -77,8 +77,9 @@ public class ResourceAI extends GoalBasedAI {
 	}
 
 	protected void trainWorkers() {
-		int numWorkers = extimateNumWorkers() - workersCounter;
-		for (int i = 0; i < numWorkers; i++) {
+//		int numWorkers = extimateNumWorkers() - workersCounter;
+//		for (int i = 0; i < numWorkers; i++) {
+		if (resourcesContainer.getFood() > 100 && resourcesContainer.getWood() > 100) {
 			if (resourcesContainer
 					.isThereEnoughFood(GameConfig.WORKER_FOOD_COST)
 					&& resourcesContainer
@@ -166,6 +167,8 @@ public class ResourceAI extends GoalBasedAI {
 			if (p != null)
 				noMoreWood = false;
 		}
+		if (!noMoreFood && !noMoreWood)
+			sendNotification(Notification.RESOURCES_FOUND, null, getMasterAID());
 	}
 
 	@Override

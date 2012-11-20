@@ -13,7 +13,6 @@ import com.jrts.common.ResourcesContainer;
 import com.jrts.common.UnitFactory;
 import com.jrts.common.Utils;
 import com.jrts.environment.Cell;
-import com.jrts.environment.CellType;
 import com.jrts.environment.MasterPerception;
 import com.jrts.environment.Perception;
 import com.jrts.environment.Position;
@@ -193,11 +192,21 @@ public class MasterAI extends JrtsAgent implements Team {
 
 		} else if (n.getSubject().equals(Notification.ENEMY_SIGHTED)) {
 			EnemySighting e = (EnemySighting) n.getContentObject();
-			// TODO save it
+			masterPerception.getEnemySightings().add(e);
 
 		} else if (n.getSubject().equals(Notification.NO_MORE_RESOURCE)) {
-			CellType resourceType = (CellType) n.getContentObject();
-			// TODO save it
+			masterPerception.setAlertNoMoreResources(true);
+			
+		} else if (n.getSubject().equals(Notification.RESOURCES_FOUND)) {
+			masterPerception.setAlertNoMoreResources(false);
+			
+		} else if (n.getSubject().equals(Notification.UNIT_DEATH)) {
+			Position where = (Position) n.getContentObject();
+			masterPerception.getDeaths().add(where);
+			
+		} else if (n.getSubject().equals(Notification.UNDER_ATTACK)) {
+			Position where = (Position) n.getContentObject();
+			masterPerception.getThreats().add(where);
 		}
 	}
 
