@@ -42,7 +42,7 @@ public class GameConfig {
 	public static final int ATTACKS_REFRESH = 50;
 	public static final int PERCEPTION_REFRESH = 500;
 	
-	public static final int UNIT_CREATION_TIME = 1;
+	public static final int UNIT_CREATION_TIME = 5;
 	public static final long UNIT_TABLE_REFRESH_TIME = 100;
 	public static final long SOLDIERS_TABLE_REFRESH_TIME = 100;
 	
