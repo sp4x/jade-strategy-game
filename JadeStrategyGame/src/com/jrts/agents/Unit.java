@@ -140,7 +140,7 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 	@Override
 	public void decreaseLife(int damage) {
 		setLife(getLife() - damage);
-		sendNotification(Notification.UNDER_ATTACK, getPosition(), getMilitaryAID());
+		sendNotification(Notification.UNIT_UNDER_ATTACK, getPosition(), getMilitaryAID());
 	}
 
 	public int getSpeed() {

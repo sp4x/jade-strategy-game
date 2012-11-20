@@ -25,6 +25,8 @@ public class MilitaryAI extends GoalBasedAI {
 
 	int soldierCounter = 0;
 	
+	int lastCityCenterLife = GameConfig.BUILDING_ENERGY;
+	
 	@Override
 	protected void setup() {
 		super.setup();
@@ -166,6 +168,18 @@ public class MilitaryAI extends GoalBasedAI {
 		if (!enemies.isEmpty()) {
 			onEnemySighting(enemies);
 		}
+		
+		int cityCenterLife = cityCenterPerception.get(cityCenter).getResourceEnergy();
+		if (cityCenterLife < lastCityCenterLife) {
+			lastCityCenterLife = cityCenterLife;
+			underAttack();
+		}
+	}
+
+	private void underAttack() {
+		sendNotification(Notification.CITYCENTER_UNDER_ATTACK, cityCenter, getMasterAID());
+		logger.log(logLevel, getTeamName() + " city center under attack!");
+		// TODO handle it
 	}
 
 	@Override
@@ -242,8 +256,8 @@ public class MilitaryAI extends GoalBasedAI {
 		} else if (n.getSubject().equals(Notification.READY_TO_BE_UPGRADED)) {
 			this.trainSoldier();
 			
-		} else if (n.getSubject().equals(Notification.UNDER_ATTACK)) {
-			sendNotification(Notification.UNDER_ATTACK, n.getContentObject(), getMasterAID());
+		} else if (n.getSubject().equals(Notification.UNIT_UNDER_ATTACK)) {
+			sendNotification(Notification.UNIT_UNDER_ATTACK, n.getContentObject(), getMasterAID());
 		}
 	}
 	
