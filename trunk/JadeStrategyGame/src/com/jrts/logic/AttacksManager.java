@@ -56,6 +56,8 @@ public class AttacksManager {
 				int damage = hit.getDamage();
 				if(cell.getType() == CellType.WORKER || cell.getType() == CellType.SOLDIER)
 					World.getInstance().getCell(pos).getUnit().decreaseLife(damage);
+				if(cell.getType() == CellType.CITY_CENTER)
+					World.getInstance().takeEnergy(pos, damage);
 			}
 			else if(hits.get(i).getRange() == 0){
 				//exceeded range limit

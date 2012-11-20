@@ -18,13 +18,12 @@ public class Notification implements Serializable {
 	public static final String ORDER = "order";
 	public static final String TEAM_DECEASED = "team_deceased";
 	public static final String UNIT_DEATH = "unit_death";
-	public static final String UNDER_ATTACK = "under_attack";
+	public static final String UNIT_UNDER_ATTACK = "under_attack";
 	public static final String NEW_WORKER = "new_worker";
 	public static final String NEW_SOLDIER = "new_soldier";
-
 	public static final String READY_TO_BE_UPGRADED = "ready_to_be_upgraded";
-
 	public static final String RESOURCES_FOUND = "resources_found";
+	public static final String CITYCENTER_UNDER_ATTACK = "citycenter_under_attack";
 
 	String subject;
 	Serializable contentObject;

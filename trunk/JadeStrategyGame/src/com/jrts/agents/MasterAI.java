@@ -45,14 +45,13 @@ public class MasterAI extends JrtsAgent implements Team {
 	ExplorationScorer explorationScorer;
 
 	UnitFactory unitFactory;
-	
+
 	MasterPerception masterPerception = new MasterPerception();
 
 	public MasterAI() {
 		registerO2AInterface(Team.class, this);
 		int die = Utils.random.nextInt(3);
-		nature = die == 0 ? Nature.AGGRESSIVE : die == 1 ? Nature.AVERAGE
-				: Nature.DEFENSIVE;
+		nature = die == 0 ? Nature.AGGRESSIVE : die == 1 ? Nature.AVERAGE : Nature.DEFENSIVE;
 	}
 
 	protected void setup() {
@@ -69,27 +68,21 @@ public class MasterAI extends JrtsAgent implements Team {
 		PlatformController container = getContainerController();
 		AgentController militaryAI, resourceAI, df;
 		try {
-			df = container.createNewAgent(getTeamDF().getLocalName(),
-					"jade.domain.df", null);
+			df = container.createNewAgent(getTeamDF().getLocalName(), "jade.domain.df", null);
 			df.start();
-			
+
 			masterPerception.setTeamDF(getTeamDF());
 
-			unitFactory = new UnitFactory(getTeamName(),
-					getContainerController(), masterPerception.getCityCenter());
+			unitFactory = new UnitFactory(getTeamName(), getContainerController(), masterPerception.getCityCenter());
 			unitFactory.start();
 
-			masterPerception.setResourcesContainer(new ResourcesContainer(
-					GameConfig.STARTUP_WOOD, GameConfig.STARTUP_FOOD));
+			masterPerception.setResourcesContainer(new ResourcesContainer(GameConfig.STARTUP_WOOD, GameConfig.STARTUP_FOOD));
 
-			Object[] arg = { getTeamName(), unitFactory, masterPerception.getResourcesContainer(),
-					masterPerception.getCityCenter(), nature };
+			Object[] arg = { getTeamName(), unitFactory, masterPerception.getResourcesContainer(), masterPerception.getCityCenter(), nature };
 
-			resourceAI = container.createNewAgent(resourceAID.getLocalName(),
-					ResourceAI.class.getName(), arg);
+			resourceAI = container.createNewAgent(resourceAID.getLocalName(), ResourceAI.class.getName(), arg);
 			resourceAI.start();
-			militaryAI = container.createNewAgent(militaryAID.getLocalName(),
-					MilitaryAI.class.getName(), arg);
+			militaryAI = container.createNewAgent(militaryAID.getLocalName(), MilitaryAI.class.getName(), arg);
 			militaryAI.start();
 
 		} catch (ControllerException e) {
@@ -109,8 +102,7 @@ public class MasterAI extends JrtsAgent implements Team {
 			protected void onTick() {
 				goalLevels.setAttack(attackScorer.calculatePriority());
 				goalLevels.setDefence(defenceScorer.calculatePriority());
-				goalLevels
-						.setExploration(explorationScorer.calculatePriority());
+				goalLevels.setExploration(explorationScorer.calculatePriority());
 				goalLevels.setResources(resourceScorer.calculatePriority());
 				notifyGoalChanges();
 			}
@@ -118,10 +110,8 @@ public class MasterAI extends JrtsAgent implements Team {
 	}
 
 	public void setDefaultGoals() {
-		//just for initialization
-		//they will change soon
-		goalLevels = new GoalLevels(GoalPriority.LOW, GoalPriority.LOW,
-				GoalPriority.LOW, GoalPriority.LOW);
+		// just for initialization they will change soon
+		goalLevels = new GoalLevels(GoalPriority.LOW, GoalPriority.LOW, GoalPriority.LOW, GoalPriority.LOW);
 		notifyGoalChanges();
 	}
 
@@ -130,10 +120,7 @@ public class MasterAI extends JrtsAgent implements Team {
 		World world = World.getInstance();
 		// check if city center was destroyed
 		Cell cityCenterCell = world.getCell(masterPerception.getCityCenter());
-		logger.log(
-				logLevel,
-				getTeamName() + " energy: "
-						+ cityCenterCell.getResourceEnergy());
+		logger.log(logLevel, getTeamName() + " energy: " + cityCenterCell.getResourceEnergy());
 		if (cityCenterCell.getResourceEnergy() <= 0) {
 			logger.log(logLevel, "TEAM DELETED");
 			decease();
@@ -151,8 +138,6 @@ public class MasterAI extends JrtsAgent implements Team {
 		// clean the cell of citycenter in the floor
 		World.getInstance().removeTeam(getTeamName());
 
-		// wait for resource,military and units death messages and then delete
-		// the agent
 		removeAllBehaviours();
 		this.doDelete();
 	}
@@ -204,9 +189,12 @@ public class MasterAI extends JrtsAgent implements Team {
 			Position where = (Position) n.getContentObject();
 			masterPerception.getDeaths().add(where);
 			
-		} else if (n.getSubject().equals(Notification.UNDER_ATTACK)) {
+		} else if (n.getSubject().equals(Notification.UNIT_UNDER_ATTACK)) {
 			Position where = (Position) n.getContentObject();
 			masterPerception.getThreats().add(where);
+			
+		} else if (n.getSubject().equals(Notification.CITYCENTER_UNDER_ATTACK)) {
+			// TODO handle it (differs from unit attacks
 		}
 	}
 
