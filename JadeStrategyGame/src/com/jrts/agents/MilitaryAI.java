@@ -2,7 +2,6 @@ package com.jrts.agents;
 
 import jade.core.AID;
 import jade.core.behaviours.TickerBehaviour;
-import jade.core.behaviours.WakerBehaviour;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 
 import java.util.ArrayList;
@@ -175,6 +174,7 @@ public class MilitaryAI extends GoalBasedAI {
 		
 		EnemySighting enemies = lookForEnemies(cityCenter, GameConfig.CITY_CENTER_SIGHT, cityCenterPerception);
 		sendNotification(Notification.ENEMY_SIGHTED, enemies, getMasterAID());
+
 		if (!enemies.isEmpty()) {
 			onEnemySighting(enemies);
 		}
@@ -247,11 +247,10 @@ public class MilitaryAI extends GoalBasedAI {
 		int heuristic = numSightedSoldiers*x - distance*defence/y + numMyFreeSoldier*z;
 		logger.log(logLevel, "CALCOLO EURISTICA, VALORE: " + heuristic + "\n" +
 				"----------------- End OnEnemySighting ----------------\n");
-		
-		if(heuristic > GameConfig.ENEMY_SIGHTING_BOUND)
-			attackEnemy(e.getEnemies().get(0).getId());
+				
+		attackEnemy(e.getEnemies().get(0).getPosition());
 	}
-	
+
 	@Override
 	protected void handleNotification(Notification n) {
 		super.handleNotification(n);
@@ -280,53 +279,48 @@ public class MilitaryAI extends GoalBasedAI {
 		return null;
 	}
 	
-	public void attackEnemy(String enemyId){
-		//get enemy position
-		Position enemyPosition = getUnitPosition(enemyId);
+	public void attackEnemy(Position enemyPosition){
 		Double currDistance = Double.MAX_VALUE;
-		String attackerId = "";
+		AID attacker = null;
 		
 		Collection<AID> soldiers = getUnitTable().getSoldiers();
 		
 		if(!soldiers.isEmpty()){
 			//choose soldier near then enemy's position
 			for(AID soldier : soldiers){
-				Position soldierPosition = getUnitPosition(soldier.toString());
+				Position soldierPosition = World.getInstance().getUnitPosition(soldier);
 				Double distance = enemyPosition.distance(soldierPosition);
 				if(distance < currDistance){
 					currDistance = distance;
-					attackerId = soldier.toString();
+					attacker = soldier;
 				}
 			}
 		}
 		else{
 			Collection<AID> workers = getUnitTable().getWorkers();
-			
+//			System.out.println("Workers finding");
 			if(!workers.isEmpty()){
 				//choose soldier near then enemy's position
 				for(AID worker : workers){
-					Position workerPosition = getUnitPosition(worker.toString());
+					Position workerPosition = World.getInstance().getUnitPosition(worker);
 					Double distance = enemyPosition.distance(workerPosition);
 					if(distance < currDistance){
 						currDistance = distance;
-						attackerId = worker.toString();
+						attacker = worker;
 					}
 				}
 			}else{
 				logger.severe("No unit available for attack!");
+//				System.out.println("No unit available for attack!");
 			}
 		}
 		
-		orderAttack(attackerId, enemyPosition);
+//		System.out.println("Attacker: " + attacker + " to Position: " + enemyPosition);
+		orderAttack(attacker, enemyPosition);
 	}
 
-	private void orderAttack(String attacker, Position enemyPosition) {
+	private void orderAttack(AID attacker, Position enemyPosition) {
 		//todo completare
-		sendNotification("attack", enemyPosition, new AID(attacker));
-	}
-
-	private Position getUnitPosition(String enemyId) {
-		//todo completare
-		return null;
+		sendNotification("attack", enemyPosition, attacker);
 	}
 }

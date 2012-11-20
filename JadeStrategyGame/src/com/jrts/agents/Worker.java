@@ -110,9 +110,8 @@ public class Worker extends Unit {
 	}
 
 	@Override
-	public void onEnemySighted(EnemySighting list) {
-		// TODO Auto-generated method stub
-		
+	public void onEnemySighted(EnemySighting enemies) {
+		sendNotification(Notification.ENEMY_SIGHTED, enemies, getMilitaryAID());
 	}
 	
 	@Override

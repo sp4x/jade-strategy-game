@@ -1,5 +1,7 @@
 package com.jrts.environment;
 
+import jade.core.AID;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -277,5 +279,7 @@ public class World {
 		floor.set(i,j,cell);
 	}
 
-	
+	public synchronized Position getUnitPosition(AID aid) {
+		return floor.getAgentPosition(aid);
+	}
 }

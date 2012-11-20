@@ -68,6 +68,9 @@ public class Position implements Serializable {
 	}
 	
 	public double distance(Position other) {
+		if(other == null){
+			return Double.MAX_VALUE;
+		}
 		float x = Math.abs(this.col - other.col);
 		float y = Math.abs(this.row - other.row);
 		return Math.hypot(x, y);

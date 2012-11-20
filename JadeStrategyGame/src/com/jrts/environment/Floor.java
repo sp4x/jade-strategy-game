@@ -1,5 +1,7 @@
 package com.jrts.environment;
 
+import jade.core.AID;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -276,5 +278,13 @@ public class Floor implements Serializable {
 
 	public ArrayList<Position> getBusyCells() {
 		return busyCells;
+	}
+
+	public Position getAgentPosition(AID aid) {
+		for (int i = 0; i < rows; i++)
+			for (int j = 0; j < cols; j++)
+				if(get(i, j).isUnit() && get(i, j).getId().equals(aid))
+					return new Position(i, j);
+		return null;
 	}
 }
