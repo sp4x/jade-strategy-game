@@ -280,6 +280,6 @@ public class World {
 	}
 
 	public synchronized Position getUnitPosition(AID aid) {
-		return floor.getAgentPosition(aid);
+		return floor.clone().getAgentPosition(aid);
 	}
 }

@@ -5,6 +5,7 @@ import jade.core.AID;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.jrts.agents.Soldier;
@@ -55,19 +56,17 @@ public class UnitTable extends HashMap<AID, String> {
 	public Collection<AID> getSoldiers() {
 		ArrayList<AID> soldiers = new ArrayList<AID>();
 		for (AID agent : keySet()) {
-			if (Pattern.matches(Soldier.class.getSimpleName(), agent.toString()))
-				soldiers.add(agent);
+			soldiers.add(agent);
 		}
 		return soldiers;
 	}
 	
 	public Collection<AID> getWorkers() {
-		ArrayList<AID> soldiers = new ArrayList<AID>();
+		ArrayList<AID> workers = new ArrayList<AID>();		
 		for (AID agent : keySet()) {
-			if (Pattern.matches(Worker.class.getSimpleName(), agent.toString()))
-				soldiers.add(agent);
+			workers.add(agent);
 		}
-		return soldiers;
+		return workers;
 	}
 
 	public Collection<AID> getAllUnits() {
