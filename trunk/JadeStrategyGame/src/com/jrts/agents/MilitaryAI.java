@@ -82,7 +82,7 @@ public class MilitaryAI extends GoalBasedAI {
 			DFAgentDescription[] workers = this.getTeamDF().searchByUnitStatus(Worker.class, AgentStatus.FREE);
 			if(workers.length > 0)
 			{
-				System.out.println("ABBASTANZA LAVORATORI");
+				logger.log(logLevel, "ABBASTANZA LAVORATORI");
 				
 				DFAgentDescription worker = workers[0];	
 				giveOrder(worker.getName(), new Order(AgentStatus.GO_UPGRADING));
@@ -169,7 +169,7 @@ public class MilitaryAI extends GoalBasedAI {
 		ArrayList<AID> freeSoldiers = unitTable.getFreeUnits();
 		int numMyFreeSoldier = freeSoldiers.size();
 		
-		System.out.println(
+		logger.log(logLevel, 
 				"\n----------------- Start OnEnemySighting ----------------\n" +
 				"EnemySighting received: \n" + 
 					e +
@@ -211,7 +211,7 @@ public class MilitaryAI extends GoalBasedAI {
 			defence = 3;
 		
 		int heuristic = numSightedSoldiers*x - distance*defence/y + numMyFreeSoldier*z;
-		System.out.println("CALCOLO EURISTICA, VALORE: " + heuristic + "\n" +
+		logger.log(logLevel, "CALCOLO EURISTICA, VALORE: " + heuristic + "\n" +
 				"----------------- End OnEnemySighting ----------------\n");
 	}
 	

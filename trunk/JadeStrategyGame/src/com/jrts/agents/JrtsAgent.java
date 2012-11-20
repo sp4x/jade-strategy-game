@@ -23,6 +23,7 @@ import com.jrts.messages.Notification;
 public abstract class JrtsAgent extends Agent {
 
 	public final Logger logger = Logger.getLogger(Agent.class.getName());
+	public Level logLevel = Level.FINE;
 	
 	private String team;
 

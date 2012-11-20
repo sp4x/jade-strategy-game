@@ -1,6 +1,7 @@
 package com.jrts.logic;
 
 import java.util.ArrayList;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.jrts.common.GameConfig;
@@ -14,6 +15,8 @@ import com.jrts.environment.World;
 public class AttacksManager {
 
 	static Logger logger = Logger.getLogger(AttacksManager.class.getName());
+	static Level logLevel = Level.FINE;
+	
 	private static ArrayList<Hit> hits;
 	private static int counter;
 	
@@ -47,7 +50,7 @@ public class AttacksManager {
 			Position hp = hits.get(i).getPos();
 			Cell cell = World.getInstance().getCell(hp);
 			if(cell.getType() != CellType.FREE){
-				logger.info("Detected collision");
+				logger.log(logLevel, "Detected collision");
 				Hit hit = hits.remove(i);
 				Position pos = hit.getPos();
 				int damage = hit.getDamage();

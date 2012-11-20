@@ -2,6 +2,7 @@ package com.jrts.behaviours;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 import com.jrts.agents.Unit;
 import com.jrts.common.GameConfig;
@@ -14,6 +15,8 @@ import com.jrts.environment.Position;
 
 @SuppressWarnings("serial")
 public class FollowPathBehaviour extends UnitBehaviour {
+	
+	public Level logLevel = Level.FINE;
 
 	List<Direction> list;
 	Unit unit;
@@ -47,7 +50,7 @@ public class FollowPathBehaviour extends UnitBehaviour {
 		Position start = unit.getPosition();
 		this.list = Utils.calculatePath(getWorldCachedCopy(), start, goal);
 		
-//		unit.logger.info(unit.getId() + ":path: " + list);
+//		unit.logger.log(logLevel, unit.getId() + ":path: " + list);
 	}
 	
 	@Override
@@ -60,7 +63,7 @@ public class FollowPathBehaviour extends UnitBehaviour {
 			if (!unit.move(d)) {
 				Position destination = unit.getPosition().step(d);
 				worldCachedCopy.set(destination, new Cell(CellType.OBSTACLE));
-//				unit.logger.info(unit.getId() + ":Need path recalculation");
+				unit.logger.log(logLevel, unit.getId() + ":Need path recalculation");
 				if (remainingAttempts > 0) { // solo se ho ancora tentativi a disposizione
 					// unit.addBehaviour(new FollowPathBehaviour(unit, goalRow, goalCol, remainingAttempts - 1, worldCachedCopy));
 					calculatePath();

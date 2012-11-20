@@ -2,6 +2,7 @@ package com.jrts.environment;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.jrts.O2Ainterfaces.IUnit;
@@ -11,6 +12,8 @@ import com.jrts.common.Utils;
 public class World {
 
 	private static World instance = null;
+	
+	public static Level logLevel = Level.FINE;
 
 	final Floor floor;
 
@@ -181,7 +184,7 @@ public class World {
 		Cell wood = new Cell(CellType.WOOD, GameConfig.TREE_ENERGY);
 		addObject(wood, woodPosition);
 
-		logger.info("TEAM " + name + " added in " + cityCenter.toString());
+		logger.log(logLevel, "TEAM " + name + " added in " + cityCenter.toString());
 		
 		return cityCenter;
 	}

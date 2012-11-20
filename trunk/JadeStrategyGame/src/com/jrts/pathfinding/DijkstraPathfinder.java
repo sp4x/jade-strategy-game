@@ -25,7 +25,7 @@ public class DijkstraPathfinder implements Pathfinder {
 		if (TOLERANCE) {
 			Position correctedEndPosition = approximateEndPosition(floor,
 					startPosition, endPosition);
-			// System.out.println("Corrected EndPos:" + correctedEndPosition);
+			// logger.log(logLevel, "Corrected EndPos:" + correctedEndPosition);
 			if (correctedEndPosition == null)
 				return new ArrayList<Direction>();
 
@@ -46,17 +46,17 @@ public class DijkstraPathfinder implements Pathfinder {
 		//VisualGraph.show(walkableGraph, 30);
 
 		if (!walkableGraph.containsVertex(endPosition)) {
-			// System.out.println("Dest Node not reachable");
+			// logger.log(logLevel, "Dest Node not reachable");
 			return new ArrayList<Direction>();
 		}
 		List<DefaultWeightedEdge> list = new DijkstraShortestPath<Position, DefaultWeightedEdge>(
 				walkableGraph, startPosition, endPosition).getPathEdgeList();
-		// System.out.println("List Edges:" + list);
+		// logger.log(logLevel, "List Edges:" + list);
 		ArrayList<Direction> directions = edgeListToDirectionList(walkableGraph, startPosition, list);
-		// System.out.println("Cells List:" + cellList);
-		// System.out.println("Path's StartPos:" + startPosition);
-		// System.out.println("Path's EndPos:" + endPosition);
-		// System.out.println("Path's direction:" + directions);
+		// logger.log(logLevel, "Cells List:" + cellList);
+		// logger.log(logLevel, "Path's StartPos:" + startPosition);
+		// logger.log(logLevel, "Path's EndPos:" + endPosition);
+		// logger.log(logLevel, "Path's direction:" + directions);
 		return directions;
 	}
 

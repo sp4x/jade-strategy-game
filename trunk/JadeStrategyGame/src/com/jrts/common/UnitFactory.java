@@ -43,7 +43,7 @@ public class UnitFactory extends Thread {
 	}
 	
 	public void trainUnit(final Class<? extends Unit> claz)  {
-//		logger.info(team + " request to train a " + claz.getSimpleName());
+//		logger.log(logLevel, team + " request to train a " + claz.getSimpleName());
 		try {
 			queue.put(claz);
 		} catch (InterruptedException e) {

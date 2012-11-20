@@ -1,8 +1,14 @@
 package com.jrts.common;
 
+
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class GameStatistics implements Runnable {
+	
+	static Logger logger = Logger.getLogger(GameStatistics.class.getSimpleName());
+	static Level logLevel = Level.FINE;
 		
 	static private int counter = 0;
 	static int frameRate = 0;
@@ -30,16 +36,16 @@ public class GameStatistics implements Runnable {
 	
 	private void showActionRateStatistics() {
 		if(GameConfig.STATISTICS && !mediumTime.isEmpty()){
-			System.out.println("------------------------------------------------------");
+			logger.log(logLevel, "------------------------------------------------------");
 			for (String className : mediumTime.keySet()) {
-				System.out.println("Class: " + className + " " + mediumTime.get(className));
+				logger.log(logLevel, "Class: " + className + " " + mediumTime.get(className));
 			}
 		}
 	}
 
 	public static void increaseCounter(){
 		GameStatistics.counter++;
-//		System.out.println("Increase counter " + counter);
+//		logger.log(logLevel, "Increase counter " + counter);
 	}
 	
 	public static int getFrameRate(){
@@ -48,7 +54,7 @@ public class GameStatistics implements Runnable {
 
 	public static void saveElapsedTime(String className, long timeElapsed) {
 		if(GameConfig.STATISTICS){
-//			System.out.println("Behaviour: " + className + " " + timeElapsed);
+//			logger.log(logLevel, "Behaviour: " + className + " " + timeElapsed);
 			if(actionCounter.containsKey(className)){
 				actionCounter.put(className, actionCounter.get(className)+1);
 				Long currMediumTime = mediumTime.get(className);
