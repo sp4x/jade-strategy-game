@@ -16,6 +16,7 @@ public class MasterPerception {
 	TeamDF teamDF;
 	
 	boolean alertNoMoreResources = false;
+	boolean alertCityCenterUnderAttack = false;
 	
 	Collection<EnemySighting> enemySightings = new LinkedList<EnemySighting>();
 	Collection<Position> threats = new LinkedList<Position>();
@@ -74,10 +75,18 @@ public class MasterPerception {
 		this.alertNoMoreResources = alertNoMoreResources;
 	}
 	
+	public boolean isAlertCityCenterUnderAttack() {
+		return alertCityCenterUnderAttack;
+	}
+	public void setAlertCityCenterUnderAttack(boolean alertCityCenterUnderAttack) {
+		this.alertCityCenterUnderAttack = alertCityCenterUnderAttack;
+	}
+	
 	public void clean() {
 		enemySightings.clear();
 		threats.clear();
 		deaths.clear();
+		alertCityCenterUnderAttack = false;
 	}
 	
 	

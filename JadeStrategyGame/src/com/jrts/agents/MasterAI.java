@@ -105,6 +105,7 @@ public class MasterAI extends JrtsAgent implements Team {
 				goalLevels.setExploration(explorationScorer.calculatePriority());
 				goalLevels.setResources(resourceScorer.calculatePriority());
 				notifyGoalChanges();
+				masterPerception.clean();
 			}
 		});
 	}
@@ -194,7 +195,7 @@ public class MasterAI extends JrtsAgent implements Team {
 			masterPerception.getThreats().add(where);
 			
 		} else if (n.getSubject().equals(Notification.CITYCENTER_UNDER_ATTACK)) {
-			// TODO handle it (differs from unit attacks
+			masterPerception.setAlertCityCenterUnderAttack(true);
 		}
 	}
 

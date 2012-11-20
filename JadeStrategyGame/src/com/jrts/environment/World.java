@@ -237,13 +237,18 @@ public class World {
 
 	public synchronized int takeEnergy(Position target, int amount) {
 		Cell targetCell = floor.get(target);
-		if (targetCell.energy >= amount) {
+		if (targetCell.isUnit()) {
+			targetCell.getUnit().decreaseLife(amount);
+			return amount;
+			
+		} else if (targetCell.energy >= amount) {
 			targetCell.energy -= amount;
 			return amount;
+			
 		} else {
 			int taken = targetCell.energy;
 			clear(target);
-			if (targetCell.type == CellType.CITY_CENTER)
+			if (targetCell.isCityCenter())
 				teams.remove(targetCell.id);
 			return taken;
 		}
