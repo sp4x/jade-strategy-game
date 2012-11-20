@@ -13,6 +13,8 @@ import com.jrts.common.GameConfig;
 import com.jrts.common.GoalPriority;
 import com.jrts.common.Utils;
 import com.jrts.environment.Direction;
+import com.jrts.environment.Perception;
+import com.jrts.environment.World;
 import com.jrts.messages.EnemySighting;
 import com.jrts.messages.Notification;
 import com.jrts.messages.Order;
@@ -156,6 +158,14 @@ public class MilitaryAI extends GoalBasedAI {
 	
 	@Override
 	protected void updatePerception() {
+		Perception cityCenterPerception = World.getInstance().getPerception(cityCenter, GameConfig.CITY_CENTER_SIGHT);
+		sendNotification(Notification.PERCEPTION, cityCenterPerception, getMasterAID());
+		
+		EnemySighting enemies = lookForEnemies(cityCenter, GameConfig.CITY_CENTER_SIGHT, cityCenterPerception);
+		sendNotification(Notification.ENEMY_SIGHTED, enemies, getMasterAID());
+		if (!enemies.isEmpty()) {
+			onEnemySighting(enemies);
+		}
 	}
 
 	@Override

@@ -8,7 +8,6 @@ import com.jrts.behaviours.BehaviourWrapper;
 import com.jrts.behaviours.FollowPathBehaviour;
 import com.jrts.behaviours.UnitBehaviour;
 import com.jrts.common.GameConfig;
-import com.jrts.environment.Cell;
 import com.jrts.environment.CellType;
 import com.jrts.environment.Direction;
 import com.jrts.environment.Perception;
@@ -16,7 +15,6 @@ import com.jrts.environment.Position;
 import com.jrts.environment.World;
 import com.jrts.environment.WorldMap;
 import com.jrts.messages.EnemySighting;
-import com.jrts.messages.EnemySightingItem;
 import com.jrts.messages.MessageSubject;
 import com.jrts.messages.Notification;
 
@@ -68,7 +66,7 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 		else
 			super.addBehaviour(b);
 	}
- 
+
 	public void goThere(Position p) {
 		logger.log(logLevel, getAID().getName() + ":Go there " + p);
 		addBehaviour(new FollowPathBehaviour(this, p, GameConfig.UNIT_MOVING_ATTEMPTS));
@@ -93,30 +91,8 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 		// send perception to MasterAi
 		sendNotification(Notification.PERCEPTION, perception, getMasterAID());
 		
-		// look for enemies
-		int row = position.getRow();
-		int col = position.getCol();
-		EnemySighting enemies = new EnemySighting(position);
-//		logger.log(logLevel, id + " : " + position);
-		for (int i = row - sight; i <= row + sight; i++) {
-			for (int j = col - sight; j <= col + sight; j++) {
-				Cell cell = perception.get(i,j);
-				CellType type = cell.getType();
-//				logger.log(logLevel, id + " : " + i + "," + j + " - " + type);
-				String enemyId = cell.getId();
-				if (type == CellType.SOLDIER || type == CellType.WORKER) {
-//					logger.log(logLevel, "Sono " + id + " e vicino a me c'e' " + enemyId);
-					if (!isFriend(enemyId)) {
-//						logger.log(logLevel, "E noi ("+id+" e " + enemyId + " NON siamo della stessa squadra!!");
-						enemies.addEnemy(new EnemySightingItem(new Position(i, j), enemyId, type));
-					} else {
-//						logger.log(logLevel, "Ma noi ("+id+" e " + enemyId + " siamo della stessa squadra..");
-					}
-				} 
-			}
-		}
+		EnemySighting enemies = lookForEnemies(position, sight, perception);
 		if (!enemies.isEmpty()) {
-			sendNotification(Notification.ENEMY_SIGHTED, enemies, getMilitaryAID());
 			onEnemySighted(enemies);
 		}
 	}
@@ -210,20 +186,6 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 	public void switchStatus(String newStatus) {
 		getTeamDF().registerUnit(this, newStatus);
 		status = newStatus;
-	}
-
-	public boolean isFriend(String aid) {
-//		DFAgentDescription desc = new DFAgentDescription();
-//		desc.setName(new AID(aid, AID.ISLOCALNAME));
-//		try {
-//			
-//			return DFService.search(this, getTeamDF(), desc).length == 0;
-//		} catch (FIPAException e) {
-//			e.printStackTrace();
-//			return false;
-//		}
-	
-		return aid.contains(getTeamName());
 	}
 
 	public WorldMap requestMap() {

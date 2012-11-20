@@ -17,6 +17,12 @@ import java.util.logging.Logger;
 
 import com.jrts.common.GameConfig;
 import com.jrts.common.TeamDF;
+import com.jrts.environment.Cell;
+import com.jrts.environment.CellType;
+import com.jrts.environment.Perception;
+import com.jrts.environment.Position;
+import com.jrts.messages.EnemySighting;
+import com.jrts.messages.EnemySightingItem;
 import com.jrts.messages.Notification;
 
 @SuppressWarnings("serial")
@@ -127,7 +133,9 @@ public abstract class JrtsAgent extends Agent {
 	}
 
 	
-
+	public boolean isFriend(String aid) {
+		return aid.contains(getTeamName());
+	}
 	
 
 	protected void setTeamName(String team) {
@@ -179,4 +187,22 @@ public abstract class JrtsAgent extends Agent {
 		
 	}
 
+	protected EnemySighting lookForEnemies(Position position, int sight, Perception perception) {
+		int row = position.getRow();
+		int col = position.getCol();
+		EnemySighting enemies = new EnemySighting(position);
+		for (int i = row - sight; i <= row + sight; i++) {
+			for (int j = col - sight; j <= col + sight; j++) {
+				Cell cell = perception.get(i,j);
+				CellType type = cell.getType();
+				String enemyId = cell.getId();
+				if (type == CellType.SOLDIER || type == CellType.WORKER) {
+					if (!isFriend(enemyId)) {
+						enemies.addEnemy(new EnemySightingItem(new Position(i, j), enemyId, type));
+					}
+				} 
+			}
+		}
+		return enemies;
+	}
 }

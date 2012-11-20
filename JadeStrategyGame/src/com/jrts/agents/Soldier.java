@@ -72,8 +72,8 @@ public class Soldier extends Unit {
 	}
 
 	@Override
-	public void onEnemySighted(EnemySighting list) {
-		
+	public void onEnemySighted(EnemySighting enemies) {
+		sendNotification(Notification.ENEMY_SIGHTED, enemies, getMilitaryAID());
 	}
 	
 	@Override

@@ -130,9 +130,6 @@ public class MasterAI extends JrtsAgent implements Team {
 	@Override
 	protected void updatePerception() {
 		World world = World.getInstance();
-		// the area near the building is always visible
-		Perception center = world.getPerception(cityCenter, GameConfig.CITY_CENTER_SIGHT);
-		
 		// check if city center was destroyed  
 		Cell cityCenterCell = world.getCell(cityCenter);
 		logger.log(logLevel, getTeamName() + " energy: " + cityCenterCell.getResourceEnergy());
@@ -153,10 +150,6 @@ public class MasterAI extends JrtsAgent implements Team {
 			this.doDelete();
 			decease();
 		}
-		
-		// TODO maybe do something if an enemy is detected
-		
-		worldMap.update(center);
 	}
 
 	public synchronized void decease() {
