@@ -1,6 +1,7 @@
 package com.jrts.agents;
 
 import jade.core.AID;
+import jade.core.behaviours.TickerBehaviour;
 import jade.core.behaviours.WakerBehaviour;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 
@@ -9,11 +10,13 @@ import java.util.ArrayList;
 import com.jrts.behaviours.PatrolBehaviour;
 import com.jrts.behaviours.UpdateUnitTable;
 import com.jrts.common.AgentStatus;
+import com.jrts.common.Battalion;
 import com.jrts.common.GameConfig;
 import com.jrts.common.GoalPriority;
 import com.jrts.common.Utils;
 import com.jrts.environment.Direction;
 import com.jrts.environment.Perception;
+import com.jrts.environment.Position;
 import com.jrts.environment.World;
 import com.jrts.messages.EnemySighting;
 import com.jrts.messages.Notification;
@@ -25,56 +28,63 @@ public class MilitaryAI extends GoalBasedAI {
 
 	int soldierCounter = 0;
 	
+	Battalion battalion;
+	int battalionSize = 4;
 	int lastCityCenterLife = GameConfig.BUILDING_ENERGY;
 	
 	@Override
 	protected void setup() {
 		super.setup();
 		
+		Position battailonPosition = Utils.getBattalionCenter(requestMap(), cityCenter, battalionSize);
+		if(battailonPosition != null)
+			this.battalion = new Battalion(battailonPosition, battalionSize);
+		
 		addBehaviour(new UpdateUnitTable(this, Soldier.class));
 
-		addBehaviour(new WakerBehaviour(this, 15000) {
+		addBehaviour(new TickerBehaviour(this, 2000) {
+
 			private static final long serialVersionUID = 1746608629262055814L;
 			@Override
-			protected void handleElapsedTimeout() {
+			protected void onTick() {
 				requestSoldierCreation();
 			}
 		});
 		
-//		addBehaviour(new WakerBehaviour(this, 5000) {
-//			private static final long serialVersionUID = 1746608629262055814L;
-//			@Override
-//			protected void handleElapsedTimeout() {
-//				requestSoldierCreation();
-//			}
-//		});
-//		
-//		addBehaviour(new WakerBehaviour(this, 7000) {
-//			private static final long serialVersionUID = 1746608629262055814L;
-//			@Override
-//			protected void handleElapsedTimeout() {
-//				requestSoldierCreation();
-//			}
-//		});
-		
-		addBehaviour(new WakerBehaviour(this, 10000) {
-			private static final long serialVersionUID = 1746608629262055814L;
-
+		addBehaviour(new TickerBehaviour(this, 15000) {
+			
 			@Override
-			protected void handleElapsedTimeout() {
-				addExplorer();
+			protected void onTick() {
+				if(Utils.random.nextBoolean())
+					addExplorer();
+				else
+					addPatroler();
 			}
 		});
-//		
-//		addBehaviour(new WakerBehaviour(this, 15000) {
-//			private static final long serialVersionUID = 1746608629262055814L;
-//
-//			@Override
-//			protected void handleElapsedTimeout() {
-//				addPatroler();
-//			}
-//		});
 		
+		
+		addBehaviour(new TickerBehaviour(this, 5000) {
+			private static final long serialVersionUID = 1746608629262055814L;
+			@Override
+			protected void onTick() {
+				//addExplorer();
+				AID soldier = getUnitTable().getAFreeUnit();
+				if(soldier != null)
+				{
+					if(!battalion.isFull())
+					{
+						Position pos = battalion.addSoldier(soldier); 
+						if(pos != null)
+						{						
+							Order order = new Order(AgentStatus.GO_AND_WAIT_TO_FIGHT);
+							order.setPosition(pos);
+							giveOrder(soldier, order);
+						}
+
+					}
+				}
+			}
+		});
 	}
 
 	public void requestSoldierCreation()
@@ -121,36 +131,36 @@ public class MilitaryAI extends GoalBasedAI {
 			if(angle.equals(Direction.LEFT_UP))
 			{
 				if(Utils.random.nextBoolean())
-					order.setPatrolDirection(Direction.RIGHT);
+					order.setDirection(Direction.RIGHT);
 				else
-					order.setPatrolDirection(Direction.DOWN);
+					order.setDirection(Direction.DOWN);
 			} else if(angle.equals(Direction.LEFT_DOWN))
 			{
 				if(Utils.random.nextBoolean())
-					order.setPatrolDirection(Direction.RIGHT);
+					order.setDirection(Direction.RIGHT);
 				else
-					order.setPatrolDirection(Direction.UP);
+					order.setDirection(Direction.UP);
 			} else if(angle.equals(Direction.RIGHT_UP)){
 				if(Utils.random.nextBoolean())
-					order.setPatrolDirection(Direction.LEFT);
+					order.setDirection(Direction.LEFT);
 				else
-					order.setPatrolDirection(Direction.DOWN);
+					order.setDirection(Direction.DOWN);
 			} else if(angle.equals(Direction.RIGHT_DOWN)){
 				if(Utils.random.nextBoolean())
-					order.setPatrolDirection(Direction.LEFT);
+					order.setDirection(Direction.LEFT);
 				else
-					order.setPatrolDirection(Direction.UP);
+					order.setDirection(Direction.UP);
 			}
 			
 			switch (Utils.random.nextInt(3)) {
 			case 0:
-				order.setPatrolDistance(PatrolBehaviour.DISTANCE_LITTLE);
+				order.setDistance(PatrolBehaviour.DISTANCE_LITTLE);
 				break;
 			case 1:
-				order.setPatrolDistance(PatrolBehaviour.DISTANCE_MEDIUM);
+				order.setDistance(PatrolBehaviour.DISTANCE_MEDIUM);
 				break;
 			case 2:
-				order.setPatrolDistance(PatrolBehaviour.DISTANCE_BIG);
+				order.setDistance(PatrolBehaviour.DISTANCE_BIG);
 				break;
 			}
 			
