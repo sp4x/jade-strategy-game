@@ -1,6 +1,7 @@
 package com.jrts.environment;
 
 import java.util.Collection;
+import java.util.LinkedList;
 
 import com.jrts.common.ResourcesContainer;
 import com.jrts.common.TeamDF;
@@ -12,13 +13,13 @@ public class MasterPerception {
 	ResourcesContainer resourcesContainer;
 	Position cityCenter;
 	
-	int numWorkers;
-	int numSoldiers;
 	TeamDF teamDF;
 	
-	Collection<EnemySighting> enemySightings;
-	Collection<Position> threats;
-	Collection<Position> deaths;
+	boolean alertNoMoreResources = false;
+	
+	Collection<EnemySighting> enemySightings = new LinkedList<EnemySighting>();
+	Collection<Position> threats = new LinkedList<Position>();
+	Collection<Position> deaths = new LinkedList<Position>();
 	
 	
 	
@@ -40,18 +41,7 @@ public class MasterPerception {
 	public void setCityCenter(Position cityCenter) {
 		this.cityCenter = cityCenter;
 	}
-	public int getNumWorkers() {
-		return numWorkers;
-	}
-	public void setNumWorkers(int numWorkers) {
-		this.numWorkers = numWorkers;
-	}
-	public int getNumSoldiers() {
-		return numSoldiers;
-	}
-	public void setNumSoldiers(int numSoldiers) {
-		this.numSoldiers = numSoldiers;
-	}
+	
 	public Collection<EnemySighting> getEnemySightings() {
 		return enemySightings;
 	}
@@ -77,6 +67,18 @@ public class MasterPerception {
 		this.teamDF = teamDF;
 	}
 	
+	public boolean isAlertNoMoreResources() {
+		return alertNoMoreResources;
+	}
+	public void setAlertNoMoreResources(boolean alertNoMoreResources) {
+		this.alertNoMoreResources = alertNoMoreResources;
+	}
+	
+	public void clean() {
+		enemySightings.clear();
+		threats.clear();
+		deaths.clear();
+	}
 	
 	
 	
