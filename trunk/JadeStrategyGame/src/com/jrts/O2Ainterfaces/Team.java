@@ -13,4 +13,6 @@ public interface Team {
 	public WorldMap getWorldMap();
 
 	public int getEnergy();
+	
+	public void decease();
 }
