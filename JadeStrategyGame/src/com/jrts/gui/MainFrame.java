@@ -73,27 +73,24 @@ public class MainFrame extends JFrame {
 
 	JPanel topPanel;
 	JPanel rightPanel;
+	
+	AgentContainer agentController;
 
 	public static void start(Floor floor, List<Team> teams, AgentContainer ac) {
 		mainFrame = new MainFrame(floor, teams, ac);
 	}
 
-	protected MainFrame(final Floor floor, List<Team> teams, final AgentContainer ac) {
+	protected MainFrame(Floor floor, List<Team> teams, AgentContainer ac) {
 		super();
 
+		this.agentController = ac;
+		
 		this.teams = teams;
+		
 		super.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
-				finished = true;
-				dispose();
-				try {
-					ac.kill();
-					Runtime.instance().shutDown();
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
-				System.exit(0);
+				close();
 			}
 		});
 
@@ -251,6 +248,21 @@ public class MainFrame extends JFrame {
 			}
 		}
 		new Thread(new RefreshGUI()).start();
+	}
+
+	private void close() {
+		finished = true;
+		dispose();
+		try {
+			for (Team t : teams) {
+				t.decease();
+			}
+			agentController.kill();
+			Runtime.instance().shutDown();
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+		System.exit(0);
 	}
 
 	public void update() {
