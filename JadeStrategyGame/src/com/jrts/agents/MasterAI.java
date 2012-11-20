@@ -46,7 +46,7 @@ public class MasterAI extends JrtsAgent implements Team {
 
 	UnitFactory unitFactory;
 	
-	MasterPerception masterPerception;
+	MasterPerception masterPerception = new MasterPerception();
 
 	public MasterAI() {
 		registerO2AInterface(Team.class, this);
