@@ -2,12 +2,6 @@ package com.jrts.agents;
 
 import jade.core.AID;
 import jade.core.behaviours.Behaviour;
-import jade.core.behaviours.CyclicBehaviour;
-import jade.lang.acl.ACLMessage;
-import jade.lang.acl.MessageTemplate;
-import jade.lang.acl.UnreadableException;
-
-import java.io.IOException;
 
 import com.jrts.O2Ainterfaces.IUnit;
 import com.jrts.agents.MasterAI.Nature;
@@ -68,57 +62,10 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 		getTeamDF().registerUnit(this);
 		addBehaviour(behaviourWrapper);
 		
-		addBehaviour(new CyclicBehaviour() {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void action() {
-				MessageTemplate mt = MessageTemplate.MatchConversationId(MessageSubject.FIGHT);
-				ACLMessage msg = receive(mt);
-				if (msg != null) {
-					onFightMessage(msg);
-				} else {
-					block();
-				}
-			}
-		});
 	}
 	
 	private void setCityCenter(Position position) {
 		this.cityCenter = position;
-	}
-
-	public void onFightMessage(ACLMessage msg) {
-		String target = msg.getSender().getLocalName();
-		
-		switch (msg.getPerformative()) {
-		
-		case ACLMessage.PROPOSE:
-			boolean accept = onAttackProposal(target);
-			ACLMessage reply = msg.createReply();
-			if (accept) {
-				try {
-					reply.setContentObject(position);
-				} catch (IOException e) {
-				}
-				reply.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
-			} else {
-				reply.setPerformative(ACLMessage.REJECT_PROPOSAL);
-			}
-			send(reply);
-			break;
-
-		case ACLMessage.ACCEPT_PROPOSAL:
-			try {
-				Position targetPosition = (Position) msg.getContentObject();
-				engageFight(target, targetPosition);
-			} catch (UnreadableException e) {
-			}
-			break;
-
-		default:
-			break;
-		}
 	}
 
 
@@ -206,9 +153,7 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 		sendNotification(Notification.UNIT_UNDER_ATTACK, getPosition(), getMilitaryAID());
 	}
 	
-	public abstract boolean onAttackProposal(String attacker);
-	
-	public abstract void engageFight(String target, Position targetPosition);
+	public abstract boolean onAttacNotification(String attacker);
 
 	public Position getCityCenter() {
 		return cityCenter;
@@ -294,6 +239,9 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 			removeAllBehaviours();
 			this.doDelete();
 			World.getInstance().killUnit(this);
+		} else if (n.getSubject().equals(Notification.ATTACK)) {
+			String attacker = (String) n.getContentObject();
+			onAttacNotification(attacker);
 		}
 	}
 
