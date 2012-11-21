@@ -53,9 +53,10 @@ public class ExploreBehaviour extends UnitBehaviour {
 
 	@Override
 	public void myAction() {
-		followPathBehaviour.myAction();
-		if(followPathBehaviour.done()){
+		if(followPathBehaviour == null || followPathBehaviour.done()){
 			explore();
+		}else{
+			followPathBehaviour.myAction();
 		}
 	}
 
