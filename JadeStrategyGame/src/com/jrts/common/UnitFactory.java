@@ -8,6 +8,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.logging.Logger;
 
 import com.jrts.O2Ainterfaces.IUnit;
+import com.jrts.agents.MasterAI.Nature;
 import com.jrts.agents.Unit;
 import com.jrts.environment.Position;
 import com.jrts.environment.World;
@@ -16,6 +17,7 @@ public class UnitFactory extends Thread {
 
 	Logger logger = Logger.getLogger(UnitFactory.class.getName());
 	
+	Nature nature;
 	String team;
 	PlatformController controller;
 	Position cityCenter;
@@ -23,11 +25,12 @@ public class UnitFactory extends Thread {
 	
 	LinkedBlockingQueue<Class<? extends Unit>> queue;
 	
-	public UnitFactory(String team, PlatformController controller, Position cityCenter) {
+	public UnitFactory(String team, PlatformController controller, Position cityCenter, Nature nature) {
 		this.team = team;
 		this.controller = controller;
 		this.queue = new LinkedBlockingQueue<Class<? extends Unit>>();
 		this.cityCenter = cityCenter;
+		this.nature = nature;
 	}
 	
 
@@ -66,7 +69,7 @@ public class UnitFactory extends Thread {
 			//Instantiate the unit
 			AgentController agentController;
 			try {
-				Object[] args = {unitPosition, team};
+				Object[] args = {unitPosition, team, nature};
 				synchronized (this) {
 					agentController = controller.createNewAgent(unitName, claz.getName(), args);
 					agentController.start();

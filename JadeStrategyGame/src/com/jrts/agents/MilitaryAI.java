@@ -5,7 +5,6 @@ import jade.core.behaviours.TickerBehaviour;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
 import com.jrts.behaviours.PatrolBehaviour;
 import com.jrts.behaviours.UpdateUnitTable;
@@ -21,6 +20,7 @@ import com.jrts.environment.World;
 import com.jrts.messages.EnemySighting;
 import com.jrts.messages.Notification;
 import com.jrts.messages.Order;
+
 
 public class MilitaryAI extends GoalBasedAI {
 	private static final long serialVersionUID = 9114684864072759345L;
@@ -176,7 +176,6 @@ public class MilitaryAI extends GoalBasedAI {
 		
 		EnemySighting enemies = lookForEnemies(cityCenter, GameConfig.CITY_CENTER_SIGHT, cityCenterPerception);
 		sendNotification(Notification.ENEMY_SIGHTED, enemies, getMasterAID());
-
 		if (!enemies.isEmpty()) {
 			onEnemySighting(enemies);
 		}
@@ -252,7 +251,7 @@ public class MilitaryAI extends GoalBasedAI {
 				
 		attackEnemy(e.getEnemies().get(0).getPosition());
 	}
-
+	
 	@Override
 	protected void handleNotification(Notification n) {
 		super.handleNotification(n);
@@ -280,6 +279,7 @@ public class MilitaryAI extends GoalBasedAI {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 	
 	public void attackEnemy(Position enemyPosition){
 		Double currDistance = Double.MAX_VALUE;

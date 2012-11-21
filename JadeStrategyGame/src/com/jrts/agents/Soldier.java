@@ -74,6 +74,7 @@ public class Soldier extends Unit {
 	@Override
 	public void onEnemySighted(EnemySighting enemies) {
 		sendNotification(Notification.ENEMY_SIGHTED, enemies, getMilitaryAID());
+		
 	}
 	
 	@Override
@@ -99,5 +100,9 @@ public class Soldier extends Unit {
 	protected void die() {
 		sendNotification(Notification.UNIT_DEATH, getPosition(), getMilitaryAID());
 		terminate();
+	}
+
+	@Override
+	public void underAttack() {
 	}
 }

@@ -4,6 +4,7 @@ import jade.core.AID;
 import jade.core.behaviours.Behaviour;
 
 import com.jrts.O2Ainterfaces.IUnit;
+import com.jrts.agents.MasterAI.Nature;
 import com.jrts.behaviours.BehaviourWrapper;
 import com.jrts.behaviours.FollowPathBehaviour;
 import com.jrts.behaviours.UnitBehaviour;
@@ -50,11 +51,12 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 		super.setup();
 		Object[] args = getArguments();
 		if (args != null) {
-			setPosition((Position) args[0]);
-			setTeamName((String) args[1]);
+			int i = 0;
+			setPosition((Position) args[i++]);
+			setTeamName((String) args[i++]);
+			setNature((Nature) args[i++]);
 		}
 		id = getAID().getLocalName();
-
 		getTeamDF().registerUnit(this);
 		addBehaviour(behaviourWrapper);
 	}
@@ -142,6 +144,8 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 		setLife(getLife() - damage);
 		sendNotification(Notification.UNIT_UNDER_ATTACK, getPosition(), getMilitaryAID());
 	}
+	
+	public abstract void underAttack();
 
 	public int getSpeed() {
 		return speed;

@@ -36,7 +36,6 @@ public class MasterAI extends JrtsAgent implements Team {
 
 	AID resourceAID, militaryAID;
 
-	final Nature nature;
 	GoalLevels goalLevels;
 
 	ResourceScorer resourceScorer;
@@ -73,7 +72,7 @@ public class MasterAI extends JrtsAgent implements Team {
 
 			masterPerception.setTeamDF(getTeamDF());
 
-			unitFactory = new UnitFactory(getTeamName(), getContainerController(), masterPerception.getCityCenter());
+			unitFactory = new UnitFactory(getTeamName(), getContainerController(), masterPerception.getCityCenter(), nature);
 			unitFactory.start();
 
 			masterPerception.setResourcesContainer(new ResourcesContainer(GameConfig.STARTUP_WOOD, GameConfig.STARTUP_FOOD));

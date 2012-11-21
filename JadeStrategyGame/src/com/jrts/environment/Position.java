@@ -108,4 +108,12 @@ public class Position implements Serializable {
 		}
 		return sortedMap.firstEntry().getValue();
 	}
+
+	public Direction getDirectionTo(Position p) {
+		for (Direction d : Direction.ALL) {
+			if (step(d).equals(p))
+				return d;
+		}
+		return null;
+	}
 }
