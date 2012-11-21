@@ -9,6 +9,11 @@ import com.jrts.common.GameStatistics;
 
 public abstract class JrtsBehaviour extends Behaviour{
 		
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public JrtsBehaviour(Unit u) {
 		super(u);
 	}

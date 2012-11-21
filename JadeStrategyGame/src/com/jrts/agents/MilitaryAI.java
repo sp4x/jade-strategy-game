@@ -51,7 +51,7 @@ public class MilitaryAI extends GoalBasedAI {
 			}
 		});
 		
-		addBehaviour(new TickerBehaviour(this, 5000) {
+		addBehaviour(new TickerBehaviour(this, 4000) {
 			
 			@Override
 			protected void onTick() {
@@ -82,14 +82,13 @@ public class MilitaryAI extends GoalBasedAI {
 				cityCenterPositions.remove(cityCenter);
 				if(cityCenterPositions.size() > 0)
 				{
-					System.out.println("SIZE > 0");
 					Position posToAttack = cityCenter.nearest(cityCenterPositions);
 					for (AID aid : battalion.getSoldiersList()) {
 						Order order = new Order(AgentStatus.GO_FIGHTING);
 						order.setPosition(posToAttack);
 						giveOrder(aid, order);
 					}
-				} else System.out.println("SIZE < 0 :(");
+				}
 				
 			}
 		});

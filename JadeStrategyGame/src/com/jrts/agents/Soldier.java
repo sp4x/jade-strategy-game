@@ -2,15 +2,12 @@ package com.jrts.agents;
 
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
-import jade.lang.acl.MessageTemplate;
-import jade.lang.acl.UnreadableException;
 
 import com.jrts.behaviours.ExploreBehaviour;
 import com.jrts.behaviours.FightingBehaviour;
 import com.jrts.behaviours.PatrolBehaviour;
 import com.jrts.common.AgentStatus;
 import com.jrts.common.GameConfig;
-import com.jrts.common.Utils;
 import com.jrts.environment.CellType;
 import com.jrts.environment.Direction;
 import com.jrts.environment.Position;
@@ -104,18 +101,12 @@ public class Soldier extends Unit {
 		proposal.setConversationId(MessageSubject.FIGHT);
 		proposal.addReceiver(new AID(target, AID.ISLOCALNAME));
 		send(proposal);
-		long waitTime = Utils.random.nextInt(1000);
-		MessageTemplate mt = MessageTemplate.or(
-				MessageTemplate.MatchPerformative(ACLMessage.ACCEPT_PROPOSAL),
-				MessageTemplate.MatchPerformative(ACLMessage.REJECT_PROPOSAL)
-		);
-		ACLMessage msg = blockingReceive(mt, waitTime);
-		if (msg != null && msg.getPerformative() == ACLMessage.ACCEPT_PROPOSAL) 
-			try {
-				switchStatus(AgentStatus.FIGHTING);
-				Position enemyPosition = (Position) msg.getContentObject();
-				addBehaviour(new FightingBehaviour(this, target, enemyPosition));
-			} catch (UnreadableException e) {}
+	}
+	
+	@Override
+	public void engageFight(String target, Position targetPosition) {
+		switchStatus(AgentStatus.FIGHTING);
+		addBehaviour(new FightingBehaviour(this, target, targetPosition));
 	}
 	
 	@Override
@@ -149,8 +140,7 @@ public class Soldier extends Unit {
 
 	@Override
 	public boolean onAttackProposal(String attacker) {
-		switchStatus(AgentStatus.FIGHTING);
-		addBehaviour(new FightingBehaviour(this, attacker));
+		engageFight(attacker, null);
 		return true;
 	}
 

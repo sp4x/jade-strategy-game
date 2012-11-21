@@ -46,7 +46,7 @@ public class ExploreBehaviour extends UnitBehaviour {
 		Position posToGo = Utils.getRandomUnknownCellPosition(this.soldier.requestMap(), dir);
 
 		if (posToGo != null) {
-			followPathBehaviour = new FollowPathBehaviour(soldier, posToGo, 1);
+			followPathBehaviour = new FollowPathBehaviour(soldier, posToGo);
 			exploring = true;
 		}
 	}
