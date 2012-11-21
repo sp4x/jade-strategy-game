@@ -43,11 +43,11 @@ public class GameConfig {
 	public static final long UNIT_TABLE_REFRESH_TIME = 100;
 	public static final long SOLDIERS_TABLE_REFRESH_TIME = 100;
 	
-	public static final int STARTUP_WOOD = WORKER_WOOD_COST;
-	public static final int STARTUP_FOOD = WORKER_FOOD_COST;
-	
+	public static final int STARTUP_WOOD = 2000; //2*WORKER_WOOD_COST;
+	public static final int STARTUP_FOOD = 2000; //2*WORKER_FOOD_COST;
+
 	public static final int PATH_TOLERANCE = 5;
-	public static final int HIT_RANGE = 10;
+	public static final int HIT_RANGE = 1;
 	public static final int ICON_SIZE = 15;
 	
 	public static final int TREE_ENERGY = 500;
@@ -62,7 +62,7 @@ public class GameConfig {
 	public static final int ENEMY_SIGHTING_BOUND = 10;
 	public static final int BATTALION_SIZE = 3;
 	
-	public static int BUILDING_ENERGY = 1000;
+	public static int BUILDING_ENERGY = 100; //1000;
 	public static int FOOD_MIN_DISTANCE = 3;
 	public static int FOOD_MAX_DISTANCE = 5;
 	public static int WOOD_MIN_DISTANCE = 3;

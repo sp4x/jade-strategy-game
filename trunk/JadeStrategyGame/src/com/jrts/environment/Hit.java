@@ -13,7 +13,7 @@ public class Hit {
 		this.pos = pos;
 		this.damage = damage;
 		this.dir = dir;
-		this.range = range + 1;
+		this.range = hitRange;
 	}
 	
 	public void step(){

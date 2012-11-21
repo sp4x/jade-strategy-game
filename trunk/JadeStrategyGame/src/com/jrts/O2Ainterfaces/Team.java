@@ -1,5 +1,6 @@
 package com.jrts.O2Ainterfaces;
 
+import com.jrts.agents.MasterAI.Nature;
 import com.jrts.environment.WorldMap;
 
 public interface Team {
@@ -10,6 +11,7 @@ public interface Team {
 	public int getQueueSoldierCount();
 		
 	public String getTeamName();
+	public Nature getTeamNature();
 	
 	public WorldMap getWorldMap();
 

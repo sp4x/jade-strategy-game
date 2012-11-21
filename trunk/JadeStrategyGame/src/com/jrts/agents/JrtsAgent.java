@@ -205,7 +205,7 @@ public abstract class JrtsAgent extends Agent {
 		return enemies;
 	}
 
-	public Nature getNature() {
+	public Nature getTeamNature() {
 		return nature;
 	}
 

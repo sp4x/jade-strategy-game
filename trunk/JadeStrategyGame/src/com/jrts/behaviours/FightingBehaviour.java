@@ -1,7 +1,6 @@
 package com.jrts.behaviours;
 
 import com.jrts.agents.Soldier;
-import com.jrts.environment.Direction;
 import com.jrts.environment.Position;
 import com.jrts.messages.EnemySightingItem;
 
