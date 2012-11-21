@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
+import java.util.regex.Pattern;
 
 import com.jrts.common.Utils;
 
@@ -282,9 +283,14 @@ public class Floor implements Serializable {
 
 	public Position getAgentPosition(AID aid) {
 		for (int i = 0; i < rows; i++)
-			for (int j = 0; j < cols; j++)
-				if(get(i, j).getId().equals(aid))
-					return new Position(i, j);
+			for (int j = 0; j < cols; j++){
+				if(get(i,j).getId() != null){
+					String regex = ".*" + get(i,j).getId() + ".*";
+					if(Pattern.matches(regex, aid.toString())){
+						return new Position(i, j);
+					}
+				}
+			}
 		return null;
 	}
 }
