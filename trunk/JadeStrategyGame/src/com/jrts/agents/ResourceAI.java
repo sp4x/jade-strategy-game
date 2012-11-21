@@ -118,19 +118,18 @@ public class ResourceAI extends GoalBasedAI {
 		if (noMoreFood && noMoreWood)
 			return null;
 
-		double foodRatio;
-		if (goalLevels.getResources() == GoalPriority.HIGH) {
-			foodRatio = 2;
-		} else {
-			foodRatio = 1;
-		}
+		double foodRatio = 1, woodRatio = 1;
+		if (goalLevels.getResources() == GoalPriority.HIGH)
+			foodRatio = 3;
+		
 
 		int woodCutters = unitTable
 				.getUnitsWithStatus(AgentStatus.WOOD_CUTTING).size();
 		int foodCollectors = unitTable.getUnitsWithStatus(
 				AgentStatus.FOOD_COLLECTING).size();
 
-		if (foodRatio * foodCollectors <= woodCutters)
+		//foodCollectors : woodCutters = foodRatio : woodRatio
+		if (foodCollectors < foodRatio * (double) woodCutters / woodRatio)
 			return new String[] { AgentStatus.FOOD_COLLECTING,
 					AgentStatus.WOOD_CUTTING };
 		return new String[] { AgentStatus.WOOD_CUTTING,
