@@ -1,7 +1,9 @@
 package com.jrts.behaviours;
 
 import com.jrts.agents.Soldier;
+import com.jrts.environment.Cell;
 import com.jrts.environment.Position;
+import com.jrts.environment.WorldMap;
 import com.jrts.messages.EnemySightingItem;
 
 public class FightingBehaviour extends UnitBehaviour {
@@ -19,9 +21,37 @@ public class FightingBehaviour extends UnitBehaviour {
 		this.soldier = soldier;
 		this.target = target;
 	}
+	
+	public FightingBehaviour(Soldier soldier, Position targetPosition) {
+		super(true, soldier);
+		this.soldier = soldier;
+		this.targetPosition = targetPosition;
+	}
+	
+	private void hitOnBuilding() {
+		WorldMap worldMap = soldier.requestMap();
+		Cell targetCell = worldMap.get(targetPosition);
+		if (targetCell.isCityCenter()) {
+			if (soldier.getPosition().isNextTo(targetPosition))
+				soldier.sendHit(soldier.getPosition().getDirectionTo(targetPosition));
+			else
+				reach(targetPosition);
+		}
+		else {
+			done = true;
+		}
+	}
 
 	@Override
 	public void myAction() {
+		if (target == null) {
+			hitOnBuilding();
+		} else {
+			hitOnTargetEnemy();
+		}
+	}
+
+	private void hitOnTargetEnemy() {
 		EnemySightingItem enemy = soldier.getLastEnemySighting().getById(target);
 		//if the enemy is not in sight or it's dead
 		if (enemy == null) {
@@ -36,13 +66,13 @@ public class FightingBehaviour extends UnitBehaviour {
 		}
 	}
 
-	private void reach(Position enemyCurrentPosition) {
+	private void reach(Position position) {
 		if (targetPosition == null) {
-			targetPosition = enemyCurrentPosition;
+			targetPosition = position;
 		}
 		
-		if (!enemyCurrentPosition.equals(targetPosition) || followPathBehaviour == null) {
-			targetPosition = enemyCurrentPosition;
+		if (!position.equals(targetPosition) || followPathBehaviour == null) {
+			targetPosition = position;
 			followPathBehaviour = new FollowPathBehaviour(soldier, targetPosition);
 		}
 		else {
