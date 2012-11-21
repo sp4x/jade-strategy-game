@@ -21,11 +21,11 @@ public class ResourceAI extends GoalBasedAI {
 
 	int workersCounter = 0;
 
-	boolean noMoreFood = false, noMoreWood = false;
+	boolean moreFood = true, moreWood = true;
 
 	public ResourceAI() {
 		super();
-		logLevel = Level.INFO;
+		logLevel = Level.FINEST;
 	}
 
 	protected void setup() {
@@ -112,22 +112,19 @@ public class ResourceAI extends GoalBasedAI {
 	}
 
 	public String[] extimateOrderPriority() {
-		if (noMoreFood && !noMoreWood)
+		if (moreFood && !moreWood)
 			return new String[] { AgentStatus.WOOD_CUTTING,
 					AgentStatus.FOOD_COLLECTING };
-		if (!noMoreFood && noMoreWood)
+		if (moreWood && !moreFood)
 			return new String[] { AgentStatus.FOOD_COLLECTING,
 					AgentStatus.WOOD_CUTTING };
-		if (noMoreFood && noMoreWood)
-			return null;
 
 		double foodRatio = 1, woodRatio = 1;
 		if (goalLevels.getResources() == GoalPriority.HIGH)
 			foodRatio = 3;
-		
 
-		int woodCutters = unitTable
-				.getUnitsWithStatus(AgentStatus.WOOD_CUTTING).size();
+		int woodCutters = unitTable.getUnitsWithStatus(
+				AgentStatus.WOOD_CUTTING).size();
 		int foodCollectors = unitTable.getUnitsWithStatus(
 				AgentStatus.FOOD_COLLECTING).size();
 
@@ -145,17 +142,17 @@ public class ResourceAI extends GoalBasedAI {
 
 	@Override
 	protected void updatePerception() {
-		if (noMoreFood) {
+		if (moreFood) {
 			Position p = requestMap().findNearest(myCityCenter, CellType.FOOD);
 			if (p != null)
-				noMoreFood = false;
+				moreFood = false;
 		}
-		if (noMoreWood) {
+		if (moreWood) {
 			Position p = requestMap().findNearest(myCityCenter, CellType.WOOD);
 			if (p != null)
-				noMoreWood = false;
+				moreWood = false;
 		}
-		if (!noMoreFood && !noMoreWood)
+		if (!moreFood && !moreWood)
 			sendNotification(Notification.RESOURCES_FOUND, null, getMasterAID());
 	}
 
@@ -170,9 +167,9 @@ public class ResourceAI extends GoalBasedAI {
 			sendNotification(Notification.NO_MORE_RESOURCE, resourceType,
 					getMasterAID());
 			if (resourceType.equals(CellType.FOOD))
-				noMoreFood = true;
+				moreFood = false;
 			else
-				noMoreWood = true;
+				moreWood = false;
 
 		} else if (n.getSubject().equals(Notification.RESOURCES_UPDATE)) {
 			AggiornaRisorse aggiornamento = (AggiornaRisorse) n
@@ -195,5 +192,4 @@ public class ResourceAI extends GoalBasedAI {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 }

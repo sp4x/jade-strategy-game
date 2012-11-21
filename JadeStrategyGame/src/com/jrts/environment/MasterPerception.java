@@ -12,6 +12,7 @@ public class MasterPerception {
 	WorldMap worldMap;
 	ResourcesContainer resourcesContainer;
 	Position cityCenter;
+	Position meetingPoint;
 	
 	TeamDF teamDF;
 	
@@ -43,6 +44,12 @@ public class MasterPerception {
 		this.cityCenter = cityCenter;
 	}
 	
+	public Position getMeetingPoint() {
+		return meetingPoint;
+	}
+	public void setMeetingPoint(Position meetingPoint) {
+		this.meetingPoint = meetingPoint;
+	}
 	public Collection<EnemySighting> getEnemySightings() {
 		return enemySightings;
 	}

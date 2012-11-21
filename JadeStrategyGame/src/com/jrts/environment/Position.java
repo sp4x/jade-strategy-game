@@ -116,4 +116,12 @@ public class Position implements Serializable {
 		}
 		return null;
 	}
+
+	public Position step(Direction dir, Integer step) {
+		Position copyPos = this.clone();
+		for (int i = 0; i < step; i++) {
+			copyPos = copyPos.step(dir);
+		}
+		return copyPos;
+	}
 }

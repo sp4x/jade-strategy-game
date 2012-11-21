@@ -51,7 +51,7 @@ public class TeamResourcePanel extends JPanel{
 		}
 		
 		super.setBorder(border);
-		super.setPreferredSize(new Dimension(215, 50));
+		super.setPreferredSize(new Dimension(250, 50));
 
 		super.add(this.food);
 		super.add(this.wood);
