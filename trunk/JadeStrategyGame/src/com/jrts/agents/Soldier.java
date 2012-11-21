@@ -18,6 +18,8 @@ public class Soldier extends Unit {
 	int knapsack = 0;
 	CellType resourceCarried;
 
+	Order lastOrderReceived;
+	
 	public Soldier() {
 		this(null, null);
 	}
@@ -66,6 +68,11 @@ public class Soldier extends Unit {
 		switchStatus(AgentStatus.EXPLORING);
 	}
 	
+	public void goToAttack(Position pos)
+	{
+		goThere(pos);
+	}
+	
 	@Override
 	public CellType getType() {
 		return CellType.SOLDIER;
@@ -75,6 +82,11 @@ public class Soldier extends Unit {
 	public void onEnemySighted(EnemySighting enemies) {
 		sendNotification(Notification.ENEMY_SIGHTED, enemies, getMilitaryAID());
 		
+		if(getStatus().equals(AgentStatus.GO_FIGHTING))
+		{
+			Position enemyPosition = enemies.getEnemies().get(0).getPosition();
+			//addBehaviour(new );
+		}
 	}
 	
 	@Override
@@ -82,6 +94,8 @@ public class Soldier extends Unit {
 		super.handleNotification(n);
 		if (n.getSubject().equals(Notification.ORDER)) {
 			Order order = (Order) n.getContentObject();
+			this.lastOrderReceived = order;
+			
 			if (order.getOrder().equals(AgentStatus.PATROLING)) {
 				Direction dir = order.getDirection();
 				int distance = order.getDistance();
@@ -89,9 +103,11 @@ public class Soldier extends Unit {
 				
 			} else if (order.getOrder().equals(AgentStatus.EXPLORING)) {
 				explore();
-			} else if (order.getOrder().equals(AgentStatus.GO_AND_WAIT_TO_FIGHT)) {
+			} else if (order.getOrder().equals(AgentStatus.WAIT_TO_FIGHT)) {
 				goThere(order.getPosition());
-				switchStatus(AgentStatus.GO_AND_WAIT_TO_FIGHT);
+				switchStatus(AgentStatus.WAIT_TO_FIGHT);
+			} else if (order.getOrder().equals(AgentStatus.GO_FIGHTING)) {
+				switchStatus(AgentStatus.GO_FIGHTING);
 			}
 		}
 	}
