@@ -145,4 +145,10 @@ public class Worker extends Unit {
 		goThere(p);
 		return false;
 	}
+
+	@Override
+	public void engageFight(String target, Position targetPosition) {
+		// TODO Auto-generated method stub
+		
+	}
 }

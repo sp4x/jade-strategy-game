@@ -5,6 +5,7 @@ import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
+import jade.lang.acl.UnreadableException;
 
 import java.io.IOException;
 
@@ -70,7 +71,8 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 
 			@Override
 			public void action() {
-				ACLMessage msg = receive(MessageTemplate.MatchPerformative(ACLMessage.PROPOSE));
+				MessageTemplate mt = MessageTemplate.MatchConversationId(MessageSubject.FIGHT);
+				ACLMessage msg = receive(mt);
 				if (msg != null) {
 					onFightMessage(msg);
 				} else {
@@ -83,18 +85,36 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 	}
 	
 	public void onFightMessage(ACLMessage msg) {
-		String attacker = msg.getSender().getLocalName();
-		boolean accept = onAttackProposal(attacker);
-		ACLMessage reply = msg.createReply();
-		if (accept) {
+		String target = msg.getSender().getLocalName();
+		
+		switch (msg.getPerformative()) {
+		
+		case ACLMessage.PROPOSE:
+			boolean accept = onAttackProposal(target);
+			ACLMessage reply = msg.createReply();
+			if (accept) {
+				try {
+					reply.setContentObject(position);
+				} catch (IOException e) {
+				}
+				reply.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
+			} else {
+				reply.setPerformative(ACLMessage.REJECT_PROPOSAL);
+			}
+			send(reply);
+			break;
+
+		case ACLMessage.ACCEPT_PROPOSAL:
 			try {
-				reply.setContentObject(position);
-			} catch (IOException e) {}
-			reply.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
-		} else {
-			reply.setPerformative(ACLMessage.REJECT_PROPOSAL);
+				Position targetPosition = (Position) msg.getContentObject();
+				engageFight(target, targetPosition);
+			} catch (UnreadableException e) {
+			}
+			break;
+
+		default:
+			break;
 		}
-		send(reply);
 	}
 
 
@@ -108,7 +128,7 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 
 	public void goThere(Position p) {
 		logger.log(logLevel, getAID().getName() + ":Go there " + p);
-		addBehaviour(new FollowPathBehaviour(this, p, GameConfig.UNIT_MOVING_ATTEMPTS));
+		addBehaviour(new FollowPathBehaviour(this, p));
 	}
 
 	public AID getMasterAID() {
@@ -183,6 +203,8 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 	}
 	
 	public abstract boolean onAttackProposal(String attacker);
+	
+	public abstract void engageFight(String target, Position targetPosition);
 
 	public int getSpeed() {
 		return speed;

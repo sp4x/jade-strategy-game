@@ -33,7 +33,7 @@ public class FightingBehaviour extends UnitBehaviour {
 	public void myAction() {
 		//if I know the target position I need to be next to it
 		if (targetPosition != null && !soldier.getPosition().isNextTo(targetPosition)) {
-			this.followPathBehaviour = new FollowPathBehaviour(soldier, targetPosition, 1);
+			this.followPathBehaviour = new FollowPathBehaviour(soldier, targetPosition);
 		} else if (followPathBehaviour != null) {
 			followPathBehaviour.myAction();
 			if (followPathBehaviour.done())

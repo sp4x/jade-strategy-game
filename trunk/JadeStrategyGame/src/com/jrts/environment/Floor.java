@@ -135,7 +135,7 @@ public class Floor implements Serializable {
 		if(floor[i][j] != null)
 			currType = floor[i][j].type;
 		
-		if(i>=0 && j>=0 && i<=rows && j<=cols){
+		if(i>=0 && j>=0 && i<rows && j<cols){
 			//se sto per settare una cella occupata
 			if(!newCell.isWalkable() && !busyCells.contains(position))
 				busyCells.add(position);
