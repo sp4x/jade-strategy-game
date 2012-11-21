@@ -2,6 +2,11 @@ package com.jrts.agents;
 
 import jade.core.AID;
 import jade.core.behaviours.Behaviour;
+import jade.core.behaviours.CyclicBehaviour;
+import jade.lang.acl.ACLMessage;
+import jade.lang.acl.MessageTemplate;
+
+import java.io.IOException;
 
 import com.jrts.O2Ainterfaces.IUnit;
 import com.jrts.agents.MasterAI.Nature;
@@ -59,7 +64,39 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 		id = getAID().getLocalName();
 		getTeamDF().registerUnit(this);
 		addBehaviour(behaviourWrapper);
+		
+		addBehaviour(new CyclicBehaviour() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void action() {
+				ACLMessage msg = receive(MessageTemplate.MatchPerformative(ACLMessage.PROPOSE));
+				if (msg != null) {
+					onFightMessage(msg);
+				} else {
+					block();
+				}
+			}
+		});
+			
+		
 	}
+	
+	public void onFightMessage(ACLMessage msg) {
+		String attacker = msg.getSender().getLocalName();
+		boolean accept = onAttackProposal(attacker);
+		ACLMessage reply = msg.createReply();
+		if (accept) {
+			try {
+				reply.setContentObject(position);
+			} catch (IOException e) {}
+			reply.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
+		} else {
+			reply.setPerformative(ACLMessage.REJECT_PROPOSAL);
+		}
+		send(reply);
+	}
+
 
 	@Override
 	public void addBehaviour(Behaviour b) {
@@ -145,7 +182,7 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 		sendNotification(Notification.UNIT_UNDER_ATTACK, getPosition(), getMilitaryAID());
 	}
 	
-	public abstract void underAttack();
+	public abstract boolean onAttackProposal(String attacker);
 
 	public int getSpeed() {
 		return speed;

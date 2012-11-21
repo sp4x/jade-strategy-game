@@ -62,6 +62,14 @@ public class EnemySighting implements Serializable {
 		return null;
 	}
 	
+	public EnemySightingItem getById(String id) {
+		for (EnemySightingItem item : getEnemies()) {
+			if (item.getId().equals(id))
+				return item;
+		}
+		return null;
+	}
+	
 	@Override
 	public String toString() {
 		String s = "";
