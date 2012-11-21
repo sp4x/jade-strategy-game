@@ -17,7 +17,7 @@ public class ExploreBehaviour extends UnitBehaviour {
 	Soldier soldier;
 	Position cityCenter;
 	boolean exploring;
-	FollowPathBehaviour exploreBehaviour;
+	FollowPathBehaviour followPathBehaviour;
 	ArrayList<Direction> directions;
 
 	/**
@@ -46,15 +46,15 @@ public class ExploreBehaviour extends UnitBehaviour {
 		Position posToGo = Utils.getRandomUnknownCellPosition(this.soldier.requestMap(), dir);
 
 		if (posToGo != null) {
-			exploreBehaviour = new FollowPathBehaviour(soldier, posToGo, 1);
+			followPathBehaviour = new FollowPathBehaviour(soldier, posToGo, 1);
 			exploring = true;
 		}
 	}
 
 	@Override
 	public void myAction() {
-		exploreBehaviour.myAction();
-		if(exploreBehaviour.done()){
+		followPathBehaviour.myAction();
+		if(followPathBehaviour.done()){
 			explore();
 		}
 	}

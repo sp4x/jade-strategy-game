@@ -138,10 +138,11 @@ public class Worker extends Unit {
 	}
 
 	@Override
-	public void underAttack() {
+	public boolean onAttackProposal(String attacker) {
 		WorldMap worldMap = requestMap();
 		int i = Utils.random.nextInt(Direction.ALL.length);
 		Position p = worldMap.bigStep(getPosition(), Direction.ALL[i], GameConfig.RUNAWAY_DISTANCE);
 		goThere(p);
+		return false;
 	}
 }
