@@ -85,29 +85,30 @@ public class Utils {
 	 */
 	public static Position getRandomUnknownCellPosition(WorldMap map, Direction d)
 	{
-		int w = 0;
-		int h = 0;
-		
-		if(d.equals(Direction.LEFT_UP))
-		{
-			w = 0;
-			h = 0;
-		} else if(d.equals(Direction.LEFT_DOWN))
-		{
-			w = 0;
-			h = GameConfig.WORLD_ROWS/2;
-		} else if(d.equals(Direction.RIGHT_UP)){
-			w = GameConfig.WORLD_COLS/2;
-			h = 0;
-		} else if(d.equals(Direction.RIGHT_DOWN)){
-			w = GameConfig.WORLD_COLS/2;
-			h = GameConfig.WORLD_ROWS/2;
-		}
-		
 		for (int i = 0; i < 10; i++) {
 
+			int w = 0;
+			int h = 0;
+			if(d.equals(Direction.LEFT_UP))
+			{
+				w = 0;
+				h = 0;
+			} else if(d.equals(Direction.LEFT_DOWN))
+			{
+				w = 0;
+				h = GameConfig.WORLD_ROWS/2;
+			} else if(d.equals(Direction.RIGHT_UP)){
+				w = GameConfig.WORLD_COLS/2;
+				h = 0;
+			} else if(d.equals(Direction.RIGHT_DOWN)){
+				w = GameConfig.WORLD_COLS/2;
+				h = GameConfig.WORLD_ROWS/2;
+			}
+			
 			int x = w + getRandom().nextInt(GameConfig.WORLD_COLS/2 - 1);
 			int y = h + getRandom().nextInt(GameConfig.WORLD_ROWS/2 - 1);
+			if(x <= 0) x = 0;
+			if(y <= 0) y = 0;
 			Position pos = new Position(x, y);
 			if(map.get(pos).isUnknown())
 				return pos;

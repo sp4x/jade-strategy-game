@@ -25,7 +25,7 @@ public class GameConfig {
 	
 
 	public static final int WORKER_SIGHT = 2; //TODO change
-	public static final int SOLDIER_SIGHT = 5;
+	public static final int SOLDIER_SIGHT = 3;
 	public static final int CITY_CENTER_SIGHT = 8;
 	
 	public static final int WORKER_KNAPSACK_CAPACITY = 10;
@@ -47,8 +47,8 @@ public class GameConfig {
 	public static final long UNIT_TABLE_REFRESH_TIME = 100;
 	public static final long SOLDIERS_TABLE_REFRESH_TIME = 100;
 	
-	public static final int STARTUP_WOOD = 1000; //WORKER_WOOD_COST;
-	public static final int STARTUP_FOOD = 1000; //WORKER_FOOD_COST;
+	public static final int STARTUP_WOOD = 2000; //WORKER_WOOD_COST;
+	public static final int STARTUP_FOOD = 2000; //WORKER_FOOD_COST;
 	
 	public static final int PATH_TOLERANCE = 5;
 	public static final int HIT_RANGE = 10;
@@ -61,7 +61,7 @@ public class GameConfig {
 	
 	public static final boolean STATISTICS = true;
 	public static final long GOALS_UPDATE = 1000;
-	public static final int POPULATION_LIMIT = 30;
+	public static final int POPULATION_LIMIT = 25;
 	public static final int RUNAWAY_DISTANCE = 10;
 	
 	public static final int ENEMY_SIGHTING_BOUND = 10;
