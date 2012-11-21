@@ -290,12 +290,12 @@ public class MilitaryAI extends GoalBasedAI {
 		if(!soldiers.isEmpty()){
 			//choose soldier near then enemy's position
 			for(AID soldier : soldiers){
-				System.out.println("Soldiers: " + soldiers.size());
+				logger.info("Soldiers: " + soldiers.size());
 				Position soldierPosition = World.getInstance().getUnitPosition(soldier);
-				System.out.println("Position: " + soldierPosition);
+				logger.info("Position: " + soldierPosition);
 				Double distance = enemyPosition.distance(soldierPosition);
-				System.out.println("Distance " + distance);
-				System.out.println("Curr distance: " + currDistance);
+				logger.info("Distance " + distance);
+				logger.info("Curr distance: " + currDistance);
 				if(distance < currDistance){
 					currDistance = distance;
 					attacker = soldier;
@@ -306,7 +306,7 @@ public class MilitaryAI extends GoalBasedAI {
 			logger.severe("No units available for attack!");
 		}
 		
-		System.out.println("Attacker: " + attacker + " to Position: " + enemyPosition);
+		logger.info("Attacker: " + attacker + " to Position: " + enemyPosition);
 		orderAttack(attacker, enemyPosition);
 	}
 
