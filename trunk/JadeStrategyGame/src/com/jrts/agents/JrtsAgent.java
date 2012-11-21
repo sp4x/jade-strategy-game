@@ -15,6 +15,7 @@ import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.jrts.agents.MasterAI.Nature;
 import com.jrts.common.GameConfig;
 import com.jrts.common.TeamDF;
 import com.jrts.environment.Cell;
@@ -29,6 +30,8 @@ public abstract class JrtsAgent extends Agent {
 
 	public final Logger logger = Logger.getLogger(Agent.class.getName());
 	public Level logLevel = Level.FINE;
+	
+	Nature nature;
 	
 	private String team;
 
@@ -201,4 +204,14 @@ public abstract class JrtsAgent extends Agent {
 		}
 		return enemies;
 	}
+
+	public Nature getNature() {
+		return nature;
+	}
+
+	public void setNature(Nature nature) {
+		this.nature = nature;
+	}
+	
+	
 }

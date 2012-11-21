@@ -46,6 +46,22 @@ public class EnemySighting implements Serializable {
 		return sightingPosition;
 	}
 	
+	public Position getAWorker() {
+		for (EnemySightingItem item : getEnemies()) {
+			if (item.isWorker())
+				return item.getPosition();
+		}
+		return null;
+	}
+	
+	public Position getASoldier() {
+		for (EnemySightingItem item : getEnemies()) {
+			if (item.isSoldier())
+				return item.getPosition();
+		}
+		return null;
+	}
+	
 	@Override
 	public String toString() {
 		String s = "";

@@ -36,4 +36,12 @@ public class EnemySightingItem implements Serializable {
 	public void setType(CellType type) {
 		this.type = type;
 	}
+	
+	public boolean isWorker() {
+		return type == CellType.WORKER;
+	}
+	
+	public boolean isSoldier() {
+		return type == CellType.SOLDIER;
+	}
 }

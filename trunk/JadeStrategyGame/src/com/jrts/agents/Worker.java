@@ -4,11 +4,13 @@ import com.jrts.behaviours.CollectResources;
 import com.jrts.behaviours.GoUpgradingBehaviour;
 import com.jrts.common.AgentStatus;
 import com.jrts.common.GameConfig;
+import com.jrts.common.Utils;
 import com.jrts.environment.Cell;
 import com.jrts.environment.CellType;
 import com.jrts.environment.Direction;
 import com.jrts.environment.Position;
 import com.jrts.environment.World;
+import com.jrts.environment.WorldMap;
 import com.jrts.logic.AttacksManager;
 import com.jrts.messages.AggiornaRisorse;
 import com.jrts.messages.EnemySighting;
@@ -133,5 +135,13 @@ public class Worker extends Unit {
 	protected void die() {
 		sendNotification(Notification.UNIT_DEATH, getPosition(), getResourceAID());
 		terminate();
+	}
+
+	@Override
+	public void underAttack() {
+		WorldMap worldMap = requestMap();
+		int i = Utils.random.nextInt(Direction.ALL.length);
+		Position p = worldMap.bigStep(getPosition(), Direction.ALL[i], GameConfig.RUNAWAY_DISTANCE);
+		goThere(p);
 	}
 }
