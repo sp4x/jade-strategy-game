@@ -29,7 +29,7 @@ public class MilitaryAI extends GoalBasedAI {
 	int soldierCounter = 0;
 	
 	Battalion battalion;
-	int battalionSize = 4;
+	int battalionSize = 3;
 	int lastCityCenterLife = GameConfig.BUILDING_ENERGY;
 	
 	@Override
@@ -42,7 +42,7 @@ public class MilitaryAI extends GoalBasedAI {
 		
 		addBehaviour(new UpdateUnitTable(this, Soldier.class));
 
-		addBehaviour(new TickerBehaviour(this, 2000) {
+		addBehaviour(new TickerBehaviour(this, 4000) {
 
 			private static final long serialVersionUID = 1746608629262055814L;
 			@Override
@@ -53,25 +53,15 @@ public class MilitaryAI extends GoalBasedAI {
 		
 		addBehaviour(new TickerBehaviour(this, 4000) {
 			
-			@Override
-			protected void onTick() {
-				addExplorer();
-			}
-		});
-		
-		/*
-		addBehaviour(new TickerBehaviour(this, 15000) {
+			int i=0;
 			
 			@Override
 			protected void onTick() {
-				if(Utils.random.nextBoolean())
+				if(i<2)
 					addExplorer();
-				else
-					addPatroler();
+				else i++;
 			}
 		});
-		*/
-
 		
 		addBehaviour(new TickerBehaviour(this, 120000) {
 			private static final long serialVersionUID = 1746608629262055814L;

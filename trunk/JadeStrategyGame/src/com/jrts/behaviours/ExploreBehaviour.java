@@ -18,7 +18,6 @@ public class ExploreBehaviour extends UnitBehaviour {
 	Position cityCenter;
 	boolean exploring;
 	FollowPathBehaviour followPathBehaviour;
-	ArrayList<Direction> directions;
 
 	/**
 	 * 
@@ -29,19 +28,16 @@ public class ExploreBehaviour extends UnitBehaviour {
 		this.soldier = soldier;
 		this.cityCenter = soldier.requestCityCenterPosition();
 		
-		directions = new ArrayList<Direction>();
-		
-		directions.add(Direction.LEFT_UP);
-		directions.add(Direction.LEFT_DOWN);
-		directions.add(Direction.RIGHT_UP);
-		directions.add(Direction.RIGHT_DOWN);
-
-		directions.remove(Utils.getMapAnglePosition(this.soldier.getPosition()));
-		
 		explore();
 	}
 	
 	public void explore(){
+		ArrayList<Direction> directions = new ArrayList<Direction>();
+		directions.add(Direction.LEFT_UP);
+		directions.add(Direction.LEFT_DOWN);
+		directions.add(Direction.RIGHT_UP);
+		directions.add(Direction.RIGHT_DOWN);
+		directions.remove(Utils.getMapAnglePosition(this.soldier.getPosition()));
 		Direction dir = directions.get(Utils.random.nextInt(3));
 		Position posToGo = Utils.getRandomUnknownCellPosition(this.soldier.requestMap(), dir);
 

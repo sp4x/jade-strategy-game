@@ -216,4 +216,14 @@ public class MasterAI extends JrtsAgent implements Team {
 		Position cityCenter = masterPerception.getCityCenter();
 		return World.getInstance().getCell(cityCenter).getEnergy();
 	}
+
+	@Override
+	public int getQueueWorkerCount() {
+		return unitFactory.getQueueWorkerCount();
+	}
+
+	@Override
+	public int getQueueSoldierCount() {
+		return unitFactory.getQueueSoldierCount();
+	}
 }

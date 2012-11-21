@@ -61,10 +61,6 @@ public class Soldier extends Unit {
 	 * @param direction must be one between TOP, RIGHT, DOWN, LEFT
 	 */
 	public void patrol(Direction direction, int distance) {
-		/*
-		Direction direction = Direction.UP;
-		int distance = PatrolBehaviour.DISTANCE_LITTLE;
-		*/
 		addBehaviour(new PatrolBehaviour(this, direction, distance, requestMap()));
 		switchStatus(AgentStatus.PATROLING);
 	}
@@ -76,6 +72,7 @@ public class Soldier extends Unit {
 	
 	public void goToAttack(Position pos)
 	{
+		switchStatus(AgentStatus.GO_FIGHTING);
 		goThere(pos);
 	}
 	
@@ -127,7 +124,7 @@ public class Soldier extends Unit {
 				goThere(order.getPosition());
 				switchStatus(AgentStatus.WAIT_TO_FIGHT);
 			} else if (order.getOrder().equals(AgentStatus.GO_FIGHTING)) {
-				switchStatus(AgentStatus.GO_FIGHTING);
+				goToAttack(order.getPosition());
 			}
 		}
 	}

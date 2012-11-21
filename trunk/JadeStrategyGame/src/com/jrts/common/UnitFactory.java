@@ -24,6 +24,9 @@ public class UnitFactory extends Thread {
 	long unitCounter = 0;
 	
 	LinkedBlockingQueue<Class<? extends Unit>> queue;
+
+	int workerQueueCount = 0;
+	int soldierQueueCount = 0;
 	
 	public UnitFactory(String team, PlatformController controller, Position cityCenter, Nature nature) {
 		this.team = team;
@@ -49,6 +52,10 @@ public class UnitFactory extends Thread {
 //		logger.log(logLevel, team + " request to train a " + claz.getSimpleName());
 		try {
 			queue.put(claz);
+			
+			if(claz.getName().contains("Worker")) workerQueueCount++;
+			else if(claz.getName().contains("Soldier")) soldierQueueCount++;
+			
 		} catch (InterruptedException e) {
 		}
 	}
@@ -73,6 +80,9 @@ public class UnitFactory extends Thread {
 				synchronized (this) {
 					agentController = controller.createNewAgent(unitName, claz.getName(), args);
 					agentController.start();
+
+					if(claz.getName().contains("Worker")) workerQueueCount--;
+					else if(claz.getName().contains("Soldier")) soldierQueueCount--;
 				}
 				IUnit o2a = agentController.getO2AInterface(IUnit.class);
 				World.getInstance().addUnit(unitPosition, unitName, o2a);
@@ -84,5 +94,13 @@ public class UnitFactory extends Thread {
 		else{
 			logger.severe(team + ":Cannot instantiate the unit");
 		}
+	}
+
+	public int getQueueWorkerCount() {
+		return workerQueueCount;
+	}
+
+	public int getQueueSoldierCount() {
+		return soldierQueueCount;
 	}
 }
