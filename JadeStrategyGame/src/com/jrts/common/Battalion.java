@@ -3,6 +3,7 @@ package com.jrts.common;
 import jade.core.AID;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 
 import com.jrts.environment.Position;
@@ -52,5 +53,8 @@ public class Battalion {
 		
 		return null;
 	}
-	
+
+	public Collection<AID> getSoldiersList() {
+		return soldiers.values();
+	}
 }

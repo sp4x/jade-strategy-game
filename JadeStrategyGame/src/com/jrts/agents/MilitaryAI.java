@@ -5,6 +5,7 @@ import jade.core.behaviours.TickerBehaviour;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 import com.jrts.behaviours.PatrolBehaviour;
 import com.jrts.behaviours.UpdateUnitTable;
@@ -50,6 +51,15 @@ public class MilitaryAI extends GoalBasedAI {
 			}
 		});
 		
+		addBehaviour(new TickerBehaviour(this, 5000) {
+			
+			@Override
+			protected void onTick() {
+				addExplorer();
+			}
+		});
+		
+		/*
 		addBehaviour(new TickerBehaviour(this, 15000) {
 			
 			@Override
@@ -60,9 +70,31 @@ public class MilitaryAI extends GoalBasedAI {
 					addPatroler();
 			}
 		});
+		*/
+
 		
+		addBehaviour(new TickerBehaviour(this, 120000) {
+			private static final long serialVersionUID = 1746608629262055814L;
+			@Override
+			protected void onTick() {
+
+				Collection<Position> cityCenterPositions = requestMap().getKnownCityCenters();
+				cityCenterPositions.remove(cityCenter);
+				if(cityCenterPositions.size() > 0)
+				{
+					System.out.println("SIZE > 0");
+					Position posToAttack = cityCenter.nearest(cityCenterPositions);
+					for (AID aid : battalion.getSoldiersList()) {
+						Order order = new Order(AgentStatus.GO_FIGHTING);
+						order.setPosition(posToAttack);
+						giveOrder(aid, order);
+					}
+				} else System.out.println("SIZE < 0 :(");
+				
+			}
+		});
 		
-		addBehaviour(new TickerBehaviour(this, 5000) {
+		addBehaviour(new TickerBehaviour(this, 3000) {
 			private static final long serialVersionUID = 1746608629262055814L;
 			@Override
 			protected void onTick() {
@@ -75,7 +107,7 @@ public class MilitaryAI extends GoalBasedAI {
 						Position pos = battalion.addSoldier(soldier); 
 						if(pos != null)
 						{						
-							Order order = new Order(AgentStatus.GO_AND_WAIT_TO_FIGHT);
+							Order order = new Order(AgentStatus.WAIT_TO_FIGHT);
 							order.setPosition(pos);
 							giveOrder(soldier, order);
 						}
@@ -249,7 +281,7 @@ public class MilitaryAI extends GoalBasedAI {
 		logger.log(logLevel, "CALCOLO EURISTICA, VALORE: " + heuristic + "\n" +
 				"----------------- End OnEnemySighting ----------------\n");
 				
-		attackEnemy(e.getEnemies().get(0).getPosition());
+		//attackEnemy(e.getEnemies().get(0).getPosition());
 	}
 	
 	@Override
