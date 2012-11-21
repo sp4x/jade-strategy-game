@@ -53,14 +53,14 @@ public class GameConfig {
 	public static final int TREE_ENERGY = 500;
 	public static final int FARM_ENERGY = 500;
 	
-	public static final int ATTACKS_SLEEP_TIME = 3000;
-	
 	public static final boolean STATISTICS = true;
 	public static final long GOALS_UPDATE = 1000;
 	public static final int POPULATION_LIMIT = 25;
 	public static final int RUNAWAY_DISTANCE = 10;
 	
+	public static final int ATTACKS_SLEEP_TIME = 3000;
 	public static final int ENEMY_SIGHTING_BOUND = 10;
+	public static final int BATTALION_SIZE = 3;
 	
 	public static int BUILDING_ENERGY = 1000;
 	public static int FOOD_MIN_DISTANCE = 3;

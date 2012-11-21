@@ -25,7 +25,7 @@ public abstract class GoalBasedAI extends JrtsAgent {
 	UnitFactory unitFactory;
 	ResourcesContainer resourcesContainer;
 //	WorldMap worldMap;
-	Position cityCenter;
+	Position myCityCenter;
 	Nature nature;
 	
 	UnitTable unitTable = new UnitTable();
@@ -43,15 +43,13 @@ public abstract class GoalBasedAI extends JrtsAgent {
 			setTeamName((String) args[i++]);
 			unitFactory = (UnitFactory) args[i++];
 			resourcesContainer = (ResourcesContainer) args[i++];
-			cityCenter = (Position) args[i++];
+			myCityCenter = (Position) args[i++];
 			nature = (Nature) args[i++];
 		} else {
 			logger.severe("Needs team's name");
 			System.exit(1);
 		}
 	}
-	
-	public abstract void onGoalsChanged();
 
 	public void giveOrder(AID target, Order order) {
 		sendNotification(Notification.ORDER, order, target);
@@ -69,8 +67,6 @@ public abstract class GoalBasedAI extends JrtsAgent {
 	protected void handleNotification(Notification n) {
 		if (n.getSubject().equals(Notification.GOAL_LEVELS)) {
 			this.goalLevels = (GoalLevels) n.getContentObject();
-			onGoalsChanged();
-			
 		} else if (n.getSubject().equals(Notification.TEAM_DECEASED)) {
 			Collection<AID> units = unitTable.getAllUnits();
 			for (AID unit : units) {
