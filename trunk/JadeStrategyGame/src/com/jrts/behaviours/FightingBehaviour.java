@@ -12,52 +12,47 @@ public class FightingBehaviour extends UnitBehaviour {
 	Soldier soldier;
 	String target;
 	Position targetPosition;
-	Direction targetDirection;
 	FollowPathBehaviour followPathBehaviour;
+	boolean done = false;
 
-	//in case the soldier has been attacked
-	public FightingBehaviour(Soldier soldier, String attacker) {
-		this(soldier, attacker, null);
-	}
-
-	//in case a soldier decided to attack a target placed in enemyPosition
-	public FightingBehaviour(Soldier soldier, String target,
-			Position enemyPosition) {
+	public FightingBehaviour(Soldier soldier, String target) {
 		super(true, soldier);
 		this.soldier = soldier;
 		this.target = target;
-		this.targetPosition = enemyPosition;
 	}
 
 	@Override
 	public void myAction() {
-		//if I know the target position I need to be next to it
-		if (targetPosition != null && !soldier.getPosition().isNextTo(targetPosition)) {
-			this.followPathBehaviour = new FollowPathBehaviour(soldier, targetPosition);
-		} else if (followPathBehaviour != null) {
-			followPathBehaviour.myAction();
-			if (followPathBehaviour.done())
-				followPathBehaviour = null;
-		} else if (targetDirection == null) {
-			findDirection();
+		EnemySightingItem enemy = soldier.getLastEnemySighting().getById(target);
+		//if the enemy is not in sight or it's dead
+		if (enemy == null) {
+			done = true;
 		} else {
-			soldier.sendHit(targetDirection);
+			Position enemyCurrentPosition = enemy.getPosition();
+			//if it's close attack
+			if (soldier.getPosition().isNextTo(enemyCurrentPosition))
+				soldier.sendHit(soldier.getPosition().getDirectionTo(enemyCurrentPosition));
+			else //walk until it's in range
+				reach(enemyCurrentPosition);
 		}
 	}
 
-	private void findDirection() {
-		EnemySightingItem item = soldier.getLastEnemySighting().getById(target);
-		if (item != null) {
-			Position p = item.getPosition();
-			if (soldier.getPosition().isNextTo(p)) {
-				targetPosition = p;
-				targetDirection = soldier.getPosition().getDirectionTo(p);
-			}
+	private void reach(Position enemyCurrentPosition) {
+		if (targetPosition == null) {
+			targetPosition = enemyCurrentPosition;
+		}
+		
+		if (!enemyCurrentPosition.equals(targetPosition) || followPathBehaviour == null) {
+			targetPosition = enemyCurrentPosition;
+			followPathBehaviour = new FollowPathBehaviour(soldier, targetPosition);
+		}
+		else {
+			followPathBehaviour.myAction();
 		}
 	}
 
 	@Override
 	public boolean done() {
-		return soldier.getLastEnemySighting().getById(target) == null;
+		return done;
 	}
 }

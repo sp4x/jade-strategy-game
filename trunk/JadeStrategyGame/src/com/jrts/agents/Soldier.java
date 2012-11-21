@@ -1,8 +1,8 @@
 package com.jrts.agents;
 
 import jade.core.AID;
-import jade.lang.acl.ACLMessage;
 
+import com.jrts.agents.MasterAI.Nature;
 import com.jrts.behaviours.ExploreBehaviour;
 import com.jrts.behaviours.FightingBehaviour;
 import com.jrts.behaviours.PatrolBehaviour;
@@ -13,7 +13,6 @@ import com.jrts.environment.Direction;
 import com.jrts.environment.Position;
 import com.jrts.logic.AttacksManager;
 import com.jrts.messages.EnemySighting;
-import com.jrts.messages.MessageSubject;
 import com.jrts.messages.Notification;
 import com.jrts.messages.Order;
 
@@ -86,7 +85,8 @@ public class Soldier extends Unit {
 		lastEnemySighting = enemies;
 		sendNotification(Notification.ENEMY_SIGHTED, enemies, getMilitaryAID());
 		
-		if(getStatus().equals(AgentStatus.GO_FIGHTING))
+		//add some heuristic to determine wether attack or not
+		if(getStatus().equals(AgentStatus.GO_FIGHTING) || nature == Nature.AGGRESSIVE)
 		{
 			String target = enemies.getEnemies().iterator().next().getId();
 			attack(target);
@@ -94,16 +94,13 @@ public class Soldier extends Unit {
 	}
 	
 	public void attack(String target) {
-		ACLMessage proposal = new ACLMessage(ACLMessage.PROPOSE);
-		proposal.setConversationId(MessageSubject.FIGHT);
-		proposal.addReceiver(new AID(target, AID.ISLOCALNAME));
-		send(proposal);
+		AID targetAid = new AID(target, AID.ISLOCALNAME);
+		sendNotification(Notification.ATTACK, id, targetAid);
 	}
 	
-	@Override
-	public void engageFight(String target, Position targetPosition) {
+	public void engageFight(String target) {
 		switchStatus(AgentStatus.FIGHTING);
-		addBehaviour(new FightingBehaviour(this, target, targetPosition));
+		addBehaviour(new FightingBehaviour(this, target));
 	}
 	
 	@Override
@@ -130,6 +127,7 @@ public class Soldier extends Unit {
 				goToAttack(order.getPosition());
 			}
 		}
+			
 	}
 
 	@Override
@@ -139,8 +137,11 @@ public class Soldier extends Unit {
 	}
 
 	@Override
-	public boolean onAttackProposal(String attacker) {
-		engageFight(attacker, null);
+	public boolean onAttacNotification(String attacker) {
+		//reject fight if the attacker has not been spotted yet
+		if (lastEnemySighting == null || lastEnemySighting.getById(attacker) == null)
+			return false;
+		engageFight(attacker);
 		return true;
 	}
 

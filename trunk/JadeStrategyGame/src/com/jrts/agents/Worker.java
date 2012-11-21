@@ -138,7 +138,7 @@ public class Worker extends Unit {
 	}
 
 	@Override
-	public boolean onAttackProposal(String attacker) {
+	public boolean onAttacNotification(String attacker) {
 		WorldMap worldMap = requestMap();
 		int i = Utils.random.nextInt(Direction.ALL.length);
 		Position p = worldMap.bigStep(getPosition(), Direction.ALL[i], GameConfig.RUNAWAY_DISTANCE);
@@ -146,9 +146,4 @@ public class Worker extends Unit {
 		return false;
 	}
 
-	@Override
-	public void engageFight(String target, Position targetPosition) {
-		// TODO Auto-generated method stub
-		
-	}
 }

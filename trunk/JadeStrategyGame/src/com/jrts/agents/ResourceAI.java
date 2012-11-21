@@ -97,6 +97,7 @@ public class ResourceAI extends GoalBasedAI {
 		int neededUnits = goalLevels.extimateNeededUnits() - population;
 		boolean train = neededUnits > 0
 				&& population < GameConfig.POPULATION_LIMIT
+				&& unitFactory.getQueueWorkerCount() == 0
 				&& resourcesContainer.isThereEnoughFood(GameConfig.WORKER_FOOD_COST)
 				&& resourcesContainer.isThereEnoughWood(GameConfig.WORKER_WOOD_COST);
 

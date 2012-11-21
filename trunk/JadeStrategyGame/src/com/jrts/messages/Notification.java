@@ -25,6 +25,8 @@ public class Notification implements Serializable {
 	public static final String RESOURCES_FOUND = "resources_found";
 	public static final String CITYCENTER_UNDER_ATTACK = "citycenter_under_attack";
 
+	public static final String ATTACK = "attack";
+
 	String subject;
 	Serializable contentObject;
 
