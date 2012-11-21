@@ -18,7 +18,7 @@ import com.jrts.messages.Order;
 
 @SuppressWarnings("serial")
 public class ResourceAI extends GoalBasedAI {
-	
+
 	int workersCounter = 0;
 
 	boolean noMoreFood = false, noMoreWood = false;
@@ -51,9 +51,9 @@ public class ResourceAI extends GoalBasedAI {
 		String[] orders = extimateOrderPriority();
 		int freeWorkers = unitTable.getFreeUnits().size();
 		int busyWorkers = unitTable.getBusyUnits().size();
-		int neededWorkers = extimateNumWorkers();
-		
-		//too much busy workers
+		int neededWorkers = goalLevels.extimateResourceUnits();
+
+		// too much busy workers
 		if (busyWorkers > neededWorkers) {
 			String orderToCancel = orders[1];
 			worker = unitTable.getAUnitWithStatus(orderToCancel);
@@ -62,60 +62,59 @@ public class ResourceAI extends GoalBasedAI {
 				worker = unitTable.getAUnitWithStatus(orderToCancel);
 			}
 			order = new Order(AgentStatus.FREE);
-		
-		//free workers to employ	
+
+			// free workers to employ
 		} else if (freeWorkers > 0 && busyWorkers < neededWorkers) {
 			worker = unitTable.getAFreeUnit();
 			order = new Order(orders[0]);
-		
-		//reassign workers if needed
+
+			// reassign workers if needed
 		} else {
 			int food = resourcesContainer.getFood();
 			int wood = resourcesContainer.getWood();
-			//too much food and wood needed
-			if (food > 2*wood && orders[0].equals(AgentStatus.WOOD_CUTTING))
-				worker = unitTable.getAUnitWithStatus(AgentStatus.FOOD_COLLECTING);
-			//too much wood and food needed
-			else if (wood > 2*food && orders[0].equals(AgentStatus.FOOD_COLLECTING))
+			// too much food and wood needed
+			if (food > 2 * wood && orders[0].equals(AgentStatus.WOOD_CUTTING))
+				worker = unitTable
+						.getAUnitWithStatus(AgentStatus.FOOD_COLLECTING);
+			// too much wood and food needed
+			else if (wood > 2 * food
+					&& orders[0].equals(AgentStatus.FOOD_COLLECTING))
 				worker = unitTable.getAUnitWithStatus(AgentStatus.WOOD_CUTTING);
 			order = new Order(orders[0]);
 		}
-		
+
 		if (worker != null && order != null) {
 			giveOrder(worker, order);
 			unitTable.put(worker, order.getOrder());
 		}
 	}
 
-	public boolean populationLimitReached() {
-		int soldiersCounter = getTeamDF().searchByUnitType(Soldier.class).length;
-		return workersCounter + soldiersCounter >= GameConfig.POPULATION_LIMIT;
-	}
+	
 
 	protected void trainWorkers() {
-		//heuristic based on costs and population
-		int minFood = GameConfig.WORKER_FOOD_COST*(workersCounter + 1);
-		int minWood = GameConfig.WORKER_WOOD_COST*(workersCounter + 1);
-		if (resourcesContainer.getFood() >= minFood && resourcesContainer.getWood() >= minWood) {
-			if (resourcesContainer
-					.isThereEnoughFood(GameConfig.WORKER_FOOD_COST)
-					&& resourcesContainer
-							.isThereEnoughWood(GameConfig.WORKER_WOOD_COST)
-					&& !populationLimitReached()) {
+		// heuristic based on costs and population
+		int population = getTeamDF().countUnits() - unitFactory.getQueuedUnitsCount();
+		int neededUnits = goalLevels.extimateNeededUnits() - population;
+		boolean train = neededUnits > 0
+				&& population < GameConfig.POPULATION_LIMIT
+				&& resourcesContainer.isThereEnoughFood(GameConfig.WORKER_FOOD_COST)
+				&& resourcesContainer.isThereEnoughWood(GameConfig.WORKER_WOOD_COST);
 
-				resourcesContainer.removeFood(GameConfig.WORKER_FOOD_COST);
-				resourcesContainer.removeWood(GameConfig.WORKER_WOOD_COST);
-				unitFactory.trainUnit(Worker.class);
-				workersCounter++;
-			}
+		if (train) {
+			resourcesContainer.removeFood(GameConfig.WORKER_FOOD_COST);
+			resourcesContainer.removeWood(GameConfig.WORKER_WOOD_COST);
+			unitFactory.trainUnit(Worker.class);
+			workersCounter++;
 		}
 	}
 
 	public String[] extimateOrderPriority() {
 		if (noMoreFood && !noMoreWood)
-			return new String[]{AgentStatus.WOOD_CUTTING, AgentStatus.FOOD_COLLECTING};
+			return new String[] { AgentStatus.WOOD_CUTTING,
+					AgentStatus.FOOD_COLLECTING };
 		if (!noMoreFood && noMoreWood)
-			return new String[]{AgentStatus.FOOD_COLLECTING, AgentStatus.WOOD_CUTTING};
+			return new String[] { AgentStatus.FOOD_COLLECTING,
+					AgentStatus.WOOD_CUTTING };
 		if (noMoreFood && noMoreWood)
 			return null;
 
@@ -125,49 +124,17 @@ public class ResourceAI extends GoalBasedAI {
 		} else {
 			foodRatio = 1;
 		}
-		
-		int woodCutters = unitTable.getUnitsWithStatus(AgentStatus.WOOD_CUTTING).size();
-		int foodCollectors = unitTable.getUnitsWithStatus(AgentStatus.FOOD_COLLECTING).size();
+
+		int woodCutters = unitTable
+				.getUnitsWithStatus(AgentStatus.WOOD_CUTTING).size();
+		int foodCollectors = unitTable.getUnitsWithStatus(
+				AgentStatus.FOOD_COLLECTING).size();
 
 		if (foodRatio * foodCollectors <= woodCutters)
-			return new String[]{AgentStatus.FOOD_COLLECTING, AgentStatus.WOOD_CUTTING};
-		return new String[]{AgentStatus.WOOD_CUTTING, AgentStatus.FOOD_COLLECTING};
-	}
-
-	public int extimateNumWorkers() {
-		switch (goalLevels.getResources()) {
-		case HIGH:
-			return 4;
-		case MEDIUM:
-			return 3;
-		case LOW:
-			return 2;
-		default:
-			return 0;
-		}
-	}
-
-	@Deprecated
-	public boolean assignWoodcutter() {
-		AID worker = unitTable.getAFreeUnit();
-		if (worker != null) {
-			Order order = new Order(AgentStatus.WOOD_CUTTING);
-			giveOrder(worker, order);
-			unitTable.put(worker, order.getOrder());
-			return true;
-		}
-		return false;
-	}
-
-	@Deprecated
-	public boolean assignFoodCollector() {
-		AID worker = unitTable.getAFreeUnit();
-		if (worker != null) {
-			Order order = new Order(AgentStatus.FOOD_COLLECTING);
-			unitTable.put(worker, order.getOrder());
-			return true;
-		}
-		return false;
+			return new String[] { AgentStatus.FOOD_COLLECTING,
+					AgentStatus.WOOD_CUTTING };
+		return new String[] { AgentStatus.WOOD_CUTTING,
+				AgentStatus.FOOD_COLLECTING };
 	}
 
 	public UnitTable getWorkersMap() {
@@ -200,8 +167,8 @@ public class ResourceAI extends GoalBasedAI {
 
 		if (n.getSubject().equals(Notification.NO_MORE_RESOURCE)) {
 			CellType resourceType = (CellType) n.getContentObject();
-			logger.log(logLevel, getAID().getName() + ": no more " + resourceType
-					+ " in our known world..");
+			logger.log(logLevel, getAID().getName() + ": no more "
+					+ resourceType + " in our known world..");
 			sendNotification(Notification.NO_MORE_RESOURCE, resourceType,
 					getMasterAID());
 			if (resourceType.equals(CellType.FOOD))
