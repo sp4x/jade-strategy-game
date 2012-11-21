@@ -36,33 +36,29 @@ public class MilitaryAI extends GoalBasedAI {
 	protected void setup() {
 		super.setup();
 		
+		addBehaviour(new TickerBehaviour(this, 1000) {
+
+			private static final long serialVersionUID = 1746608629262055814L;
+			@Override
+			protected void onTick() {
+
+				manageSoldiers();
+				managePatroling();
+				manageExploring();
+				manageFighting();
+				//manageBattaiolon();
+				//manageWars();
+				
+			}
+		});
+				
 		Position battailonPosition = Utils.getBattalionCenter(requestMap(), cityCenter, battalionSize);
 		if(battailonPosition != null)
 			this.battalion = new Battalion(battailonPosition, battalionSize);
 		
 		addBehaviour(new UpdateUnitTable(this, Soldier.class));
 
-		addBehaviour(new TickerBehaviour(this, 4000) {
-
-			private static final long serialVersionUID = 1746608629262055814L;
-			@Override
-			protected void onTick() {
-				requestSoldierCreation();
-			}
-		});
-		
-		addBehaviour(new TickerBehaviour(this, 4000) {
-			
-			int i=0;
-			
-			@Override
-			protected void onTick() {
-				if(i<2)
-					addExplorer();
-				else i++;
-			}
-		});
-		
+		/*
 		addBehaviour(new TickerBehaviour(this, 120000) {
 			private static final long serialVersionUID = 1746608629262055814L;
 			@Override
@@ -82,7 +78,8 @@ public class MilitaryAI extends GoalBasedAI {
 				
 			}
 		});
-		
+		*/
+		/*
 		addBehaviour(new TickerBehaviour(this, 3000) {
 			private static final long serialVersionUID = 1746608629262055814L;
 			@Override
@@ -105,10 +102,66 @@ public class MilitaryAI extends GoalBasedAI {
 				}
 			}
 		});
-		
-		trainSoldier();
+		*/
+		//trainSoldier();
 	}
 
+	private void manageSoldiers() {		
+		int numFreeSoldiers = unitTable.getFreeUnits().size();
+		
+		int neededAttackingSoldiers = goalLevels.extimateFightingUnits() - unitTable.getUnitsWithStatus(AgentStatus.WAIT_TO_FIGHT).size();
+		int neededPatrolingSoldiers = goalLevels.extimatePatrolingUnits() - unitTable.getUnitsWithStatus(AgentStatus.PATROLING).size();
+		int neededExploringSoldiers = goalLevels.extimateExplorationUnits() - unitTable.getUnitsWithStatus(AgentStatus.EXPLORING).size();
+		int neededResources = goalLevels.extimateResourceUnits();
+		
+		int heuristic = neededAttackingSoldiers + neededPatrolingSoldiers + neededExploringSoldiers - numFreeSoldiers - neededResources;		
+		if(heuristic > 0) requestSoldierCreation();
+	}
+	
+	private void manageFighting() {
+	
+		if(goalLevels.getAttack() == GoalPriority.LOW)
+			return;
+		
+		if(goalLevels.getAttack() == GoalPriority.HIGH){
+			Collection<Position> cityCenterPositions = requestMap().getKnownCityCenters();
+			cityCenterPositions.remove(cityCenter);
+			if(battalion.size() > 0 && cityCenterPositions.size() > 0)
+			{
+				Position posToAttack = cityCenter.nearest(cityCenterPositions);
+				for (AID aid : battalion.getSoldiersList()) {
+					Order order = new Order(AgentStatus.GO_FIGHTING);
+					order.setPosition(posToAttack);
+					giveOrder(aid, order);
+				}
+			}
+		}
+		
+		addUnitToBattailon();
+	}
+	
+	private void managePatroling() {
+
+		int numPatrolingSoldiers = unitTable.getUnitsWithStatus(AgentStatus.PATROLING).size();
+		int neededPatrolingSoldiers = goalLevels.extimatePatrolingUnits();
+		
+		if(neededPatrolingSoldiers > numPatrolingSoldiers)
+			addPatroler();
+		else if(neededPatrolingSoldiers < numPatrolingSoldiers)
+			giveOrder(unitTable.getAUnitWithStatus(AgentStatus.PATROLING), new Order(AgentStatus.FREE));
+	}
+	
+	private void manageExploring() {
+
+		int numExploringSoldiers = unitTable.getUnitsWithStatus(AgentStatus.EXPLORING).size();
+		int neededExploringSoldiers = goalLevels.extimateExplorationUnits();
+		
+		if(neededExploringSoldiers > numExploringSoldiers)
+			addExplorer();
+		else if(neededExploringSoldiers < numExploringSoldiers)
+			giveOrder(unitTable.getAUnitWithStatus(AgentStatus.EXPLORING), new Order(AgentStatus.FREE));
+	}
+	
 	public void requestSoldierCreation()
 	{
 		if (resourcesContainer.isThereEnoughFood(GameConfig.SOLDIER_FOOD_COST) && 
@@ -187,6 +240,25 @@ public class MilitaryAI extends GoalBasedAI {
 			}
 			
 			giveOrder(soldier, order);
+		}
+	}
+	
+	public void addUnitToBattailon()
+	{
+		AID soldier = getUnitTable().getAFreeUnit();
+		if(soldier != null)
+		{
+			if(!battalion.isFull())
+			{
+				Position pos = battalion.addSoldier(soldier); 
+				if(pos != null)
+				{						
+					Order order = new Order(AgentStatus.WAIT_TO_FIGHT);
+					order.setPosition(pos);
+					giveOrder(soldier, order);
+				}
+
+			}
 		}
 	}
 	

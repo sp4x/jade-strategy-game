@@ -114,6 +114,9 @@ public class Soldier extends Unit {
 			this.lastOrderReceived = order;
 			
 			if (order.getOrder().equals(AgentStatus.PATROLING)) {
+				goThere(getCityCenter());
+				switchStatus(AgentStatus.FREE);
+			}else if (order.getOrder().equals(AgentStatus.PATROLING)) {
 				Direction dir = order.getDirection();
 				int distance = order.getDistance();
 				patrol(dir, distance);
