@@ -56,17 +56,25 @@ public class MilitaryAI extends GoalBasedAI {
 		
 		addBehaviour(new UpdateUnitTable(this, Soldier.class));
 
-		/*
-		addBehaviour(new TickerBehaviour(this, 120000) {
+
+		addBehaviour(new TickerBehaviour(this, 50000) {
+			private static final long serialVersionUID = 1746608629262055814L;
+			@Override
+			protected void onTick() {
+				addUnitToBattalion();
+			}
+		});
+		
+		addBehaviour(new TickerBehaviour(this, 60000) {
 			private static final long serialVersionUID = 1746608629262055814L;
 			@Override
 			protected void onTick() {
 
 				Collection<Position> cityCenterPositions = requestMap().getKnownCityCenters();
-				cityCenterPositions.remove(cityCenter);
+				cityCenterPositions.remove(myCityCenter);
 				if(cityCenterPositions.size() > 0)
 				{
-					Position posToAttack = cityCenter.nearest(cityCenterPositions);
+					Position posToAttack = myCityCenter.nearest(cityCenterPositions);
 					for (AID aid : battalion.getSoldiersList()) {
 						Order order = new Order(AgentStatus.GO_FIGHTING);
 						order.setPosition(posToAttack);
@@ -76,7 +84,7 @@ public class MilitaryAI extends GoalBasedAI {
 				
 			}
 		});
-		*/
+
 		/*
 		addBehaviour(new TickerBehaviour(this, 3000) {
 			private static final long serialVersionUID = 1746608629262055814L;
@@ -107,7 +115,9 @@ public class MilitaryAI extends GoalBasedAI {
 	private void manageSoldiers() {		
 		int numFreeSoldiers = unitTable.getFreeUnits().size();
 		int numQueueSoldiers = unitFactory.getQueueSoldierCount();
-
+		
+		//System.out.println("NUM Q SOLDIER:" + numQueueSoldiers);
+		
 		int neededAttackingSoldiers = goalLevels.extimateFightingUnits() - unitTable.getUnitsWithStatus(AgentStatus.WAIT_TO_FIGHT).size();
 		int neededPatrolingSoldiers = goalLevels.extimatePatrolingUnits() - unitTable.getUnitsWithStatus(AgentStatus.PATROLING).size();
 		int neededExploringSoldiers = goalLevels.extimateExplorationUnits() - unitTable.getUnitsWithStatus(AgentStatus.EXPLORING).size();
@@ -115,6 +125,8 @@ public class MilitaryAI extends GoalBasedAI {
 		
 		int heuristic = neededAttackingSoldiers + neededPatrolingSoldiers + neededExploringSoldiers - numFreeSoldiers - numQueueSoldiers - neededResources;	
 		if(heuristic > 0) requestSoldierCreation();
+		
+		//System.out.println("HEURISTIC:" + heuristic);
 	}
 	
 	private void manageFighting() {

@@ -105,8 +105,10 @@ public class WorldViewPanel extends JPanel {
 					
 				}
 				
+				/*
 				if (AttacksManager.isThereAnHit(i, j))
 					icon = ImageLoader.hitIcon;
+				*/
 				
 				currCellLabel.setIcon(icon);
 			}

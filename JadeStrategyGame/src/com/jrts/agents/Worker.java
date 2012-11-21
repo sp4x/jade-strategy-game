@@ -29,6 +29,7 @@ public class Worker extends Unit {
 
 	public Worker(String id, Position position) {
 		super(id, position);
+		
 		setLife(GameConfig.WORKER_LIFE);
 		setSpeed(GameConfig.WORKER_SPEED);
 		setForceOfAttack(GameConfig.WORKER_DAMAGES);

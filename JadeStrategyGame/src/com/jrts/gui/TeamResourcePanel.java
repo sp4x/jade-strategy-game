@@ -26,7 +26,7 @@ public class TeamResourcePanel extends JPanel{
 		
 		this.team = team;
 		
-		TitledBorder border = BorderFactory.createTitledBorder(team.getTeamName());
+		TitledBorder border = BorderFactory.createTitledBorder(team.getTeamName() + " (" + team.getTeamNature().toString().toLowerCase() + ")");
 
 		this.food = new JLabel(ImageLoader.foodIcon);
 		this.wood = new JLabel(ImageLoader.woodIcon);
@@ -51,7 +51,7 @@ public class TeamResourcePanel extends JPanel{
 		}
 		
 		super.setBorder(border);
-		super.setPreferredSize(new Dimension(200, 50));
+		super.setPreferredSize(new Dimension(215, 50));
 
 		super.add(this.food);
 		super.add(this.wood);

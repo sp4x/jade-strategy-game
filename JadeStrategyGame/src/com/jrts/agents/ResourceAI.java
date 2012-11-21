@@ -92,6 +92,8 @@ public class ResourceAI extends GoalBasedAI {
 	
 
 	protected void trainWorkers() {
+		if(unitFactory.getQueueWorkerCount() > 1) return;
+		
 		// heuristic based on costs and population
 		int population = getTeamDF().countUnits() - unitFactory.getQueuedUnitsCount();
 		int neededUnits = goalLevels.extimateNeededUnits() - population;

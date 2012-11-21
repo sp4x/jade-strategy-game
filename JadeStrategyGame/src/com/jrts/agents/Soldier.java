@@ -71,8 +71,8 @@ public class Soldier extends Unit {
 	
 	public void goToAttack(Position pos)
 	{
-		switchStatus(AgentStatus.GO_FIGHTING);
-		goThere(pos);
+		switchStatus(AgentStatus.GO_FIGHTING);		
+		//addBehaviour(new FightingBehaviour(this, pos));
 	}
 	
 	@Override

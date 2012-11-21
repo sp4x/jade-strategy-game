@@ -9,6 +9,7 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.HashMap;
@@ -16,11 +17,13 @@ import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSlider;
+import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -167,18 +170,27 @@ public class MainFrame extends JFrame {
 		infoPanel.setMinimumSize(d);
 		infoPanel.setMaximumSize(d);
 
+		/*
+		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.CENTER);
+		JPanel panel1 = new JPanel();
+		panel1.add(new JLabel("lalal"));
+		tabbedPane.addTab("Tab 1", ImageLoader.soldierIcon1, panel1, "Does nothing");
+		tabbedPane.setMnemonicAt(0, KeyEvent.VK_1);
+		tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
+		*/
 		d = new Dimension(200, 300);
-		JPanel leftInformationPanel = new JPanel();
-		leftInformationPanel.setPreferredSize(d);
-		leftInformationPanel.setSize(d);
-		leftInformationPanel.setMinimumSize(d);
-		leftInformationPanel.setMaximumSize(d);
+		JPanel leftPanel = new JPanel();
+		leftPanel.setPreferredSize(d);
+		leftPanel.setSize(d);
+		leftPanel.setMinimumSize(d);
+		leftPanel.setMaximumSize(d);
 
-		leftInformationPanel.add(this.infoPanel);
-		leftInformationPanel.add(settingsPanel);
+		leftPanel.add(this.infoPanel);
+		leftPanel.add(settingsPanel);
+		//leftPanel.add(tabbedPane);
 		
 		JPanel statisticsPanel = new JPanel();
-		leftInformationPanel.add(statisticsPanel);
+		leftPanel.add(statisticsPanel);
 		
 		statisticsPanel.add(new JLabel("Actions per seconds:"));
 		apsCounter = new JLabel("nothing");
@@ -218,7 +230,7 @@ public class MainFrame extends JFrame {
 		getContentPane().add(rightPanel, BorderLayout.EAST);
 		getContentPane().add(center, BorderLayout.CENTER);
 		// getContentPane().add(worldViewPanel, BorderLayout.CENTER);
-		getContentPane().add(leftInformationPanel, BorderLayout.WEST);
+		getContentPane().add(leftPanel, BorderLayout.WEST);
 
 		JPanel footer = new JPanel();
 		d = new Dimension(500, 30);
