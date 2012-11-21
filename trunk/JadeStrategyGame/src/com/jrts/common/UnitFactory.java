@@ -76,7 +76,7 @@ public class UnitFactory extends Thread {
 			//Instantiate the unit
 			AgentController agentController;
 			try {
-				Object[] args = {unitPosition, team, nature};
+				Object[] args = {cityCenter, unitPosition, team, nature};
 				synchronized (this) {
 					agentController = controller.createNewAgent(unitName, claz.getName(), args);
 					agentController.start();

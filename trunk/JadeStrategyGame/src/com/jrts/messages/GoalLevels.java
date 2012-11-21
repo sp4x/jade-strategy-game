@@ -2,6 +2,7 @@ package com.jrts.messages;
 
 import jade.util.leap.Serializable;
 
+import com.jrts.common.AgentStatus;
 import com.jrts.common.GoalPriority;
 
 public class GoalLevels implements Serializable {
@@ -29,6 +30,42 @@ public class GoalLevels implements Serializable {
 		this.exploration = exploration;
 	}
 
+	public int extimateResourceUnits() {
+		
+		if(getResources() == GoalPriority.LOW) return 2;
+		else if(getResources() == GoalPriority.MEDIUM) return 4;
+		else if(getResources() == GoalPriority.HIGH) return 6;
+		
+		return 0;
+	}
+	
+	public int extimateFightingUnits() {
+
+		if(getAttack() == GoalPriority.LOW) return 0;
+		else if(getAttack() == GoalPriority.MEDIUM) return 10;
+		else if(getAttack() == GoalPriority.HIGH) return 15;
+		
+		return 0;
+	}
+	
+	public int extimatePatrolingUnits()
+	{
+		if(getDefence() == GoalPriority.LOW) return 1;
+		else if(getDefence() == GoalPriority.MEDIUM) return  2;
+		else if(getDefence() == GoalPriority.HIGH) return 4;
+		
+		return 0;
+	}
+
+	public int extimateExplorationUnits()
+	{	
+		if(getExploration() == GoalPriority.LOW) return 1;
+		else if(getExploration() == GoalPriority.MEDIUM) return  2;
+		else if(getExploration() == GoalPriority.HIGH) return 3;
+		
+		return 0;
+	}
+	
 	public GoalPriority getResources() {
 		return resources;
 	}
@@ -60,5 +97,5 @@ public class GoalLevels implements Serializable {
 	public void setExploration(GoalPriority exploration) {
 		this.exploration = exploration;
 	}
-	
+
 }

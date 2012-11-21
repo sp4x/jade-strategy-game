@@ -28,6 +28,7 @@ import com.jrts.messages.Notification;
 public abstract class Unit extends JrtsAgent implements IUnit {
 
 	private static final long serialVersionUID = -1503577834258923742L;
+	private Position cityCenter;
 	private Position position = null;
 	private String status;
 	private Perception perception;
@@ -58,6 +59,7 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 		Object[] args = getArguments();
 		if (args != null) {
 			int i = 0;
+			setCityCenter((Position) args[i++]);
 			setPosition((Position) args[i++]);
 			setTeamName((String) args[i++]);
 			setNature((Nature) args[i++]);
@@ -80,10 +82,12 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 				}
 			}
 		});
-			
-		
 	}
 	
+	private void setCityCenter(Position position) {
+		this.cityCenter = position;
+	}
+
 	public void onFightMessage(ACLMessage msg) {
 		String target = msg.getSender().getLocalName();
 		
@@ -205,6 +209,10 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 	public abstract boolean onAttackProposal(String attacker);
 	
 	public abstract void engageFight(String target, Position targetPosition);
+
+	public Position getCityCenter() {
+		return cityCenter;
+	}
 
 	public int getSpeed() {
 		return speed;
