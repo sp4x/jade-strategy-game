@@ -10,8 +10,8 @@ import com.jrts.common.Utils;
 import com.jrts.environment.Cell;
 import com.jrts.environment.CellType;
 import com.jrts.environment.Direction;
-import com.jrts.environment.Position;
 import com.jrts.environment.Floor;
+import com.jrts.environment.Position;
 
 @SuppressWarnings("serial")
 public class FollowPathBehaviour extends UnitBehaviour {

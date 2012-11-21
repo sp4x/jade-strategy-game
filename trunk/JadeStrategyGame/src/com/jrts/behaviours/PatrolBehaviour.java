@@ -5,13 +5,8 @@ import com.jrts.environment.Direction;
 import com.jrts.environment.Position;
 import com.jrts.environment.WorldMap;
 
-
+@SuppressWarnings("serial")
 public class PatrolBehaviour extends UnitBehaviour {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 	
 	private int distance = 20;
 	
@@ -58,10 +53,10 @@ public class PatrolBehaviour extends UnitBehaviour {
 
 	@Override
 	public void myAction() {
-
-		if(go1) this.soldier.goThere(p2);
-		else 	this.soldier.goThere(p1);
-
+		if(go1)
+			this.soldier.goThere(p2);
+		else
+			this.soldier.goThere(p1);
 		go1 = !go1;
 	}
 

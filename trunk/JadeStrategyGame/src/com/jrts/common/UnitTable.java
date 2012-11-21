@@ -5,11 +5,6 @@ import jade.core.AID;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import com.jrts.agents.Soldier;
-import com.jrts.agents.Worker;
 
 
 public class UnitTable extends HashMap<AID, String> {

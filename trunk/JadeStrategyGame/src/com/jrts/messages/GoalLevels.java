@@ -2,7 +2,6 @@ package com.jrts.messages;
 
 import jade.util.leap.Serializable;
 
-import com.jrts.common.AgentStatus;
 import com.jrts.common.GoalPriority;
 
 public class GoalLevels implements Serializable {
