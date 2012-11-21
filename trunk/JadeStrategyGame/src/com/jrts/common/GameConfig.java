@@ -62,7 +62,24 @@ public class GameConfig {
 	public static final int ENEMY_SIGHTING_BOUND = 10;
 	public static final int BATTALION_SIZE = 3;
 	
+	public static final int LOW_PRIORITY_RESOURCES_UNITS = 2;
+	public static final int MEDIUM_PRIORITY_RESOURCES_UNITS = 4;
+	public static final int HIGH_PRIORITY_RESOURCES_UNITS = 6;
+	
+	public static final int LOW_PRIORITY_ATTACKS_UNITS = 0;
+	public static final int MEDIUM_PRIORITY_ATTACKS_UNITS = 5;
+	public static final int HIGH_PRIORITY_ATTACKS_UNITS = 10;
+	
+	public static final int LOW_PRIORITY_PATROLING_UNITS = 1;
+	public static final int MEDIUM_PRIORITY_PATROLING_UNITS = 2;
+	public static final int HIGH_PRIORITY_PATROLING_UNITS = 4;
+	
+	public static final int LOW_PRIORITY_EXPLORATION_UNITS = 1;
+	public static final int MEDIUM_PRIORITY_EXPLORATION_UNITS = 2;
+	public static final int HIGH_PRIORITY_EXPLORATION_UNITS = 4;
+	
 	public static int BUILDING_ENERGY = 100; //1000;
+
 	public static int FOOD_MIN_DISTANCE = 3;
 	public static int FOOD_MAX_DISTANCE = 5;
 	public static int WOOD_MIN_DISTANCE = 3;

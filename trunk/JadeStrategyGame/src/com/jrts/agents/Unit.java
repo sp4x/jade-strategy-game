@@ -50,11 +50,13 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 	@Override
 	protected void setup() {
 		super.setup();
+		Position meetingPoint = cityCenter;
 		Object[] args = getArguments();
 		if (args != null) {
 			int i = 0;
 			setCityCenter((Position) args[i++]);
 			setPosition((Position) args[i++]);
+			meetingPoint = (Position) args[i++];
 			setTeamName((String) args[i++]);
 			setNature((Nature) args[i++]);
 		}
@@ -62,6 +64,8 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 		getTeamDF().registerUnit(this);
 		addBehaviour(behaviourWrapper);
 		
+		
+		goThere(meetingPoint);
 	}
 	
 	private void setCityCenter(Position position) {

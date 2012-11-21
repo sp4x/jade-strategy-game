@@ -2,6 +2,7 @@ package com.jrts.messages;
 
 import jade.util.leap.Serializable;
 
+import com.jrts.common.GameConfig;
 import com.jrts.common.GoalPriority;
 
 public class GoalLevels implements Serializable {
@@ -31,36 +32,48 @@ public class GoalLevels implements Serializable {
 
 	public int extimateResourceUnits() {
 		
-		if(getResources() == GoalPriority.LOW) return 2;
-		else if(getResources() == GoalPriority.MEDIUM) return 4;
-		else if(getResources() == GoalPriority.HIGH) return 6;
+		if(getResources() == GoalPriority.LOW)
+			return GameConfig.LOW_PRIORITY_RESOURCES_UNITS;
+		else if(getResources() == GoalPriority.MEDIUM)
+			return GameConfig.MEDIUM_PRIORITY_RESOURCES_UNITS;
+		else if(getResources() == GoalPriority.HIGH)
+			return GameConfig.HIGH_PRIORITY_RESOURCES_UNITS;
 		
 		return 0;
 	}
 	
 	public int extimateFightingUnits() {
 
-		if(getAttack() == GoalPriority.LOW) return 0;
-		else if(getAttack() == GoalPriority.MEDIUM) return 10;
-		else if(getAttack() == GoalPriority.HIGH) return 15;
+		if(getAttack() == GoalPriority.LOW)
+			return GameConfig.LOW_PRIORITY_ATTACKS_UNITS;
+		else if(getAttack() == GoalPriority.MEDIUM)
+			return GameConfig.MEDIUM_PRIORITY_ATTACKS_UNITS;
+		else if(getAttack() == GoalPriority.HIGH)
+			return GameConfig.HIGH_PRIORITY_ATTACKS_UNITS;
 		
 		return 0;
 	}
 	
 	public int extimatePatrolingUnits()
 	{
-		if(getDefence() == GoalPriority.LOW) return 1;
-		else if(getDefence() == GoalPriority.MEDIUM) return  2;
-		else if(getDefence() == GoalPriority.HIGH) return 4;
+		if(getDefence() == GoalPriority.LOW)
+			return GameConfig.LOW_PRIORITY_PATROLING_UNITS;
+		else if(getDefence() == GoalPriority.MEDIUM)
+			return GameConfig.MEDIUM_PRIORITY_PATROLING_UNITS;
+		else if(getDefence() == GoalPriority.HIGH)
+			return GameConfig.HIGH_PRIORITY_PATROLING_UNITS;
 		
 		return 0;
 	}
 
 	public int extimateExplorationUnits()
 	{	
-		if(getExploration() == GoalPriority.LOW) return 1;
-		else if(getExploration() == GoalPriority.MEDIUM) return  2;
-		else if(getExploration() == GoalPriority.HIGH) return 3;
+		if(getExploration() == GoalPriority.LOW)
+			return GameConfig.LOW_PRIORITY_EXPLORATION_UNITS;
+		else if(getExploration() == GoalPriority.MEDIUM)
+			return GameConfig.MEDIUM_PRIORITY_EXPLORATION_UNITS;
+		else if(getExploration() == GoalPriority.HIGH)
+			return GameConfig.HIGH_PRIORITY_EXPLORATION_UNITS;
 		
 		return 0;
 	}

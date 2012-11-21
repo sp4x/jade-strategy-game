@@ -60,6 +60,7 @@ public class MasterAI extends JrtsAgent implements Team {
 		setTeamName(getAID().getLocalName());
 
 		masterPerception.setCityCenter((Position) getArguments()[0]);
+		masterPerception.setMeetingPoint((Position) getArguments()[1]);
 
 		resourceAID = new AID(getTeamName() + "-resourceAI", AID.ISLOCALNAME);
 		militaryAID = new AID(getTeamName() + "-militaryAI", AID.ISLOCALNAME);
@@ -72,7 +73,7 @@ public class MasterAI extends JrtsAgent implements Team {
 
 			masterPerception.setTeamDF(getTeamDF());
 
-			unitFactory = new UnitFactory(getTeamName(), getContainerController(), masterPerception.getCityCenter(), nature);
+			unitFactory = new UnitFactory(getTeamName(), getContainerController(), masterPerception.getCityCenter(), masterPerception.getMeetingPoint(), nature);
 			unitFactory.start();
 
 			masterPerception.setResourcesContainer(new ResourcesContainer(GameConfig.STARTUP_WOOD, GameConfig.STARTUP_FOOD));
@@ -83,7 +84,6 @@ public class MasterAI extends JrtsAgent implements Team {
 			resourceAI.start();
 			militaryAI = container.createNewAgent(militaryAID.getLocalName(), MilitaryAI.class.getName(), arg);
 			militaryAI.start();
-
 		} catch (ControllerException e) {
 			e.printStackTrace();
 		}

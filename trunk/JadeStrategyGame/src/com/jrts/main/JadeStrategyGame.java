@@ -50,8 +50,9 @@ public class JadeStrategyGame {
 			String teamName = "team" + i;
 			
 			Position cityCenter = World.getInstance().addTeam(teamName);
+			Position meetingPoint = World.getInstance().randomMeetingPoint(cityCenter);
 			
-			Object[] masterAiArgs = {cityCenter};
+			Object[] masterAiArgs = {cityCenter, meetingPoint};
 			AgentController controller = ac.createNewAgent(teamName, MasterAI.class.getName(), masterAiArgs);
 			controller.start();
 
