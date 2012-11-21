@@ -48,16 +48,20 @@ public class UnitFactory extends Thread {
 		}
 	}
 	
-	public void trainUnit(final Class<? extends Unit> claz)  {
+	public void trainUnit(final Class<? extends Unit> clazz)  {
 //		logger.log(logLevel, team + " request to train a " + claz.getSimpleName());
 		try {
-			queue.put(claz);
+			queue.put(clazz);
 			
-			if(claz.getName().contains("Worker")) workerQueueCount++;
-			else if(claz.getName().contains("Soldier")) soldierQueueCount++;
+			incrementCounters(clazz);
 			
 		} catch (InterruptedException e) {
 		}
+	}
+	
+	public synchronized void incrementCounters(Class<?> clazz) {
+		if(clazz.getName().contains("Worker")) workerQueueCount++;
+		else if(clazz.getName().contains("Soldier")) soldierQueueCount++;
 	}
 	
 	public synchronized long counter() {
@@ -102,5 +106,13 @@ public class UnitFactory extends Thread {
 
 	public int getQueueSoldierCount() {
 		return soldierQueueCount;
+	}
+	
+	public boolean queueIsEmpty() {
+		return queue.isEmpty();
+	}
+	
+	public int getQueuedUnitsCount() {
+		return queue.size();
 	}
 }

@@ -97,5 +97,10 @@ public class GoalLevels implements Serializable {
 	public void setExploration(GoalPriority exploration) {
 		this.exploration = exploration;
 	}
+	
+	public int extimateNeededUnits() {
+		return extimateExplorationUnits() + extimateFightingUnits()
+				+ extimatePatrolingUnits() + extimateResourceUnits();
+	}
 
 }

@@ -46,8 +46,6 @@ public class MilitaryAI extends GoalBasedAI {
 				managePatroling();
 				manageExploring();
 				manageFighting();
-				//manageBattaiolon();
-				//manageWars();
 				
 			}
 		});
