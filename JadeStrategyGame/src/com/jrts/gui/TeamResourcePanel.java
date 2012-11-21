@@ -61,9 +61,9 @@ public class TeamResourcePanel extends JPanel{
 	
 	public void update () {
 		if (team != null) {
-			this.food.setText("" + team.getFood()); 
-			this.wood.setText("" + team.getWood());
-			this.workers.setText("" + team.getQueueWorkerCount());
+			this.food.setText(team.getFood() + "   "); 
+			this.wood.setText(team.getWood() + "   ");
+			this.workers.setText(team.getQueueWorkerCount() + "   ");
 			this.soldiers.setText("" + team.getQueueSoldierCount());
 		}
 	}

@@ -371,39 +371,4 @@ public class MilitaryAI extends GoalBasedAI {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-	
-	public void attackEnemy(Position enemyPosition){
-		Double currDistance = Double.MAX_VALUE;
-		AID attacker = null;
-		
-		Collection<AID> soldiers = getUnitTable().getSoldiers();
-		
-		if(!soldiers.isEmpty()){
-			//choose soldier near then enemy's position
-			for(AID soldier : soldiers){
-				logger.info("Soldiers: " + soldiers.size());
-				Position soldierPosition = World.getInstance().getUnitPosition(soldier);
-				logger.info("Position: " + soldierPosition);
-				Double distance = enemyPosition.distance(soldierPosition);
-				logger.info("Distance " + distance);
-				logger.info("Curr distance: " + currDistance);
-				if(distance < currDistance){
-					currDistance = distance;
-					attacker = soldier;
-				}
-			}
-		}
-		else{
-			logger.severe("No units available for attack!");
-		}
-		
-		logger.info("Attacker: " + attacker + " to Position: " + enemyPosition);
-		orderAttack(attacker, enemyPosition);
-	}
-
-	private void orderAttack(AID attacker, Position enemyPosition) {
-		//todo completare
-		sendNotification("attack", enemyPosition, attacker);
-	}
 }
