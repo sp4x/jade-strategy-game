@@ -4,12 +4,8 @@ import com.jrts.agents.Worker;
 import com.jrts.environment.Position;
 import com.jrts.messages.Notification;
 
+@SuppressWarnings("serial")
 public class GoUpgradingBehaviour extends UnitBehaviour {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 
 	Worker worker;
 	Position cityCenter;

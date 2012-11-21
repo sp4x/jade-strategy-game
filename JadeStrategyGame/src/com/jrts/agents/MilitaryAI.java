@@ -29,7 +29,7 @@ public class MilitaryAI extends GoalBasedAI {
 	int soldierCounter = 0;
 	
 	Battalion battalion;
-	int battalionSize = 3;
+	int battalionSize = GameConfig.BATTALION_SIZE;
 	int lastCityCenterLife = GameConfig.BUILDING_ENERGY;
 	
 	@Override
@@ -50,7 +50,7 @@ public class MilitaryAI extends GoalBasedAI {
 			}
 		});
 				
-		Position battailonPosition = Utils.getBattalionCenter(requestMap(), cityCenter, battalionSize);
+		Position battailonPosition = Utils.getBattalionCenter(requestMap(), myCityCenter, battalionSize);
 		if(battailonPosition != null)
 			this.battalion = new Battalion(battailonPosition, battalionSize);
 		
@@ -124,10 +124,10 @@ public class MilitaryAI extends GoalBasedAI {
 		
 		if(goalLevels.getAttack() == GoalPriority.HIGH){
 			Collection<Position> cityCenterPositions = requestMap().getKnownCityCenters();
-			cityCenterPositions.remove(cityCenter);
+			cityCenterPositions.remove(myCityCenter);
 			if(battalion.size() > 0 && cityCenterPositions.size() > 0)
 			{
-				Position posToAttack = cityCenter.nearest(cityCenterPositions);
+				Position posToAttack = myCityCenter.nearest(cityCenterPositions);
 				for (AID aid : battalion.getSoldiersList()) {
 					Order order = new Order(AgentStatus.GO_FIGHTING);
 					order.setPosition(posToAttack);
@@ -136,7 +136,7 @@ public class MilitaryAI extends GoalBasedAI {
 			}
 		}
 		
-		addUnitToBattailon();
+		addUnitToBattalion();
 	}
 	
 	private void managePatroling() {
@@ -199,7 +199,7 @@ public class MilitaryAI extends GoalBasedAI {
 		AID soldier = this.getUnitTable().getAFreeUnit();
 		if(soldier != null){
 			
-			Direction angle = Utils.getMapAnglePosition(cityCenter);
+			Direction angle = Utils.getMapAnglePosition(myCityCenter);
 			
 			Order order = new Order(AgentStatus.PATROLING);
 			if(angle.equals(Direction.LEFT_UP))
@@ -242,7 +242,7 @@ public class MilitaryAI extends GoalBasedAI {
 		}
 	}
 	
-	public void addUnitToBattailon()
+	public void addUnitToBattalion()
 	{
 		AID soldier = getUnitTable().getAFreeUnit();
 		if(soldier != null)
@@ -256,23 +256,22 @@ public class MilitaryAI extends GoalBasedAI {
 					order.setPosition(pos);
 					giveOrder(soldier, order);
 				}
-
 			}
 		}
 	}
 	
 	@Override
 	protected void updatePerception() {
-		Perception cityCenterPerception = World.getInstance().getPerception(cityCenter, GameConfig.CITY_CENTER_SIGHT);
+		Perception cityCenterPerception = World.getInstance().getPerception(myCityCenter, GameConfig.CITY_CENTER_SIGHT);
 		sendNotification(Notification.PERCEPTION, cityCenterPerception, getMasterAID());
 		
-		EnemySighting enemies = lookForEnemies(cityCenter, GameConfig.CITY_CENTER_SIGHT, cityCenterPerception);
+		EnemySighting enemies = lookForEnemies(myCityCenter, GameConfig.CITY_CENTER_SIGHT, cityCenterPerception);
 		sendNotification(Notification.ENEMY_SIGHTED, enemies, getMasterAID());
 		if (!enemies.isEmpty()) {
 			onEnemySighting(enemies);
 		}
 		
-		int cityCenterLife = cityCenterPerception.get(cityCenter).getEnergy();
+		int cityCenterLife = cityCenterPerception.get(myCityCenter).getEnergy();
 		if (cityCenterLife < lastCityCenterLife) {
 			lastCityCenterLife = cityCenterLife;
 			underAttack();
@@ -280,19 +279,14 @@ public class MilitaryAI extends GoalBasedAI {
 	}
 
 	private void underAttack() {
-		sendNotification(Notification.CITYCENTER_UNDER_ATTACK, cityCenter, getMasterAID());
+		sendNotification(Notification.CITYCENTER_UNDER_ATTACK, myCityCenter, getMasterAID());
 		logger.log(logLevel, getTeamName() + " city center under attack!");
 		// TODO handle it
 	}
 
-	@Override
-	public void onGoalsChanged() {
-		// TODO Auto-generated method stub
-	}
-
 	public void onEnemySighting(EnemySighting e) {
 		int numSightedSoldiers = e.getSoldierNumber();
-		int distance = (int)e.getSightingPosition().distance(cityCenter);
+		int distance = (int)e.getSightingPosition().distance(myCityCenter);
 		ArrayList<AID> freeSoldiers = unitTable.getFreeUnits();
 		int numMyFreeSoldier = freeSoldiers.size();
 		

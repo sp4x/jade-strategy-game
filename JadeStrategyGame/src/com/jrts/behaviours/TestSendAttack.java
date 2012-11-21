@@ -6,7 +6,7 @@ import com.jrts.agents.Worker;
 import com.jrts.common.GameConfig;
 import com.jrts.environment.Direction;
 
-public class SendAttack extends CyclicBehaviour {
+public class TestSendAttack extends CyclicBehaviour {
 
 	/**
 	 * 
@@ -14,7 +14,7 @@ public class SendAttack extends CyclicBehaviour {
 	private static final long serialVersionUID = -8832334971270701493L;
 	private Worker unit;
 	
-	public SendAttack(Worker unit) {
+	public TestSendAttack(Worker unit) {
 		super();
 		this.unit = unit;
 	}

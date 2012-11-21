@@ -29,17 +29,19 @@ public class Battalion {
 		}
 	}
 	
-	public boolean isFull(){ return soldiers.size() == diameter*diameter; }
+	public boolean isFull(){
+		return soldiers.size() == diameter*diameter;
+	}
 	
-	public int size(){ return this.soldiers.size(); }
+	public int size(){
+		return this.soldiers.size();
+	}
 	
-	public Position addSoldier(AID soldier)
-	{
+	public Position addSoldier(AID soldier){
 		for (int i = 0; i < diameter; i++) {
 			for (int j = 0; j < diameter; j++) {
 				
-				if(!this.occupiedPositions[i][j])
-				{
+				if(!this.occupiedPositions[i][j]){
 					this.occupiedPositions[i][j] = true;
 										
 					int w = center.getRow() - 1 + i;

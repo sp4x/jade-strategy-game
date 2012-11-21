@@ -143,21 +143,17 @@ public class ResourceAI extends GoalBasedAI {
 	@Override
 	protected void updatePerception() {
 		if (noMoreFood) {
-			Position p = requestMap().findNearest(cityCenter, CellType.FOOD);
+			Position p = requestMap().findNearest(myCityCenter, CellType.FOOD);
 			if (p != null)
 				noMoreFood = false;
 		}
 		if (noMoreWood) {
-			Position p = requestMap().findNearest(cityCenter, CellType.WOOD);
+			Position p = requestMap().findNearest(myCityCenter, CellType.WOOD);
 			if (p != null)
 				noMoreWood = false;
 		}
 		if (!noMoreFood && !noMoreWood)
 			sendNotification(Notification.RESOURCES_FOUND, null, getMasterAID());
-	}
-
-	@Override
-	public void onGoalsChanged() {
 	}
 
 	@Override
