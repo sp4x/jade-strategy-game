@@ -57,12 +57,11 @@ public class WorldTest {
 	public void perception() {
 		World.create(10, 10, 0);
 		Position center = new Position(5, 5);
-		Floor floor = World.getInstance().getPerception(center, 1);
+		Perception perception = World.getInstance().getPerception(center, 1);
 		int seen = 0;
-		for (int row = 0; row < floor.rows; row++) {
-			for (int col = 0; col < floor.cols; col++) {
-				seen += floor.get(row, col).getType() != CellType.UNKNOWN ? 1
-						: 0;
+		for (int row = 0; row < World.getInstance().getRows(); row++) {
+			for (int col = 0; col < World.getInstance().getCols(); col++) {
+				seen += perception.get(row, col).isUnknown() ? 0 : 1;
 			}
 		}
 		assertEquals(9, seen);

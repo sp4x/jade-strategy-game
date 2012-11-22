@@ -126,7 +126,7 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 	}
 
 	protected void setPosition(Position position) {
-		if (this.position == null)
+		if (this.position != null)
 			this.position = position;
 	}
 

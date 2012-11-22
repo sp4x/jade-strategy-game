@@ -6,17 +6,19 @@ import java.util.logging.Level;
 
 import com.jrts.agents.Unit;
 import com.jrts.common.GameConfig;
-import com.jrts.common.Utils;
 import com.jrts.environment.Cell;
 import com.jrts.environment.CellType;
 import com.jrts.environment.Direction;
 import com.jrts.environment.Floor;
 import com.jrts.environment.Position;
+import com.jrts.pathfinding.DijkstraPathfinder;
+import com.jrts.pathfinding.Pathfinder;
 
 @SuppressWarnings("serial")
 public class FollowPathBehaviour extends UnitBehaviour {
 	
-	public Level logLevel = Level.FINE;
+	private static Pathfinder pathfinder = new DijkstraPathfinder();
+	public static Level logLevel = Level.FINE;
 
 	List<Direction> list;
 	Unit unit;
@@ -43,7 +45,7 @@ public class FollowPathBehaviour extends UnitBehaviour {
 
 	private void calculatePath() {
 		Position start = unit.getPosition();
-		this.list = Utils.calculatePath(floor, start, goal);
+		this.list = pathfinder.calculatePath(floor, start, goal);
 	}
 	
 	@Override

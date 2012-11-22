@@ -104,14 +104,14 @@ public class FollowPathTest {
 
 	}
 	
-	public void simulate(FollowPathBehaviour[] list) {
+	public void simulate(UnitBehaviour[] list) {
 		boolean allDone = false;
 		while (!allDone) {
 			allDone = true;
-			for (FollowPathBehaviour b : list) {
+			for (UnitBehaviour b : list) {
 				if (!b.done()) {
 					allDone = false;
-					b.action();
+					b.myAction();
 				}
 			}
 		}
