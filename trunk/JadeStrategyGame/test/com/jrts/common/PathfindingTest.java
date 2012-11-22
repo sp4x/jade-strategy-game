@@ -12,12 +12,16 @@ import com.jrts.environment.CellType;
 import com.jrts.environment.Direction;
 import com.jrts.environment.Floor;
 import com.jrts.environment.Position;
+import com.jrts.pathfinding.DijkstraPathfinder;
+import com.jrts.pathfinding.Pathfinder;
 
 public class PathfindingTest {
+	
+	Pathfinder pathfinder = new DijkstraPathfinder();
 
 	// + start
 	// X obstacle
-	// * end pos
+	// * expected end pos
 	// - free pos
 
 	@Test
@@ -27,22 +31,22 @@ public class PathfindingTest {
 		f.set(0, 4, new Cell(CellType.OBSTACLE));
 		Position start = new Position(0, 0);
 		Position target = new Position(0, 4);
-		List<Direction> path = Utils.calculatePath(f, start, target);
+		List<Direction> path = pathfinder.calculatePath(f, start, target);
 		Position end = start.followPath(path);
 		assertEquals(new Position(0, 3), end);
 	}
 
 	@Test
-	// ----*
+	// ---**
 	// +--xx
-	// ----*
+	// ---**
 	public void test2() {
 		Floor f = new Floor(3, 5);
 		f.set(1, 4, new Cell(CellType.OBSTACLE));
 		f.set(1, 3, new Cell(CellType.OBSTACLE));
 		Position start = new Position(1, 0);
 		Position target = new Position(1, 4);
-		List<Direction> path = Utils.calculatePath(f, start, target);
+		List<Direction> path = pathfinder.calculatePath(f, start, target);
 		Position end = start.followPath(path);
 		assertTrue(end.isNextTo(target));
 	}
@@ -62,7 +66,7 @@ public class PathfindingTest {
 		}
 		Position start = new Position(2, 0);
 		Position target = new Position(2, 3);
-		List<Direction> path = Utils.calculatePath(f, start, target);
+		List<Direction> path = pathfinder.calculatePath(f, start, target);
 		Position end = start.followPath(path);
 		assertEquals(target, end);
 	}

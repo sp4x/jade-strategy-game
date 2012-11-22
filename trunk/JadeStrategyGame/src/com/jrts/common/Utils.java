@@ -1,22 +1,15 @@
 package com.jrts.common;
 
 import java.util.GregorianCalendar;
-import java.util.List;
 import java.util.Random;
 
 import com.jrts.environment.Direction;
-import com.jrts.environment.Floor;
 import com.jrts.environment.Position;
 import com.jrts.environment.WorldMap;
-import com.jrts.pathfinding.DijkstraPathfinder;
-import com.jrts.pathfinding.Pathfinder;
 
 public class Utils {
 	
 	public static Random random = new Random(GregorianCalendar.getInstance().getTimeInMillis());
-	
-	public static Pathfinder pathfinder = new DijkstraPathfinder();
-	
 	
 	/**
 	 * This function let you know in what angle of the map the unit is located
@@ -125,8 +118,4 @@ public class Utils {
 		Utils.random = random;
 	}
 
-	public static List<Direction> calculatePath(Floor worldCachedCopy,
-			Position start, Position goal) {
-		return pathfinder.calculatePath(worldCachedCopy, start, goal);
-	}
 }

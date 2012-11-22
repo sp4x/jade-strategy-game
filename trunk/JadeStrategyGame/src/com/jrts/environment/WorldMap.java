@@ -11,6 +11,10 @@ public class WorldMap extends Floor {
 	public WorldMap(int rows, int cols) {
 		super(rows, cols, CellType.UNKNOWN);
 	}
+	
+	public WorldMap(Floor floor) {
+		super(floor);
+	}
 
 	public void update(Perception perception) {
 		for (int i = 0; i < perception.rows; i++) {
