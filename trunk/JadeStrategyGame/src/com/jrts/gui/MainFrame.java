@@ -4,6 +4,7 @@ import jade.core.Runtime;
 import jade.wrapper.AgentContainer;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
@@ -17,19 +18,14 @@ import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.JSlider;
 import javax.swing.JTabbedPane;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 import com.jrts.O2Ainterfaces.IUnit;
 import com.jrts.O2Ainterfaces.Team;
-import com.jrts.common.GameConfig;
 import com.jrts.common.GameStatistics;
 import com.jrts.environment.Cell;
 import com.jrts.environment.CellType;
@@ -53,7 +49,8 @@ public class MainFrame extends JFrame {
 	protected IUnit selectedUnit = null;
 
 	protected JPanel infoPanel;
-
+	protected JTabbedPane leftTabbedPane;
+	
 	private JLabel labelTeam, labelType, labelPosition, labelEnergy, labelAction, apsCounter;
 
 	private int selectedRow = 0, selectedCol = 0;
@@ -67,7 +64,7 @@ public class MainFrame extends JFrame {
 
 	public static String addTreeClick = "Add Tree";
 	public static String addFoodClick = "Add Food";
-	public static String deleteCellClick = "Empty Cell";
+	public static String deleteCellClick = "Add Sand";
 	public static String selectionClick = "Get Cell/Unit Info";
 
 	public String clickType = selectionClick;
@@ -100,19 +97,11 @@ public class MainFrame extends JFrame {
 		this.worldViewPanel = new WorldViewPanel(floor);
 		this.floor = floor;
 
-		JSlider speed = new JSlider(JSlider.HORIZONTAL, -GameConfig.MAX_REFRESH_TIME, -GameConfig.MIN_REFRESH_TIME, -GameConfig.REFRESH_TIME);
-		speed.setPaintTicks(true);
-		speed.setPaintLabels(true);
-		speed.setBorder(BorderFactory.createTitledBorder("Speed"));
-		speed.addChangeListener(new ChangeListener() {
-			@Override
-			public void stateChanged(ChangeEvent ce) {
-				JSlider source = (JSlider) ce.getSource();
-				if (!source.getValueIsAdjusting())
-					GameConfig.REFRESH_TIME = (int) source.getValue() * (-1);
-			}
-		});
-
+		JPanel statisticsPanel = new JPanel();
+		statisticsPanel.add(new JLabel("Actions per seconds:"));
+		apsCounter = new JLabel("nothing");
+		statisticsPanel.add(apsCounter);
+		
 		ActionListener al = new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				MainFrame.this.clickType = e.getActionCommand();
@@ -138,13 +127,20 @@ public class MainFrame extends JFrame {
 
 		/**********************************************************************/
 		/************** CREATING LEFT PANEL ***********************************/
-		JPanel settingsPanel = new JPanel(new GridLayout(5, 1));
-		settingsPanel.add(speed);
+		JPanel settingsPanel = new JPanel(new GridLayout(4, 1));
+		settingsPanel.setBorder(BorderFactory.createTitledBorder("Map Cells"));
+		//settingsPanel.add(speed);
 		settingsPanel.add(tree);
 		settingsPanel.add(food);
 		settingsPanel.add(emptyCell);
 		settingsPanel.add(selection);
-
+		
+		Dimension d = new Dimension(200, 150);
+		settingsPanel.setPreferredSize(d);
+		settingsPanel.setSize(d);
+		settingsPanel.setMinimumSize(d);
+		settingsPanel.setMaximumSize(d);
+		
 		this.infoPanel = new JPanel();
 		infoPanel.setBorder(BorderFactory.createTitledBorder("Informations"));
 		infoPanel.setLayout(new GridLayout(5, 2));
@@ -164,20 +160,31 @@ public class MainFrame extends JFrame {
 		labelAction = new JLabel("nothing");
 		infoPanel.add(labelAction);
 		
-		Dimension d = new Dimension(200, 150);
 		infoPanel.setPreferredSize(d);
 		infoPanel.setSize(d);
 		infoPanel.setMinimumSize(d);
 		infoPanel.setMaximumSize(d);
 
-		/*
-		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.CENTER);
+		this.leftTabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		JPanel panel1 = new JPanel();
 		panel1.add(new JLabel("lalal"));
-		tabbedPane.addTab("Tab 1", ImageLoader.soldierIcon1, panel1, "Does nothing");
-		tabbedPane.setMnemonicAt(0, KeyEvent.VK_1);
-		tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
-		*/
+		for (Team t : teams){
+			if(t.getTeamName().equals("team1"))
+				leftTabbedPane.addTab(t.getTeamName(), ImageLoader.soldierIcon1, new TeamInfoPanel(t));
+			else if(t.getTeamName().equals("team2"))
+				leftTabbedPane.addTab(t.getTeamName(), ImageLoader.soldierIcon2, new TeamInfoPanel(t));
+			else if(t.getTeamName().equals("team3"))
+				leftTabbedPane.addTab(t.getTeamName(), ImageLoader.soldierIcon3, new TeamInfoPanel(t));
+			else if(t.getTeamName().equals("team4"))
+				leftTabbedPane.addTab(t.getTeamName(), ImageLoader.soldierIcon4, new TeamInfoPanel(t));
+		}
+		leftTabbedPane.setMnemonicAt(0, KeyEvent.VK_1);
+		leftTabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);		
+		leftTabbedPane.setPreferredSize(d);
+		leftTabbedPane.setSize(d);
+		leftTabbedPane.setMinimumSize(d);
+		leftTabbedPane.setMaximumSize(d);
+		
 		d = new Dimension(200, 300);
 		JPanel leftPanel = new JPanel();
 		leftPanel.setPreferredSize(d);
@@ -185,16 +192,10 @@ public class MainFrame extends JFrame {
 		leftPanel.setMinimumSize(d);
 		leftPanel.setMaximumSize(d);
 
+		leftPanel.add(statisticsPanel);
 		leftPanel.add(this.infoPanel);
 		leftPanel.add(settingsPanel);
-		//leftPanel.add(tabbedPane);
-		
-		JPanel statisticsPanel = new JPanel();
-		leftPanel.add(statisticsPanel);
-		
-		statisticsPanel.add(new JLabel("Actions per seconds:"));
-		apsCounter = new JLabel("nothing");
-		statisticsPanel.add(apsCounter);
+		leftPanel.add(leftTabbedPane);
 		/************** END CREATING LEFT PANEL *******************************/
 		/**********************************************************************/
 
@@ -283,6 +284,11 @@ public class MainFrame extends JFrame {
 		for (int i = 0; i < topPanel.getComponentCount(); i++) {
 			if (topPanel.getComponent(i) instanceof TeamResourcePanel)
 				((TeamResourcePanel) topPanel.getComponent(i)).update();
+		}
+		
+		for (int i = 0; i < leftTabbedPane.getComponentCount(); i++) {
+			if (leftTabbedPane.getComponent(i) instanceof TeamInfoPanel)
+				((TeamInfoPanel) leftTabbedPane.getComponent(i)).update();
 		}
 		
 		/** follow the selected unit */

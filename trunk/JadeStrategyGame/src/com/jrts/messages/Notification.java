@@ -2,6 +2,8 @@ package com.jrts.messages;
 
 import java.io.Serializable;
 
+import com.jrts.agents.JrtsAgent;
+
 /**
  * Used to send notification like "there is an enemy here: 10,30" or
  * "there is no more food in our known world"
@@ -27,12 +29,22 @@ public class Notification implements Serializable {
 
 	public static final String ATTACK = "attack";
 
+	String sender;
 	String subject;
 	Serializable contentObject;
 
-	public Notification(String messageSubject, Serializable contentObject) {
+	public Notification(String senderName, String messageSubject, Serializable contentObject) {
+		this.sender = sender;
 		this.subject = messageSubject;
 		this.contentObject = contentObject;
+	}
+
+	public String getSender() {
+		return sender;
+	}
+
+	public void setSender(String sender) {
+		this.sender = sender;
 	}
 
 	public String getSubject() {

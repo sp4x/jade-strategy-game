@@ -116,8 +116,6 @@ public class MilitaryAI extends GoalBasedAI {
 		int numFreeSoldiers = unitTable.getFreeUnits().size();
 		int numQueueSoldiers = unitFactory.getQueueSoldierCount();
 		
-		//System.out.println("NUM Q SOLDIER:" + numQueueSoldiers);
-		
 		int neededAttackingSoldiers = goalLevels.extimateFightingUnits() - unitTable.getUnitsWithStatus(AgentStatus.WAIT_TO_FIGHT).size();
 		int neededPatrolingSoldiers = goalLevels.extimatePatrolingUnits() - unitTable.getUnitsWithStatus(AgentStatus.PATROLING).size();
 		int neededExploringSoldiers = goalLevels.extimateExplorationUnits() - unitTable.getUnitsWithStatus(AgentStatus.EXPLORING).size();
@@ -125,8 +123,6 @@ public class MilitaryAI extends GoalBasedAI {
 		
 		int heuristic = neededAttackingSoldiers + neededPatrolingSoldiers + neededExploringSoldiers - numFreeSoldiers - numQueueSoldiers - neededResources;	
 		if(heuristic > 0) requestSoldierCreation();
-		
-		//System.out.println("HEURISTIC:" + heuristic);
 	}
 	
 	private void manageFighting() {

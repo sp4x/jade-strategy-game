@@ -6,10 +6,7 @@ import com.jrts.common.GameConfig;
 import com.jrts.common.GoalPriority;
 
 public class GoalLevels implements Serializable {
-	
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 	
 	GoalPriority resources;

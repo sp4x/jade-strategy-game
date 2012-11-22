@@ -2,6 +2,7 @@ package com.jrts.O2Ainterfaces;
 
 import com.jrts.agents.MasterAI.Nature;
 import com.jrts.environment.WorldMap;
+import com.jrts.messages.GoalLevels;
 
 public interface Team {
 	
@@ -12,6 +13,10 @@ public interface Team {
 		
 	public String getTeamName();
 	public Nature getTeamNature();
+	public GoalLevels getGoalLevels();
+	
+	public int getNumDeadWorkers();
+	public int getNumDeadSoldiers();
 	
 	public WorldMap getWorldMap();
 
