@@ -160,7 +160,7 @@ public abstract class JrtsAgent extends Agent {
 		try {
 			ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
 			msg.addReceiver(receiver);
-			msg.setContentObject(new Notification(messageSubject, contentObject));
+			msg.setContentObject(new Notification(this.getName(), messageSubject, contentObject));
 			send(msg);
 			
 		} catch (IOException e) {

@@ -189,6 +189,9 @@ public class MasterAI extends JrtsAgent implements Team {
 			Position where = (Position) n.getContentObject();
 			masterPerception.getDeaths().add(where);
 			
+			if(n.getSender().contains("worker")) unitFactory.increaseNumDeadWorkers();
+			else if(n.getSender().contains("soldier")) unitFactory.increaseNumDeadSoldiers();
+			
 		} else if (n.getSubject().equals(Notification.UNIT_UNDER_ATTACK)) {
 			Position where = (Position) n.getContentObject();
 			masterPerception.getThreats().add(where);
@@ -225,5 +228,20 @@ public class MasterAI extends JrtsAgent implements Team {
 	@Override
 	public int getQueueSoldierCount() {
 		return unitFactory.getQueueSoldierCount();
+	}
+
+	@Override
+	public GoalLevels getGoalLevels() {
+		return this.goalLevels;
+	}
+
+	@Override
+	public int getNumDeadWorkers() {
+		return unitFactory.getNumDeadWorkers();
+	}
+
+	@Override
+	public int getNumDeadSoldiers() {
+		return unitFactory.getNumDeadSoldiers();
 	}
 }
