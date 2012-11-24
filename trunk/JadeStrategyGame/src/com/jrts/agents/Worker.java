@@ -120,15 +120,17 @@ public class Worker extends Unit {
 	@Override
 	protected void handleNotification(Notification n) {
 		super.handleNotification(n);
-		if (n.getSubject().equals(Notification.ORDER)) {
-			Order order = (Order) n.getContentObject();
-			if (order.getOrder().equals(AgentStatus.GO_UPGRADING)) {
-				this.goUpgrading();
-			} else if (order.getOrder().equals(AgentStatus.WOOD_CUTTING)) {
-				collectWood();
-			} else if (order.getOrder().equals(AgentStatus.FOOD_COLLECTING)) {
-				collectFood();
-			}
+	}
+	
+	@Override
+	public void takeOrder(Order order) {
+		super.takeOrder(order);
+		if (order.getNextStatus().equals(AgentStatus.GO_UPGRADING)) {
+			this.goUpgrading();
+		} else if (order.getNextStatus().equals(AgentStatus.WOOD_CUTTING)) {
+			collectWood();
+		} else if (order.getNextStatus().equals(AgentStatus.FOOD_COLLECTING)) {
+			collectFood();
 		}
 	}
 
