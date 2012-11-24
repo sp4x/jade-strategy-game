@@ -10,9 +10,10 @@ public class Cell implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	CellType type;
-	String id;
-	IUnit unit;
+	private CellType type;
+	private String id;
+	private IUnit unit;
+	
 	int energy = 0;
 	
 	public Cell(CellType t) {

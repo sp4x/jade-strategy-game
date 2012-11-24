@@ -128,10 +128,10 @@ public class Floor implements Serializable {
 	public void set(int i, int j, Cell newCell) {
 		Position position = new Position(i, j);
 		if (isValid(position)) {
-			CellType newType = newCell.type;
+			CellType newType = newCell.getType();
 			CellType currType = CellType.FREE;
 			if (floor[i][j] != null)
-				currType = floor[i][j].type;
+				currType = floor[i][j].getType();
 
 			// se sto per settare una cella occupata
 			if (!newCell.isWalkable() && !busyCells.contains(position))
@@ -216,7 +216,7 @@ public class Floor implements Serializable {
 			int maxDistance) {
 		if (!isValid(target))
 			return null;
-		if (maxDistance == 0 && get(target).type == type)
+		if (maxDistance == 0 && get(target).getType() == type)
 			return target;
 		for (int d = 1; d <= maxDistance; d++) {
 			LinkedList<Position> frame = frameWithType(target, type, d);
@@ -235,25 +235,25 @@ public class Floor implements Serializable {
 		j = center.col - d;
 		for (i = center.row - d; i <= center.row + d; i++) {
 			Position candidate = new Position(i, j);
-			if (isValid(candidate) && get(candidate).type == type)
+			if (isValid(candidate) && get(candidate).getType() == type)
 				frame.add(candidate);
 		}
 		j = center.col + d;
 		for (i = center.row - d; i <= center.row + d; i++) {
 			Position candidate = new Position(i, j);
-			if (isValid(candidate) && get(candidate).type == type)
+			if (isValid(candidate) && get(candidate).getType() == type)
 				frame.add(candidate);
 		}
 		i = center.row - d + 1;
 		for (j = center.col - d; j <= center.col + d; j++) {
 			Position candidate = new Position(i, j);
-			if (isValid(candidate) && get(candidate).type == type)
+			if (isValid(candidate) && get(candidate).getType() == type)
 				frame.add(candidate);
 		}
 		i = center.row + d - 1;
 		for (j = center.col - d; j <= center.col + d; j++) {
 			Position candidate = new Position(i, j);
-			if (isValid(candidate) && get(candidate).type == type)
+			if (isValid(candidate) && get(candidate).getType() == type)
 				frame.add(candidate);
 		}
 		return frame;

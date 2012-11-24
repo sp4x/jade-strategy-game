@@ -115,7 +115,7 @@ public class World {
 	}
 
 	boolean isAvailable(Position p) {
-		return floor.isValid(p) && floor.get(p).type == CellType.FREE;
+		return floor.isValid(p) && floor.get(p).getType() == CellType.FREE;
 	}
 	
 	public  void clear(Position p) {
@@ -325,7 +325,7 @@ public class World {
 
 	public synchronized void killUnit(IUnit u) {
 		Cell target = floor.get(u.getPosition());
-		if (u.getId().equals(target.id)) {
+		if (u.getId().equals(target.getId())) {
 			clear(u.getPosition());
 		}
 	}
