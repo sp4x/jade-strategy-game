@@ -81,12 +81,12 @@ public class UnitFactory extends Thread {
 		World world = World.getInstance();
 		String unitName = team + "-" + claz.getSimpleName() + counter();
 		Position unitPosition = world.neighPosition(cityCenter);
-		Position unitMeetingPoint = world.randomMeetingPoint(meetingPoint);
+//		Position unitMeetingPoint = world.randomMeetingPoint(meetingPoint);
 		if(unitPosition != null){
 			//Instantiate the unit
 			AgentController agentController;
 			try {
-				Object[] args = {cityCenter, unitPosition, unitMeetingPoint, team, nature};
+				Object[] args = {cityCenter, unitPosition, meetingPoint, team, nature};
 				synchronized (this) {
 					agentController = controller.createNewAgent(unitName, claz.getName(), args);
 					agentController.start();

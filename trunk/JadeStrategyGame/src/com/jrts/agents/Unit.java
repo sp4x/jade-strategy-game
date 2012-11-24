@@ -50,7 +50,7 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 	@Override
 	protected void setup() {
 		super.setup();
-		Position meetingPoint = cityCenter;
+		Position meetingPoint = null;
 		Object[] args = getArguments();
 		if (args != null) {
 			int i = 0;
