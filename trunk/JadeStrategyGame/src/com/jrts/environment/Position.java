@@ -96,9 +96,14 @@ public class Position implements Serializable {
 	}
 
 	@Override
-	public boolean equals(Object pos){
-		Position p = (Position) pos;
-		return getRow() == p.getRow() && getCol() == p.getCol();
+	public boolean equals(Object obj){
+		if (obj == null)
+			return false;
+		if (obj instanceof Position) {
+			Position p = (Position) obj;
+			return getRow() == p.getRow() && getCol() == p.getCol();
+		}
+		return false;
 	}
 	
 	public Position nearest(Collection<Position> candidates) {

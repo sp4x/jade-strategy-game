@@ -45,7 +45,7 @@ public class FollowPathBehaviour extends UnitBehaviour {
 
 	private void calculatePath() {
 		Position start = unit.getPosition();
-		this.list = pathfinder.calculatePath(floor, start, goal);
+		this.list = pathfinder.calculatePath(floor, start, goal, GameConfig.PATH_TOLERANCE);
 	}
 	
 	@Override
