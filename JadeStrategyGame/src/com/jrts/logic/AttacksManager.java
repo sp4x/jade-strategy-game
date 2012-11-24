@@ -26,7 +26,7 @@ public class AttacksManager {
 	public synchronized static void addHit(Position pos, Direction dir, int damage, int hitRange){
 		Hit hit = new Hit(pos, dir, damage, hitRange);
 		//Eseguo uno spostamento per evitare che il colpo danneggi l'unita' sorgente stessa
-		hit.step();
+//		hit.step(); EDIT: viene fatto dopo
 		hits.add(hit);
 	}
 	

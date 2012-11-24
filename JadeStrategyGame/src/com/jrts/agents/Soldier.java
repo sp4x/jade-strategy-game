@@ -57,6 +57,7 @@ public class Soldier extends Unit {
 	}
 	
 	public void sendHit(Direction direction) {
+		spendTime();
 		AttacksManager.addHit(getPosition().clone(), direction, GameConfig.SOLDIER_DAMAGES, GameConfig.HIT_RANGE);
 	}
 
