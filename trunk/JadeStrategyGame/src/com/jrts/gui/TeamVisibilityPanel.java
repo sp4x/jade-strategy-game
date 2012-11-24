@@ -93,35 +93,9 @@ public class TeamVisibilityPanel extends JPanel {
 						g2d.setPaint(Color.RED);
 					else if(type.equals(CellType.FREE))
 						g2d.setPaint(Color.GRAY);
-//					else if (team.getTeamName().contains("team1"))
-//						g2d.setPaint(Color.RED);
-//					else if (team.getTeamName().contains("team2"))
-//						g2d.setPaint(Color.BLACK);
-//					else if (team.getTeamName().contains("team3"))
-//						g2d.setPaint(Color.ORANGE);
-//					else if (team.getTeamName().contains("team4"))
-//						g2d.setPaint(Color.BLUE);
 					else 
 						g2d.setPaint(Color.BLUE);
 					
-					/*
-					switch (r.nextInt(50)) {
-					case 0:
-						g2d.setPaint(Color.BLACK);
-						break;
-					case 1:
-						g2d.setPaint(Color.BLUE);
-						break;
-					default:
-						g2d.setPaint(Color.WHITE);
-						break;
-					}
-					*/
-					
-					/*
-					if(j == GameConfig.WORLD_ROWS-1 || j == 0 || i == GameConfig.WORLD_COLS-1 || i == 0)
-						g2d.setPaint(Color.RED);
-					*/
 					int scaledI = i*GameConfig.WORLD_VISIBILITY_MAP_FACTOR;
 					int scaledJ = j*GameConfig.WORLD_VISIBILITY_MAP_FACTOR;
 					

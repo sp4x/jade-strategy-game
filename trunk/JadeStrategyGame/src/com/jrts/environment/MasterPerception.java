@@ -26,8 +26,6 @@ public class MasterPerception {
 	Collection<Position> threats = new LinkedList<Position>();
 	Collection<Position> deaths = new LinkedList<Position>();
 	
-	
-	
 	public WorldMap getWorldMap() {
 		return worldMap;
 	}
