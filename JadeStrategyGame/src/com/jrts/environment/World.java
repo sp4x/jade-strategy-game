@@ -248,6 +248,7 @@ public class World {
 			logger.info("random step:" + randomStep);
 			meetingPoint = meetingPoint.step(randomDir, randomStep);
 		}
+		Utils.checkAndFixPosition(meetingPoint);
 		System.out.println("City Center: " + cityCenter + " MeetingPoint: " + meetingPoint);
 		return meetingPoint; 
 	}
