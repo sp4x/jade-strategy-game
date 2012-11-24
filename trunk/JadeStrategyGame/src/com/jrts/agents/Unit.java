@@ -1,5 +1,7 @@
 package com.jrts.agents;
 
+import java.util.logging.Level;
+
 import jade.core.AID;
 import jade.core.behaviours.Behaviour;
 
@@ -24,6 +26,9 @@ import com.jrts.messages.Order;
 public abstract class Unit extends JrtsAgent implements IUnit {
 
 	private static final long serialVersionUID = -1503577834258923742L;
+	
+	private Level logLevel = Level.FINE;
+	
 	private Position cityCenter;
 	private Position position = null;
 	private String status;

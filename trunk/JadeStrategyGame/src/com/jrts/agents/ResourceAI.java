@@ -18,6 +18,8 @@ import com.jrts.messages.Order;
 
 @SuppressWarnings("serial")
 public class ResourceAI extends GoalBasedAI {
+	
+	private Level logLevel = Level.FINE;
 
 	int workersCounter = 0;
 

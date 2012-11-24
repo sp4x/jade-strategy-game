@@ -311,8 +311,6 @@ public class World {
 		} else {
 			int taken = targetCell.energy;
 			clear(target);
-			if (targetCell.isCityCenter())
-				teams.remove(targetCell.id);
 			return taken;
 		}
 	}

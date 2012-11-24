@@ -19,6 +19,9 @@ public class MasterPerception {
 	boolean alertNoMoreResources = false;
 	boolean alertCityCenterUnderAttack = false;
 	
+	public int numDeadWorkers = 0;
+	public int numDeadSoldiers = 0;
+	
 	Collection<EnemySighting> enemySightings = new LinkedList<EnemySighting>();
 	Collection<Position> threats = new LinkedList<Position>();
 	Collection<Position> deaths = new LinkedList<Position>();

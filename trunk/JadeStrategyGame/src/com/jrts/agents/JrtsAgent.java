@@ -29,7 +29,7 @@ import com.jrts.messages.Notification;
 public abstract class JrtsAgent extends Agent {
 
 	public final Logger logger = Logger.getLogger(Agent.class.getName());
-	public Level logLevel = Level.FINE;
+	private Level logLevel = Level.FINE;
 	
 	Nature nature;
 	
@@ -160,7 +160,7 @@ public abstract class JrtsAgent extends Agent {
 		try {
 			ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
 			msg.addReceiver(receiver);
-			msg.setContentObject(new Notification(this.getName(), messageSubject, contentObject));
+			msg.setContentObject(new Notification(messageSubject, contentObject));
 			send(msg);
 			
 		} catch (IOException e) {
@@ -176,6 +176,7 @@ public abstract class JrtsAgent extends Agent {
 	 */
 	public Object sendRequest(String requestSubject, AID receiver) {
 		try {
+			logger.log(logLevel, getAID().getLocalName() + ":sending request");
 			ACLMessage msg = new ACLMessage(ACLMessage.QUERY_REF);
 			msg.addReceiver(receiver);
 			msg.setConversationId(requestSubject);

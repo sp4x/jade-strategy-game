@@ -1,5 +1,7 @@
 package com.jrts.agents;
 
+import java.util.logging.Level;
+
 import jade.core.AID;
 import jade.core.behaviours.TickerBehaviour;
 import jade.wrapper.AgentController;
@@ -18,6 +20,7 @@ import com.jrts.environment.Perception;
 import com.jrts.environment.Position;
 import com.jrts.environment.World;
 import com.jrts.environment.WorldMap;
+import com.jrts.messages.Death;
 import com.jrts.messages.EnemySighting;
 import com.jrts.messages.GoalLevels;
 import com.jrts.messages.MessageSubject;
@@ -29,6 +32,8 @@ import com.jrts.scorer.ResourceScorer;
 
 @SuppressWarnings("serial")
 public class MasterAI extends JrtsAgent implements Team {
+
+	private Level logLevel = Level.FINE;
 
 	public enum Nature {
 		AGGRESSIVE, AVERAGE, DEFENSIVE
@@ -50,13 +55,15 @@ public class MasterAI extends JrtsAgent implements Team {
 	public MasterAI() {
 		registerO2AInterface(Team.class, this);
 		int die = Utils.random.nextInt(3);
-		nature = die == 0 ? Nature.AGGRESSIVE : die == 1 ? Nature.AVERAGE : Nature.DEFENSIVE;
+		nature = die == 0 ? Nature.AGGRESSIVE : die == 1 ? Nature.AVERAGE
+				: Nature.DEFENSIVE;
 	}
 
 	protected void setup() {
 		super.setup();
 		World world = World.getInstance();
-		masterPerception.setWorldMap(new WorldMap(world.getRows(), world.getCols()));
+		masterPerception.setWorldMap(new WorldMap(world.getRows(), world
+				.getCols()));
 		setTeamName(getAID().getLocalName());
 
 		masterPerception.setCityCenter((Position) getArguments()[0]);
@@ -68,21 +75,29 @@ public class MasterAI extends JrtsAgent implements Team {
 		PlatformController container = getContainerController();
 		AgentController militaryAI, resourceAI, df;
 		try {
-			df = container.createNewAgent(getTeamDF().getLocalName(), "jade.domain.df", null);
+			df = container.createNewAgent(getTeamDF().getLocalName(),
+					"jade.domain.df", null);
 			df.start();
 
 			masterPerception.setTeamDF(getTeamDF());
 
-			unitFactory = new UnitFactory(getTeamName(), getContainerController(), masterPerception.getCityCenter(), masterPerception.getMeetingPoint(), nature);
+			unitFactory = new UnitFactory(getTeamName(),
+					getContainerController(), masterPerception.getCityCenter(),
+					masterPerception.getMeetingPoint(), nature);
 			unitFactory.start();
 
-			masterPerception.setResourcesContainer(new ResourcesContainer(GameConfig.STARTUP_WOOD, GameConfig.STARTUP_FOOD));
+			masterPerception.setResourcesContainer(new ResourcesContainer(
+					GameConfig.STARTUP_WOOD, GameConfig.STARTUP_FOOD));
 
-			Object[] arg = { getTeamName(), unitFactory, masterPerception.getResourcesContainer(), masterPerception.getCityCenter(), nature };
+			Object[] arg = { getTeamName(), unitFactory,
+					masterPerception.getResourcesContainer(),
+					masterPerception.getCityCenter(), nature };
 
-			resourceAI = container.createNewAgent(resourceAID.getLocalName(), ResourceAI.class.getName(), arg);
+			resourceAI = container.createNewAgent(resourceAID.getLocalName(),
+					ResourceAI.class.getName(), arg);
 			resourceAI.start();
-			militaryAI = container.createNewAgent(militaryAID.getLocalName(), MilitaryAI.class.getName(), arg);
+			militaryAI = container.createNewAgent(militaryAID.getLocalName(),
+					MilitaryAI.class.getName(), arg);
 			militaryAI.start();
 		} catch (ControllerException e) {
 			e.printStackTrace();
@@ -101,7 +116,8 @@ public class MasterAI extends JrtsAgent implements Team {
 			protected void onTick() {
 				goalLevels.setAttack(attackScorer.calculatePriority());
 				goalLevels.setDefence(defenceScorer.calculatePriority());
-				goalLevels.setExploration(explorationScorer.calculatePriority());
+				goalLevels
+						.setExploration(explorationScorer.calculatePriority());
 				goalLevels.setResources(resourceScorer.calculatePriority());
 				notifyGoalChanges();
 				masterPerception.clean();
@@ -111,7 +127,8 @@ public class MasterAI extends JrtsAgent implements Team {
 
 	public void setDefaultGoals() {
 		// just for initialization they will change soon
-		goalLevels = new GoalLevels(GoalPriority.LOW, GoalPriority.LOW, GoalPriority.LOW, GoalPriority.LOW);
+		goalLevels = new GoalLevels(GoalPriority.LOW, GoalPriority.LOW,
+				GoalPriority.LOW, GoalPriority.LOW);
 		notifyGoalChanges();
 	}
 
@@ -120,7 +137,8 @@ public class MasterAI extends JrtsAgent implements Team {
 		World world = World.getInstance();
 		// check if city center was destroyed
 		Cell cityCenterCell = world.getCell(masterPerception.getCityCenter());
-		logger.log(logLevel, getTeamName() + " energy: " + cityCenterCell.getEnergy());
+		logger.log(logLevel,
+				getTeamName() + " energy: " + cityCenterCell.getEnergy());
 		if (cityCenterCell.getEnergy() <= 0) {
 			logger.log(logLevel, "TEAM DELETED");
 			decease();
@@ -181,21 +199,22 @@ public class MasterAI extends JrtsAgent implements Team {
 
 		} else if (n.getSubject().equals(Notification.NO_MORE_RESOURCE)) {
 			masterPerception.setAlertNoMoreResources(true);
-			
+
 		} else if (n.getSubject().equals(Notification.RESOURCES_FOUND)) {
 			masterPerception.setAlertNoMoreResources(false);
-			
+
 		} else if (n.getSubject().equals(Notification.UNIT_DEATH)) {
-			Position where = (Position) n.getContentObject();
-			masterPerception.getDeaths().add(where);
-			
-			if(n.getSender().contains("worker")) unitFactory.increaseNumDeadWorkers();
-			else if(n.getSender().contains("soldier")) unitFactory.increaseNumDeadSoldiers();
-			
+			Death death = (Death) n.getContentObject();
+
+			if (death.getUnitType() == Death.WORKER)
+				masterPerception.numDeadWorkers++;
+			else if (death.getUnitType() == Death.SOLDIER)
+				masterPerception.numDeadSoldiers++;
+
 		} else if (n.getSubject().equals(Notification.UNIT_UNDER_ATTACK)) {
 			Position where = (Position) n.getContentObject();
 			masterPerception.getThreats().add(where);
-			
+
 		} else if (n.getSubject().equals(Notification.CITYCENTER_UNDER_ATTACK)) {
 			masterPerception.setAlertCityCenterUnderAttack(true);
 		}
@@ -237,11 +256,11 @@ public class MasterAI extends JrtsAgent implements Team {
 
 	@Override
 	public int getNumDeadWorkers() {
-		return unitFactory.getNumDeadWorkers();
+		return masterPerception.numDeadWorkers;
 	}
 
 	@Override
 	public int getNumDeadSoldiers() {
-		return unitFactory.getNumDeadSoldiers();
+		return masterPerception.numDeadWorkers;
 	}
 }
