@@ -23,7 +23,7 @@ public class CollectResources extends UnitBehaviour {
 	Position cityCenter;
 
 	public CollectResources(Worker worker, CellType resource) {
-		super(false);
+		super(resource == CellType.FOOD ? AgentStatus.FOOD_COLLECTING : AgentStatus.WOOD_CUTTING, false);
 		this.worker = worker;
 		this.resourceToCollect = resource;
 		this.cityCenter = worker.requestCityCenterPosition();

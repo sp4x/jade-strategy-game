@@ -94,17 +94,14 @@ public class Worker extends Unit {
 	}
 
 	public void goUpgrading() {
-		switchStatus(AgentStatus.GO_UPGRADING);
 		addBehaviour(new GoUpgradingBehaviour(this));
 	}
 	
 	public void collectWood() {
-		switchStatus(AgentStatus.WOOD_CUTTING);
 		addBehaviour(new CollectResources(this, CellType.WOOD));
 	}
 
 	public void collectFood() {
-		switchStatus(AgentStatus.FOOD_COLLECTING);
 		addBehaviour(new CollectResources(this, CellType.FOOD));
 	}
 	
@@ -146,12 +143,11 @@ public class Worker extends Unit {
 	}
 
 	@Override
-	public boolean onAttacNotification(String attacker) {
+	public void onAttacNotification(String attacker) {
 		WorldMap worldMap = requestMap();
 		int i = Utils.random.nextInt(Direction.ALL.length);
 		Position p = worldMap.bigStep(getPosition(), Direction.ALL[i], GameConfig.RUNAWAY_DISTANCE);
 		goThere(p);
-		return false;
 	}
 
 }

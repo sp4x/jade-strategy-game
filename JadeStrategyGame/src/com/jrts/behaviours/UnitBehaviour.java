@@ -6,17 +6,17 @@ import com.jrts.common.GameStatistics;
 @SuppressWarnings("serial")
 public abstract class UnitBehaviour extends JrtsBehaviour{
 	
-	boolean idle = false;
+	final String agentStatus;
 	final boolean highPriority;
 
-	public UnitBehaviour(boolean highPriority, Unit u) {
+	public UnitBehaviour(String agentStatus, boolean highPriority, Unit u) {
 		super(u);
+		this.agentStatus = agentStatus;
 		this.highPriority = highPriority;
 	}
 
-	protected UnitBehaviour(boolean highPriority) {
-		super();
-		this.highPriority = highPriority;
+	protected UnitBehaviour(String agentStatus, boolean highPriority) {
+		this(agentStatus, highPriority, null);
 	}
 
 	public boolean isHighPriority() {

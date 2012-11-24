@@ -1,6 +1,7 @@
 package com.jrts.behaviours;
 
 import com.jrts.agents.Worker;
+import com.jrts.common.AgentStatus;
 import com.jrts.environment.Position;
 import com.jrts.messages.Notification;
 
@@ -16,7 +17,7 @@ public class GoUpgradingBehaviour extends UnitBehaviour {
 	 * @param soldier
 	 */
 	public GoUpgradingBehaviour(Worker soldier) {
-		super(false);
+		super(AgentStatus.GO_UPGRADING, false);
 		this.worker = soldier;
 		this.cityCenter = soldier.requestCityCenterPosition();
 	}

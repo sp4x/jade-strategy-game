@@ -3,6 +3,7 @@ package com.jrts.behaviours;
 import java.util.ArrayList;
 
 import com.jrts.agents.Soldier;
+import com.jrts.common.AgentStatus;
 import com.jrts.common.Utils;
 import com.jrts.environment.Direction;
 import com.jrts.environment.Position;
@@ -24,7 +25,7 @@ public class ExploreBehaviour extends UnitBehaviour {
 	 * @param soldier
 	 */
 	public ExploreBehaviour(Soldier soldier) {
-		super(false);
+		super(AgentStatus.EXPLORING, false);
 		this.soldier = soldier;
 		this.cityCenter = soldier.requestCityCenterPosition();
 		

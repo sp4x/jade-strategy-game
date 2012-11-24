@@ -51,7 +51,7 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 		this.position = position;
 		this.id = id;
 		registerO2AInterface(IUnit.class, this);
-		behaviourWrapper = new BehaviourWrapper();
+		behaviourWrapper = new BehaviourWrapper(this);
 	}
 
 	@Override
@@ -165,7 +165,7 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 		sendNotification(Notification.UNIT_UNDER_ATTACK, getPosition(), getMilitaryAID());
 	}
 	
-	public abstract boolean onAttacNotification(String attacker);
+	public abstract void onAttacNotification(String attacker);
 
 	public Position getCityCenter() {
 		return cityCenter;

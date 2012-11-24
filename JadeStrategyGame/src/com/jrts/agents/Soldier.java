@@ -5,8 +5,10 @@ import java.util.logging.Level;
 import jade.core.AID;
 
 import com.jrts.agents.MasterAI.Nature;
+import com.jrts.behaviours.BehaviourScheduler;
 import com.jrts.behaviours.ExploreBehaviour;
 import com.jrts.behaviours.FightingBehaviour;
+import com.jrts.behaviours.FollowPathBehaviour;
 import com.jrts.behaviours.PatrolBehaviour;
 import com.jrts.common.AgentStatus;
 import com.jrts.common.GameConfig;
@@ -22,7 +24,7 @@ import com.jrts.messages.Order;
 @SuppressWarnings("serial")
 public class Soldier extends Unit {
 	
-	private Level logLevel = Level.INFO;
+	private Level logLevel = Level.FINE;
 	
 	int knapsack = 0;
 	CellType resourceCarried;
@@ -67,18 +69,18 @@ public class Soldier extends Unit {
 	 */
 	public void patrol(Direction direction, int distance) {
 		addBehaviour(new PatrolBehaviour(this, direction, distance, requestMap()));
-		switchStatus(AgentStatus.PATROLING);
 	}
 
 	public void explore() {
 		addBehaviour(new ExploreBehaviour(this));
-		switchStatus(AgentStatus.EXPLORING);
 	}
 	
 	public void goToAttack(Position pos)
 	{
-		switchStatus(AgentStatus.GO_FIGHTING);		
-		//addBehaviour(new FightingBehaviour(this, pos));
+		BehaviourScheduler b = new BehaviourScheduler(AgentStatus.GO_FIGHTING, this);
+		b.queueBehaviour(new FollowPathBehaviour(this, pos));
+		b.queueBehaviour(new FightingBehaviour(this, pos));
+		addBehaviour(new FightingBehaviour(this, pos));
 	}
 	
 	@Override
@@ -102,10 +104,10 @@ public class Soldier extends Unit {
 	public void attack(String target) {
 		AID targetAid = new AID(target, AID.ISLOCALNAME);
 		sendNotification(Notification.ATTACK, id, targetAid);
+		engageFight(target);
 	}
 	
 	public void engageFight(String target) {
-		switchStatus(AgentStatus.FIGHTING);
 		addBehaviour(new FightingBehaviour(this, target));
 	}
 	
@@ -142,12 +144,10 @@ public class Soldier extends Unit {
 	}
 
 	@Override
-	public boolean onAttacNotification(String attacker) {
+	public void onAttacNotification(String attacker) {
 		//reject fight if the attacker has not been spotted yet
-		if (lastEnemySighting == null || lastEnemySighting.getById(attacker) == null)
-			return false;
-		engageFight(attacker);
-		return true;
+		if (lastEnemySighting != null && lastEnemySighting.getById(attacker) != null)
+			engageFight(attacker);
 	}
 
 	public EnemySighting getLastEnemySighting() {
