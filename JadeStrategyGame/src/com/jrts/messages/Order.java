@@ -10,7 +10,7 @@ public class Order implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private String order;
+	private String nextStatus;
 	private HashMap<String, Object> parameters;
 	
 	public static final String POSITION = "position";
@@ -19,18 +19,18 @@ public class Order implements Serializable {
 	
 	public Order() {}
 	
-	public Order(String order) {
+	public Order(String nextStatus) {
 
-		this.order = order;
+		this.nextStatus = nextStatus;
 		this.parameters = new HashMap<String, Object>();
 	}
 
-	public String getOrder() {
-		return order;
+	public String getNextStatus() {
+		return nextStatus;
 	}
 
 	public void setOrder(String order) {
-		this.order = order;
+		this.nextStatus = order;
 	}
 
 	public Direction getDirection() {

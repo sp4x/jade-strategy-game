@@ -106,28 +106,26 @@ public class Soldier extends Unit {
 	@Override
 	protected void handleNotification(Notification n) {
 		super.handleNotification(n);
-		if (n.getSubject().equals(Notification.ORDER)) {
-			Order order = (Order) n.getContentObject();
-			this.lastOrderReceived = order;
+	}
+	
+	@Override
+	public void takeOrder(Order order) {
+		super.takeOrder(order);
+		this.lastOrderReceived = order;
+		
+		if (order.getNextStatus().equals(AgentStatus.PATROLING)) {
+			Direction dir = order.getDirection();
+			int distance = order.getDistance();
+			patrol(dir, distance);
 			
-			if (order.getOrder().equals(AgentStatus.PATROLING)) {
-				goThere(getCityCenter());
-				switchStatus(AgentStatus.FREE);
-			}else if (order.getOrder().equals(AgentStatus.PATROLING)) {
-				Direction dir = order.getDirection();
-				int distance = order.getDistance();
-				patrol(dir, distance);
-				
-			} else if (order.getOrder().equals(AgentStatus.EXPLORING)) {
-				explore();
-			} else if (order.getOrder().equals(AgentStatus.WAIT_TO_FIGHT)) {
-				goThere(order.getPosition());
-				switchStatus(AgentStatus.WAIT_TO_FIGHT);
-			} else if (order.getOrder().equals(AgentStatus.GO_FIGHTING)) {
-				goToAttack(order.getPosition());
-			}
+		} else if (order.getNextStatus().equals(AgentStatus.EXPLORING)) {
+			explore();
+		} else if (order.getNextStatus().equals(AgentStatus.WAIT_TO_FIGHT)) {
+			goThere(order.getPosition());
+			switchStatus(AgentStatus.WAIT_TO_FIGHT);
+		} else if (order.getNextStatus().equals(AgentStatus.GO_FIGHTING)) {
+			goToAttack(order.getPosition());
 		}
-			
 	}
 
 	@Override

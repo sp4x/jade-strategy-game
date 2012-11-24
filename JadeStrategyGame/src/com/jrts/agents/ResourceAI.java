@@ -85,7 +85,7 @@ public class ResourceAI extends GoalBasedAI {
 
 		if (worker != null && order != null) {
 			giveOrder(worker, order);
-			unitTable.put(worker, order.getOrder());
+			unitTable.put(worker, order.getNextStatus());
 		}
 	}
 

@@ -8,6 +8,7 @@ import com.jrts.agents.MasterAI.Nature;
 import com.jrts.behaviours.BehaviourWrapper;
 import com.jrts.behaviours.FollowPathBehaviour;
 import com.jrts.behaviours.UnitBehaviour;
+import com.jrts.common.AgentStatus;
 import com.jrts.common.GameConfig;
 import com.jrts.environment.CellType;
 import com.jrts.environment.Direction;
@@ -18,6 +19,7 @@ import com.jrts.environment.WorldMap;
 import com.jrts.messages.EnemySighting;
 import com.jrts.messages.MessageSubject;
 import com.jrts.messages.Notification;
+import com.jrts.messages.Order;
 
 public abstract class Unit extends JrtsAgent implements IUnit {
 
@@ -246,6 +248,16 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 		} else if (n.getSubject().equals(Notification.ATTACK)) {
 			String attacker = (String) n.getContentObject();
 			onAttacNotification(attacker);
+		} else if (n.getSubject().equals(Notification.ORDER)) {
+			Order order = (Order) n.getContentObject();
+			takeOrder(order);
+		}
+	}
+
+	public void takeOrder(Order order) {
+		if (order.getNextStatus().equals(AgentStatus.FREE)) {
+			goThere(cityCenter);
+			switchStatus(AgentStatus.FREE);
 		}
 	}
 
