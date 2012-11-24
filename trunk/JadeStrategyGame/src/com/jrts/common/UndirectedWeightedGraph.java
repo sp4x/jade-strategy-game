@@ -71,8 +71,9 @@ public class UndirectedWeightedGraph extends SimpleWeightedGraph<Position, Defau
 		UndirectedWeightedGraph graph = new UndirectedWeightedGraph();
 		for( Position v : vertexSet())
 			graph.addVertex(v);
-		for( DefaultWeightedEdge edge: edgeSet())
-			graph.addEdge(getEdgeSource(edge), getEdgeTarget(edge));
+		for( DefaultWeightedEdge edge: edgeSet()){
+			graph.addWeightedEdge(getEdgeSource(edge), getEdgeTarget(edge), getEdgeWeight(edge));
+		}
 		l.unlock();
 		return graph;
 	}
