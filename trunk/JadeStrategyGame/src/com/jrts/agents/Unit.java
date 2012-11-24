@@ -32,9 +32,14 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 	private Position cityCenter;
 	private Position position = null;
 	private String status;
-	private Perception perception;
-
+	
+	//perception
+	Perception perception;
+	EnemySighting lastEnemySighting;
+	
 	private BehaviourWrapper behaviourWrapper;
+	
+
 
 	String id;
 	int life;
@@ -113,6 +118,9 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 		sendNotification(Notification.PERCEPTION, perception, getMasterAID());
 		
 		EnemySighting enemies = lookForEnemies(position, sight, perception);
+		
+		lastEnemySighting = enemies;
+		
 		if (!enemies.isEmpty()) {
 			onEnemySighted(enemies);
 		}
@@ -268,4 +276,9 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 	}
 
 	public abstract void onEnemySighted(EnemySighting list);
+
+	public EnemySighting getLastEnemySighting() {
+		return lastEnemySighting;
+	}
+	
 }

@@ -30,7 +30,7 @@ public class Soldier extends Unit {
 	CellType resourceCarried;
 
 	Order lastOrderReceived;
-	EnemySighting lastEnemySighting;
+	
 	
 	public Soldier() {
 		this(null, null);
@@ -90,7 +90,6 @@ public class Soldier extends Unit {
 
 	@Override
 	public void onEnemySighted(EnemySighting enemies) {
-		lastEnemySighting = enemies;
 		sendNotification(Notification.ENEMY_SIGHTED, enemies, getMilitaryAID());
 		
 		//add some heuristic to determine wether attack or not
@@ -150,8 +149,5 @@ public class Soldier extends Unit {
 			engageFight(attacker);
 	}
 
-	public EnemySighting getLastEnemySighting() {
-		return lastEnemySighting;
-	}
 	
 }

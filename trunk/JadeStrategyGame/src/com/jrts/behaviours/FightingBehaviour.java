@@ -57,6 +57,7 @@ public class FightingBehaviour extends UnitBehaviour {
 		//if the enemy is not in sight or it's dead
 		if (enemy == null) {
 			done = true;
+			System.out.println("nemico annientato");
 		} else {
 			Position enemyCurrentPosition = enemy.getPosition();
 			//if it's close attack
