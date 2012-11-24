@@ -14,7 +14,7 @@ public class World {
 
 	private static World instance = null;
 	
-	public static Level logLevel = Level.INFO;
+	public static Level logLevel = Level.FINE;
 
 	final Floor floor;
 
@@ -249,7 +249,6 @@ public class World {
 			meetingPoint = meetingPoint.step(randomDir, randomStep);
 		}
 		Utils.checkAndFixPosition(meetingPoint);
-		System.out.println("City Center: " + cityCenter + " MeetingPoint: " + meetingPoint);
 		return meetingPoint; 
 	}
 	
