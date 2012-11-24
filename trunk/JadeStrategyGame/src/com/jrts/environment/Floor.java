@@ -125,19 +125,20 @@ public class Floor implements Serializable {
 	 * @param j 	the Cell's column
 	 * @param st	the Cell's state
 	 */
-	public void set(int i, int j, Cell newCell){
+	public void set(int i, int j, Cell newCell) {
 		Position position = new Position(i, j);
-		CellType newType = newCell.type;
-		CellType currType = CellType.FREE;
-		if(floor[i][j] != null)
-			currType = floor[i][j].type;
-		
-		if(i>=0 && j>=0 && i<rows && j<cols){
-			//se sto per settare una cella occupata
-			if(!newCell.isWalkable() && !busyCells.contains(position))
+		if (isValid(position)) {
+			CellType newType = newCell.type;
+			CellType currType = CellType.FREE;
+			if (floor[i][j] != null)
+				currType = floor[i][j].type;
+
+			// se sto per settare una cella occupata
+			if (!newCell.isWalkable() && !busyCells.contains(position))
 				busyCells.add(position);
-			//se sto per liberare una cella occupata
-			if(isTypeWalkable(currType) && !isTypeWalkable(newType) && busyCells.contains(position))
+			// se sto per liberare una cella occupata
+			if (isTypeWalkable(currType) && !isTypeWalkable(newType)
+					&& busyCells.contains(position))
 				busyCells.remove(position);
 			floor[i][j] = newCell;
 		}
