@@ -15,6 +15,7 @@ import com.jrts.environment.World;
 import com.jrts.environment.WorldMap;
 import com.jrts.logic.AttacksManager;
 import com.jrts.messages.AggiornaRisorse;
+import com.jrts.messages.Death;
 import com.jrts.messages.EnemySighting;
 import com.jrts.messages.Notification;
 import com.jrts.messages.Order;
@@ -140,7 +141,7 @@ public class Worker extends Unit {
 
 	@Override
 	protected void die() {
-		sendNotification(Notification.UNIT_DEATH, getPosition(), getResourceAID());
+		sendNotification(Notification.UNIT_DEATH, new Death(Death.WORKER), getResourceAID());
 		terminate();
 	}
 
