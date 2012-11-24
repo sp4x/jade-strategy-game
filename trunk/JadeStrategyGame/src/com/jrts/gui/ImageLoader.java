@@ -68,16 +68,16 @@ class ImageLoader {
 		return null;
 	}
 	
-	public static Icon getSoldierImageIcon(String id) {
-		if(id == null){
+	public static Icon getSoldierImageIcon(String teamName) {
+		if(teamName == null){
 			logger.severe("Requested id null!");
 			return null;
 		}
 		
-		if(id.equals("team1")) return soldierIcon1;
-		if(id.equals("team2")) return soldierIcon2;
-		if(id.equals("team3")) return soldierIcon3;
-		if(id.equals("team4")) return soldierIcon4;
+		if(teamName.equals("team1")) return soldierIcon1;
+		if(teamName.equals("team2")) return soldierIcon2;
+		if(teamName.equals("team3")) return soldierIcon3;
+		if(teamName.equals("team4")) return soldierIcon4;
 		
 		return null;
 	}

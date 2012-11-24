@@ -72,6 +72,7 @@ public abstract class GoalBasedAI extends JrtsAgent {
 			for (AID unit : units) {
 				sendNotification(Notification.TEAM_DECEASED, null, unit);
 			}
+			this.removeAllBehaviours();
 			this.doDelete();
 		}
 	}
