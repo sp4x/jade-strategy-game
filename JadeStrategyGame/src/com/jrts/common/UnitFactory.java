@@ -28,6 +28,8 @@ public class UnitFactory extends Thread {
 
 	int workerQueueCount = 0;
 	int soldierQueueCount = 0;
+
+	private boolean finished = false;;
 	
 	
 	
@@ -43,7 +45,7 @@ public class UnitFactory extends Thread {
 
 	@Override
 	public void run() {
-		while (true) {
+		while (!isFinished()) {
 			try {
 				Class<? extends Unit> claz = queue.take();
 				createUnit(claz);
@@ -86,18 +88,19 @@ public class UnitFactory extends Thread {
 			AgentController agentController;
 			try {
 				Object[] args = {cityCenter, unitPosition, meetingPoint, team, nature};
-				synchronized (this) {
-					agentController = controller.createNewAgent(unitName, claz.getName(), args);
-					agentController.start();
-
-					if(claz.getName().contains("Worker")) workerQueueCount--;
-					else if(claz.getName().contains("Soldier")) soldierQueueCount--;
+				if (!isFinished()) {
+					synchronized (this) {
+						agentController = controller.createNewAgent(unitName, claz.getName(), args);
+						agentController.start();
+	
+						if(claz.getName().contains("Worker")) workerQueueCount--;
+						else if(claz.getName().contains("Soldier")) soldierQueueCount--;
+					}
+					IUnit o2a = agentController.getO2AInterface(IUnit.class);
+					World.getInstance().addUnit(unitPosition, unitName, o2a);
 				}
-				IUnit o2a = agentController.getO2AInterface(IUnit.class);
-				World.getInstance().addUnit(unitPosition, unitName, o2a);
 				
 			} catch (ControllerException e) {
-				e.printStackTrace();
 			}
 		}
 		else{
@@ -119,6 +122,16 @@ public class UnitFactory extends Thread {
 	
 	public int getQueuedUnitsCount() {
 		return queue.size();
+	}
+
+
+	public synchronized boolean isFinished() {
+		return finished;
+	}
+
+
+	public synchronized void setFinished(boolean finished) {
+		this.finished = finished;
 	}
 	
 	

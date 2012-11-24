@@ -53,9 +53,9 @@ public class DijkstraPathfinder implements Pathfinder {
 		for (int index = 0; index < floor.getBusyCells().size(); index++)
 			walkableGraph.removeVertex(floor.getBusyCells().get(index));
 		
-		if((startPosition.getRow() == endPosition.getRow() || startPosition.getCol() == endPosition.getCol()) &&
-				startPosition.distance(endPosition) > 5)
-			VisualGraph.show(walkableGraph, 30);
+//		if((startPosition.getRow() == endPosition.getRow() || startPosition.getCol() == endPosition.getCol()) &&
+//				startPosition.distance(endPosition) > 5)
+//			VisualGraph.show(walkableGraph, 30);
 
 		if (!walkableGraph.containsVertex(endPosition)) {
 			// logger.log(logLevel, "Dest Node not reachable");

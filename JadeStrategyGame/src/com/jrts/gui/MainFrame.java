@@ -4,7 +4,6 @@ import jade.core.Runtime;
 import jade.wrapper.AgentContainer;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
@@ -59,6 +58,7 @@ public class MainFrame extends JFrame {
 
 	HashMap<String, JPanel> teamResourcePanels = new HashMap<String, JPanel>();
 	HashMap<String, JPanel> teamVisibilityPanels = new HashMap<String, JPanel>();
+	HashMap<String, JPanel> teamInfoPanels = new HashMap<String, JPanel>();
 	
 	// public static int treeClick = 0;
 
@@ -168,15 +168,10 @@ public class MainFrame extends JFrame {
 		this.leftTabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		JPanel panel1 = new JPanel();
 		panel1.add(new JLabel("lalal"));
-		for (Team t : teams){
-			if(t.getTeamName().equals("team1"))
-				leftTabbedPane.addTab(t.getTeamName(), ImageLoader.soldierIcon1, new TeamInfoPanel(t));
-			else if(t.getTeamName().equals("team2"))
-				leftTabbedPane.addTab(t.getTeamName(), ImageLoader.soldierIcon2, new TeamInfoPanel(t));
-			else if(t.getTeamName().equals("team3"))
-				leftTabbedPane.addTab(t.getTeamName(), ImageLoader.soldierIcon3, new TeamInfoPanel(t));
-			else if(t.getTeamName().equals("team4"))
-				leftTabbedPane.addTab(t.getTeamName(), ImageLoader.soldierIcon4, new TeamInfoPanel(t));
+		for (Team t : teams) {
+			TeamInfoPanel tip = new TeamInfoPanel(t);
+			teamInfoPanels.put(t.getTeamName(), tip);
+			leftTabbedPane.addTab(t.getTeamName(), ImageLoader.getSoldierImageIcon(t.getTeamName()), tip);
 		}
 		leftTabbedPane.setMnemonicAt(0, KeyEvent.VK_1);
 		leftTabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);		
@@ -273,8 +268,7 @@ public class MainFrame extends JFrame {
 			agentController.kill();
 			Runtime.instance().shutDown();
 		} catch (Exception e1) {
-			e1.printStackTrace();
-		}
+		} 
 		System.exit(0);
 	}
 
@@ -364,6 +358,8 @@ public class MainFrame extends JFrame {
 		}
 		rightPanel.remove(teamVisibilityPanels.get(teamName));
 		topPanel.remove(teamResourcePanels.get(teamName));
+		leftTabbedPane.remove(teamInfoPanels.get(teamName));
+		
 		repaint();
 	}
 }
