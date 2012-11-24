@@ -22,10 +22,10 @@ public class DijkstraPathfinder implements Pathfinder {
 
 	@Override
 	public ArrayList<Direction> calculatePath(Floor floor,
-			Position startPosition, Position endPosition) {
+			Position startPosition, Position endPosition, int tolerance) {
 		if (TOLERANCE) {
 			Position correctedEndPosition = approximateEndPosition(floor,
-					startPosition, endPosition);
+					startPosition, endPosition, tolerance);
 			// logger.log(logLevel, "Corrected EndPos:" + correctedEndPosition);
 			if (correctedEndPosition == null)
 				return new ArrayList<Direction>();
@@ -73,12 +73,11 @@ public class DijkstraPathfinder implements Pathfinder {
 	 * @return correctedEndPosition
 	 */
 	private Position approximateEndPosition(Floor floor, Position startPos,
-			Position endPos) {
+			Position endPos, int tolerance) {
 		Cell target = floor.get(endPos);
 		if (target.isWalkable())
 			return endPos;
-		return floor.nextTo(startPos, endPos, CellType.FREE,
-				GameConfig.PATH_TOLERANCE);
+		return floor.nextTo(startPos, endPos, CellType.FREE, tolerance);
 	}
 
 	private UndirectedWeightedGraph createWalkableGraph(Floor floor,

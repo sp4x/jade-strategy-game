@@ -9,6 +9,6 @@ import com.jrts.environment.Position;
 public interface Pathfinder {
 
 	public List<Direction> calculatePath(Floor floor, Position startPosition,
-			Position endPosition);
+			Position endPosition, int tolerance);
 
 }
