@@ -56,7 +56,7 @@ public class DijkstraPathfinder implements Pathfinder {
 			walkableGraph.removeVertex(floor.getBusyCells().get(index));
 		
 		if((startPosition.getRow() == endPosition.getRow() || startPosition.getCol() == endPosition.getCol()) &&
-				startPosition.distance(endPosition) > 10)
+				startPosition.distance(endPosition) > 5)
 			VisualGraph.show(walkableGraph, 30);
 
 		if (!walkableGraph.containsVertex(endPosition)) {
@@ -66,8 +66,11 @@ public class DijkstraPathfinder implements Pathfinder {
 
 //		List<DefaultWeightedEdge> list = new DijkstraShortestPath<Position, DefaultWeightedEdge>(
 //				walkableGraph, startPosition, endPosition).getPath().getEdgeList();
+//	    List<DefaultWeightedEdge> list = DijkstraShortestPath.findPathBetween(
+//					walkableGraph, startPosition, endPosition);
+	    
 	    List<DefaultWeightedEdge> list = DijkstraShortestPath.findPathBetween(
-					walkableGraph, startPosition, endPosition);
+				walkableGraph, startPosition, endPosition);
 		// logger.log(logLevel, "List Edges:" + list);
 		ArrayList<Direction> directions = edgeListToDirectionList(walkableGraph, startPosition, list);
 		// logger.log(logLevel, "Cells List:" + cellList);
