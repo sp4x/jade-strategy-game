@@ -3,11 +3,14 @@ package com.jrts.pathfinding;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.transform.Transformer;
+
 import org.jgrapht.alg.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultWeightedEdge;
 
 import com.jrts.common.GameConfig;
 import com.jrts.common.UndirectedWeightedGraph;
+import com.jrts.common.VisualGraph;
 import com.jrts.environment.Cell;
 import com.jrts.environment.CellType;
 import com.jrts.environment.Direction;
@@ -17,12 +20,20 @@ import com.jrts.environment.Position;
 public class DijkstraPathfinder implements Pathfinder {
 	
 	public static final boolean TOLERANCE = true;
+	public static Floor floor = null;
+	public static ArrayList<Direction> EMPTY_PATH = new ArrayList<Direction>();
 
 	UndirectedWeightedGraph mainWalkableGraph;
 
 	@Override
-	public ArrayList<Direction> calculatePath(Floor floor,
-			Position startPosition, Position endPosition, int tolerance) {
+	public ArrayList<Direction> calculatePath(Floor floor, Position startPosition, Position endPosition, int tolerance) {
+		
+		System.out.println("Distance requested: " + startPosition.distance(endPosition));
+		if(startPosition.equals(endPosition))
+			return EMPTY_PATH;
+		
+		DijkstraPathfinder.floor = floor;
+		
 		if (TOLERANCE) {
 			Position correctedEndPosition = approximateEndPosition(floor,
 					startPosition, endPosition, tolerance);
@@ -44,14 +55,19 @@ public class DijkstraPathfinder implements Pathfinder {
 		for (int index = 0; index < floor.getBusyCells().size(); index++)
 			walkableGraph.removeVertex(floor.getBusyCells().get(index));
 		
-		//VisualGraph.show(walkableGraph, 30);
+		if((startPosition.getRow() == endPosition.getRow() || startPosition.getCol() == endPosition.getCol()) &&
+				startPosition.distance(endPosition) > 10)
+			VisualGraph.show(walkableGraph, 30);
 
 		if (!walkableGraph.containsVertex(endPosition)) {
 			// logger.log(logLevel, "Dest Node not reachable");
-			return new ArrayList<Direction>();
+			return EMPTY_PATH;
 		}
-		List<DefaultWeightedEdge> list = new DijkstraShortestPath<Position, DefaultWeightedEdge>(
-				walkableGraph, startPosition, endPosition).getPathEdgeList();
+
+//		List<DefaultWeightedEdge> list = new DijkstraShortestPath<Position, DefaultWeightedEdge>(
+//				walkableGraph, startPosition, endPosition).getPath().getEdgeList();
+	    List<DefaultWeightedEdge> list = DijkstraShortestPath.findPathBetween(
+					walkableGraph, startPosition, endPosition);
 		// logger.log(logLevel, "List Edges:" + list);
 		ArrayList<Direction> directions = edgeListToDirectionList(walkableGraph, startPosition, list);
 		// logger.log(logLevel, "Cells List:" + cellList);
@@ -74,6 +90,7 @@ public class DijkstraPathfinder implements Pathfinder {
 	 */
 	private Position approximateEndPosition(Floor floor, Position startPos,
 			Position endPos, int tolerance) {
+
 		Cell target = floor.get(endPos);
 		if (target.isWalkable())
 			return endPos;
@@ -82,8 +99,6 @@ public class DijkstraPathfinder implements Pathfinder {
 
 	private UndirectedWeightedGraph createWalkableGraph(Floor floor,
 			Position startPos, Position endPos, boolean includeCellWithUnit) {
-		Integer startRow = startPos.getRow();
-		Integer startCol = startPos.getCol();
 		// create walkable graph
 		UndirectedWeightedGraph walkableGraph = new UndirectedWeightedGraph();
 		// avoid exceptions
@@ -92,74 +107,46 @@ public class DijkstraPathfinder implements Pathfinder {
 		for (int i = 0; i < floor.getRows(); i++)
 			for (int j = 0; j < floor.getCols(); j++) {
 				Cell cell = floor.get(i, j);
-				// NB La cella di partenza anche se occupata dall'unita' fa
-				// parte del grafo
-				boolean includeCell = cell.isWalkable()|| (includeCellWithUnit && cell.isUnit());
+				// NB La cella di partenza anche se occupata dall'unita' fa parte del grafo
+				boolean includeCell = cell.isWalkable() || (includeCellWithUnit && cell.isUnit()) || cell.equals(startPos);
 				if (includeCell) {
 					// A
 					// |
-					if (i - 1 >= 0 && includeCell || (i - 1 == startRow && j == startCol)) {
-						walkableGraph.addWeightedEdge(new Position(i, j),
-								new Position(i - 1, j), 1);
+					if (isBounded(i-1, j) || startPos.equals(i-1, j)) {
+						walkableGraph.addWeightedEdge(new Position(i, j), new Position(i - 1, j), 1);
 					}
 					// |
 					// v
-					if (i + 1 < floor.getRows()
-							&& includeCell || (i - 1 == startRow && j == startCol)
-									|| (i + 1 == startRow && j == startCol)) {
-						walkableGraph.addWeightedEdge(new Position(i, j),
-								new Position(i + 1, j), 1);
+					if (isBounded(i+1, j) || startPos.equals(i+1, j)) {
+						walkableGraph.addWeightedEdge(new Position(i, j), new Position(i + 1, j), 1);
 					}
 					// <-
-					if (j - 1 >= 0
-							&& includeCell || (i - 1 == startRow && j == startCol)
-									|| (i == startRow && j - 1 == startCol)) {
-						walkableGraph.addWeightedEdge(new Position(i, j),
-								new Position(i, j - 1), 1);
+					if (isBounded(i, j-1) || startPos.equals(i, j-1)) {
+						walkableGraph.addWeightedEdge(new Position(i, j), new Position(i, j - 1), 1);
 					}
 					// ->
-					if (j + 1 < floor.getCols()
-							&& includeCell || (i - 1 == startRow && j == startCol)
-									|| (i == startRow && j + 1 == startCol)) {
-						walkableGraph.addWeightedEdge(new Position(i, j),
-								new Position(i, j + 1), 1);
+					if (isBounded(i, j+1) || startPos.equals(i, j+1)) {
+						walkableGraph.addWeightedEdge(new Position(i, j), new Position(i, j + 1), 1);
 					}
 					// A
 					// \
-					if (j - 1 >= 0
-							&& i - 1 >= 0
-							&& includeCell || (i - 1 == startRow && j == startCol)
-									|| (i - 1 == startRow && j - 1 == startCol)) {
-						walkableGraph.addWeightedEdge(new Position(i, j),
-								new Position(i - 1, j - 1), 1.5);
+					if (isBounded(i-1, j-1) || startPos.equals(i-1, j-1)) {
+						walkableGraph.addWeightedEdge(new Position(i, j), new Position(i - 1, j - 1), 1.5);
 					}
-
 					// A
 					// /
-					if (j + 1 < floor.getCols()
-							&& i - 1 >= 0
-							&& includeCell || (i - 1 == startRow && j == startCol)
-									|| (i - 1 == startRow && j + 1 == startCol)) {
-						walkableGraph.addWeightedEdge(new Position(i, j),
-								new Position(i - 1, j + 1), 1.5);
+					if (isBounded(i-1, j+1) || startPos.equals(i-1, j+1)) {
+						walkableGraph.addWeightedEdge(new Position(i, j), new Position(i - 1, j + 1), 1.5);
 					}
 					// /
 					// v
-					if (j - 1 >= 0
-							&& i + 1 < floor.getRows()
-							&& includeCell || (i - 1 == startRow && j == startCol)
-									|| (i + 1 == startRow && j - 1 == startCol)) {
-						walkableGraph.addWeightedEdge(new Position(i, j),
-								new Position(i + 1, j - 1), 1.5);
+					if (isBounded(i+1, j-1) || startPos.equals(i+1, j-1)) {
+						walkableGraph.addWeightedEdge(new Position(i, j), new Position(i + 1, j - 1), 1.5);
 					}
 					// \
 					// v
-					if (j + 1 < floor.getCols()
-							&& i + 1 < floor.getRows()
-							&& includeCell || (i - 1 == startRow && j == startCol)
-									|| (i + 1 == startRow && j + 1 == startCol)) {
-						walkableGraph.addWeightedEdge(new Position(i, j),
-								new Position(i + 1, j + 1), 1.5);
+					if (isBounded(i+1, j+1) || startPos.equals(i+1, j+1)) {
+						walkableGraph.addWeightedEdge(new Position(i, j), new Position(i + 1, j + 1), 1.5);
 					}
 				}
 			}
@@ -222,5 +209,11 @@ public class DijkstraPathfinder implements Pathfinder {
 				return Direction.LEFT;
 		}
 		return Direction.DOWN;
+	}
+	
+	private boolean isBounded(int row, int col){
+		boolean rowBounded = row >= 0 && row < floor.getRows();
+		boolean colBounded = col >= 0 && col < floor.getCols();
+		return rowBounded && colBounded;
 	}
 }

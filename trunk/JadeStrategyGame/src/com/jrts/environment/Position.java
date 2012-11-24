@@ -129,4 +129,8 @@ public class Position implements Serializable {
 		}
 		return copyPos;
 	}
+
+	public boolean equals(int row, int col) {
+		return this.row == row && this.col == col;
+	}
 }
