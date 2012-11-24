@@ -75,9 +75,9 @@ public class WorldMap extends Floor {
 	}
 
 	public Position bigStep(Position start, Direction d, int numSteps) {
-		Position newPosition = start;
+		Position p = start;
 		for (int i = 0; i < numSteps; i++) {
-			Position p = newPosition.step(d);
+			p = p.step(d);
 			if(p.getCol() < 0) p.setCol(0);
 			else if(p.getCol() >= cols) p.setCol(cols - 1 );
 			
@@ -85,10 +85,6 @@ public class WorldMap extends Floor {
 			else if(p.getRow() >= rows) p.setRow(rows - 1);
 		}
 		
-		return newPosition;
+		return p;
 	}
-	
-	
-	
-
 }

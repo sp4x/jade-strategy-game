@@ -3,8 +3,6 @@ package com.jrts.pathfinding;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.transform.Transformer;
-
 import org.jgrapht.alg.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultWeightedEdge;
 
@@ -28,7 +26,7 @@ public class DijkstraPathfinder implements Pathfinder {
 	@Override
 	public ArrayList<Direction> calculatePath(Floor floor, Position startPosition, Position endPosition, int tolerance) {
 		
-		System.out.println("Distance requested: " + startPosition.distance(endPosition));
+		//System.out.println("Distance requested: " + startPosition.distance(endPosition));
 		if(startPosition.equals(endPosition))
 			return EMPTY_PATH;
 		
