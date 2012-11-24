@@ -8,17 +8,15 @@ import com.jrts.environment.WorldMap;
 @SuppressWarnings("serial")
 public class PatrolBehaviour extends UnitBehaviour {
 	
-	private int distance = 20;
+	private int distance = DISTANCE_LITTLE;
 	
 	public static final int DISTANCE_LITTLE = 5;
 	public static final int DISTANCE_MEDIUM = 8;
 	public static final int DISTANCE_BIG = 10;
 
 	Soldier soldier;
-	Position cityCenter;
 	Position p1, p2;
 	boolean go1 = true;
-	/**
 	/**
 	 * 
 	 * @param soldier
@@ -27,27 +25,25 @@ public class PatrolBehaviour extends UnitBehaviour {
 	public PatrolBehaviour(Soldier soldier, Direction direction, int distance, WorldMap worldMap) {
 		super(false);
 		
-		this.soldier = soldier;
-		this.cityCenter = soldier.requestCityCenterPosition();
-		
+		this.soldier = soldier;		
 		this.distance = distance;
 		
 		if(direction == Direction.LEFT)
 		{
-			p1 = worldMap.bigStep(cityCenter, Direction.LEFT_UP, this.distance);
-			p2 = worldMap.bigStep(cityCenter, Direction.LEFT_DOWN, this.distance);
+			p1 = worldMap.bigStep(soldier.getCityCenter(), Direction.LEFT_UP, this.distance);
+			p2 = worldMap.bigStep(soldier.getCityCenter(), Direction.LEFT_DOWN, this.distance);
 		} else if(direction == Direction.UP)
 		{
-			p1 = worldMap.bigStep(cityCenter, Direction.LEFT_UP, this.distance);
-			p2 = worldMap.bigStep(cityCenter, Direction.RIGHT_UP, this.distance);
+			p1 = worldMap.bigStep(soldier.getCityCenter(), Direction.LEFT_UP, this.distance);
+			p2 = worldMap.bigStep(soldier.getCityCenter(), Direction.RIGHT_UP, this.distance);
 		} else if(direction == Direction.RIGHT)
 		{
-			p1 = worldMap.bigStep(cityCenter, Direction.RIGHT_UP, this.distance);
-			p2 = worldMap.bigStep(cityCenter, Direction.RIGHT_DOWN, this.distance);
+			p1 = worldMap.bigStep(soldier.getCityCenter(), Direction.RIGHT_UP, this.distance);
+			p2 = worldMap.bigStep(soldier.getCityCenter(), Direction.RIGHT_DOWN, this.distance);
 		} else if(direction == Direction.DOWN)
 		{
-			p1 = worldMap.bigStep(cityCenter, Direction.LEFT_DOWN, this.distance);
-			p2 = worldMap.bigStep(cityCenter, Direction.RIGHT_DOWN, this.distance);
+			p1 = worldMap.bigStep(soldier.getCityCenter(), Direction.LEFT_DOWN, this.distance);
+			p2 = worldMap.bigStep(soldier.getCityCenter(), Direction.RIGHT_DOWN, this.distance);
 		}
 	}
 
