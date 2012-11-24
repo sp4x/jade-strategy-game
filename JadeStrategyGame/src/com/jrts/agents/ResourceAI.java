@@ -185,8 +185,7 @@ public class ResourceAI extends GoalBasedAI {
 			resourcesContainer.addWood(collectedWood);
 		} else if (n.getSubject().equals(Notification.UNIT_DEATH)) {
 			workersCounter--;
-			sendNotification(Notification.UNIT_DEATH, n.getContentObject(),
-					getMasterAID());
+			sendNotification(Notification.UNIT_DEATH, n.getContentObject(), getMasterAID());
 		} else if (n.getSubject().equals(Notification.READY_TO_BE_UPGRADED)) {
 			workersCounter--;
 		}

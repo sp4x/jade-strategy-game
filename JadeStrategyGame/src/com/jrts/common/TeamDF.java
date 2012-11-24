@@ -19,7 +19,6 @@ public class TeamDF {
 	public TeamDF(Agent agent, String teamName) {
 		this.agent = agent;
 		this.aid = new AID(teamName + "-df", AID.ISLOCALNAME);
-
 	}
 
 	public DFAgentDescription[] search(DFAgentDescription desc) {

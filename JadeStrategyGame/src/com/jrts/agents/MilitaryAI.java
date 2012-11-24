@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.logging.Level;
 
+import javax.rmi.CORBA.Util;
+
 import com.jrts.behaviours.PatrolBehaviour;
 import com.jrts.behaviours.UpdateUnitTable;
 import com.jrts.common.AgentStatus;
@@ -20,6 +22,7 @@ import com.jrts.environment.Perception;
 import com.jrts.environment.Position;
 import com.jrts.environment.World;
 import com.jrts.messages.EnemySighting;
+import com.jrts.messages.GoalLevels;
 import com.jrts.messages.Notification;
 import com.jrts.messages.Order;
 
@@ -48,8 +51,7 @@ public class MilitaryAI extends GoalBasedAI {
 				manageSoldiers();
 				managePatroling();
 				manageExploring();
-				manageFighting();
-				
+				manageFighting();	
 			}
 		});
 				
@@ -152,6 +154,10 @@ public class MilitaryAI extends GoalBasedAI {
 	
 	private void managePatroling() {
 
+		if(goalLevels.getDefence().equals(GoalPriority.LOW))
+			try { Thread.sleep(Utils.random.nextInt(5000)); } 
+			catch (InterruptedException e) { e.printStackTrace(); }
+		
 		int numPatrolingSoldiers = unitTable.getUnitsWithStatus(AgentStatus.PATROLING).size();
 		int neededPatrolingSoldiers = goalLevels.extimatePatrolingUnits();
 		
@@ -163,6 +169,10 @@ public class MilitaryAI extends GoalBasedAI {
 	
 	private void manageExploring() {
 
+		if(goalLevels.getExploration().equals(GoalPriority.LOW))
+			try { Thread.sleep(Utils.random.nextInt(5000)); } 
+			catch (InterruptedException e) { e.printStackTrace(); }
+		
 		int numExploringSoldiers = unitTable.getUnitsWithStatus(AgentStatus.EXPLORING).size();
 		int neededExploringSoldiers = goalLevels.extimateExplorationUnits();
 		

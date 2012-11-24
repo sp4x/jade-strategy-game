@@ -36,14 +36,29 @@ public class GoalScorer {
 		double score = 0;
 		for (Rule r : rules) {
 			double localScore = r.value();
+			if(localScore < MIN_SCORE) localScore = 0;
+			if(localScore > MAX_SCORE || Double.isNaN(localScore)) localScore = MAX_SCORE;
+			/*
 			score += (localScore < MIN_SCORE ? 0 : localScore > MAX_SCORE
 					|| Double.isNaN(localScore) ? MAX_SCORE : localScore);
+					*/
+			score += localScore;
 		}
+		
 		score /= rules.size();
+
+		/*
+		if(this.getClass().getName().contains("Att")){
+			System.out.println(perception.getTeamDF().getLocalName() + " - ATT : " + score);
+			if(perception.getTeamDF().getLocalName().contains("2"))
+				System.out.println();
+		}
+		*/
 		if (score < MAX_SCORE / 3)
 			return GoalPriority.LOW;
 		else if (score < 2 * MAX_SCORE / 3)
 			return GoalPriority.MEDIUM;
+		
 		return GoalPriority.HIGH;
 	}
 
