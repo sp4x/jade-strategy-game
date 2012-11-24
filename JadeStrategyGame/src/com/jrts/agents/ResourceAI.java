@@ -27,7 +27,7 @@ public class ResourceAI extends GoalBasedAI {
 
 	public ResourceAI() {
 		super();
-		logLevel = Level.INFO;
+		logLevel = Level.FINE;
 	}
 
 	protected void setup() {

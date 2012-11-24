@@ -1,6 +1,10 @@
 package com.jrts.messages;
 
-public class Death {
+import jade.util.leap.Serializable;
+
+public class Death implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
 	
 	public static final int SOLDIER = 0;
 	public static final int WORKER = 1;

@@ -1,5 +1,7 @@
 package com.jrts.agents;
 
+import java.util.logging.Level;
+
 import jade.core.AID;
 
 import com.jrts.agents.MasterAI.Nature;
@@ -12,12 +14,15 @@ import com.jrts.environment.CellType;
 import com.jrts.environment.Direction;
 import com.jrts.environment.Position;
 import com.jrts.logic.AttacksManager;
+import com.jrts.messages.Death;
 import com.jrts.messages.EnemySighting;
 import com.jrts.messages.Notification;
 import com.jrts.messages.Order;
 
 @SuppressWarnings("serial")
 public class Soldier extends Unit {
+	
+	private Level logLevel = Level.INFO;
 	
 	int knapsack = 0;
 	CellType resourceCarried;
@@ -130,7 +135,8 @@ public class Soldier extends Unit {
 
 	@Override
 	protected void die() {
-		sendNotification(Notification.UNIT_DEATH, getPosition(), getMilitaryAID());
+		sendNotification(Notification.UNIT_DEATH, new Death(Death.SOLDIER), getResourceAID());
+		logger.log(logLevel, getAID().getLocalName() + ":dying");
 		terminate();
 	}
 

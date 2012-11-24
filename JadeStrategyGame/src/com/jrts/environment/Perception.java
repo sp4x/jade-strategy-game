@@ -20,7 +20,7 @@ public class Perception extends Floor {
 						&& Math.abs(center.col - col) <= sight;
 				if (inRange) {
 					Cell cell = floor.get(row, col);
-					setWithAbsoluteCoords(row, col, new Cell(cell));
+					setWithAbsoluteCoords(row, col, new Cell(cell.getType(), cell.getId()));
 				}
 			}
 		}
