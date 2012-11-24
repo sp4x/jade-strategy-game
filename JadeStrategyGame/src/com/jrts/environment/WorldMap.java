@@ -52,14 +52,14 @@ public class WorldMap extends Floor {
 	
 	
 	public double exploredPercentage() {
-		double totalCells = rows*cols, unknown = 0;
+		double totalCells = rows*cols, known = 0;
 		for (int i=0; i < getRows(); i++) {
 			for (int j=0; j < getCols(); j++) {
-				if (get(i, j).type == CellType.UNKNOWN)
-					unknown += 1;
+				if (!get(i, j).isUnknown())
+					known += 1;
 			}
 		}
-		return unknown*100.0/totalCells;
+		return known*100.0/totalCells;
 	}
 	
 	
