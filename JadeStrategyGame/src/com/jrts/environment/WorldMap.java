@@ -67,7 +67,7 @@ public class WorldMap extends Floor {
 		Collection<Position> positions = new LinkedList<Position>();
 		for (int i=0; i < getRows(); i++) {
 			for (int j=0; j < getCols(); j++) {
-				if (get(i, j).type == CellType.CITY_CENTER)
+				if (get(i, j).isCityCenter())
 					positions.add(new Position(i, j));
 			}
 		}
