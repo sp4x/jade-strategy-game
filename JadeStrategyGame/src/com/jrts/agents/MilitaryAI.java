@@ -8,8 +8,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.logging.Level;
 
-import javax.rmi.CORBA.Util;
-
 import com.jrts.behaviours.PatrolBehaviour;
 import com.jrts.behaviours.UpdateUnitTable;
 import com.jrts.common.AgentStatus;
@@ -22,7 +20,6 @@ import com.jrts.environment.Perception;
 import com.jrts.environment.Position;
 import com.jrts.environment.World;
 import com.jrts.messages.EnemySighting;
-import com.jrts.messages.GoalLevels;
 import com.jrts.messages.Notification;
 import com.jrts.messages.Order;
 

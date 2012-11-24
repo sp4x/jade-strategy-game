@@ -1,7 +1,5 @@
 package com.jrts.behaviours;
 
-import jade.core.behaviours.Behaviour;
-
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -9,8 +7,10 @@ import com.jrts.agents.Unit;
 
 public class BehaviourScheduler extends UnitBehaviour {
 	
-	Queue<Behaviour> scheduledBehaviours = new LinkedList<Behaviour>();
-	Behaviour current = null;
+	private static final long serialVersionUID = 1L;
+	
+	Queue<UnitBehaviour> scheduledBehaviours = new LinkedList<UnitBehaviour>();
+	UnitBehaviour current = null;
 	Unit unit;
 
 	public BehaviourScheduler(String agentStatus, Unit u) {
@@ -22,9 +22,10 @@ public class BehaviourScheduler extends UnitBehaviour {
 	public void myAction() {
 		if (current == null && !scheduledBehaviours.isEmpty()) {
 			current = scheduledBehaviours.poll();
-			unit.addBehaviour(current);
 		} else if (current.done()) {
 			current = null;
+		} else {
+			current.myAction();
 		}
 	}
 
@@ -33,7 +34,7 @@ public class BehaviourScheduler extends UnitBehaviour {
 		return current == null && scheduledBehaviours.isEmpty();
 	}
 	
-	public void queueBehaviour(Behaviour b) {
+	public void queueBehaviour(UnitBehaviour b) {
 		scheduledBehaviours.add(b);
 	}
 
