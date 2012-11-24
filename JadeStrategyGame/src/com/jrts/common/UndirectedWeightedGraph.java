@@ -7,6 +7,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.jgrapht.Graphs;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.SimpleWeightedGraph;
 
@@ -30,12 +31,8 @@ public class UndirectedWeightedGraph extends SimpleWeightedGraph<Position, Defau
 			addVertex(v1);
 		if (!containsVertex(v2))
 			addVertex(v2);
-		DefaultWeightedEdge e1 = new DefaultWeightedEdge();
-		DefaultWeightedEdge e2 = new DefaultWeightedEdge();
-		addEdge(v1, v2, e1);
-		addEdge(v2, v1, e2);
-		setEdgeWeight(e1, weight);
-		setEdgeWeight(e2, weight);
+		Graphs.addEdge(this, v1, v2, weight); 
+		Graphs.addEdge(this, v2, v1, weight); 
 		l.unlock();
 	}
 	
