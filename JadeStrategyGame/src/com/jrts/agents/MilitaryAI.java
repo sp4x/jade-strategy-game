@@ -156,7 +156,7 @@ public class MilitaryAI extends GoalBasedAI {
 
 		if(goalLevels.getDefence().equals(GoalPriority.LOW))
 			try { Thread.sleep(Utils.random.nextInt(5000)); } 
-			catch (InterruptedException e) { e.printStackTrace(); }
+			catch (InterruptedException e) {  }
 		
 		int numPatrolingSoldiers = unitTable.getUnitsWithStatus(AgentStatus.PATROLING).size();
 		int neededPatrolingSoldiers = goalLevels.extimatePatrolingUnits();
@@ -171,7 +171,7 @@ public class MilitaryAI extends GoalBasedAI {
 
 		if(goalLevels.getExploration().equals(GoalPriority.LOW))
 			try { Thread.sleep(Utils.random.nextInt(5000)); } 
-			catch (InterruptedException e) { e.printStackTrace(); }
+			catch (InterruptedException e) {  }
 		
 		int numExploringSoldiers = unitTable.getUnitsWithStatus(AgentStatus.EXPLORING).size();
 		int neededExploringSoldiers = goalLevels.extimateExplorationUnits();
