@@ -1,6 +1,7 @@
 package com.jrts.behaviours;
 
 import com.jrts.agents.Soldier;
+import com.jrts.common.AgentStatus;
 import com.jrts.environment.Cell;
 import com.jrts.environment.Position;
 import com.jrts.environment.WorldMap;
@@ -17,13 +18,13 @@ public class FightingBehaviour extends UnitBehaviour {
 	boolean done = false;
 
 	public FightingBehaviour(Soldier soldier, String target) {
-		super(true, soldier);
+		super(AgentStatus.FIGHTING, true, soldier);
 		this.soldier = soldier;
 		this.target = target;
 	}
 	
 	public FightingBehaviour(Soldier soldier, Position targetPosition) {
-		super(true, soldier);
+		super(AgentStatus.FIGHTING, true, soldier);
 		this.soldier = soldier;
 		this.targetPosition = targetPosition;
 	}

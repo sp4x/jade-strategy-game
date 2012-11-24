@@ -1,5 +1,8 @@
 package com.jrts.behaviours;
 
+import com.jrts.agents.Unit;
+import com.jrts.common.AgentStatus;
+
 import jade.core.behaviours.CyclicBehaviour;
 
 
@@ -7,10 +10,21 @@ public class BehaviourWrapper extends CyclicBehaviour {
 	
 	private static final long serialVersionUID = 1L;
 	
+	Unit unit;
 	UnitBehaviour highPriority;
 	UnitBehaviour backgrond;
 	
+	
+	
+	public BehaviourWrapper(Unit unit) {
+		super();
+		this.unit = unit;
+	}
+
 	public void wrap(UnitBehaviour b) {
+		String newStatus = b.agentStatus;
+		if (newStatus != null)
+			unit.switchStatus(newStatus);
 		if (b.isHighPriority())
 			highPriority = b;
 		else
@@ -26,13 +40,24 @@ public class BehaviourWrapper extends CyclicBehaviour {
 			if (highPriority != null) {
 				highPriority.action();
 				if (highPriority.done())
-					highPriority = null;
+					restoreBackground();
 			} else {
 				backgrond.action();
 				if (backgrond.done())
-					backgrond = null;
+					removeBackground();
 			}
 		}
+	}
+
+	private void removeBackground() {
+		backgrond = null;
+		unit.switchStatus(AgentStatus.FREE);
+	}
+
+	private void restoreBackground() {
+		highPriority = null;
+		if (backgrond != null && backgrond.agentStatus != null)
+			unit.switchStatus(backgrond.agentStatus);
 	}
 
 }

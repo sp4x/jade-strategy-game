@@ -14,16 +14,16 @@ import com.jrts.agents.Worker;
 public class TeamDF {
 
 	Agent agent;
-	AID aid;
+	AID dfName;
 
 	public TeamDF(Agent agent, String teamName) {
 		this.agent = agent;
-		this.aid = new AID(teamName + "-df", AID.ISLOCALNAME);
+		this.dfName = new AID(teamName + "-df", AID.ISLOCALNAME);
 	}
 
 	public DFAgentDescription[] search(DFAgentDescription desc) {
 		try {
-			return DFService.search(agent, aid, desc);
+			return DFService.search(agent, dfName, desc);
 		} catch (FIPAException e) {
 			e.printStackTrace();
 		}
@@ -69,12 +69,12 @@ public class TeamDF {
 		}
 
 		try {
-			DFService.deregister(unit, aid);
+			DFService.deregister(unit, dfName);
 		} catch (FIPAException e) {
 		}
 
 		try {
-			DFService.register(unit, aid, agentDescription);
+			DFService.register(unit, dfName, agentDescription);
 		} catch (FIPAException e) {
 			unit.logger.severe("error registering unit");
 		}
@@ -86,7 +86,7 @@ public class TeamDF {
 	}
 
 	public String getLocalName() {
-		return aid.getLocalName();
+		return dfName.getLocalName();
 	}
 
 }

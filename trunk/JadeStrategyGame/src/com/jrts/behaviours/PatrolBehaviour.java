@@ -1,6 +1,7 @@
 package com.jrts.behaviours;
 
 import com.jrts.agents.Soldier;
+import com.jrts.common.AgentStatus;
 import com.jrts.environment.Direction;
 import com.jrts.environment.Position;
 import com.jrts.environment.WorldMap;
@@ -23,7 +24,7 @@ public class PatrolBehaviour extends UnitBehaviour {
 	 * @param direction: TOP | RIGHT | DOWN | LEFT 
 	 */
 	public PatrolBehaviour(Soldier soldier, Direction direction, int distance, WorldMap worldMap) {
-		super(false);
+		super(AgentStatus.PATROLING, false);
 		
 		this.soldier = soldier;		
 		this.distance = distance;

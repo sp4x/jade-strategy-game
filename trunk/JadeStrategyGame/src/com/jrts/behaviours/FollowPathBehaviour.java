@@ -28,7 +28,7 @@ public class FollowPathBehaviour extends UnitBehaviour {
 	Floor floor = null;
 
 	public FollowPathBehaviour(Unit unit, Position goal, int remainingAttempts, Floor worldMap) {
-		super(true);// high priority
+		super(null, true);// high priority
 		this.unit = unit;
 		this.goal = goal;
 		this.remainingAttempts = remainingAttempts;

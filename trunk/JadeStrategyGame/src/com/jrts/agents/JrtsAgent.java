@@ -36,7 +36,6 @@ public abstract class JrtsAgent extends Agent {
 	private String team;
 
 	public JrtsAgent() {
-		this.logger.setLevel(Level.WARNING);
 	}
 	
 	LinkedList<Behaviour> behaviours = new LinkedList<Behaviour>();
