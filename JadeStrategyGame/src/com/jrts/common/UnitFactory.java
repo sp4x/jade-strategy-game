@@ -29,8 +29,7 @@ public class UnitFactory extends Thread {
 	int workerQueueCount = 0;
 	int soldierQueueCount = 0;
 	
-	private int numDeadWorkers = 0;
-	private int numDeadSoldiers = 0;
+	
 	
 	public UnitFactory(String team, PlatformController controller, Position cityCenter, Position meetingPoint, Nature nature) {
 		this.team = team;
@@ -122,14 +121,5 @@ public class UnitFactory extends Thread {
 		return queue.size();
 	}
 	
-	public synchronized void increaseNumDeadWorkers() { this.numDeadWorkers++; }
-	public synchronized void increaseNumDeadSoldiers() { this.numDeadSoldiers++; }
-
-	public int getNumDeadWorkers() {
-		return numDeadWorkers;
-	}
-
-	public int getNumDeadSoldiers() {
-		return numDeadSoldiers;
-	}
+	
 }

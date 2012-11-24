@@ -1,5 +1,7 @@
 package com.jrts.agents;
 
+import java.util.logging.Level;
+
 import com.jrts.behaviours.CollectResources;
 import com.jrts.behaviours.GoUpgradingBehaviour;
 import com.jrts.common.AgentStatus;
@@ -19,6 +21,8 @@ import com.jrts.messages.Order;
 
 @SuppressWarnings("serial")
 public class Worker extends Unit {
+	
+	private Level logLevel = Level.FINE;
 	
 	int knapsack = 0;
 	CellType resourceCarried;

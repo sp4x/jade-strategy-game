@@ -6,6 +6,7 @@ import jade.domain.FIPAAgentManagement.DFAgentDescription;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.logging.Level;
 
 import com.jrts.behaviours.PatrolBehaviour;
 import com.jrts.behaviours.UpdateUnitTable;
@@ -25,6 +26,8 @@ import com.jrts.messages.Order;
 
 public class MilitaryAI extends GoalBasedAI {
 	private static final long serialVersionUID = 9114684864072759345L;
+	
+	private Level logLevel = Level.FINE;
 
 	int soldierCounter = 0;
 	
