@@ -9,8 +9,11 @@ import javax.swing.Icon;
 import javax.swing.JPanel;
 
 import com.jrts.common.GameConfig;
+import com.jrts.common.Utils;
 import com.jrts.environment.Cell;
+import com.jrts.environment.CellType;
 import com.jrts.environment.Floor;
+import com.jrts.environment.Position;
 import com.jrts.environment.World;
 import com.jrts.logic.AttacksManager;
 
@@ -75,6 +78,17 @@ public class WorldViewPanel extends JPanel {
 							icon = ImageLoader.getSelectedSoldierImageIcon(currCell.getUnit().getTeamName());
 						else
 							icon = ImageLoader.getSoldierImageIcon(currCell.getUnit().getTeamName());
+						break;
+					case EXPLOSION:
+						icon = ImageLoader.explosionIcon;
+						
+						new DeleteExplosionThread(new Position(i, j));
+						//if(Utils.random.nextInt(5) == 0)
+							//World.getInstance().clear(new Position(i, j));
+						
+						
+						
+						//currCell.setType(CellType.FREE);
 						break;
 					case CITY_CENTER: 
 						if (currCellLabel.isSelected())
