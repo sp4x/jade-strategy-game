@@ -134,7 +134,7 @@ public class MilitaryAI extends GoalBasedAI {
 			return;
 		
 		if(goalLevels.getAttack() == GoalPriority.HIGH){
-			// Se il battaglone non è pronto c'è 1/3 di possbilità di attaccare comunque
+			// Se il battaglone non ï¿½ pronto c'ï¿½ 1/3 di possbilitï¿½ di attaccare comunque
 			if(battalion.isFull() || Utils.random.nextInt(3) == 0)
 			{
 				Collection<Position> cityCenterPositions = requestMap().getKnownCityCenters();

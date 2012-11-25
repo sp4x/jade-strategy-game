@@ -58,6 +58,8 @@ public class BehaviourWrapper extends CyclicBehaviour {
 		highPriority = null;
 		if (backgrond != null && backgrond.agentStatus != null)
 			unit.switchStatus(backgrond.agentStatus);
+		else
+			unit.switchStatus(AgentStatus.FREE);
 	}
 
 }
