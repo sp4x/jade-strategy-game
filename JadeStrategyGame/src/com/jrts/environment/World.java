@@ -118,7 +118,7 @@ public class World {
 		return floor.isValid(p) && floor.get(p).getType() == CellType.FREE;
 	}
 	
-	public  void clear(Position p) {
+	public void clear(Position p) {
 		floor.set(p, new Cell(CellType.FREE));
 	}
 	
