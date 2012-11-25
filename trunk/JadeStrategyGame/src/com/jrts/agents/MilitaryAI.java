@@ -38,7 +38,12 @@ public class MilitaryAI extends GoalBasedAI {
 	@Override
 	protected void setup() {
 		super.setup();
+
+		addBehaviour(new UpdateUnitTable(this, Soldier.class));
 		
+		Position battailonPosition = Utils.getBattalionCenter(requestMap(), myCityCenter, battalionSize);
+		this.battalion = new Battalion(battailonPosition, battalionSize);
+
 		addBehaviour(new TickerBehaviour(this, 1000) {
 
 			private static final long serialVersionUID = 1746608629262055814L;
@@ -51,14 +56,8 @@ public class MilitaryAI extends GoalBasedAI {
 				manageFighting();	
 			}
 		});
-				
-		Position battailonPosition = Utils.getBattalionCenter(requestMap(), myCityCenter, battalionSize);
-		if(battailonPosition != null)
-			this.battalion = new Battalion(battailonPosition, battalionSize);
-		
-		addBehaviour(new UpdateUnitTable(this, Soldier.class));
 
-
+		/*
 		addBehaviour(new TickerBehaviour(this, 50000) {
 			private static final long serialVersionUID = 1746608629262055814L;
 			@Override
@@ -66,7 +65,8 @@ public class MilitaryAI extends GoalBasedAI {
 				addUnitToBattalion();
 			}
 		});
-		
+		*/
+		/*
 		addBehaviour(new TickerBehaviour(this, 60000) {
 			private static final long serialVersionUID = 1746608629262055814L;
 			@Override
@@ -86,7 +86,8 @@ public class MilitaryAI extends GoalBasedAI {
 				
 			}
 		});
-
+		*/
+		
 		/*
 		addBehaviour(new TickerBehaviour(this, 3000) {
 			private static final long serialVersionUID = 1746608629262055814L;
@@ -129,19 +130,23 @@ public class MilitaryAI extends GoalBasedAI {
 	
 	private void manageFighting() {
 	
-		if(goalLevels.getAttack() == GoalPriority.LOW)
+		if(goalLevels.getAttack() == GoalPriority.LOW && Utils.random.nextBoolean())
 			return;
 		
 		if(goalLevels.getAttack() == GoalPriority.HIGH){
-			Collection<Position> cityCenterPositions = requestMap().getKnownCityCenters();
-			cityCenterPositions.remove(myCityCenter);
-			if(battalion.size() > 0 && cityCenterPositions.size() > 0)
+			// Se il battaglone non è pronto c'è 1/3 di possbilità di attaccare comunque
+			if(battalion.isFull() || Utils.random.nextInt(3) == 0)
 			{
-				Position posToAttack = myCityCenter.nearest(cityCenterPositions);
-				for (AID aid : battalion.getSoldiersList()) {
-					Order order = new Order(AgentStatus.GO_FIGHTING);
-					order.setPosition(posToAttack);
-					giveOrder(aid, order);
+				Collection<Position> cityCenterPositions = requestMap().getKnownCityCenters();
+				cityCenterPositions.remove(myCityCenter);
+				if(battalion.size() > 0 && cityCenterPositions.size() > 0)
+				{
+					Position posToAttack = myCityCenter.nearest(cityCenterPositions);
+					for (AID aid : battalion.getSoldiersList()) {
+						Order order = new Order(AgentStatus.GO_FIGHTING);
+						order.setPosition(posToAttack);
+						giveOrder(aid, order);
+					}
 				}
 			}
 		}
