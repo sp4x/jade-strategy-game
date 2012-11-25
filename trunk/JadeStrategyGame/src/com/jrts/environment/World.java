@@ -341,4 +341,8 @@ public class World {
 	public synchronized void changeCell(int i, int j, Cell cell) {
 		floor.set(i,j,cell);
 	}
+
+	public synchronized int getNumberOfTeams() {
+		return teams.size();
+	}
 }
