@@ -210,8 +210,10 @@ public class MasterAI extends JrtsAgent implements Team {
 
 			if (death.getUnitType() == Death.WORKER)
 				masterPerception.numDeadWorkers++;
-			else if (death.getUnitType() == Death.SOLDIER)
+			else if (death.getUnitType() == Death.SOLDIER) {
+				System.out.println(getTeamName() + ":soldato morto");
 				masterPerception.numDeadSoldiers++;
+			}
 
 		} else if (n.getSubject().equals(Notification.UNIT_UNDER_ATTACK)) {
 			Position where = (Position) n.getContentObject();
@@ -263,6 +265,6 @@ public class MasterAI extends JrtsAgent implements Team {
 
 	@Override
 	public int getNumDeadSoldiers() {
-		return masterPerception.numDeadWorkers;
+		return masterPerception.numDeadSoldiers;
 	}
 }
