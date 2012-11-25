@@ -56,7 +56,11 @@ public class ResourceAI extends GoalBasedAI {
 		int neededWorkers = goalLevels.extimateResourceUnits();
 
 		// too much busy workers
-		if (busyWorkers > neededWorkers) {
+		if(orders == null){
+			worker = unitTable.getAFreeUnit();
+			order = new Order(AgentStatus.FREE);
+			
+		} else if (busyWorkers > neededWorkers) {
 			String orderToCancel = orders[1];
 			worker = unitTable.getAUnitWithStatus(orderToCancel);
 			if (worker == null) {

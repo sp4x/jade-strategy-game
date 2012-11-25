@@ -12,6 +12,7 @@ import com.jrts.behaviours.FollowPathBehaviour;
 import com.jrts.behaviours.PatrolBehaviour;
 import com.jrts.common.AgentStatus;
 import com.jrts.common.GameConfig;
+import com.jrts.common.Utils;
 import com.jrts.environment.CellType;
 import com.jrts.environment.Direction;
 import com.jrts.environment.Position;
@@ -93,7 +94,10 @@ public class Soldier extends Unit {
 		sendNotification(Notification.ENEMY_SIGHTED, enemies, getMilitaryAID());
 		
 		//add some heuristic to determine wether attack or not
-		if(getStatus().equals(AgentStatus.GO_FIGHTING) || nature == Nature.AGGRESSIVE)
+		if(	getStatus().equals(AgentStatus.PATROLING) || 
+			getStatus().equals(AgentStatus.GO_FIGHTING) ||
+							nature == Nature.AGGRESSIVE || 
+							(nature == Nature.AVERAGE && Utils.random.nextBoolean()) )
 		{
 			String target = enemies.getEnemies().iterator().next().getId();
 			attack(target);

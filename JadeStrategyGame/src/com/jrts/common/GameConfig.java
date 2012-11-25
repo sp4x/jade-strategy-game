@@ -66,9 +66,9 @@ public class GameConfig {
 	public static final int MEDIUM_PRIORITY_RESOURCES_UNITS = 4;
 	public static final int HIGH_PRIORITY_RESOURCES_UNITS = 6;
 	
-	public static final int LOW_PRIORITY_ATTACKS_UNITS = 0;
-	public static final int MEDIUM_PRIORITY_ATTACKS_UNITS = 5;
-	public static final int HIGH_PRIORITY_ATTACKS_UNITS = 10;
+	public static final int LOW_PRIORITY_ATTACKS_UNITS = 5;
+	public static final int MEDIUM_PRIORITY_ATTACKS_UNITS = 10;
+	public static final int HIGH_PRIORITY_ATTACKS_UNITS = 15;
 	
 	public static final int LOW_PRIORITY_PATROLING_UNITS = 1;
 	public static final int MEDIUM_PRIORITY_PATROLING_UNITS = 2;
