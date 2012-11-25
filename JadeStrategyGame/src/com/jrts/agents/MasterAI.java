@@ -50,7 +50,7 @@ public class MasterAI extends JrtsAgent implements Team {
 
 	UnitFactory unitFactory;
 
-	MasterPerception masterPerception = new MasterPerception();
+	MasterPerception perception = new MasterPerception();
 
 	public MasterAI() {
 		registerO2AInterface(Team.class, this);
@@ -62,12 +62,12 @@ public class MasterAI extends JrtsAgent implements Team {
 	protected void setup() {
 		super.setup();
 		World world = World.getInstance();
-		masterPerception.setWorldMap(new WorldMap(world.getRows(), world
+		perception.setWorldMap(new WorldMap(world.getRows(), world
 				.getCols()));
 		setTeamName(getAID().getLocalName());
 
-		masterPerception.setCityCenter((Position) getArguments()[0]);
-		masterPerception.setMeetingPoint((Position) getArguments()[1]);
+		perception.setCityCenter((Position) getArguments()[0]);
+		perception.setMeetingPoint((Position) getArguments()[1]);
 
 		resourceAID = new AID(getTeamName() + "-resourceAI", AID.ISLOCALNAME);
 		militaryAID = new AID(getTeamName() + "-militaryAI", AID.ISLOCALNAME);
@@ -79,19 +79,21 @@ public class MasterAI extends JrtsAgent implements Team {
 					"jade.domain.df", null);
 			df.start();
 
-			masterPerception.setTeamDF(getTeamDF());
+			perception.setTeamDF(getTeamDF());
+			
+			perception.setNumTeams(World.getInstance().getNumberOfTeams());
 
 			unitFactory = new UnitFactory(getTeamName(),
-					getContainerController(), masterPerception.getCityCenter(),
-					masterPerception.getMeetingPoint(), nature);
+					getContainerController(), perception.getCityCenter(),
+					perception.getMeetingPoint(), nature);
 			unitFactory.start();
 
-			masterPerception.setResourcesContainer(new ResourcesContainer(
+			perception.setResourcesContainer(new ResourcesContainer(
 					GameConfig.STARTUP_WOOD, GameConfig.STARTUP_FOOD));
 
 			Object[] arg = { getTeamName(), unitFactory,
-					masterPerception.getResourcesContainer(),
-					masterPerception.getCityCenter(), nature };
+					perception.getResourcesContainer(),
+					perception.getCityCenter(), nature };
 
 			resourceAI = container.createNewAgent(resourceAID.getLocalName(),
 					ResourceAI.class.getName(), arg);
@@ -105,10 +107,10 @@ public class MasterAI extends JrtsAgent implements Team {
 
 		setDefaultGoals();
 
-		this.attackScorer = new AttackScorer(nature, masterPerception);
-		this.defenceScorer = new DefenceScorer(nature, masterPerception);
-		this.explorationScorer = new ExplorationScorer(nature, masterPerception);
-		this.resourceScorer = new ResourceScorer(nature, masterPerception);
+		this.attackScorer = new AttackScorer(nature, perception);
+		this.defenceScorer = new DefenceScorer(nature, perception);
+		this.explorationScorer = new ExplorationScorer(nature, perception);
+		this.resourceScorer = new ResourceScorer(nature, perception);
 
 		addBehaviour(new TickerBehaviour(this, GameConfig.GOALS_UPDATE) {
 
@@ -120,7 +122,7 @@ public class MasterAI extends JrtsAgent implements Team {
 						.setExploration(explorationScorer.calculatePriority());
 				goalLevels.setResources(resourceScorer.calculatePriority());
 				notifyGoalChanges();
-				masterPerception.clean();
+				perception.clean();
 			}
 		});
 	}
@@ -135,8 +137,9 @@ public class MasterAI extends JrtsAgent implements Team {
 	@Override
 	protected void updatePerception() {
 		World world = World.getInstance();
+		perception.setNumTeams(world.getNumberOfTeams());
 		// check if city center was destroyed
-		Cell cityCenterCell = world.getCell(masterPerception.getCityCenter());
+		Cell cityCenterCell = world.getCell(perception.getCityCenter());
 		logger.log(logLevel,
 				getTeamName() + " energy: " + cityCenterCell.getEnergy());
 		if (cityCenterCell.getEnergy() <= 0) {
@@ -166,12 +169,12 @@ public class MasterAI extends JrtsAgent implements Team {
 
 	@Override
 	public int getFood() {
-		return masterPerception.getResourcesContainer().getFood();
+		return perception.getResourcesContainer().getFood();
 	}
 
 	@Override
 	public int getWood() {
-		return masterPerception.getResourcesContainer().getWood();
+		return perception.getResourcesContainer().getWood();
 	}
 
 	@Override
@@ -186,60 +189,60 @@ public class MasterAI extends JrtsAgent implements Team {
 
 	@Override
 	public WorldMap getWorldMap() {
-		return masterPerception.getWorldMap();
+		return perception.getWorldMap();
 	}
 
 	@Override
 	protected void handleNotification(Notification n) {
 		if (n.getSubject().equals(Notification.PERCEPTION)) {
 			Perception info = (Perception) n.getContentObject();
-			masterPerception.getWorldMap().update(info);
+			perception.getWorldMap().update(info);
 
 		} else if (n.getSubject().equals(Notification.ENEMY_SIGHTED)) {
 			EnemySighting e = (EnemySighting) n.getContentObject();
-			masterPerception.getEnemySightings().add(e);
+			perception.getEnemySightings().add(e);
 
 		} else if (n.getSubject().equals(Notification.NO_MORE_RESOURCE)) {
-			masterPerception.setAlertNoMoreResources(true);
+			perception.setAlertNoMoreResources(true);
 
 		} else if (n.getSubject().equals(Notification.RESOURCES_FOUND)) {
-			masterPerception.setAlertNoMoreResources(false);
+			perception.setAlertNoMoreResources(false);
 
 		} else if (n.getSubject().equals(Notification.UNIT_DEATH)) {
 			Death death = (Death) n.getContentObject();
 
 			if (death.getUnitType() == Death.WORKER)
-				masterPerception.numDeadWorkers++;
+				perception.numDeadWorkers++;
 			else if (death.getUnitType() == Death.SOLDIER) {
 				System.out.println(getTeamName() + ":soldato morto");
-				masterPerception.numDeadSoldiers++;
+				perception.numDeadSoldiers++;
 			}
 
 		} else if (n.getSubject().equals(Notification.UNIT_UNDER_ATTACK)) {
 			Position where = (Position) n.getContentObject();
-			masterPerception.getThreats().add(where);
+			perception.getThreats().add(where);
 
 		} else if (n.getSubject().equals(Notification.CITYCENTER_UNDER_ATTACK)) {
-			masterPerception.setAlertCityCenterUnderAttack(true);
+			perception.setAlertCityCenterUnderAttack(true);
 		}
 	}
 
 	@Override
 	protected Object handleRequest(String requestSubject) {
 		if (requestSubject.equals(MessageSubject.GET_CITY_CENTER_POSITION))
-			return masterPerception.getCityCenter();
+			return perception.getCityCenter();
 		else if (requestSubject.equals(MessageSubject.GET_WORLD_MAP))
-			return masterPerception.getWorldMap();
+			return perception.getWorldMap();
 		return null;
 	}
 
 	public ResourcesContainer getResourcesContainer() {
-		return masterPerception.getResourcesContainer();
+		return perception.getResourcesContainer();
 	}
 
 	@Override
 	public int getEnergy() {
-		Position cityCenter = masterPerception.getCityCenter();
+		Position cityCenter = perception.getCityCenter();
 		return World.getInstance().getCell(cityCenter).getEnergy();
 	}
 
@@ -260,11 +263,11 @@ public class MasterAI extends JrtsAgent implements Team {
 
 	@Override
 	public int getNumDeadWorkers() {
-		return masterPerception.numDeadWorkers;
+		return perception.numDeadWorkers;
 	}
 
 	@Override
 	public int getNumDeadSoldiers() {
-		return masterPerception.numDeadSoldiers;
+		return perception.numDeadSoldiers;
 	}
 }

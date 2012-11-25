@@ -19,6 +19,8 @@ public class MasterPerception {
 	boolean alertNoMoreResources = false;
 	boolean alertCityCenterUnderAttack = false;
 	
+	int numTeams;
+	
 	public int numDeadWorkers = 0;
 	public int numDeadSoldiers = 0;
 	
@@ -95,6 +97,13 @@ public class MasterPerception {
 		threats.clear();
 		deaths.clear();
 		alertCityCenterUnderAttack = false;
+	}
+	
+	public int getNumTeams() {
+		return numTeams;
+	}
+	public void setNumTeams(int leftTeams) {
+		this.numTeams = leftTeams;
 	}
 	
 	
