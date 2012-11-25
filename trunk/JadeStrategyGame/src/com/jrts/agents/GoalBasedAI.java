@@ -1,6 +1,7 @@
 package com.jrts.agents;
 
 import jade.core.AID;
+import jade.core.behaviours.TickerBehaviour;
 
 import java.util.Collection;
 
@@ -73,8 +74,16 @@ public abstract class GoalBasedAI extends JrtsAgent {
 			for (AID unit : units) {
 				sendNotification(Notification.TEAM_DECEASED, null, unit);
 			}
-			this.removeAllBehaviours();
-			this.doDelete();
+//			this.removeAllBehaviours();
+			addBehaviour(new TickerBehaviour(this, 100) {
+				private static final long serialVersionUID = 2292431112232972684L;
+				@Override
+				protected void onTick() {
+					if (unitTable.size() == 0) {
+						doDelete();
+					}
+				}
+			});
 		}
 	}
 	

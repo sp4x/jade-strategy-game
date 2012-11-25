@@ -1,12 +1,13 @@
 package com.jrts.agents;
 
-import java.util.logging.Level;
-
 import jade.core.AID;
 import jade.core.behaviours.TickerBehaviour;
 import jade.wrapper.AgentController;
 import jade.wrapper.ControllerException;
 import jade.wrapper.PlatformController;
+import jade.wrapper.StaleProxyException;
+
+import java.util.logging.Level;
 
 import com.jrts.O2Ainterfaces.Team;
 import com.jrts.common.GameConfig;
@@ -48,6 +49,8 @@ public class MasterAI extends JrtsAgent implements Team {
 	DefenceScorer defenceScorer;
 	ExplorationScorer explorationScorer;
 
+	AgentController militaryAI, resourceAI, df;
+	
 	UnitFactory unitFactory;
 
 	MasterPerception perception = new MasterPerception();
@@ -73,7 +76,6 @@ public class MasterAI extends JrtsAgent implements Team {
 		militaryAID = new AID(getTeamName() + "-militaryAI", AID.ISLOCALNAME);
 
 		PlatformController container = getContainerController();
-		AgentController militaryAI, resourceAI, df;
 		try {
 			df = container.createNewAgent(getTeamDF().getLocalName(),
 					"jade.domain.df", null);
@@ -158,11 +160,18 @@ public class MasterAI extends JrtsAgent implements Team {
 		sendNotification(Notification.TEAM_DECEASED, null, militaryAID);
 		sendNotification(Notification.TEAM_DECEASED, null, resourceAID);
 
-		// clean the cell of citycenter in the floor
-		World.getInstance().removeTeam(getTeamName());
-
-		removeAllBehaviours();
-		this.doDelete();
+//		removeAllBehaviours();
+		addBehaviour(new TickerBehaviour(this, 100) {
+			private static final long serialVersionUID = 2292431112232972684L;
+			@Override
+			protected void onTick() {
+				try {
+					if (militaryAI.getState().getCode() == AP_DELETED && resourceAI.getState().getCode() == AP_DELETED)
+						doDelete();
+				} catch (StaleProxyException e) {
+				}
+			}
+		});
 	}
 
 	/** O2A methods (for use in non-agent java objects) */
@@ -269,5 +278,12 @@ public class MasterAI extends JrtsAgent implements Team {
 	@Override
 	public int getNumDeadSoldiers() {
 		return perception.numDeadSoldiers;
+	}
+	
+	@Override
+	protected void takeDown() {
+		super.takeDown();
+		// clean the cell of citycenter in the floor
+		World.getInstance().removeTeam(getTeamName());
 	}
 }
