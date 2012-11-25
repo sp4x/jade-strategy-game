@@ -12,11 +12,7 @@ public class ExplorationScorer extends GoalScorer {
 			
 			@Override
 			public double value() {
-				int numTeams = perception.getNumTeams();
-				int others = numTeams - 1;
-				double exploredPercentage = perception.getWorldMap().exploredPercentage();
-				double max = (MAX_SCORE / numTeams) * others; 
-				return max - exploredPercentage;
+				return 50.0 - perception.getWorldMap().exploredPercentage();
 			}
 		});
 		
