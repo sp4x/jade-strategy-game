@@ -53,6 +53,7 @@ public abstract class GoalBasedAI extends JrtsAgent {
 
 	public void giveOrder(AID target, Order order) {
 		sendNotification(Notification.ORDER, order, target);
+		unitTable.put(target, order.getNextStatus());
 	}
 
 	public UnitTable getUnitTable() {
