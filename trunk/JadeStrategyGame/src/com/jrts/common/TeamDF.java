@@ -89,4 +89,11 @@ public class TeamDF {
 		return dfName.getLocalName();
 	}
 
+	public void deregister() {
+		try {
+			DFService.deregister(agent, dfName);
+		} catch (FIPAException e) {
+		}
+	}
+
 }
