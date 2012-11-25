@@ -159,9 +159,8 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 		}
 	}
 
-	public void terminate(boolean dead) {
-		World.getInstance().killUnit(this, dead);
-		removeAllBehaviours();
+	public void terminate() {
+//		removeAllBehaviours();
 		doDelete();
 	}
 	
@@ -256,8 +255,8 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 	@Override
 	protected void handleNotification(Notification n) {
 		if (n.getSubject().equals(Notification.TEAM_DECEASED)) {
-			removeAllBehaviours();
-			World.getInstance().killUnit(this, true);
+//			removeAllBehaviours();
+//			World.getInstance().killUnit(this);
 			this.doDelete();
 		} else if (n.getSubject().equals(Notification.ATTACK)) {
 			String attacker = (String) n.getContentObject();
@@ -281,4 +280,10 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 		return lastEnemySighting;
 	}
 	
+	@Override
+	protected void takeDown() {
+		super.takeDown();
+		System.out.println("takedown " + getId());
+		World.getInstance().killUnit(this);
+	}
 }

@@ -116,7 +116,7 @@ public class WorldViewPanel extends JPanel {
 						break;
 					}
 				} catch (Exception e) {
-					
+					System.out.println("WORLDVIEWPANEL: NON RIESCO A DISEGNARE LA CELLA " + i + "," + j);
 				}
 				
 				/*

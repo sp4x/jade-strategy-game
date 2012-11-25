@@ -139,7 +139,7 @@ public class Worker extends Unit {
 	@Override
 	protected void die() {
 		sendNotification(Notification.UNIT_DEATH, new Death(Death.WORKER), getResourceAID());
-		terminate(true);
+		terminate();
 	}
 
 	@Override
