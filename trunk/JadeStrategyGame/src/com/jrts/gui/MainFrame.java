@@ -350,12 +350,15 @@ public class MainFrame extends JFrame {
 	}
 
 	public synchronized void removeTeam(String teamName) {
-		for (Team t : teams) {
-			if (t.getTeamName().equals(teamName)) {
-				teams.remove(t);
-				break;
+		int toRemove = -1;
+		for (int i = 0; i < teams.size(); i++) {
+			if (teams.get(i).getTeamName().equals(teamName)) {
+				toRemove = i;
 			}
 		}
+		if (toRemove != -1)
+			teams.remove(toRemove);
+		
 		rightPanel.remove(teamVisibilityPanels.get(teamName));
 		topPanel.remove(teamResourcePanels.get(teamName));
 		leftTabbedPane.remove(teamInfoPanels.get(teamName));

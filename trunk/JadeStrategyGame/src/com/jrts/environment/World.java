@@ -327,11 +327,10 @@ public class World {
 		return cols;
 	}
 
-	public synchronized void killUnit(IUnit u, boolean dead) {
+	public synchronized void killUnit(IUnit u) {
 		Cell target = floor.get(u.getPosition());
 		if (u.getId().equals(target.getId())) {
-			if(dead) explode(u.getPosition());
-			else clear(u.getPosition());
+			clear(u.getPosition());
 		}
 	}
 
