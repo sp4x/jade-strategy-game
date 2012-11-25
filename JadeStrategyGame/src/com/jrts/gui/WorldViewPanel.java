@@ -79,14 +79,7 @@ public class WorldViewPanel extends JPanel {
 						break;
 					case EXPLOSION:
 						icon = ImageLoader.explosionIcon;
-						
 						new DeleteExplosionThread(new Position(i, j));
-						//if(Utils.random.nextInt(5) == 0)
-							//World.getInstance().clear(new Position(i, j));
-						
-						
-						
-						//currCell.setType(CellType.FREE);
 						break;
 					case CITY_CENTER: 
 						if (currCellLabel.isSelected())
@@ -113,15 +106,7 @@ public class WorldViewPanel extends JPanel {
 							icon = ImageLoader.freeIcon;
 						break;
 					}
-				} catch (Exception e) {
-//					System.out.println("WORLDVIEWPANEL: NON RIESCO A DISEGNARE LA CELLA " + i + "," + j);
-				}
-				
-				/*
-				if (AttacksManager.isThereAnHit(i, j))
-					icon = ImageLoader.hitIcon;
-				*/
-				
+				} catch (Exception e) {}
 				currCellLabel.setIcon(icon);
 			}
 		}

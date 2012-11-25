@@ -8,10 +8,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.logging.Level;
 
+import com.jrts.agents.MasterAI.Nature;
 import com.jrts.behaviours.PatrolBehaviour;
 import com.jrts.behaviours.UpdateUnitTable;
 import com.jrts.common.AgentStatus;
-import com.jrts.common.Battalion;
 import com.jrts.common.GameConfig;
 import com.jrts.common.GoalPriority;
 import com.jrts.common.Utils;
@@ -31,8 +31,10 @@ public class MilitaryAI extends GoalBasedAI {
 
 	int soldierCounter = 0;
 	
+	/*
 	Battalion battalion;
 	int battalionSize = GameConfig.BATTALION_SIZE;
+	*/
 	int lastCityCenterLife = GameConfig.BUILDING_ENERGY;
 	
 	@Override
@@ -41,16 +43,18 @@ public class MilitaryAI extends GoalBasedAI {
 
 		addBehaviour(new UpdateUnitTable(this, Soldier.class));
 		
+		/*
 		Position battailonPosition = Utils.getBattalionCenter(requestMap(), myCityCenter, battalionSize);
 		this.battalion = new Battalion(battailonPosition, battalionSize);
-
-		addBehaviour(new TickerBehaviour(this, 1000) {
+		*/
+		
+		addBehaviour(new TickerBehaviour(this, 2000) {
 
 			private static final long serialVersionUID = 1746608629262055814L;
 			@Override
 			protected void onTick() {
-
-				manageSoldiers();
+				//manageSoldiers();
+				requestSoldierCreation();
 				managePatroling();
 				manageExploring();
 				manageFighting();	
@@ -119,7 +123,8 @@ public class MilitaryAI extends GoalBasedAI {
 		int numFreeSoldiers = unitTable.getFreeUnits().size();
 		int numQueueSoldiers = unitFactory.getQueueSoldierCount();
 		
-		int neededAttackingSoldiers = goalLevels.extimateFightingUnits() - unitTable.getUnitsWithStatus(AgentStatus.WAIT_TO_FIGHT).size();
+		//int neededAttackingSoldiers = goalLevels.extimateFightingUnits() - unitTable.getUnitsWithStatus(AgentStatus.WAIT_TO_FIGHT).size();
+		int neededAttackingSoldiers = goalLevels.extimateFightingUnits() - unitTable.getUnitsWithStatus(AgentStatus.FREE).size();
 		int neededPatrolingSoldiers = goalLevels.extimatePatrolingUnits() - unitTable.getUnitsWithStatus(AgentStatus.PATROLING).size();
 		int neededExploringSoldiers = goalLevels.extimateExplorationUnits() - unitTable.getUnitsWithStatus(AgentStatus.EXPLORING).size();
 		int neededResources = goalLevels.extimateResourceUnits();
@@ -130,28 +135,50 @@ public class MilitaryAI extends GoalBasedAI {
 	
 	private void manageFighting() {
 	
+		//System.out.println(getTeamName() + ": ATT PRIORITY IS " + goalLevels.getAttack());
+		/*
 		if(goalLevels.getAttack() == GoalPriority.LOW && Utils.random.nextBoolean())
 			return;
+
+		addUnitToBattalion();
+		*/
 		
-		if(goalLevels.getAttack() == GoalPriority.HIGH){
+		System.out.println(getTeamName() + ": " + "MANAGE FIGHTING");
+		if(goalLevels.getAttack() == GoalPriority.HIGH || (goalLevels.getAttack() == GoalPriority.MEDIUM && Utils.random.nextInt(4) == 0)){
+			System.out.println(getTeamName() + ": " + "SENDING TO ATTACK");
 			// Se il battaglone non � pronto c'� 1/3 di possbilit� di attaccare comunque
-			if(battalion.isFull() || Utils.random.nextInt(3) == 0)
+			//if(battalion.isFull() || Utils.random.nextInt(3) == 0)
+			//{
+			Collection<Position> cityCenterPositions = requestMap().getKnownCityCenters();
+			cityCenterPositions.remove(myCityCenter);
+			if(/*battalion.size() > 0 && */cityCenterPositions.size() > 0)
 			{
-				Collection<Position> cityCenterPositions = requestMap().getKnownCityCenters();
-				cityCenterPositions.remove(myCityCenter);
-				if(battalion.size() > 0 && cityCenterPositions.size() > 0)
-				{
-					Position posToAttack = myCityCenter.nearest(cityCenterPositions);
-					for (AID aid : battalion.getSoldiersList()) {
+				Position posToAttack = myCityCenter.nearest(cityCenterPositions);
+				//for (AID aid : battalion.getSoldiersList()) {
+				System.out.println(getTeamName() + ": " + unitTable.getUnitsWithStatus(AgentStatus.FREE).size() + " UNITS ARE GOING TO ATTACK");
+				
+				ArrayList<AID> soldiers = unitTable.getUnitsWithStatus(AgentStatus.FREE);
+				if(nature != Nature.DEFENSIVE) 
+					soldiers.addAll(unitTable.getUnitsWithStatus(AgentStatus.EXPLORING));
+				if(nature == Nature.AGGRESSIVE) 
+					soldiers.addAll(unitTable.getUnitsWithStatus(AgentStatus.PATROLING));
+				int minSize = 12;
+				if(nature == Nature.DEFENSIVE) minSize = 5;
+				else if(nature == Nature.DEFENSIVE) minSize = 8;
+				if(soldiers.size() >= minSize){
+					for (AID aid : soldiers) {
+						System.out.println(getTeamName() + ": " + "ORDER: " + aid.getLocalName() + " GO TO ATTACK " + posToAttack);
 						Order order = new Order(AgentStatus.GO_FIGHTING);
 						order.setPosition(posToAttack);
 						giveOrder(aid, order);
 					}
 				}
-			}
+				System.out.println();
+				System.out.println();
+				System.out.println();
+			} else System.out.println(getTeamName() + ": " + "NO CITY CENTERS");
+			//}
 		}
-		
-		addUnitToBattalion();
 	}
 	
 	private void managePatroling() {
@@ -265,6 +292,7 @@ public class MilitaryAI extends GoalBasedAI {
 		}
 	}
 	
+	/*
 	public void addUnitToBattalion()
 	{
 		AID soldier = getUnitTable().getAFreeUnit();
@@ -280,8 +308,9 @@ public class MilitaryAI extends GoalBasedAI {
 					giveOrder(soldier, order);
 				}
 			}
-		} //else System.out.println(getTeamName() + ": NO FREE UNIT PER IL BATTAGLIONE");
+		} else System.out.println(getTeamName() + ": NO FREE UNIT PER IL BATTAGLIONE");
 	}
+	*/
 	
 	@Override
 	protected void updatePerception() {

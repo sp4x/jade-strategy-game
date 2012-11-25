@@ -17,9 +17,10 @@ public class AttackScorer extends GoalScorer {
 			public double value() {
 				TeamDF teamDF = perception.getTeamDF();
 				int freeSoldiers = teamDF.searchByUnitStatus(Soldier.class, AgentStatus.FREE).length;
-				int watingSoldiers = teamDF.searchByUnitStatus(Soldier.class, AgentStatus.WAIT_TO_FIGHT).length;
+				//int watingSoldiers = teamDF.searchByUnitStatus(Soldier.class, AgentStatus.WAIT_TO_FIGHT).length;
 				
-				return (freeSoldiers + watingSoldiers) * 10;
+				//return (freeSoldiers + watingSoldiers) * 10;
+				return (freeSoldiers) * 10;
 			}
 		});
 		

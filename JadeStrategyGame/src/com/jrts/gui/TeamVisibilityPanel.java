@@ -31,7 +31,7 @@ public class TeamVisibilityPanel extends JPanel {
 				.getTeamName());
 
 		if (team.getTeamName().equals("team1"))
-			border.setTitleColor(Color.RED);
+			border.setTitleColor(Color.GREEN);
 		else if (team.getTeamName().equals("team2"))
 			border.setTitleColor(Color.BLACK);
 		else if (team.getTeamName().equals("team3"))
