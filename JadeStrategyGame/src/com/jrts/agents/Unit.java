@@ -284,5 +284,6 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 	protected void takeDown() {
 		super.takeDown();
 		World.getInstance().killUnit(this);
+		getTeamDF().deregister();
 	}
 }
