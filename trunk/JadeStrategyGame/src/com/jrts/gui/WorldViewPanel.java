@@ -87,6 +87,9 @@ public class WorldViewPanel extends JPanel {
 						else
 							icon = ImageLoader.getWorkerFactoryImageIcon(currCell.getId());
 						break;
+					case MEETING_POINT: 
+						icon = ImageLoader.getMeetingPointIcon(currCell.getId());
+						break;
 					case WOOD:
 						if (currCellLabel.isSelected())
 							icon = ImageLoader.treeIcon_s;

@@ -7,6 +7,7 @@ public enum CellType {
 	WORKER("Worker"), 
 	SOLDIER("Soldier"),
 	CITY_CENTER("Town center"),
+	MEETING_POINT("Meeting Point"),
 	UNKNOWN("Unknown"),
 	OBSTACLE("Obstacle"),
 	EXPLOSION("Explosion");

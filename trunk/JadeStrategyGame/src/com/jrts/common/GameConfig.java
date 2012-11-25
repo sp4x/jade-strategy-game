@@ -78,6 +78,9 @@ public class GameConfig {
 	public static final int MEDIUM_PRIORITY_EXPLORATION_UNITS = 2;
 	public static final int HIGH_PRIORITY_EXPLORATION_UNITS = 3;
 	
+	public static final int MEETING_POINT_MIN_DISTANCE = 3;
+	public static final int MEETING_POINT_MAX_DISTANCE = 4;
+	
 	public static int BUILDING_ENERGY = 100; //1000;
 
 	public static int FOOD_MIN_DISTANCE = 3;
