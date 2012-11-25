@@ -13,10 +13,11 @@ class ImageLoader {
 	
 	static Logger logger = Logger.getLogger(ImageLoader.class.getName());
 	
-	public static ImageIcon freeIcon, workerIcon1, workerIcon2, workerIcon3, workerIcon4, 
+	public static ImageIcon freeIcon, explosionIcon, workerIcon1, workerIcon2, workerIcon3, workerIcon4, 
 							treeIcon, farmIcon, woodIcon, foodIcon, workerFactoryIcon1, soldierIcon1, 
 							soldierIcon2, soldierIcon3, soldierIcon4, background,
 							workerFactoryIcon2, workerFactoryIcon3, workerFactoryIcon4;
+	
 	public static ImageIcon freeIcon_s, workerIcon1_s, workerIcon2_s, workerIcon3_s, workerIcon4_s, 
 							treeIcon_s, farmIcon_s, woodIcon_s, foodIcon_s, workerFactoryIcon1_s, soldierIcon1_s, 
 							soldierIcon2_s, soldierIcon3_s, soldierIcon4_s, background_s,
@@ -103,7 +104,8 @@ class ImageLoader {
 	
 	static {
 		freeIcon = new ImageIcon(new ImageIcon("img/tile.png").getImage().getScaledInstance(GameConfig.ICON_SIZE,GameConfig.ICON_SIZE,GameConfig.ICON_SIZE));
-
+		explosionIcon = new ImageIcon("img/esplosione.gif"); //new ImageIcon(new ImageIcon("img/esplosione.gif").getImage().getScaledInstance(GameConfig.ICON_SIZE,GameConfig.ICON_SIZE,GameConfig.ICON_SIZE));
+		
 		workerFactoryIcon1 = new ImageIcon(new ImageIcon("img/workerFactory1.png").getImage().getScaledInstance(GameConfig.ICON_SIZE,GameConfig.ICON_SIZE,GameConfig.ICON_SIZE));
 		workerFactoryIcon2 = new ImageIcon(new ImageIcon("img/workerFactory2.png").getImage().getScaledInstance(GameConfig.ICON_SIZE,GameConfig.ICON_SIZE,GameConfig.ICON_SIZE));
 		workerFactoryIcon3 = new ImageIcon(new ImageIcon("img/workerFactory3.png").getImage().getScaledInstance(GameConfig.ICON_SIZE,GameConfig.ICON_SIZE,GameConfig.ICON_SIZE));

@@ -8,7 +8,8 @@ public enum CellType {
 	SOLDIER("Soldier"),
 	CITY_CENTER("Town center"),
 	UNKNOWN("Unknown"),
-	OBSTACLE("Obstacle");
+	OBSTACLE("Obstacle"),
+	EXPLOSION("Explosion");
 	
 	String text;
 	

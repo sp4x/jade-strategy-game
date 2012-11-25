@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.HashMap;
 
 import com.jrts.environment.Position;
+import com.jrts.environment.WorldMap;
 
 public class Battalion {
 
@@ -31,6 +32,24 @@ public class Battalion {
 	
 	public boolean isFull(){
 		return soldiers.size() == diameter*diameter;
+
+//		if(soldiers.size() == diameter*diameter){
+//			for (int i = 0; i < diameter; i++) {
+//				for (int j = 0; j < diameter; j++) {
+//					
+//					int w = center.getRow() - 1 + i;
+//					int h = center.getCol() -1 + j;			
+//					Position pos = new Position(w, h);
+//					
+//					if(map.get(pos).isWalkable())
+//						return false;
+//				}
+//			}
+//			
+//			return true;
+//		}
+//		
+//		return false;
 	}
 	
 	public int size(){

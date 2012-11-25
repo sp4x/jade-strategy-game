@@ -121,6 +121,10 @@ public class World {
 	public  void clear(Position p) {
 		floor.set(p, new Cell(CellType.FREE));
 	}
+	
+	public  void explode(Position p) {
+		floor.set(p, new Cell(CellType.EXPLOSION));
+	}
 
 	/**
 	 * adds the city center in a random position for a new team with the
@@ -323,10 +327,11 @@ public class World {
 		return cols;
 	}
 
-	public synchronized void killUnit(IUnit u) {
+	public synchronized void killUnit(IUnit u, boolean dead) {
 		Cell target = floor.get(u.getPosition());
 		if (u.getId().equals(target.getId())) {
-			clear(u.getPosition());
+			if(dead) explode(u.getPosition());
+			else clear(u.getPosition());
 		}
 	}
 

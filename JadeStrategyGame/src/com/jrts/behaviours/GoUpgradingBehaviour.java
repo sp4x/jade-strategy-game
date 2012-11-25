@@ -31,7 +31,7 @@ public class GoUpgradingBehaviour extends UnitBehaviour {
 			this.worker.sendNotification(Notification.READY_TO_BE_UPGRADED, null, this.worker.getResourceAID());
 			
 			this.done = true;
-			this.worker.terminate();
+			this.worker.terminate(false);
 		}
 	}
 

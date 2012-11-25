@@ -143,7 +143,7 @@ public class Soldier extends Unit {
 	protected void die() {
 		sendNotification(Notification.UNIT_DEATH, new Death(Death.SOLDIER), getResourceAID());
 		logger.log(logLevel, getAID().getLocalName() + ":dying");
-		terminate();
+		terminate(true);
 	}
 
 	@Override

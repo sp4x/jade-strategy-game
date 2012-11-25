@@ -280,7 +280,7 @@ public class MilitaryAI extends GoalBasedAI {
 					giveOrder(soldier, order);
 				}
 			}
-		}
+		} //else System.out.println(getTeamName() + ": NO FREE UNIT PER IL BATTAGLIONE");
 	}
 	
 	@Override
