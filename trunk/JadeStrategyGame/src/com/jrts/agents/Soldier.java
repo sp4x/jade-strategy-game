@@ -131,9 +131,9 @@ public class Soldier extends Unit {
 			
 		} else if (order.getNextStatus().equals(AgentStatus.EXPLORING)) {
 			explore();
-		} else if (order.getNextStatus().equals(AgentStatus.WAIT_TO_FIGHT)) {
+		/*} else if (order.getNextStatus().equals(AgentStatus.WAIT_TO_FIGHT)) {
 			goThere(order.getPosition());
-			switchStatus(AgentStatus.WAIT_TO_FIGHT);
+			switchStatus(AgentStatus.WAIT_TO_FIGHT);*/
 		} else if (order.getNextStatus().equals(AgentStatus.GO_FIGHTING)) {
 			goToAttack(order.getPosition());
 		}

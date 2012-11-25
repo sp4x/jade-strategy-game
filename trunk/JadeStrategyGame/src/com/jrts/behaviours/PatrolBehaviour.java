@@ -11,9 +11,9 @@ public class PatrolBehaviour extends UnitBehaviour {
 	
 	private int distance = DISTANCE_LITTLE;
 	
-	public static final int DISTANCE_LITTLE = 5;
-	public static final int DISTANCE_MEDIUM = 8;
-	public static final int DISTANCE_BIG = 10;
+	public static final int DISTANCE_LITTLE = 4;
+	public static final int DISTANCE_MEDIUM = 6;
+	public static final int DISTANCE_BIG = 8;
 
 	Soldier soldier;
 	Position p1, p2;
