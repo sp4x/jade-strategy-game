@@ -19,6 +19,7 @@ public class World {
 	final Floor floor;
 
 	private final Map<String, Position> teams;
+	private final Map<String, Position> meetingPoints;
 
 	private final int rows;
 	private final int cols;
@@ -48,6 +49,7 @@ public class World {
 		floor.generateObject(numWood, wood);
 
 		teams = new HashMap<String, Position>();
+		meetingPoints = new HashMap<String, Position>();
 	}
 
 	
@@ -201,58 +203,68 @@ public class World {
 	 *            the cityCenter of a team
 	 * @return 
 	 */
-	public Position randomMeetingPoint(Position cityCenter) {
+	public Position randomMeetingPoint(String team, Position cityCenter) {
 		Direction angle = Utils.getMapAnglePosition(cityCenter);
 		Position meetingPoint = new Position(-1, -1);
 		
-		ArrayList<Direction> directions = new ArrayList<Direction>();
+		Cell cell;
+		int maxDistance = GameConfig.MEETING_POINT_MAX_DISTANCE;
+		int minDistance = GameConfig.MEETING_POINT_MIN_DISTANCE;
 		
-		Integer randomStep = Utils.random.nextInt(10);
-		
-		// A seconda dell'angolo della mappa scelto e del valore della var n
-		// scelgo la posizione della mappa ove posizionare il meeting point
-		if(angle == Direction.RIGHT_UP){
-			logger.log(logLevel, "angle: right up");
-			directions.add(Direction.LEFT);
-			directions.add(Direction.LEFT_DOWN);
-			directions.add(Direction.DOWN);
-			meetingPoint = cityCenter.clone();
-			Direction randomDir = directions.get(Utils.random.nextInt(3));
-			logger.log(logLevel, "random dir:" + randomDir);
-			logger.log(logLevel, "random step:" + randomStep);
-			meetingPoint = meetingPoint.step(randomDir, randomStep);
-		}else if(angle == Direction.RIGHT_DOWN){
-			logger.log(logLevel, "angle: right down");
-			directions.add(Direction.LEFT);
-			directions.add(Direction.LEFT_UP);
-			directions.add(Direction.UP);
-			meetingPoint = cityCenter.clone();
-			Direction randomDir = directions.get(Utils.random.nextInt(3));
-			logger.log(logLevel, "random dir:" + randomDir);
-			logger.log(logLevel, "random step:" + randomStep);
-			meetingPoint = meetingPoint.step(randomDir, randomStep);
-		}else if(angle == Direction.LEFT_DOWN){
-			logger.log(logLevel, "angle: left down");
-			directions.add(Direction.RIGHT);
-			directions.add(Direction.RIGHT_UP);
-			directions.add(Direction.UP);
-			meetingPoint = cityCenter.clone();
-			Direction randomDir = directions.get(Utils.random.nextInt(3));
-			logger.log(logLevel, "random dir:" + randomDir);
-			logger.log(logLevel, "random step:" + randomStep);
-			meetingPoint = meetingPoint.step(randomDir, randomStep);
-		}else if(angle == Direction.LEFT_UP){
-			logger.log(logLevel, "angle: left up");
-			directions.add(Direction.RIGHT);
-			directions.add(Direction.RIGHT_UP);
-			directions.add(Direction.UP);
-			meetingPoint = cityCenter.clone();
-			Direction randomDir = directions.get(Utils.random.nextInt(3));
-			logger.log(logLevel, "random dir:" + randomDir);
-			logger.log(logLevel, "random step:" + randomStep);
-			meetingPoint = meetingPoint.step(randomDir, randomStep);
+		do {
+			ArrayList<Direction> directions = new ArrayList<Direction>();
+			
+			Integer randomStep = Utils.random.nextInt(maxDistance) + minDistance;
+			
+			// A seconda dell'angolo della mappa scelto e del valore della var n
+			// scelgo la posizione della mappa ove posizionare il meeting point
+			if(angle == Direction.RIGHT_UP){
+				logger.log(logLevel, "angle: right up");
+				directions.add(Direction.LEFT);
+				directions.add(Direction.LEFT_DOWN);
+				directions.add(Direction.DOWN);
+				meetingPoint = cityCenter.clone();
+				Direction randomDir = directions.get(Utils.random.nextInt(3));
+				logger.log(logLevel, "random dir:" + randomDir);
+				logger.log(logLevel, "random step:" + randomStep);
+				meetingPoint = meetingPoint.step(randomDir, randomStep);
+			}else if(angle == Direction.RIGHT_DOWN){
+				logger.log(logLevel, "angle: right down");
+				directions.add(Direction.LEFT);
+				directions.add(Direction.LEFT_UP);
+				directions.add(Direction.UP);
+				meetingPoint = cityCenter.clone();
+				Direction randomDir = directions.get(Utils.random.nextInt(3));
+				logger.log(logLevel, "random dir:" + randomDir);
+				logger.log(logLevel, "random step:" + randomStep);
+				meetingPoint = meetingPoint.step(randomDir, randomStep);
+			}else if(angle == Direction.LEFT_DOWN){
+				logger.log(logLevel, "angle: left down");
+				directions.add(Direction.RIGHT);
+				directions.add(Direction.RIGHT_UP);
+				directions.add(Direction.UP);
+				meetingPoint = cityCenter.clone();
+				Direction randomDir = directions.get(Utils.random.nextInt(3));
+				logger.log(logLevel, "random dir:" + randomDir);
+				logger.log(logLevel, "random step:" + randomStep);
+				meetingPoint = meetingPoint.step(randomDir, randomStep);
+			}else if(angle == Direction.LEFT_UP){
+				logger.log(logLevel, "angle: left up");
+				directions.add(Direction.RIGHT);
+				directions.add(Direction.RIGHT_UP);
+				directions.add(Direction.UP);
+				meetingPoint = cityCenter.clone();
+				Direction randomDir = directions.get(Utils.random.nextInt(3));
+				logger.log(logLevel, "random dir:" + randomDir);
+				logger.log(logLevel, "random step:" + randomStep);
+				meetingPoint = meetingPoint.step(randomDir, randomStep);
+			}
+			Utils.checkAndFixPosition(meetingPoint);
+			cell = new Cell(CellType.MEETING_POINT, team);
 		}
-		Utils.checkAndFixPosition(meetingPoint);
+		while(!addObject(cell, meetingPoint));
+		meetingPoints.put(team, meetingPoint);
+		
 		return meetingPoint; 
 	}
 	

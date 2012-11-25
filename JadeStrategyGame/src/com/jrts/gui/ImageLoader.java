@@ -16,7 +16,8 @@ class ImageLoader {
 	public static ImageIcon freeIcon, explosionIcon, workerIcon1, workerIcon2, workerIcon3, workerIcon4, 
 							treeIcon, farmIcon, woodIcon, foodIcon, workerFactoryIcon1, soldierIcon1, 
 							soldierIcon2, soldierIcon3, soldierIcon4, background,
-							workerFactoryIcon2, workerFactoryIcon3, workerFactoryIcon4;
+							workerFactoryIcon2, workerFactoryIcon3, workerFactoryIcon4,
+							flagIcon1, flagIcon2, flagIcon3, flagIcon4;
 	
 	public static ImageIcon freeIcon_s, workerIcon1_s, workerIcon2_s, workerIcon3_s, workerIcon4_s, 
 							treeIcon_s, farmIcon_s, woodIcon_s, foodIcon_s, workerFactoryIcon1_s, soldierIcon1_s, 
@@ -97,6 +98,20 @@ class ImageLoader {
 		return null;
 	}
 	
+	public static Icon getMeetingPointIcon(String id) {
+		if(id == null){
+			logger.severe("Requested id null!");
+			return null;
+		}
+		
+		if(id.equals("team1")) return flagIcon1;
+		if(id.equals("team2")) return flagIcon2;
+		if(id.equals("team3")) return flagIcon3;
+		if(id.equals("team4")) return flagIcon4;
+		
+		return null;
+	}
+	
 	public static ImageIcon getBackgroundImage(Dimension d)
 	{
 		return new ImageIcon(new ImageIcon("img/sabbia.jpg").getImage().getScaledInstance((int)d.getWidth(), (int)d.getHeight(), 15));
@@ -123,6 +138,11 @@ class ImageLoader {
 		
 		treeIcon = new ImageIcon(new ImageIcon("img/tree.png").getImage().getScaledInstance(GameConfig.ICON_SIZE,GameConfig.ICON_SIZE,GameConfig.ICON_SIZE));
 		farmIcon = new ImageIcon(new ImageIcon("img/farm.png").getImage().getScaledInstance(GameConfig.ICON_SIZE,GameConfig.ICON_SIZE,GameConfig.ICON_SIZE));
+		
+		flagIcon1 = new ImageIcon(new ImageIcon("img/flag_1.png").getImage().getScaledInstance(GameConfig.ICON_SIZE,GameConfig.ICON_SIZE,GameConfig.ICON_SIZE));
+		flagIcon2 = new ImageIcon(new ImageIcon("img/flag_2.png").getImage().getScaledInstance(GameConfig.ICON_SIZE,GameConfig.ICON_SIZE,GameConfig.ICON_SIZE));
+		flagIcon3 = new ImageIcon(new ImageIcon("img/flag_3.png").getImage().getScaledInstance(GameConfig.ICON_SIZE,GameConfig.ICON_SIZE,GameConfig.ICON_SIZE));
+		flagIcon4 = new ImageIcon(new ImageIcon("img/flag_4.png").getImage().getScaledInstance(GameConfig.ICON_SIZE,GameConfig.ICON_SIZE,GameConfig.ICON_SIZE));
 		
 		// SELECTED
 		freeIcon_s = new ImageIcon(new ImageIcon("img/tile_s.png").getImage().getScaledInstance(GameConfig.ICON_SIZE,GameConfig.ICON_SIZE,GameConfig.ICON_SIZE));
