@@ -223,7 +223,6 @@ public class MasterAI extends JrtsAgent implements Team {
 			if (death.getUnitType() == Death.WORKER)
 				perception.numDeadWorkers++;
 			else if (death.getUnitType() == Death.SOLDIER) {
-				System.out.println(getTeamName() + ":soldato morto");
 				perception.numDeadSoldiers++;
 			}
 
