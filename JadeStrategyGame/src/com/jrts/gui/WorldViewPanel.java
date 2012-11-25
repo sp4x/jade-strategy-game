@@ -9,9 +9,7 @@ import javax.swing.Icon;
 import javax.swing.JPanel;
 
 import com.jrts.common.GameConfig;
-import com.jrts.common.Utils;
 import com.jrts.environment.Cell;
-import com.jrts.environment.CellType;
 import com.jrts.environment.Floor;
 import com.jrts.environment.Position;
 import com.jrts.environment.World;
@@ -116,7 +114,7 @@ public class WorldViewPanel extends JPanel {
 						break;
 					}
 				} catch (Exception e) {
-					System.out.println("WORLDVIEWPANEL: NON RIESCO A DISEGNARE LA CELLA " + i + "," + j);
+//					System.out.println("WORLDVIEWPANEL: NON RIESCO A DISEGNARE LA CELLA " + i + "," + j);
 				}
 				
 				/*

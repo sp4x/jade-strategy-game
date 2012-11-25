@@ -283,7 +283,6 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 	@Override
 	protected void takeDown() {
 		super.takeDown();
-		System.out.println("takedown " + getId());
 		World.getInstance().killUnit(this);
 	}
 }
