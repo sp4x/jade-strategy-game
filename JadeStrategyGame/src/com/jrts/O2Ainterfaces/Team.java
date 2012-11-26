@@ -23,4 +23,7 @@ public interface Team {
 	public int getEnergy();
 	
 	public void decease();
+	
+	public String getProgressTrainingWorker();
+	public String getProgressTrainingSoldier();
 }

@@ -17,7 +17,9 @@ public class TeamResourcePanel extends JPanel{
 	JLabel food;
 	JLabel wood;
 	JLabel workers;
+	JLabel progressWorkers;
 	JLabel soldiers;
+	JLabel progressSoldiers;
 	
 	Team team;
 	
@@ -50,21 +52,28 @@ public class TeamResourcePanel extends JPanel{
 			border.setTitleColor(Color.BLUE);
 		}
 		
+		this.progressWorkers= new JLabel("(0%)");
+		this.progressSoldiers= new JLabel("(0%)");
+		
 		super.setBorder(border);
-		super.setPreferredSize(new Dimension(250, 50));
+		super.setPreferredSize(new Dimension(270, 50));
 
 		super.add(this.food);
 		super.add(this.wood);
 		super.add(this.workers);
+		super.add(this.progressWorkers);
 		super.add(this.soldiers);
+		super.add(this.progressSoldiers);
 	}
 	
 	public void update () {
 		if (team != null) {
-			this.food.setText(team.getFood() + "   "); 
-			this.wood.setText(team.getWood() + "   ");
-			this.workers.setText(team.getQueueWorkerCount() + "   ");
+			this.food.setText(team.getFood() + "  "); 
+			this.wood.setText(team.getWood() + "  ");
+			this.workers.setText(team.getQueueWorkerCount() + "");
+			this.progressWorkers.setText(team.getProgressTrainingWorker());
 			this.soldiers.setText("" + team.getQueueSoldierCount());
+			this.progressSoldiers.setText(team.getProgressTrainingSoldier());
 		}
 	}
 }

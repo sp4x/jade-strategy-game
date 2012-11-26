@@ -231,7 +231,7 @@ public class MainFrame extends JFrame {
 		getContentPane().add(leftPanel, BorderLayout.WEST);
 
 		JPanel footer = new JPanel();
-		d = new Dimension(500, 30);
+		d = new Dimension(550, 30);
 		// JPanel rightVisibilityPanel = new JPanel();
 		footer.setPreferredSize(d);
 		consoleLabel = new JLabel("JRTS Console: ", JLabel.CENTER);
