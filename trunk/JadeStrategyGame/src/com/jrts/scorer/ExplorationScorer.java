@@ -1,7 +1,7 @@
 package com.jrts.scorer;
 
-import com.jrts.agents.Soldier;
 import com.jrts.agents.MasterAI.Nature;
+import com.jrts.agents.Soldier;
 import com.jrts.common.AgentStatus;
 import com.jrts.environment.MasterPerception;
 

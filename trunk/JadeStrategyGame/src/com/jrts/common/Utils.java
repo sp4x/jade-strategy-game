@@ -118,11 +118,11 @@ public class Utils {
 		Utils.random = random;
 	}
 
-	public static void checkAndFixPosition(Position meetingPoint) {
-		if (meetingPoint.getCol() >= GameConfig.WORLD_COLS) meetingPoint.setCol(GameConfig.WORLD_COLS-1);
-		if (meetingPoint.getCol() < 0) meetingPoint.setCol(0);
-		if (meetingPoint.getRow() >= GameConfig.WORLD_ROWS) meetingPoint.setRow(GameConfig.WORLD_ROWS-1);
-		if (meetingPoint.getRow() < 0) meetingPoint.setRow(0);
+	public static void checkAndFixPosition(Position position) {
+		if (position.getCol() >= GameConfig.WORLD_COLS) position.setCol(GameConfig.WORLD_COLS-1);
+		if (position.getCol() < 0) position.setCol(0);
+		if (position.getRow() >= GameConfig.WORLD_ROWS) position.setRow(GameConfig.WORLD_ROWS-1);
+		if (position.getRow() < 0) position.setRow(0);
 	}
 
 }
