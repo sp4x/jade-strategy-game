@@ -15,7 +15,7 @@ public class WorldTest {
 
 	@Test
 	public void concurrency() {
-		World.create(2, 2, 0);
+		World.create(2, 2, 0, 0);
 		World w = World.getInstance();
 		final Position p1 = new Position(0, 0);
 		final Position p2 = new Position(1, 0);
@@ -55,7 +55,7 @@ public class WorldTest {
 
 	@Test
 	public void perception() {
-		World.create(10, 10, 0);
+		World.create(10, 10, 0, 0);
 		Position center = new Position(5, 5);
 		Perception perception = World.getInstance().getPerception(center, 1);
 		int seen = 0;
@@ -69,7 +69,7 @@ public class WorldTest {
 
 	@Test
 	public void near() {
-		World.create(10, 10, 0);
+		World.create(10, 10, 0, 0);
 		Position center = new Position(5, 5);
 		for (int i = 0; i < 10; i++) {
 			Position p = World.getInstance().near(center, 2, 4);

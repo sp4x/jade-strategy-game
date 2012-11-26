@@ -90,4 +90,10 @@ public abstract class GoalBasedAI extends JrtsAgent {
 	public WorldMap requestMap() {
 		return (WorldMap) sendRequest(MessageSubject.GET_WORLD_MAP, getMasterAID());
 	}
+	
+	@Override
+	protected void takeDown() {
+		sendNotification(Notification.TEAM_DECEASED, null, getMasterAID());
+		super.takeDown();
+	}
 }
