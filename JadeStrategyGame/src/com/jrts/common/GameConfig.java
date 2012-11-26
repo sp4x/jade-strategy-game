@@ -81,6 +81,10 @@ public class GameConfig {
 	public static final int MEETING_POINT_MIN_DISTANCE = 3;
 	public static final int MEETING_POINT_MAX_DISTANCE = 4;
 	
+	public static final int DEFENCE_NATURE_DEFENSIVE_BOUND = 15;
+	public static final int DEFENCE_NATURE_AVERAGE_BOUND = 10;
+	public static final int DEFENCE_NATURE_AGGRESSIVE_BOUND = 5;
+	
 	public static int BUILDING_ENERGY = 100; //1000;
 
 	public static int FOOD_MIN_DISTANCE = 3;
