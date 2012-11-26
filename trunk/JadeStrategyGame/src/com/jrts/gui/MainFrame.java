@@ -74,6 +74,8 @@ public class MainFrame extends JFrame {
 	JPanel topPanel;
 	JPanel rightPanel;
 	
+	JLabel consoleLabel;
+	
 	AgentContainer agentController;
 
 	public static void start(Floor floor, List<Team> teams, AgentContainer ac) {
@@ -232,7 +234,8 @@ public class MainFrame extends JFrame {
 		d = new Dimension(500, 30);
 		// JPanel rightVisibilityPanel = new JPanel();
 		footer.setPreferredSize(d);
-		footer.add(new JLabel("Jade Strategy Game - Loria Salvatore, Martire Andrea, Parisi Daniele, Pirrone Vincenzo", JLabel.CENTER));
+		consoleLabel = new JLabel("JRTS Console: ", JLabel.CENTER);
+		footer.add(consoleLabel);
 		getContentPane().add(footer, BorderLayout.SOUTH);
 
 		pack();
@@ -348,6 +351,10 @@ public class MainFrame extends JFrame {
 			selectedCol = col;
 		}
 	}
+	
+	public void writeToConsole(String str) {
+		consoleLabel.setText("JRTS Console: " + str);
+	}
 
 	public synchronized void removeTeam(String teamName) {
 		int toRemove = -1;
@@ -362,6 +369,12 @@ public class MainFrame extends JFrame {
 		rightPanel.remove(teamVisibilityPanels.get(teamName));
 		topPanel.remove(teamResourcePanels.get(teamName));
 		leftTabbedPane.remove(teamInfoPanels.get(teamName));
+
+		if (teams.size() >= 2) 
+			writeToConsole(teamName + " deceased!");
+		else
+			if (teams.size() > 0)
+				writeToConsole(teams.get(0).getTeamName() + " WIN!");
 		
 		repaint();
 	}
