@@ -1,8 +1,8 @@
 package com.jrts.agents;
 
-import jade.core.AID;
-
 import java.util.logging.Level;
+
+import jade.core.AID;
 
 import com.jrts.agents.MasterAI.Nature;
 import com.jrts.behaviours.BehaviourScheduler;

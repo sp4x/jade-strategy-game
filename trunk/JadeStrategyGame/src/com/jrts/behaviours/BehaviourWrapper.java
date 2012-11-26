@@ -1,9 +1,9 @@
 package com.jrts.behaviours;
 
-import jade.core.behaviours.CyclicBehaviour;
-
 import com.jrts.agents.Unit;
 import com.jrts.common.AgentStatus;
+
+import jade.core.behaviours.CyclicBehaviour;
 
 
 public class BehaviourWrapper extends CyclicBehaviour {

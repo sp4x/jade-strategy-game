@@ -255,15 +255,14 @@ public class World {
 			}else if(angle == Direction.LEFT_UP){
 				logger.log(logLevel, "angle: left up");
 				directions.add(Direction.RIGHT);
-				directions.add(Direction.RIGHT_UP);
-				directions.add(Direction.UP);
+				directions.add(Direction.RIGHT_DOWN);
+				directions.add(Direction.DOWN);
 				meetingPoint = cityCenter.clone();
 				Direction randomDir = directions.get(Utils.random.nextInt(3));
 				logger.log(logLevel, "random dir:" + randomDir);
 				logger.log(logLevel, "random step:" + randomStep);
 				meetingPoint = meetingPoint.step(randomDir, randomStep);
 			}
-			Utils.checkAndFixPosition(meetingPoint);
 			cell = new Cell(CellType.MEETING_POINT, teamName);
 		}
 		while(!addObject(cell, meetingPoint));
