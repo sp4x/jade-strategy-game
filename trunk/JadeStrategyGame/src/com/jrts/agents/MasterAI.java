@@ -47,7 +47,7 @@ public class MasterAI extends JrtsAgent implements Team {
 	AttackScorer attackScorer;
 	DefenceScorer defenceScorer;
 	ExplorationScorer explorationScorer;
-
+	
 	AgentController militaryAI, resourceAI, df;
 	
 	UnitFactory unitFactory;
@@ -280,5 +280,16 @@ public class MasterAI extends JrtsAgent implements Team {
 		// clean the cell of citycenter in the floor
 		World.getInstance().removeTeam(getTeamName());
 		super.takeDown();
+	}
+
+	@Override
+	public String getProgressTrainingWorker() {
+		System.out.println("Recupero " + unitFactory.progressionTrainingWorker);
+		return "(" + unitFactory.progressionTrainingWorker + "%)";
+	}
+	
+	@Override
+	public String getProgressTrainingSoldier() {
+		return "(" + unitFactory.progressionTrainingSoldier + "%)";
 	}
 }

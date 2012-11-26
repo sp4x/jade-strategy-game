@@ -27,6 +27,9 @@ public class Notification implements Serializable {
 
 	public static final String ATTACK = "attack";
 
+	public static final Object PROGRESS_TRAINING_WORKER = "progression training worker";
+	public static final Object PROGRESS_TRAINING_SOLDIER = "progression training soldier";
+
 	String subject;
 	Serializable contentObject;
 
