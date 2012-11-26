@@ -79,7 +79,7 @@ public class FollowPathTest {
 	}
 	
 	public void simulate(int rows, int cols, Unit[] agents, Position[] targets) {
-		World.create(rows, cols, 0);
+		World.create(rows, cols, 0, 0);
 		Floor map = World.getInstance().getSnapshot();
 		
 		FollowPathBehaviour[] list = new FollowPathBehaviour[agents.length];

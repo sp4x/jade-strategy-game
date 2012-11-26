@@ -43,7 +43,7 @@ public class JadeStrategyGame {
 
 		List<Team> teams = new ArrayList<Team>();
 
-		World.create(GameConfig.WORLD_ROWS, GameConfig.WORLD_COLS, 0.01f);
+		World.create(GameConfig.WORLD_ROWS, GameConfig.WORLD_COLS, 0.015f, 0.005f);
 
 		/** create and start all the team's masterAi */
 		for (int i = 1; i <= teamNumber; i++) {

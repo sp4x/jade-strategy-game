@@ -31,15 +31,15 @@ public class World {
 	private boolean[] occupiedAngles = {false, false, false, false};
 	private Logger logger = Logger.getLogger(World.class.getName());
 	
-	public static void create(int rows, int cols, float woodPercentage) {
-		instance = new World(rows, cols, woodPercentage);
+	public static void create(int rows, int cols, float woodPercentage, float foodPercentage) {
+		instance = new World(rows, cols, woodPercentage, foodPercentage);
 	}
 
 	public static World getInstance() {
 		return instance;
 	}
 
-	private World(int rows, int cols, float woodPercentage) {
+	private World(int rows, int cols, float woodPercentage, float foodPercentage) {
 		this.rows = rows;
 		this.cols = cols;
 		floor = new Floor(rows, cols);
@@ -48,6 +48,10 @@ public class World {
 		Cell wood = new Cell(CellType.WOOD, GameConfig.TREE_ENERGY);
 		floor.generateObject(numWood, wood);
 
+		int numFood = (int) (((float) (rows * cols)) * foodPercentage);
+		Cell food = new Cell(CellType.FOOD, GameConfig.FARM_ENERGY);
+		floor.generateObject(numFood, food);
+		
 		teams = new HashMap<String, Position>();
 		meetingPoints = new HashMap<String, Position>();
 	}
@@ -132,11 +136,11 @@ public class World {
 	 * adds the city center in a random position for a new team with the
 	 * specified name
 	 * 
-	 * @param name
+	 * @param teamName
 	 *            the name of the team, has to be unique
 	 * @return 
 	 */
-	public Position addTeam(String name) {
+	public Position addTeam(String teamName) {
 		// Prendo un angolo a caso tra 0 e 3
 		int angle = Utils.random.nextInt(4);
 
@@ -149,7 +153,7 @@ public class World {
 
 		this.occupiedAngles[angle] = true;
 		
-		Cell base = new Cell(CellType.CITY_CENTER, name);
+		Cell base = new Cell(CellType.CITY_CENTER, teamName);
 		base.energy = GameConfig.BUILDING_ENERGY;
 
 		//Inizializzo la var con una posizione inesistente
@@ -180,7 +184,7 @@ public class World {
 		
 		} while (!addObject(base, cityCenter));
 		
-		teams.put(name, cityCenter);
+		teams.put(teamName, cityCenter);
 		
 		// put a food and a wood resource near the city center
 		Position foodPosition = near(cityCenter, GameConfig.FOOD_MIN_DISTANCE, GameConfig.FOOD_MAX_DISTANCE);
@@ -191,7 +195,7 @@ public class World {
 		Cell wood = new Cell(CellType.WOOD, GameConfig.TREE_ENERGY);
 		addObject(wood, woodPosition);
 
-		logger.log(logLevel, "TEAM " + name + " added in " + cityCenter.toString());
+		logger.log(logLevel, "TEAM " + teamName + " added in " + cityCenter.toString());
 		
 		return cityCenter;
 	}
@@ -203,7 +207,7 @@ public class World {
 	 *            the cityCenter of a team
 	 * @return 
 	 */
-	public Position randomMeetingPoint(String team, Position cityCenter) {
+	public Position randomMeetingPoint(String teamName, Position cityCenter) {
 		Direction angle = Utils.getMapAnglePosition(cityCenter);
 		Position meetingPoint = new Position(-1, -1);
 		
@@ -260,15 +264,18 @@ public class World {
 				meetingPoint = meetingPoint.step(randomDir, randomStep);
 			}
 			Utils.checkAndFixPosition(meetingPoint);
-			cell = new Cell(CellType.MEETING_POINT, team);
+			cell = new Cell(CellType.MEETING_POINT, teamName);
 		}
 		while(!addObject(cell, meetingPoint));
-		meetingPoints.put(team, meetingPoint);
+		
+		meetingPoints.put(teamName, meetingPoint);
 		
 		return meetingPoint; 
 	}
 	
 	public synchronized void removeTeam(String teamName) {
+		clear(meetingPoints.get(teamName));
+		meetingPoints.remove(teamName);
 		clear(teams.get(teamName));
 		teams.remove(teamName);
 	}

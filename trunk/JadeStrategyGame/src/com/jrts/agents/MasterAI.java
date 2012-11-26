@@ -5,7 +5,6 @@ import jade.core.behaviours.TickerBehaviour;
 import jade.wrapper.AgentController;
 import jade.wrapper.ControllerException;
 import jade.wrapper.PlatformController;
-import jade.wrapper.StaleProxyException;
 
 import java.util.logging.Level;
 
@@ -21,6 +20,7 @@ import com.jrts.environment.Perception;
 import com.jrts.environment.Position;
 import com.jrts.environment.World;
 import com.jrts.environment.WorldMap;
+import com.jrts.gui.MainFrame;
 import com.jrts.messages.Death;
 import com.jrts.messages.EnemySighting;
 import com.jrts.messages.GoalLevels;
@@ -54,6 +54,8 @@ public class MasterAI extends JrtsAgent implements Team {
 	UnitFactory unitFactory;
 
 	MasterPerception perception = new MasterPerception();
+	
+	int teamDeceasedNum = 0;
 
 	public MasterAI() {
 		registerO2AInterface(Team.class, this);
@@ -153,6 +155,8 @@ public class MasterAI extends JrtsAgent implements Team {
 	public synchronized void decease() {
 		// TODO maybe send a notification to other teams (like age of empires)
 
+		MainFrame.getInstance().removeTeam(getTeamName());
+		
 		unitFactory.setFinished(true);
 		
 		// send notification of decease to military an resource ai (they will
@@ -160,18 +164,7 @@ public class MasterAI extends JrtsAgent implements Team {
 		sendNotification(Notification.TEAM_DECEASED, null, militaryAID);
 		sendNotification(Notification.TEAM_DECEASED, null, resourceAID);
 
-//		removeAllBehaviours();
-		addBehaviour(new TickerBehaviour(this, 100) {
-			private static final long serialVersionUID = 2292431112232972684L;
-			@Override
-			protected void onTick() {
-				try {
-					if (militaryAI.getState().getCode() == AP_DELETED && resourceAI.getState().getCode() == AP_DELETED)
-						doDelete();
-				} catch (StaleProxyException e) {
-				}
-			}
-		});
+		// NOW IT WAITS FOR NOTIFICATION FROM MILITARY AND RESOURCE, THEN DIES (see handlenotification)
 	}
 
 	/** O2A methods (for use in non-agent java objects) */
@@ -232,6 +225,12 @@ public class MasterAI extends JrtsAgent implements Team {
 
 		} else if (n.getSubject().equals(Notification.CITYCENTER_UNDER_ATTACK)) {
 			perception.setAlertCityCenterUnderAttack(true);
+			
+		} else if (n.getSubject().equals(Notification.TEAM_DECEASED)) {
+			teamDeceasedNum++;
+			if (teamDeceasedNum >= 2) {
+				doDelete();
+			}
 		}
 	}
 
@@ -281,8 +280,8 @@ public class MasterAI extends JrtsAgent implements Team {
 	
 	@Override
 	protected void takeDown() {
-		super.takeDown();
 		// clean the cell of citycenter in the floor
 		World.getInstance().removeTeam(getTeamName());
+		super.takeDown();
 	}
 }
