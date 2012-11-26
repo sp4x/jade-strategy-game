@@ -7,7 +7,6 @@ import java.util.Collection;
 import java.util.HashMap;
 
 import com.jrts.environment.Position;
-import com.jrts.environment.WorldMap;
 
 public class Battalion {
 

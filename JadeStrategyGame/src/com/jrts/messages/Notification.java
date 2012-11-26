@@ -11,7 +11,7 @@ public class Notification implements Serializable {
 	private static final long serialVersionUID = -4103939700986977091L;
 	
 	public static final String ENEMY_SIGHTED = "enemy_sighted";
-	public static final String NO_MORE_RESOURCE = "no_more_resource";
+	public static final String UNAVAILABLE_RESOURCE = "no_more_resource";
 	public static final String RESOURCES_UPDATE = "resources_update";
 	public static final String GOAL_LEVELS = "goal_levels";
 	public static final String PERCEPTION = "perception";

@@ -23,7 +23,7 @@ public class ResourceAI extends GoalBasedAI {
 
 	int workersCounter = 0;
 
-	boolean noMoreFood = false, noMoreWood = false;
+	boolean unavailableFood = false, unavailableWood = false;
 
 	public ResourceAI() {
 		super();
@@ -117,13 +117,13 @@ public class ResourceAI extends GoalBasedAI {
 	}
 
 	public String[] extimateOrderPriority() {
-		if (noMoreFood && !noMoreWood)
+		if (unavailableFood && !unavailableWood)
 			return new String[] { AgentStatus.WOOD_CUTTING,
 					AgentStatus.FOOD_COLLECTING };
-		if (!noMoreFood && noMoreWood)
+		if (!unavailableFood && unavailableWood)
 			return new String[] { AgentStatus.FOOD_COLLECTING,
 					AgentStatus.WOOD_CUTTING };
-		if (noMoreFood && noMoreWood)
+		if (unavailableFood && unavailableWood)
 			return null;
 
 		double foodRatio = 1, woodRatio = 1;
@@ -150,17 +150,17 @@ public class ResourceAI extends GoalBasedAI {
 
 	@Override
 	protected void updatePerception() {
-		if (noMoreFood) {
+		if (unavailableFood) {
 			Position p = requestMap().findNearest(myCityCenter, CellType.FOOD);
 			if (p != null)
-				noMoreFood = false;
+				unavailableFood = false;
 		}
-		if (noMoreWood) {
+		if (unavailableWood) {
 			Position p = requestMap().findNearest(myCityCenter, CellType.WOOD);
 			if (p != null)
-				noMoreWood = false;
+				unavailableWood = false;
 		}
-		if (!noMoreFood && !noMoreWood)
+		if (!unavailableFood && !unavailableWood)
 			sendNotification(Notification.RESOURCES_FOUND, null, getMasterAID());
 	}
 
@@ -168,16 +168,16 @@ public class ResourceAI extends GoalBasedAI {
 	protected void handleNotification(Notification n) {
 		super.handleNotification(n);
 
-		if (n.getSubject().equals(Notification.NO_MORE_RESOURCE)) {
+		if (n.getSubject().equals(Notification.UNAVAILABLE_RESOURCE)) {
 			CellType resourceType = (CellType) n.getContentObject();
 			logger.log(logLevel, getAID().getName() + ": no more "
 					+ resourceType + " in our known world..");
-			sendNotification(Notification.NO_MORE_RESOURCE, resourceType,
+			sendNotification(Notification.UNAVAILABLE_RESOURCE, resourceType,
 					getMasterAID());
 			if (resourceType.equals(CellType.FOOD))
-				noMoreFood = true;
+				unavailableFood = true;
 			else
-				noMoreWood = true;
+				unavailableWood = true;
 
 		} else if (n.getSubject().equals(Notification.RESOURCES_UPDATE)) {
 			AggiornaRisorse aggiornamento = (AggiornaRisorse) n

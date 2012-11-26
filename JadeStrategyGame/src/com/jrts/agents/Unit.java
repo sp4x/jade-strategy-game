@@ -1,9 +1,9 @@
 package com.jrts.agents;
 
-import java.util.logging.Level;
-
 import jade.core.AID;
 import jade.core.behaviours.Behaviour;
+
+import java.util.logging.Level;
 
 import com.jrts.O2Ainterfaces.IUnit;
 import com.jrts.agents.MasterAI.Nature;

@@ -1,8 +1,8 @@
 package com.jrts.agents;
 
-import java.util.logging.Level;
-
 import jade.core.AID;
+
+import java.util.logging.Level;
 
 import com.jrts.agents.MasterAI.Nature;
 import com.jrts.behaviours.BehaviourScheduler;
@@ -17,7 +17,6 @@ import com.jrts.environment.CellType;
 import com.jrts.environment.Direction;
 import com.jrts.environment.Position;
 import com.jrts.logic.AttacksManager;
-import com.jrts.messages.Death;
 import com.jrts.messages.EnemySighting;
 import com.jrts.messages.Notification;
 import com.jrts.messages.Order;
@@ -141,7 +140,7 @@ public class Soldier extends Unit {
 
 	@Override
 	protected void die() {
-		sendNotification(Notification.UNIT_DEATH, new Death(Death.SOLDIER), getResourceAID());
+		sendNotification(Notification.UNIT_DEATH, this.getClass().getCanonicalName(), getResourceAID());
 		logger.log(logLevel, getAID().getLocalName() + ":dying");
 		terminate();
 	}

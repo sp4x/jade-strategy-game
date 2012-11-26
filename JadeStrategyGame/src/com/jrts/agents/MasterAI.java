@@ -21,7 +21,6 @@ import com.jrts.environment.Position;
 import com.jrts.environment.World;
 import com.jrts.environment.WorldMap;
 import com.jrts.gui.MainFrame;
-import com.jrts.messages.Death;
 import com.jrts.messages.EnemySighting;
 import com.jrts.messages.GoalLevels;
 import com.jrts.messages.MessageSubject;
@@ -122,8 +121,7 @@ public class MasterAI extends JrtsAgent implements Team {
 			protected void onTick() {
 				goalLevels.setAttack(attackScorer.calculatePriority());
 				goalLevels.setDefence(defenceScorer.calculatePriority());
-				goalLevels
-						.setExploration(explorationScorer.calculatePriority());
+				goalLevels.setExploration(explorationScorer.calculatePriority());
 				goalLevels.setResources(resourceScorer.calculatePriority());
 				notifyGoalChanges();
 				perception.clean();
@@ -204,18 +202,17 @@ public class MasterAI extends JrtsAgent implements Team {
 			EnemySighting e = (EnemySighting) n.getContentObject();
 			perception.getEnemySightings().add(e);
 
-		} else if (n.getSubject().equals(Notification.NO_MORE_RESOURCE)) {
+		} else if (n.getSubject().equals(Notification.UNAVAILABLE_RESOURCE)) {
 			perception.setAlertNoMoreResources(true);
 
 		} else if (n.getSubject().equals(Notification.RESOURCES_FOUND)) {
 			perception.setAlertNoMoreResources(false);
 
 		} else if (n.getSubject().equals(Notification.UNIT_DEATH)) {
-			Death death = (Death) n.getContentObject();
-
-			if (death.getUnitType() == Death.WORKER)
+			String className = (String) n.getContentObject();
+			if (className.equals(Worker.class.getCanonicalName()))
 				perception.numDeadWorkers++;
-			else if (death.getUnitType() == Death.SOLDIER) {
+			else if (className.equals(Soldier.class.getCanonicalName())) {
 				perception.numDeadSoldiers++;
 			}
 

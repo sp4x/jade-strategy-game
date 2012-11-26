@@ -45,7 +45,7 @@ public class CollectResources extends UnitBehaviour {
 //				logger.log(logLevel, "No " + resourceToCollect + " our worlmap; swith my status to free");
 				worker.switchStatus(AgentStatus.FREE);
 				// inform the resourceAi that there is no resource of that type in the known world
-				worker.sendNotification(Notification.NO_MORE_RESOURCE, resourceToCollect, worker.getResourceAID());
+				worker.sendNotification(Notification.UNAVAILABLE_RESOURCE, resourceToCollect, worker.getResourceAID());
 			} else {
 //				logger.log(logLevel, "Found " + resourceToCollect + " in " + resourcePosition + "; I'm going there");
 				worker.goThere(resourcePosition);
@@ -67,7 +67,7 @@ public class CollectResources extends UnitBehaviour {
 				if (resourcePosition == null) {
 					worker.switchStatus(AgentStatus.FREE);
 					// inform the resourceAi that there is no resource of that type in the known world
-					worker.sendNotification(Notification.NO_MORE_RESOURCE, resourceToCollect, worker.getResourceAID());
+					worker.sendNotification(Notification.UNAVAILABLE_RESOURCE, resourceToCollect, worker.getResourceAID());
 				} else {
 					worker.goThere(resourcePosition);
 				}
