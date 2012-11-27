@@ -13,7 +13,6 @@ import com.jrts.environment.Cell;
 import com.jrts.environment.Floor;
 import com.jrts.environment.Position;
 import com.jrts.environment.World;
-import com.jrts.logic.AttacksManager;
 
 /**
  * Implement a JPanel to represent the environment and the agent
@@ -41,19 +40,19 @@ public class WorldViewPanel extends JPanel {
 			for (int i = 0; i < floor.getCols(); i++) {
 				CellLabel label = new CellLabel(i, j);
 				labelMatrix[i][j] = label;
-				super.add(label);
+				add(label);
 			}
 
-		Dimension d = new Dimension((floor.getCols()) * GameConfig.ICON_SIZE, (floor.getRows()) * GameConfig.ICON_SIZE);
+		Dimension d = new Dimension(floor.getCols() * GameConfig.ICON_SIZE - 10, floor.getRows() * GameConfig.ICON_SIZE - 10);
 		setPreferredSize(d);
-		setMinimumSize(d);
-		setMaximumSize(d);
-		setSize(d);
+//		setMinimumSize(d);
+//		setMaximumSize(d);
+//		setSize(d);
 		setBorder(BorderFactory.createLineBorder(Color.black, 1));
 	}
 
 	public void update() {
-		AttacksManager.update();
+		
 		/** take a snapshot of the floor at this moment and dispay it */
 		floor = World.getInstance().getSnapshot();
 		Icon icon;
@@ -116,6 +115,6 @@ public class WorldViewPanel extends JPanel {
 	}
 
 	public void paintComponent(Graphics g) {
-		g.drawImage(ImageLoader.getBackgroundImage(this.getSize()).getImage(), 0, 0, null);
+		g.drawImage(ImageLoader.getBackgroundImage(new Dimension((floor.getCols()) * GameConfig.ICON_SIZE, (floor.getRows()) * GameConfig.ICON_SIZE)).getImage(), 0, 0, null);
 	}
 }

@@ -53,10 +53,15 @@ public class TeamResourcePanel extends JPanel{
 		}
 		
 		this.progressWorkers= new JLabel("(0%)");
+		Dimension d = new Dimension(40,20);
+		progressWorkers.setSize(d);
+		progressWorkers.setPreferredSize(d);
 		this.progressSoldiers= new JLabel("(0%)");
+		progressSoldiers.setSize(d);
+		progressSoldiers.setPreferredSize(d);
 		
 		super.setBorder(border);
-		super.setPreferredSize(new Dimension(270, 50));
+		super.setPreferredSize(new Dimension(280, 50));
 
 		super.add(this.food);
 		super.add(this.wood);

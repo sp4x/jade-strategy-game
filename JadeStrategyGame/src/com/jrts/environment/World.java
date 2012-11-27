@@ -323,7 +323,11 @@ public class World {
 	public synchronized int takeEnergy(Position target, int amount) {
 		Cell targetCell = floor.get(target);
 		if (targetCell.isUnit()) {
-			targetCell.getUnit().decreaseLife(amount);
+			try {
+				targetCell.getUnit().decreaseLife(amount);
+			} catch (Exception e) {
+				// in caso di o2a exception c'è poco da fare, significa che l'agente è già morto
+			}
 			return amount;
 			
 		} else if (targetCell.energy >= amount) {

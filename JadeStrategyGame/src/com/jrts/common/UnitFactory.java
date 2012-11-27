@@ -9,7 +9,6 @@ import java.util.logging.Logger;
 
 import com.jrts.O2Ainterfaces.IUnit;
 import com.jrts.agents.MasterAI.Nature;
-import com.jrts.agents.GoalBasedAI;
 import com.jrts.agents.Soldier;
 import com.jrts.agents.Unit;
 import com.jrts.agents.Worker;
@@ -32,8 +31,8 @@ public class UnitFactory extends Thread {
 	int workerQueueCount = 0;
 	int soldierQueueCount = 0;
 	
-	public int progressionTrainingWorker = 0;
-	public int progressionTrainingSoldier = 0;
+	int workerTrainingProgress = 0;
+	int soldierTrainingProgress = 0;
 
 	private boolean finished = false;;
 	
@@ -119,9 +118,9 @@ public class UnitFactory extends Thread {
 		} catch (InterruptedException e1) {
 		}
 		if(className.equals(Worker.class.getCanonicalName()))
-			progressionTrainingWorker = progress;
+			workerTrainingProgress = progress;
 		else if(className.equals(Soldier.class.getCanonicalName()))
-			progressionTrainingSoldier = progress;
+			soldierTrainingProgress = progress;
 
 	}
 
@@ -149,6 +148,46 @@ public class UnitFactory extends Thread {
 
 	public synchronized void setFinished(boolean finished) {
 		this.finished = finished;
+	}
+
+
+	public int getWorkerQueueCount() {
+		return workerQueueCount;
+	}
+
+
+	public void setWorkerQueueCount(int workerQueueCount) {
+		this.workerQueueCount = workerQueueCount;
+	}
+
+
+	public int getSoldierQueueCount() {
+		return soldierQueueCount;
+	}
+
+
+	public void setSoldierQueueCount(int soldierQueueCount) {
+		this.soldierQueueCount = soldierQueueCount;
+	}
+
+
+	public int getWorkerTrainingProgress() {
+		return workerTrainingProgress;
+	}
+
+
+	public void setWorkerTrainingProgress(int workerTrainingProgress) {
+		this.workerTrainingProgress = workerTrainingProgress;
+	}
+
+
+	public int getSoldierTrainingProgress() {
+		return soldierTrainingProgress;
+	}
+
+
+	public void setSoldierTrainingProgress(int soldierTrainingProgress) {
+		this.soldierTrainingProgress = soldierTrainingProgress;
 	}
 	
 	
