@@ -29,50 +29,58 @@ public class GoalLevels implements Serializable {
 
 	public int extimateResourceUnits() {
 		
-		if(getResources() == GoalPriority.LOW)
+		switch (resources) {
+		case LOW:
 			return GameConfig.LOW_PRIORITY_RESOURCES_UNITS;
-		else if(getResources() == GoalPriority.MEDIUM)
+		case MEDIUM:
 			return GameConfig.MEDIUM_PRIORITY_RESOURCES_UNITS;
-		else if(getResources() == GoalPriority.HIGH)
+		case HIGH:
 			return GameConfig.HIGH_PRIORITY_RESOURCES_UNITS;
-		
-		return 0;
+		default:
+			return 0;
+		}
 	}
 	
 	public int extimateFightingUnits() {
-
-		if(getAttack() == GoalPriority.LOW)
-			return GameConfig.LOW_PRIORITY_ATTACKS_UNITS;
-		else if(getAttack() == GoalPriority.MEDIUM)
-			return GameConfig.MEDIUM_PRIORITY_ATTACKS_UNITS;
-		else if(getAttack() == GoalPriority.HIGH)
-			return GameConfig.HIGH_PRIORITY_ATTACKS_UNITS;
 		
-		return 0;
+		switch (attack) {
+		case LOW:
+			return GameConfig.LOW_PRIORITY_ATTACKS_UNITS;
+		case MEDIUM:
+			return GameConfig.MEDIUM_PRIORITY_ATTACKS_UNITS;
+		case HIGH:
+			return GameConfig.HIGH_PRIORITY_ATTACKS_UNITS;
+		default:
+			return 0;
+		}
 	}
 	
 	public int extimatePatrolingUnits()
 	{
-		if(getDefence() == GoalPriority.LOW)
+		switch (defence) {
+		case LOW:
 			return GameConfig.LOW_PRIORITY_PATROLING_UNITS;
-		else if(getDefence() == GoalPriority.MEDIUM)
+		case MEDIUM:
 			return GameConfig.MEDIUM_PRIORITY_PATROLING_UNITS;
-		else if(getDefence() == GoalPriority.HIGH)
+		case HIGH:
 			return GameConfig.HIGH_PRIORITY_PATROLING_UNITS;
-		
-		return 0;
+		default:
+			return 0;
+		}
 	}
 
 	public int extimateExplorationUnits()
 	{	
-		if(getExploration() == GoalPriority.LOW)
+		switch (exploration) {
+		case LOW:
 			return GameConfig.LOW_PRIORITY_EXPLORATION_UNITS;
-		else if(getExploration() == GoalPriority.MEDIUM)
+		case MEDIUM:
 			return GameConfig.MEDIUM_PRIORITY_EXPLORATION_UNITS;
-		else if(getExploration() == GoalPriority.HIGH)
+		case HIGH:
 			return GameConfig.HIGH_PRIORITY_EXPLORATION_UNITS;
-		
-		return 0;
+		default:
+			return 0;
+		}
 	}
 	
 	public GoalPriority getResources() {

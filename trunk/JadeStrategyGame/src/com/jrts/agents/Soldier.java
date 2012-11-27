@@ -95,6 +95,7 @@ public class Soldier extends Unit {
 		//add some heuristic to determine wether attack or not
 		if(	getStatus().equals(AgentStatus.PATROLING) || 
 			getStatus().equals(AgentStatus.GO_FIGHTING) ||
+			getPosition().distance(getCityCenter()) < 10 ||
 							nature == Nature.AGGRESSIVE || 
 							(nature == Nature.AVERAGE && Utils.random.nextBoolean()) )
 		{

@@ -101,7 +101,8 @@ public class ResourceAI extends GoalBasedAI {
 		
 		// heuristic based on costs and population
 		int population = getTeamDF().countUnits() - unitFactory.getQueuedUnitsCount();
-		int neededUnits = goalLevels.extimateNeededUnits() - population;
+		//overestimate needed units
+		int neededUnits = 2*goalLevels.extimateNeededUnits() - population;
 		boolean train = neededUnits > 0
 				&& population < GameConfig.POPULATION_LIMIT
 				&& unitFactory.getQueueWorkerCount() == 0

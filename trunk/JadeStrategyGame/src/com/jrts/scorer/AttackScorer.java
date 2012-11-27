@@ -2,6 +2,7 @@ package com.jrts.scorer;
 
 import com.jrts.agents.MasterAI.Nature;
 import com.jrts.agents.Soldier;
+import com.jrts.agents.Worker;
 import com.jrts.common.AgentStatus;
 import com.jrts.common.GameConfig;
 import com.jrts.common.TeamDF;
@@ -12,6 +13,8 @@ public class AttackScorer extends GoalScorer {
 	public AttackScorer(final Nature nature, final MasterPerception perception) {
 		super(nature, perception);
 		
+		
+		//higher when there are many free soldiers
 		addRule(new Rule() {
 			@Override
 			public double value() {
@@ -25,6 +28,7 @@ public class AttackScorer extends GoalScorer {
 		});
 		
 
+		//higher with high resources
 		addRule(new Rule() {
 			@Override
 			public double value() {
@@ -40,6 +44,8 @@ public class AttackScorer extends GoalScorer {
 		});
 		
 		//TODO valutare avvistamenti nemici
+		
+		//nature
 		addRule(new Rule() {
 			@Override
 			public double value() {
@@ -50,6 +56,25 @@ public class AttackScorer extends GoalScorer {
 					return MAX_SCORE / 3 * 2;
 
 				return MAX_SCORE /  2;
+			}
+		});
+		
+		
+		//if there arent resource to harvest
+		addRule(new Rule() {
+			
+			@Override
+			public double value() {
+				int woodCutters = perception.getTeamDF().searchByUnitStatus(
+						Worker.class, AgentStatus.WOOD_CUTTING).length;
+				int foodCollectors = perception.getTeamDF().searchByUnitStatus(
+						Worker.class, AgentStatus.FOOD_COLLECTING).length;
+				double value = 0;
+				if (woodCutters == 0)
+					value += MAX_SCORE/2;
+				if (foodCollectors == 0)
+					value += MAX_SCORE/2;
+				return value;
 			}
 		});
 	}
