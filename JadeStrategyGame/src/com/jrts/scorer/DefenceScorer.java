@@ -1,5 +1,8 @@
 package com.jrts.scorer;
 
+import java.util.Collection;
+import java.util.LinkedList;
+
 import com.jrts.agents.MasterAI.Nature;
 import com.jrts.common.GameConfig;
 import com.jrts.environment.MasterPerception;
@@ -49,6 +52,35 @@ public class DefenceScorer extends GoalScorer {
 				return MAX_SCORE /  2;
 			}
 		});
+		
+		//max if city center is under attack
+		addRule(new Rule() {
+			
+			@Override
+			public double value() {
+				if (perception.isAlertCityCenterUnderAttack())
+					return MAX_SCORE;
+				return MIN_SCORE;
+			}
+		});
+		
+		addRule(new Rule() {
+			
+			@Override
+			public double value() {
+				if (perception.getEnemySightings().isEmpty())
+					return MIN_SCORE;
+				Position cityCenter = perception.getCityCenter();
+				Collection<Position> enemyPositions = new LinkedList<Position>();
+				for (EnemySighting e : perception.getEnemySightings()) {
+					enemyPositions.add(e.getSightingPosition());
+				}
+				Position closest = cityCenter.nearest(enemyPositions);
+				return MAX_SCORE - closest.distance(cityCenter)*4;
+			}
+		});
+		
+		
 	}
 
 }
