@@ -218,10 +218,12 @@ public class MainFrame extends JFrame {
 
 		JPanel center = new JPanel();
 		center.setLayout(new BorderLayout());
-		JPanel p = new JPanel();
-		// p.setBorder(BorderFactory.createLineBorder(Color.black, 1));
-		p.setSize(100, 40);
-		center.add(p, BorderLayout.SOUTH);
+		
+		center.add(panel(), BorderLayout.NORTH);
+		center.add(panel(), BorderLayout.SOUTH);
+		center.add(panel(), BorderLayout.EAST);
+		center.add(panel(), BorderLayout.WEST);
+		
 		center.add(worldViewPanel, BorderLayout.CENTER);
 
 		getContentPane().add(topPanel, BorderLayout.NORTH);
@@ -261,6 +263,17 @@ public class MainFrame extends JFrame {
 		new Thread(new RefreshGUI()).start();
 	}
 
+	private JPanel panel() {
+		JPanel p = new JPanel();
+//		p.setBorder(BorderFactory.createLineBorder(Color.black));
+		Dimension s = new Dimension(80,10);
+		p.setSize(s);
+		p.setPreferredSize(s);
+		p.setMinimumSize(s);
+		p.setMaximumSize(s);
+		return p;
+	}
+	
 	private void close() {
 		finished = true;
 		dispose();

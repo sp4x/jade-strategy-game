@@ -2,7 +2,9 @@ package com.jrts.behaviours;
 
 import com.jrts.agents.Soldier;
 import com.jrts.common.AgentStatus;
+import com.jrts.common.GameConfig;
 import com.jrts.environment.Cell;
+import com.jrts.environment.Direction;
 import com.jrts.environment.Position;
 import com.jrts.environment.WorldMap;
 import com.jrts.messages.EnemySightingItem;
@@ -33,10 +35,16 @@ public class FightingBehaviour extends UnitBehaviour {
 		WorldMap worldMap = soldier.requestMap();
 		Cell targetCell = worldMap.get(targetPosition);
 		if (targetCell.isCityCenter()) {
-			if (soldier.getPosition().isNextTo(targetPosition))
-				soldier.sendHit(soldier.getPosition().getDirectionTo(targetPosition));
-			else
+			Position soldierPosition = soldier.getPosition().clone();
+			//if it's close attack
+			if (soldierPosition.isNextTo(targetPosition)) {
+				Direction dir = soldier.getPosition().getDirectionTo(targetPosition);
+				if (dir != null)
+					soldier.sendHit(dir);
+			} else {
+				//walk until it's in range
 				reach(targetPosition);
+			}
 		}
 		else {
 			done = true;
@@ -45,6 +53,9 @@ public class FightingBehaviour extends UnitBehaviour {
 
 	@Override
 	public void myAction() {
+		try {
+			Thread.sleep(GameConfig.ATTACKS_SLEEP_TIME);
+		} catch (InterruptedException e) {}
 		if (target == null) {
 			hitOnBuilding();
 		} else {
@@ -59,11 +70,16 @@ public class FightingBehaviour extends UnitBehaviour {
 			done = true;
 		} else {
 			Position enemyCurrentPosition = enemy.getPosition();
+			Position soldierPosition = soldier.getPosition();
 			//if it's close attack
-			if (soldier.getPosition().isNextTo(enemyCurrentPosition))
-				soldier.sendHit(soldier.getPosition().getDirectionTo(enemyCurrentPosition));
-			else //walk until it's in range
+			if (soldierPosition.isNextTo(enemyCurrentPosition)) {
+				Direction dir = soldier.getPosition().getDirectionTo(enemyCurrentPosition);
+				if (dir != null)
+					soldier.sendHit(dir);
+			} else {
+				//walk until it's in range
 				reach(enemyCurrentPosition);
+			}
 		}
 	}
 

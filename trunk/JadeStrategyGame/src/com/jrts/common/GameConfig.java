@@ -33,10 +33,8 @@ public class GameConfig {
 	public static int UNIT_WAIT_TIME = 4000;
 	
 	public static int REFRESH_TIME = 800;
-	public static final int MIN_REFRESH_TIME = 400;
-	public static final int MAX_REFRESH_TIME = 1200;
 	
-	public static final int ATTACKS_REFRESH = 50;
+	public static final int ATTACKS_REFRESH = 500;
 	public static final int PERCEPTION_REFRESH = 500;
 	
 	public static final int UNIT_CREATION_TIME = 5;
@@ -58,7 +56,7 @@ public class GameConfig {
 	public static final int POPULATION_LIMIT = 2500;
 	public static final int RUNAWAY_DISTANCE = 10;
 	
-	public static final int ATTACKS_SLEEP_TIME = 3000;
+	public static final int ATTACKS_SLEEP_TIME = 600;
 	public static final int ENEMY_SIGHTING_BOUND = 10;
 	public static final int BATTALION_SIZE = 3;
 	

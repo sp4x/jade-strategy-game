@@ -284,12 +284,11 @@ public class MasterAI extends JrtsAgent implements Team {
 
 	@Override
 	public String getProgressTrainingWorker() {
-		System.out.println("Recupero " + unitFactory.progressionTrainingWorker);
-		return "(" + unitFactory.progressionTrainingWorker + "%)";
+		return "(" + unitFactory.getWorkerTrainingProgress() + "%)";
 	}
 	
 	@Override
 	public String getProgressTrainingSoldier() {
-		return "(" + unitFactory.progressionTrainingSoldier + "%)";
+		return "(" + unitFactory.getSoldierTrainingProgress() + "%)";
 	}
 }

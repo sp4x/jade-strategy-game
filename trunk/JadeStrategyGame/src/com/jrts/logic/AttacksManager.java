@@ -1,6 +1,7 @@
 package com.jrts.logic;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -15,62 +16,70 @@ public class AttacksManager {
 
 	static Logger logger = Logger.getLogger(AttacksManager.class.getName());
 	static Level logLevel = Level.FINE;
-	
+
 	private static ArrayList<Hit> hits;
-	private static int counter;
-	
+
 	static {
 		hits = new ArrayList<Hit>();
 	}
 
-	public synchronized static void addHit(Position pos, Direction dir, int damage, int hitRange){
+	public static void start() {
+		Thread t = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				while (true) {
+					try {
+						Thread.sleep(GameConfig.ATTACKS_REFRESH);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					update();
+				}
+			}
+		});
+		t.start();
+	}
+
+	public synchronized static void addHit(Position pos, Direction dir, int damage, int hitRange) {
 		Hit hit = new Hit(pos, dir, damage, hitRange);
-		//Eseguo uno spostamento per evitare che il colpo danneggi l'unita' sorgente stessa
-//		hit.step(); EDIT: viene fatto dopo
+		// Eseguo uno spostamento per evitare che il colpo danneggi l'unita'
+		// sorgente stessa
+		// hit.step(); EDIT: viene fatto dopo
 		hits.add(hit);
 	}
-	
+
 	public synchronized static void update() {
-		if(counter++ < GameConfig.ATTACKS_REFRESH)
-			return;
-		counter = 0;
-		
-		//refresh hit's positions
-		for (int i = 0; i < hits.size(); i++){
-			Hit hit = (Hit) hits.get(i);
+		LinkedList<Hit> toRemove = new LinkedList<Hit>();
+		for (Hit hit : hits) {
 			hit.step();
-			//disable hit which exceed floor's bound
-			if(!hit.respectLimits(World.getInstance().getRows(), World.getInstance().getCols()))
-				hit.setEnabled(false);
-		}
-		
-		//check if there is some collision
-		for (int i = 0; i < hits.size(); i++){
-			Position hp = hits.get(i).getPos();
-			Cell cell = World.getInstance().getCell(hp);
-			if(!cell.isFree()){
-				logger.log(logLevel, "Detected collision");
-				Hit hit = hits.remove(i);
-				Position pos = hit.getPos();
+			// remove hit which exceed floor's bound
+			if (!hit.respectLimits(World.getInstance().getRows(), World.getInstance().getCols())) {
+				toRemove.add(hit);
+			} else {
+				// check for collisions
+				Position hitpos = hit.getPos();
 				int damage = hit.getDamage();
-				if(cell.isCityCenter() || cell.isUnit())
-					World.getInstance().takeEnergy(pos, damage);
-			}
-			else if(hits.get(i).getRange() == 0){
-				//exceeded range limit
-				hits.get(i).setEnabled(false);
+				Cell cell = World.getInstance().getCell(hitpos);
+				if (!cell.isFree()) {
+					logger.log(logLevel, "Detected collision");
+					toRemove.add(hit);
+					if (cell.isCityCenter() || cell.isUnit())
+						World.getInstance().takeEnergy(hitpos, damage);
+				} else if (hit.getRange() == 0) {
+					// exceeded range limit
+					toRemove.add(hit);
+				}
 			}
 		}
-		
-		//remove disabled hits
-		for (int i = 0; i < hits.size(); i++)
-			if(!hits.get(i).isEnabled())
-				hits.remove(i);
+		for (Hit hit : toRemove) {
+			hits.remove(hit);
+		}
+		toRemove.clear();
 	}
 
 	public synchronized static boolean isThereAnHit(int row, int col) {
 		for (int i = 0; i < hits.size(); i++)
-			if(hits.get(i).getPos().equals(new Position(row, col)))
+			if (hits.get(i).getPos().equals(new Position(row, col)))
 				return true;
 		return false;
 	}

@@ -18,6 +18,7 @@ import com.jrts.common.GameStatistics;
 import com.jrts.environment.Position;
 import com.jrts.environment.World;
 import com.jrts.gui.MainFrame;
+import com.jrts.logic.AttacksManager;
 
 public class JadeStrategyGame {
 
@@ -60,6 +61,9 @@ public class JadeStrategyGame {
 			teams.add(team);
 		}
 
+		/** start attacksManager thread */
+		AttacksManager.start();
+		
 		/** start graphics */
 		MainFrame.start(World.getInstance().getSnapshot(), teams, ac);
 	}
