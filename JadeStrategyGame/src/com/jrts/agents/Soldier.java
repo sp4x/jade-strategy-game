@@ -93,11 +93,11 @@ public class Soldier extends Unit {
 		sendNotification(Notification.ENEMY_SIGHTED, enemies, getMilitaryAID());
 		
 		//add some heuristic to determine wether attack or not
-		if(	getStatus().equals(AgentStatus.PATROLING) || 
+		if(	nature == Nature.AGGRESSIVE || 
+			(nature == Nature.AVERAGE && Utils.random.nextBoolean()) ||
+			getStatus().equals(AgentStatus.PATROLING) || 
 			getStatus().equals(AgentStatus.GO_FIGHTING) ||
-			getPosition().distance(getCityCenter()) < 10 ||
-							nature == Nature.AGGRESSIVE || 
-							(nature == Nature.AVERAGE && Utils.random.nextBoolean()) )
+			getPosition().distance(getCityCenter()) < 10 )
 		{
 			String target = enemies.getEnemies().iterator().next().getId();
 			attack(target);
@@ -131,9 +131,6 @@ public class Soldier extends Unit {
 			
 		} else if (order.getNextStatus().equals(AgentStatus.EXPLORING)) {
 			explore();
-		/*} else if (order.getNextStatus().equals(AgentStatus.WAIT_TO_FIGHT)) {
-			goThere(order.getPosition());
-			switchStatus(AgentStatus.WAIT_TO_FIGHT);*/
 		} else if (order.getNextStatus().equals(AgentStatus.GO_FIGHTING)) {
 			goToAttack(order.getPosition());
 		}

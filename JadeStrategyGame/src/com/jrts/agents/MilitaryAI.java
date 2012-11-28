@@ -342,6 +342,14 @@ public class MilitaryAI extends GoalBasedAI {
 		sendNotification(Notification.CITYCENTER_UNDER_ATTACK, myCityCenter, getMasterAID());
 		logger.log(logLevel, getTeamName() + " city center under attack!");
 		// TODO handle it
+		
+		Collection<AID> soldiers = unitTable.getSoldiers();
+		for (AID aid : soldiers) {
+			Order order = new Order(AgentStatus.FREE);
+			giveOrder(aid, order);
+		}
+		
+		
 	}
 
 	public void onEnemySighting(EnemySighting e) {
