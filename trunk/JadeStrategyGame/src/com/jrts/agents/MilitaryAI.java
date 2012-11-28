@@ -143,9 +143,9 @@ public class MilitaryAI extends GoalBasedAI {
 		addUnitToBattalion();
 		*/
 		
-		System.out.println(getTeamName() + ": " + "MANAGE FIGHTING");
+		//System.out.println(getTeamName() + ": " + "MANAGE FIGHTING");
 		if(goalLevels.getAttack() == GoalPriority.HIGH || (goalLevels.getAttack() == GoalPriority.MEDIUM && Utils.random.nextInt(4) == 0)){
-			System.out.println(getTeamName() + ": " + "SENDING TO ATTACK");
+			//System.out.println(getTeamName() + ": " + "SENDING TO ATTACK");
 			// Se il battaglone non ï¿½ pronto c'ï¿½ 1/3 di possbilitï¿½ di attaccare comunque
 			//if(battalion.isFull() || Utils.random.nextInt(3) == 0)
 			//{
@@ -155,28 +155,36 @@ public class MilitaryAI extends GoalBasedAI {
 			{
 				Position posToAttack = myCityCenter.nearest(cityCenterPositions);
 				//for (AID aid : battalion.getSoldiersList()) {
-				System.out.println(getTeamName() + ": " + unitTable.getUnitsWithStatus(AgentStatus.FREE).size() + " UNITS ARE GOING TO ATTACK");
+				//System.out.println(getTeamName() + ": " + unitTable.getUnitsWithStatus(AgentStatus.FREE).size() + " UNITS ARE GOING TO ATTACK");
 				
+				// Creo l'insieme dei soldati da mandare all'attacco
 				ArrayList<AID> soldiers = unitTable.getUnitsWithStatus(AgentStatus.FREE);
 				if(nature != Nature.DEFENSIVE) 
 					soldiers.addAll(unitTable.getUnitsWithStatus(AgentStatus.EXPLORING));
 				if(nature == Nature.AGGRESSIVE) 
 					soldiers.addAll(unitTable.getUnitsWithStatus(AgentStatus.PATROLING));
+				
+				// Stabilisco il numero minimo di unità che deve avere il battaglione
 				int minSize = 12;
 				if(nature == Nature.DEFENSIVE) minSize = 5;
 				else if(nature == Nature.DEFENSIVE) minSize = 8;
+				
+				// Se ci sono abbastanza soldati disponibili li mando all'attacco
 				if(soldiers.size() >= minSize){
 					for (AID aid : soldiers) {
-						System.out.println(getTeamName() + ": " + "ORDER: " + aid.getLocalName() + " GO TO ATTACK " + posToAttack);
+						//System.out.println(getTeamName() + ": " + "ORDER: " + aid.getLocalName() + " GO TO ATTACK " + posToAttack);
 						Order order = new Order(AgentStatus.GO_FIGHTING);
 						order.setPosition(posToAttack);
 						giveOrder(aid, order);
 					}
 				}
+				/*
 				System.out.println();
 				System.out.println();
 				System.out.println();
-			} else System.out.println(getTeamName() + ": " + "NO CITY CENTERS");
+				*/
+			} else // Se non ho ancora trovato un CityCenter provo ad aggiungere un esploratore
+				this.addExplorer();
 			//}
 		}
 	}
