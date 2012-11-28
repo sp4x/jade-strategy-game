@@ -81,7 +81,7 @@ public class UnitFactory extends Thread {
 		setProgress(claz.getCanonicalName(), 0);
 		World world = World.getInstance();
 		setProgress(claz.getCanonicalName(), 25);
-		String unitName = team + "-" + claz.getSimpleName() + counter();
+		String unitId = team + "-" + claz.getSimpleName() + counter();
 		Position unitPosition = world.neighPosition(cityCenter);
 		if(unitPosition != null){
 			//Instantiate the unit
@@ -91,16 +91,22 @@ public class UnitFactory extends Thread {
 				setProgress(claz.getCanonicalName(), 50);
 				if (!isFinished()) {
 					synchronized (this) {
-						agentController = controller.createNewAgent(unitName, claz.getName(), args);
+						agentController = controller.createNewAgent(unitId, claz.getName(), args);
 						setProgress(claz.getCanonicalName(), 75);
-						agentController.start();
 	
 						if(claz.getName().contains("Worker")) workerQueueCount--;
 						else if(claz.getName().contains("Soldier")) soldierQueueCount--;
+						setProgress(claz.getCanonicalName(), 90);
+						IUnit o2a = agentController.getO2AInterface(IUnit.class);
+						while (!World.getInstance().addUnit(unitPosition, unitId, o2a)) {
+							try {
+								Thread.sleep(100);
+							} catch (InterruptedException e) {
+							}
+						}
+						
+						agentController.start();
 					}
-					setProgress(claz.getCanonicalName(), 90);
-					IUnit o2a = agentController.getO2AInterface(IUnit.class);
-					World.getInstance().addUnit(unitPosition, unitName, o2a);
 				}
 				setProgress(claz.getCanonicalName(), 100);
 				

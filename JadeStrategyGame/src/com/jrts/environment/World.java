@@ -13,7 +13,7 @@ import com.jrts.common.Utils;
 public class World {
 
 	private static World instance = null;
-	
+
 	public static Level logLevel = Level.FINE;
 
 	final Floor floor;
@@ -25,12 +25,13 @@ public class World {
 	private final int cols;
 
 	/**
-	 * I 4 booleani rappresentano i 4 angoli della mappa, ogni qual volta la base di una squadra 
-	 * occupa uno di essi, allora la relativa cella dell'array diventa true.
+	 * I 4 booleani rappresentano i 4 angoli della mappa, ogni qual volta la
+	 * base di una squadra occupa uno di essi, allora la relativa cella
+	 * dell'array diventa true.
 	 */
-	private boolean[] occupiedAngles = {false, false, false, false};
+	private boolean[] occupiedAngles = { false, false, false, false };
 	private Logger logger = Logger.getLogger(World.class.getName());
-	
+
 	public static void create(int rows, int cols, float woodPercentage, float foodPercentage) {
 		instance = new World(rows, cols, woodPercentage, foodPercentage);
 	}
@@ -51,23 +52,11 @@ public class World {
 		int numFood = (int) (((float) (rows * cols)) * foodPercentage);
 		Cell food = new Cell(CellType.FOOD, GameConfig.FARM_ENERGY);
 		floor.generateObject(numFood, food);
-		
+
 		teams = new HashMap<String, Position>();
 		meetingPoints = new HashMap<String, Position>();
 	}
 
-	
-	boolean doMovement(Position source, Direction d) {
-		Position destination = source.step(d);
-		Cell srcCell = floor.get(source);
-		if (isAvailable(destination)) {
-			clear(source);
-			floor.set(destination, srcCell);
-			return true;
-		} 
-		return false;
-	}
-	
 	/**
 	 * changes the position of an object using the specified direction
 	 * 
@@ -78,10 +67,17 @@ public class World {
 	 * @return true if the movement has been performed
 	 */
 	public synchronized boolean move(Position source, Direction d) {
-		return doMovement(source, d);
+		Position destination = source.step(d);
+		Cell srcCell = floor.get(source);
+		if (isAvailable(destination)) {
+			clear(source);
+			floor.set(destination, srcCell);
+			return true;
+		}
+		return false;
 	}
 
-	boolean addObject(Cell objectType, Position p) {
+	private boolean addObject(Cell objectType, Position p) {
 		if (isAvailable(p)) {
 			floor.set(p, objectType);
 			return true;
@@ -89,11 +85,13 @@ public class World {
 		return false;
 	}
 
-
-	public synchronized Cell getCell(Position p) {
+	/** Returns a copy of the cell in this position 
+	 * There is no way to get the real cell pointer, if you need it please
+	 * consider to re-design your solution cause it isn't safe
+	 */
+	public synchronized Cell getCellClone(Position p) {
 		return floor.getCopy(p);
 	}
-
 
 	/**
 	 * returns a random free position near a center between the specified
@@ -123,42 +121,42 @@ public class World {
 	boolean isAvailable(Position p) {
 		return floor.isValid(p) && floor.get(p).getType() == CellType.FREE;
 	}
-	
-	public void clear(Position p) {
+
+	private void clear(Position p) {
 		floor.set(p, new Cell(CellType.FREE));
 	}
-	
-	public  void explode(Position p) {
+
+	private void explode(Position p) {
 		floor.set(p, new Cell(CellType.EXPLOSION));
 	}
-	
+
 	/**
 	 * adds the city center in a random position for a new team with the
 	 * specified name
 	 * 
 	 * @param teamName
 	 *            the name of the team, has to be unique
-	 * @return 
+	 * @return
 	 */
 	public Position addTeam(String teamName) {
 		// Prendo un angolo a caso tra 0 e 3
 		int angle = Utils.random.nextInt(4);
 
-		// se l'angolo non e' occupato da un'altra squadra 
+		// se l'angolo non e' occupato da un'altra squadra
 		// lo utilizzo per mettere la base della squadra corrente,
 		// altrimenti ne scelgo un altro
 
-		while(this.occupiedAngles[angle])
+		while (this.occupiedAngles[angle])
 			angle = (angle + 1) % 4;
 
 		this.occupiedAngles[angle] = true;
-		
+
 		Cell base = new Cell(CellType.CITY_CENTER, teamName);
 		base.energy = GameConfig.BUILDING_ENERGY;
 
-		//Inizializzo la var con una posizione inesistente
+		// Inizializzo la var con una posizione inesistente
 		Position cityCenter = new Position(-1, -1);
-		
+
 		// A seconda dell'angolo della mappa scelto e del valore della var n
 		// scelgo la posizione della mappa ove posizionare la base
 		int n = Utils.random.nextInt(3) + 5;
@@ -177,52 +175,54 @@ public class World {
 				cityCenter = new Position(n, (this.cols - n));
 				break;
 			}
-			
-			// Genero un numero casuale che sar√† utilizzato per distanziare la base
+
+			// Genero un numero casuale che sar√† utilizzato per distanziare la
+			// base
 			// dalla cella di riferimento dellangolo della mappa scelto
-			//startP.col += (r.nextInt(2) == 0)? r.nextInt(10) : - r.nextInt(10);
-		
+			// startP.col += (r.nextInt(2) == 0)? r.nextInt(10) : -
+			// r.nextInt(10);
+
 		} while (!addObject(base, cityCenter));
-		
+
 		teams.put(teamName, cityCenter);
-		
+
 		// put a food and a wood resource near the city center
 		Position foodPosition = near(cityCenter, GameConfig.FOOD_MIN_DISTANCE, GameConfig.FOOD_MAX_DISTANCE);
 		Cell food = new Cell(CellType.FOOD, GameConfig.FARM_ENERGY);
 		addObject(food, foodPosition);
-		
+
 		Position woodPosition = near(cityCenter, GameConfig.WOOD_MIN_DISTANCE, GameConfig.WOOD_MAX_DISTANCE);
 		Cell wood = new Cell(CellType.WOOD, GameConfig.TREE_ENERGY);
 		addObject(wood, woodPosition);
 
 		logger.log(logLevel, "TEAM " + teamName + " added in " + cityCenter.toString());
-		
+
 		return cityCenter;
 	}
-	
+
 	/**
 	 * adds the meeting point in a random position
 	 * 
 	 * @param cityCenter
 	 *            the cityCenter of a team
-	 * @return 
+	 * @return
 	 */
 	public Position randomMeetingPoint(String teamName, Position cityCenter) {
 		Direction angle = Utils.getMapAnglePosition(cityCenter);
 		Position meetingPoint = new Position(-1, -1);
-		
+
 		Cell cell;
 		int maxDistance = GameConfig.MEETING_POINT_MAX_DISTANCE;
 		int minDistance = GameConfig.MEETING_POINT_MIN_DISTANCE;
-		
+
 		do {
 			ArrayList<Direction> directions = new ArrayList<Direction>();
-			
+
 			Integer randomStep = Utils.random.nextInt(maxDistance) + minDistance;
-			
+
 			// A seconda dell'angolo della mappa scelto e del valore della var n
 			// scelgo la posizione della mappa ove posizionare il meeting point
-			if(angle == Direction.RIGHT_UP){
+			if (angle == Direction.RIGHT_UP) {
 				logger.log(logLevel, "angle: right up");
 				directions.add(Direction.LEFT);
 				directions.add(Direction.LEFT_DOWN);
@@ -232,7 +232,7 @@ public class World {
 				logger.log(logLevel, "random dir:" + randomDir);
 				logger.log(logLevel, "random step:" + randomStep);
 				meetingPoint = meetingPoint.step(randomDir, randomStep);
-			}else if(angle == Direction.RIGHT_DOWN){
+			} else if (angle == Direction.RIGHT_DOWN) {
 				logger.log(logLevel, "angle: right down");
 				directions.add(Direction.LEFT);
 				directions.add(Direction.LEFT_UP);
@@ -242,7 +242,7 @@ public class World {
 				logger.log(logLevel, "random dir:" + randomDir);
 				logger.log(logLevel, "random step:" + randomStep);
 				meetingPoint = meetingPoint.step(randomDir, randomStep);
-			}else if(angle == Direction.LEFT_DOWN){
+			} else if (angle == Direction.LEFT_DOWN) {
 				logger.log(logLevel, "angle: left down");
 				directions.add(Direction.RIGHT);
 				directions.add(Direction.RIGHT_UP);
@@ -252,7 +252,7 @@ public class World {
 				logger.log(logLevel, "random dir:" + randomDir);
 				logger.log(logLevel, "random step:" + randomStep);
 				meetingPoint = meetingPoint.step(randomDir, randomStep);
-			}else if(angle == Direction.LEFT_UP){
+			} else if (angle == Direction.LEFT_UP) {
 				logger.log(logLevel, "angle: left up");
 				directions.add(Direction.RIGHT);
 				directions.add(Direction.RIGHT_DOWN);
@@ -264,14 +264,13 @@ public class World {
 				meetingPoint = meetingPoint.step(randomDir, randomStep);
 			}
 			cell = new Cell(CellType.MEETING_POINT, teamName);
-		}
-		while(!addObject(cell, meetingPoint));
-		
+		} while (!addObject(cell, meetingPoint));
+
 		meetingPoints.put(teamName, meetingPoint);
-		
-		return meetingPoint; 
+
+		return meetingPoint;
 	}
-	
+
 	public synchronized void removeTeam(String teamName) {
 		clear(meetingPoints.get(teamName));
 		meetingPoints.remove(teamName);
@@ -295,15 +294,20 @@ public class World {
 		return p;
 	}
 
-	public synchronized void addUnit(Position p, String unitId, IUnit unit) {
+	/** returns true if and only if the unit has been added to the floor */
+	public synchronized boolean addUnit(Position p, String unitId, IUnit unit) {
 		Cell unitCell = new Cell(unitId, unit, unit.getType());
-		floor.set(p, unitCell);
+		return floor.set(p, unitCell);
 	}
 
-	public synchronized Floor getSnapshot() {
+	/** Returns a snapshot of the floor at this moment
+	 * is never a good idea to need the real floor pointer
+	 * @return
+	 */
+	public synchronized Floor getFloorSnapshot() {
 		return new Floor(floor);
 	}
-	
+
 	/**
 	 * Returns the perceived floor in a certain position with the specified
 	 * range of sight
@@ -315,7 +319,6 @@ public class World {
 	 * @return a floor object where the perceived cells are the same of the
 	 *         world's floor and the others are set to UNKNOWN
 	 */
-
 	public synchronized Perception getPerception(Position center, int sight) {
 		return new Perception(floor, center, sight);
 	}
@@ -326,14 +329,15 @@ public class World {
 			try {
 				targetCell.getUnit().decreaseLife(amount);
 			} catch (Exception e) {
-				// in caso di o2a exception c'Ë poco da fare, significa che l'agente Ë gi‡ morto
+				// in caso di o2a exception c'e' poco da fare, significa che
+				// l'agente e' gia' morto
 			}
 			return amount;
-			
+
 		} else if (targetCell.energy >= amount) {
 			targetCell.energy -= amount;
 			return amount;
-			
+
 		} else {
 			int taken = targetCell.energy;
 			clear(target);
@@ -353,13 +357,15 @@ public class World {
 		Cell target = floor.get(u.getPosition());
 		if (u.getId().equals(target.getId())) {
 			clear(u.getPosition());
+		} else {
+			System.out.println("World.killUnit: posizioni non sincronizzate tra unit e world...dateci un'occhiata");
 		}
 	}
-	
+
 	public synchronized void killandExplodeUnit(IUnit u) {
 		Cell target = floor.get(u.getPosition());
 		if (u.getId().equals(target.getId())) {
-			//clear(u.getPosition());
+			// clear(u.getPosition());
 			explode(u.getPosition());
 		}
 	}
@@ -369,10 +375,23 @@ public class World {
 	}
 
 	public synchronized void changeCell(int i, int j, Cell cell) {
-		floor.set(i,j,cell);
+		floor.set(i, j, cell);
 	}
 
 	public synchronized int getNumberOfTeams() {
 		return teams.size();
+	}
+
+	public synchronized Position getPosition(String id) {
+		for (int i = 0; i < floor.getRows(); i++) {
+			for (int j = 0; j < floor.getCols(); j++) {
+				String currId = floor.get(i, j).getId();
+				if (currId != null && currId.equals(id))
+					return new Position(i, j);
+			}
+		}
+		logger.log(logLevel, "ERRORE getPosition()");
+		System.out.println("ERRORE getPosition()");
+		return null;
 	}
 }

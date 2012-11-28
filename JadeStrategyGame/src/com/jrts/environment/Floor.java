@@ -125,7 +125,7 @@ public class Floor implements Serializable {
 	 * @param j 	the Cell's column
 	 * @param st	the Cell's state
 	 */
-	public void set(int i, int j, Cell newCell) {
+	public boolean set(int i, int j, Cell newCell) {
 		Position position = new Position(i, j);
 		if (isValid(position)) {
 			CellType newType = newCell.getType();
@@ -141,11 +141,14 @@ public class Floor implements Serializable {
 					&& busyCells.contains(position))
 				busyCells.remove(position);
 			floor[i][j] = newCell;
+			return true;
+		} else {
+			return false;
 		}
 	}
 	
-	public void set(Position p, Cell cell) {
-		set(p.getRow(), p.getCol(), cell);
+	public boolean set(Position p, Cell cell) {
+		return set(p.getRow(), p.getCol(), cell);
 	}
 
 	public int getRows() {

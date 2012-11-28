@@ -59,7 +59,7 @@ public class AttacksManager {
 				// check for collisions
 				Position hitpos = hit.getPos();
 				int damage = hit.getDamage();
-				Cell cell = World.getInstance().getCell(hitpos);
+				Cell cell = World.getInstance().getCellClone(hitpos);
 				if (!cell.isFree()) {
 					logger.log(logLevel, "Detected collision");
 					toRemove.add(hit);
