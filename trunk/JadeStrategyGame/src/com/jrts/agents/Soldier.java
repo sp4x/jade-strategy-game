@@ -1,8 +1,8 @@
 package com.jrts.agents;
 
-import java.util.logging.Level;
-
 import jade.core.AID;
+
+import java.util.logging.Level;
 
 import com.jrts.agents.MasterAI.Nature;
 import com.jrts.behaviours.BehaviourScheduler;
@@ -141,6 +141,7 @@ public class Soldier extends Unit {
 
 	@Override
 	protected void die() {
+		this.setStatus(AgentStatus.DYING);
 		sendNotification(Notification.UNIT_DEATH, this.getClass().getCanonicalName(), getResourceAID());
 		logger.log(logLevel, getAID().getLocalName() + ":dying");
 		terminate();
