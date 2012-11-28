@@ -131,7 +131,7 @@ public class World {
 	public  void explode(Position p) {
 		floor.set(p, new Cell(CellType.EXPLOSION));
 	}
-
+	
 	/**
 	 * adds the city center in a random position for a new team with the
 	 * specified name
@@ -353,6 +353,14 @@ public class World {
 		Cell target = floor.get(u.getPosition());
 		if (u.getId().equals(target.getId())) {
 			clear(u.getPosition());
+		}
+	}
+	
+	public synchronized void killandExplodeUnit(IUnit u) {
+		Cell target = floor.get(u.getPosition());
+		if (u.getId().equals(target.getId())) {
+			//clear(u.getPosition());
+			explode(u.getPosition());
 		}
 	}
 

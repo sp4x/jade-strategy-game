@@ -8,6 +8,7 @@ import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.JPanel;
 
+import com.jrts.common.AgentStatus;
 import com.jrts.common.GameConfig;
 import com.jrts.environment.Cell;
 import com.jrts.environment.Floor;
@@ -76,10 +77,12 @@ public class WorldViewPanel extends JPanel {
 						else
 							icon = ImageLoader.getSoldierImageIcon(currCell.getUnit().getTeamName());
 						break;
+					
 					case EXPLOSION:
 						icon = ImageLoader.explosionIcon;
 						new DeleteExplosionThread(new Position(i, j));
 						break;
+					
 					case CITY_CENTER: 
 						if (currCellLabel.isSelected())
 							icon = ImageLoader.getSelectedWorkerFactoryImageIcon(currCell.getId());

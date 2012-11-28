@@ -1,9 +1,9 @@
 package com.jrts.agents;
 
-import java.util.logging.Level;
-
 import jade.core.AID;
 import jade.core.behaviours.Behaviour;
+
+import java.util.logging.Level;
 
 import com.jrts.O2Ainterfaces.IUnit;
 import com.jrts.agents.MasterAI.Nature;
@@ -279,11 +279,16 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 	public EnemySighting getLastEnemySighting() {
 		return lastEnemySighting;
 	}
+
+	protected void setStatus(String status){ this.status = status; }
 	
 	@Override
 	protected void takeDown() {
 		super.takeDown();
-		World.getInstance().killUnit(this);
+		if(this.getStatus() == AgentStatus.DYING)
+			World.getInstance().killandExplodeUnit(this);
+		else
+			World.getInstance().killUnit(this);
 		getTeamDF().deregister();
 	}
 }
