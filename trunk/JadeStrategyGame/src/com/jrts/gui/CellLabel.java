@@ -44,7 +44,7 @@ public class CellLabel extends JLabel {
 				if (e.getButton() != MouseEvent.BUTTON1)
 					return;
 				
-				Cell cell = World.getInstance().getCell(new Position(i, j));
+				Cell cell = World.getInstance().getCellClone(new Position(i, j));
 				if(MainFrame.getInstance().clickType.equals(MainFrame.selectionClick))
 				{
 					if(cell.getType() == CellType.WORKER || cell.getType() == CellType.SOLDIER) {

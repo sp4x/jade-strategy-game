@@ -65,7 +65,7 @@ public class JadeStrategyGame {
 		AttacksManager.start();
 		
 		/** start graphics */
-		MainFrame.start(World.getInstance().getSnapshot(), teams, ac);
+		MainFrame.start(World.getInstance().getFloorSnapshot(), teams, ac);
 	}
 
 }

@@ -16,7 +16,7 @@ import com.jrts.pathfinding.Pathfinder;
 
 @SuppressWarnings("serial")
 public class FollowPathBehaviour extends UnitBehaviour {
-	
+
 	private static Pathfinder pathfinder = new DijkstraPathfinder();
 	public static Level logLevel = Level.FINE;
 
@@ -33,12 +33,11 @@ public class FollowPathBehaviour extends UnitBehaviour {
 		this.goal = goal;
 		this.remainingAttempts = remainingAttempts;
 		this.list = new ArrayList<Direction>();
-		this.floor = worldMap;
+		this.floor = worldMap.clone();
 
 		calculatePath();
 	}
 
-	
 	public FollowPathBehaviour(Unit unit, Position goal) {
 		this(unit, goal, GameConfig.UNIT_MOVING_ATTEMPTS, unit.requestMap());
 	}
@@ -47,7 +46,7 @@ public class FollowPathBehaviour extends UnitBehaviour {
 		Position start = unit.getPosition();
 		this.list = pathfinder.calculatePath(floor, start, goal, GameConfig.PATH_TOLERANCE);
 	}
-	
+
 	@Override
 	public void myAction() {
 		unit.spendTime();
@@ -57,7 +56,8 @@ public class FollowPathBehaviour extends UnitBehaviour {
 			Direction d = list.remove(0);
 			if (!unit.move(d)) {
 				Position destination = unit.getPosition().step(d);
-				if (remainingAttempts > 0) { // solo se ho ancora tentativi a disposizione
+				if (remainingAttempts > 0) { // solo se ho ancora tentativi a
+												// disposizione
 					floor.set(destination, new Cell(CellType.OBSTACLE));
 					unit.logger.log(logLevel, unit.getId() + ":Need path recalculation");
 					remainingAttempts--;

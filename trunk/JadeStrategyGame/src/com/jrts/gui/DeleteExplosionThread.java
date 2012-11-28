@@ -17,6 +17,6 @@ public class DeleteExplosionThread extends Thread {
 		try{Thread.sleep(2000); }
 		catch(Exception e){}
 		
-		World.getInstance().clear(this.p);
+		World.getInstance().takeEnergy(this.p, 1000);
 	}
 }

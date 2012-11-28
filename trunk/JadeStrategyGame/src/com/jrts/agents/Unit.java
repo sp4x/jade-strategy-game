@@ -138,6 +138,7 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 	@Override
 	public Position getPosition() {
 		return position;
+//		return World.getInstance().getPosition(id);
 	}
 
 	protected void setPosition(Position position) {
@@ -284,11 +285,11 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 	
 	@Override
 	protected void takeDown() {
-		super.takeDown();
 		if(this.getStatus() == AgentStatus.DYING)
 			World.getInstance().killandExplodeUnit(this);
 		else
 			World.getInstance().killUnit(this);
 		getTeamDF().deregister();
+		super.takeDown();
 	}
 }

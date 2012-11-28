@@ -321,7 +321,7 @@ public class MainFrame extends JFrame {
 	}
 
 	protected void showCellInfo(int i, int j) {
-		Cell cell = World.getInstance().getCell(new Position(i, j));
+		Cell cell = World.getInstance().getCellClone(new Position(i, j));
 
 		if (cell.getUnit() == null) {
 			try {

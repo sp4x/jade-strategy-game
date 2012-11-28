@@ -55,7 +55,7 @@ public class WorldViewPanel extends JPanel {
 	public void update() {
 		
 		/** take a snapshot of the floor at this moment and dispay it */
-		floor = World.getInstance().getSnapshot();
+		floor = World.getInstance().getFloorSnapshot();
 		Icon icon;
 		for (int j = 0; j < floor.getRows(); j++) {
 			for (int i = 0; i < floor.getCols(); i++) {
