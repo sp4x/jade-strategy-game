@@ -54,7 +54,7 @@ public class Floor implements Serializable {
 				set(i, j, new Cell(floor.get(i, j)));
 	}
 
-	public void setAll(Cell objectsType) {
+	private void setAll(Cell objectsType) {
 		for (int i = 0; i < rows; i++)
 			for (int j = 0; j < cols; j++)
 				set(i, j, objectsType);
@@ -66,7 +66,7 @@ public class Floor implements Serializable {
 	 * @param numDirtySquares	quantity of dirty squares
 	 * @param numObstacles		quantity of obstacles
 	 */
-	public void generateObject(int numObjects, Cell objectsType){
+	void generateObject(int numObjects, Cell objectsType){
 
 		class Square {
 			int x, y;
@@ -98,12 +98,6 @@ public class Floor implements Serializable {
 			Square myCell = cells.remove(random);
 			set(myCell.x, myCell.y, objectsType);
 		}
-	}
-
-	public void load(Floor floor){
-		this.floor = floor.floor;
-		cols = floor.cols;
-		rows = floor.rows;
 	}
 
 	/**
