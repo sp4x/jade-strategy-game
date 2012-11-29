@@ -76,6 +76,31 @@ public class World {
 		}
 		return false;
 	}
+	
+	/**
+	 * changes the position of an object using the specified direction
+	 * 
+	 * @param unitId
+	 *            the unitId
+	 * @param d
+	 *            the direction
+	 * @return true if the movement has been performed
+	 */
+	public synchronized Position move(String unitId, Direction d) {
+		Position source = getPositionUnsync(unitId);
+		if (source == null) {
+			System.out.println(unitId + " NON E' NEL FLOOR!!!");
+			return null;
+		}
+		Position destination = source.step(d);
+		Cell srcCell = floor.get(source);
+		if (isAvailable(destination)) {
+			clear(source);
+			floor.set(destination, srcCell);
+			return destination;
+		}
+		return null;
+	}
 
 	private boolean addObject(Cell objectType, Position p) {
 		if (isAvailable(p)) {
@@ -119,7 +144,7 @@ public class World {
 	}
 
 	boolean isAvailable(Position p) {
-		return floor.isValid(p) && floor.get(p).getType() == CellType.FREE;
+		return floor.isValid(p) && floor.get(p).isFree();
 	}
 
 	private void clear(Position p) {
@@ -127,7 +152,9 @@ public class World {
 	}
 
 	private void explode(Position p) {
-		floor.set(p, new Cell(CellType.EXPLOSION));
+		Cell explosion = new Cell(CellType.EXPLOSION);
+		explosion.setEnergy(99);
+		floor.set(p, explosion);
 	}
 
 	/**
@@ -297,7 +324,9 @@ public class World {
 	/** returns true if and only if the unit has been added to the floor */
 	public synchronized boolean addUnit(Position p, String unitId, IUnit unit) {
 		Cell unitCell = new Cell(unitId, unit, unit.getType());
-		return floor.set(p, unitCell);
+		if (isAvailable(p)) 
+			return floor.set(p, unitCell);
+		return false;
 	}
 
 	/** Returns a snapshot of the floor at this moment
@@ -382,16 +411,21 @@ public class World {
 		return teams.size();
 	}
 
-	public synchronized Position getPosition(String id) {
+	
+	public Position getPositionUnsync(String unitId) {
 		for (int i = 0; i < floor.getRows(); i++) {
 			for (int j = 0; j < floor.getCols(); j++) {
 				String currId = floor.get(i, j).getId();
-				if (currId != null && currId.equals(id))
+				if (currId != null && currId.equals(unitId))
 					return new Position(i, j);
 			}
 		}
 		logger.log(logLevel, "ERRORE getPosition()");
 		System.out.println("ERRORE getPosition()");
 		return null;
+	}
+	
+	public synchronized Position getPosition(String unitId) {
+		return getPositionUnsync(unitId);
 	}
 }

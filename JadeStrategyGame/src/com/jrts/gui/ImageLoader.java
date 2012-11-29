@@ -26,53 +26,53 @@ class ImageLoader {
 	
 	public static ImageIcon hitIcon;
 	
-	public static ImageIcon getWorkerFactoryImageIcon(String id){
-		if(id.equals("team1")) return workerFactoryIcon1;
-		if(id.equals("team2")) return workerFactoryIcon2;
-		if(id.equals("team3")) return workerFactoryIcon3;
-		if(id.equals("team4")) return workerFactoryIcon4;
+	public static ImageIcon getWorkerFactoryImageIcon(String teamName){
+		if(teamName.equals("team1")) return workerFactoryIcon1;
+		if(teamName.equals("team2")) return workerFactoryIcon2;
+		if(teamName.equals("team3")) return workerFactoryIcon3;
+		if(teamName.equals("team4")) return workerFactoryIcon4;
 		
 		return null;
 	}
 	
-	public static ImageIcon getSelectedWorkerFactoryImageIcon(String id){
-		if(id.equals("team1")) return workerFactoryIcon1_s;
-		if(id.equals("team2")) return workerFactoryIcon2_s;
-		if(id.equals("team3")) return workerFactoryIcon3_s;
-		if(id.equals("team4")) return workerFactoryIcon4_s;
+	public static ImageIcon getSelectedWorkerFactoryImageIcon(String teamName){
+		if(teamName.equals("team1")) return workerFactoryIcon1_s;
+		if(teamName.equals("team2")) return workerFactoryIcon2_s;
+		if(teamName.equals("team3")) return workerFactoryIcon3_s;
+		if(teamName.equals("team4")) return workerFactoryIcon4_s;
 		
 		return null;
 	}
 	
-	public static ImageIcon getWorkerImageIcon(String id){
-		if(id == null){
-			logger.severe("Requested id null!");
+	public static ImageIcon getWorkerImageIcon(String teamName){
+		if(teamName == null){
+//			logger.severe("Requested id null!");
 			return null;
 		}
-		if(id.equals("team1")) return workerIcon1;
-		if(id.equals("team2")) return workerIcon2;
-		if(id.equals("team3")) return workerIcon3;
-		if(id.equals("team4")) return workerIcon4;
+		if(teamName.equals("team1")) return workerIcon1;
+		if(teamName.equals("team2")) return workerIcon2;
+		if(teamName.equals("team3")) return workerIcon3;
+		if(teamName.equals("team4")) return workerIcon4;
 		
 		return null;
 	}
 	
-	public static ImageIcon getSelectedWorkerImageIcon(String id){
-		if(id == null){
-			logger.severe("Requested id null!");
+	public static ImageIcon getSelectedWorkerImageIcon(String teamName){
+		if(teamName == null){
+//			logger.severe("Requested id null!");
 			return null;
 		}
-		if(id.equals("team1")) return workerIcon1_s;
-		if(id.equals("team2")) return workerIcon2_s;
-		if(id.equals("team3")) return workerIcon3_s;
-		if(id.equals("team4")) return workerIcon4_s;
+		if(teamName.equals("team1")) return workerIcon1_s;
+		if(teamName.equals("team2")) return workerIcon2_s;
+		if(teamName.equals("team3")) return workerIcon3_s;
+		if(teamName.equals("team4")) return workerIcon4_s;
 		
 		return null;
 	}
 	
 	public static Icon getSoldierImageIcon(String teamName) {
 		if(teamName == null){
-			logger.severe("Requested id null!");
+//			logger.severe("teamName null!");
 			return null;
 		}
 		
@@ -84,30 +84,30 @@ class ImageLoader {
 		return null;
 	}
 	
-	public static Icon getSelectedSoldierImageIcon(String id) {
-		if(id == null){
-			logger.severe("Requested id null!");
+	public static Icon getSelectedSoldierImageIcon(String teamName) {
+		if(teamName == null){
+//			logger.severe("teamName id null!");
 			return null;
 		}
 		
-		if(id.equals("team1")) return soldierIcon1_s;
-		if(id.equals("team2")) return soldierIcon2_s;
-		if(id.equals("team3")) return soldierIcon3_s;
-		if(id.equals("team4")) return soldierIcon4_s;
+		if(teamName.equals("team1")) return soldierIcon1_s;
+		if(teamName.equals("team2")) return soldierIcon2_s;
+		if(teamName.equals("team3")) return soldierIcon3_s;
+		if(teamName.equals("team4")) return soldierIcon4_s;
 		
 		return null;
 	}
 	
-	public static Icon getMeetingPointIcon(String id) {
-		if(id == null){
-			logger.severe("Requested id null!");
+	public static Icon getMeetingPointIcon(String teamName) {
+		if(teamName == null){
+//			logger.severe("teamName null!");
 			return null;
 		}
 		
-		if(id.equals("team1")) return flagIcon1;
-		if(id.equals("team2")) return flagIcon2;
-		if(id.equals("team3")) return flagIcon3;
-		if(id.equals("team4")) return flagIcon4;
+		if(teamName.equals("team1")) return flagIcon1;
+		if(teamName.equals("team2")) return flagIcon2;
+		if(teamName.equals("team3")) return flagIcon3;
+		if(teamName.equals("team4")) return flagIcon4;
 		
 		return null;
 	}

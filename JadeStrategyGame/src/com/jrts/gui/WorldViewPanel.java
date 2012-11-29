@@ -80,7 +80,7 @@ public class WorldViewPanel extends JPanel {
 					
 					case EXPLOSION:
 						icon = ImageLoader.explosionIcon;
-						new DeleteExplosionThread(new Position(i, j)).start();
+						World.getInstance().takeEnergy(new Position(i, j), 10);
 						break;
 					
 					case CITY_CENTER: 
