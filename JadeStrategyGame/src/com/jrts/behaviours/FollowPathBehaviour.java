@@ -25,7 +25,7 @@ public class FollowPathBehaviour extends UnitBehaviour {
 	private Position goal;
 	int remainingAttempts;
 
-	Floor floor = null;
+	Floor worldMap = null;
 
 	public FollowPathBehaviour(Unit unit, Position goal, int remainingAttempts, Floor worldMap) {
 		super(null, true);// high priority
@@ -33,7 +33,7 @@ public class FollowPathBehaviour extends UnitBehaviour {
 		this.goal = goal;
 		this.remainingAttempts = remainingAttempts;
 		this.list = new ArrayList<Direction>();
-		this.floor = worldMap.clone();
+		this.worldMap = worldMap.clone();
 
 		calculatePath();
 	}
@@ -44,7 +44,7 @@ public class FollowPathBehaviour extends UnitBehaviour {
 
 	private void calculatePath() {
 		Position start = unit.getPosition();
-		this.list = pathfinder.calculatePath(floor, start, goal, GameConfig.PATH_TOLERANCE);
+		this.list = pathfinder.calculatePath(worldMap, start, goal, GameConfig.PATH_TOLERANCE);
 	}
 
 	@Override
@@ -58,7 +58,7 @@ public class FollowPathBehaviour extends UnitBehaviour {
 				Position destination = unit.getPosition().step(d);
 				if (remainingAttempts > 0) { // solo se ho ancora tentativi a
 												// disposizione
-					floor.set(destination, new Cell(CellType.OBSTACLE));
+					worldMap.set(destination, new Cell(CellType.OBSTACLE));
 					unit.logger.log(logLevel, unit.getId() + ":Need path recalculation");
 					remainingAttempts--;
 					calculatePath();

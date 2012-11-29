@@ -78,37 +78,41 @@ public class UnitFactory extends Thread {
 	}
 	
 	private void createUnit(final Class<? extends Unit> claz) {
+		long idleTime = GameConfig.UNIT_CREATION_TIME*1000/5;
 		setProgress(claz.getCanonicalName(), 0);
+		idle(idleTime);
 		World world = World.getInstance();
-		setProgress(claz.getCanonicalName(), 25);
 		String unitId = team + "-" + claz.getSimpleName() + counter();
 		Position unitPosition = world.neighPosition(cityCenter);
 		if(unitPosition != null){
+			setProgress(claz.getCanonicalName(), 25);
+			idle(idleTime);
 			//Instantiate the unit
 			AgentController agentController;
 			try {
 				Object[] args = {cityCenter, unitPosition, meetingPoint, team, nature};
 				setProgress(claz.getCanonicalName(), 50);
+				idle(idleTime);
 				if (!isFinished()) {
 					synchronized (this) {
 						agentController = controller.createNewAgent(unitId, claz.getName(), args);
 						setProgress(claz.getCanonicalName(), 75);
-	
+						idle(idleTime);
 						if(claz.getName().contains("Worker")) workerQueueCount--;
 						else if(claz.getName().contains("Soldier")) soldierQueueCount--;
 						setProgress(claz.getCanonicalName(), 90);
+						idle(idleTime);
 						IUnit o2a = agentController.getO2AInterface(IUnit.class);
+						// wait until the unit is not added to the floor
 						while (!World.getInstance().addUnit(unitPosition, unitId, o2a)) {
 							try {
 								Thread.sleep(100);
-							} catch (InterruptedException e) {
-							}
+							} catch (InterruptedException e) {}
 						}
-						
 						agentController.start();
+						setProgress(claz.getCanonicalName(), 100);
 					}
 				}
-				setProgress(claz.getCanonicalName(), 100);
 				
 			} catch (ControllerException e) {
 			}
@@ -118,11 +122,19 @@ public class UnitFactory extends Thread {
 		}
 	}
 	
-	public void setProgress(String className, int progress){
+	private void idle(long time) {
 		try {
-			Thread.sleep(GameConfig.UNIT_CREATION_TIME*100);
+			Thread.sleep(time);
 		} catch (InterruptedException e1) {
 		}
+	}
+
+
+	public void setProgress(String className, int progress){
+//		try {
+//			Thread.sleep(GameConfig.UNIT_CREATION_TIME*100);
+//		} catch (InterruptedException e1) {
+//		}
 		if(className.equals(Worker.class.getCanonicalName()))
 			workerTrainingProgress = progress;
 		else if(className.equals(Soldier.class.getCanonicalName()))

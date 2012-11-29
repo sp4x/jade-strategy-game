@@ -8,8 +8,8 @@ public class DeleteExplosionThread extends Thread {
 	Position p;
 	public DeleteExplosionThread(Position p){
 		this.p = p;
-		this.start();
 	}
+	
 	 @Override
 	public void run() {
 		super.run();
