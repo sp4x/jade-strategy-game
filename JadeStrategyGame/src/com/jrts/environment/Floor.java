@@ -52,13 +52,13 @@ public class Floor implements Serializable {
 		this.floor = new Cell[rows][cols];
 		for (int i = 0; i < rows; i++)
 			for (int j = 0; j < cols; j++)
-				this.floor[i][j] = new Cell(floor.get(i, j));
+				set(i, j, new Cell(floor.get(i, j)));
 	}
 
 	private void setAll(Cell cell) {
 		for (int i = 0; i < rows; i++)
 			for (int j = 0; j < cols; j++)
-				floor[i][j] = cell;
+				set(i, j, cell);
 	}
 
 	/**
