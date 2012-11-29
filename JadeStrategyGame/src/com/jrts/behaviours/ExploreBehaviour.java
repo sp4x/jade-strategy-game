@@ -17,7 +17,6 @@ public class ExploreBehaviour extends UnitBehaviour {
 
 	Soldier soldier;
 	Position cityCenter;
-	boolean exploring;
 	FollowPathBehaviour followPathBehaviour;
 
 	/**
@@ -42,10 +41,8 @@ public class ExploreBehaviour extends UnitBehaviour {
 		Direction dir = directions.get(Utils.random.nextInt(3));
 		Position posToGo = Utils.getRandomUnknownCellPosition(this.soldier.requestMap(), dir);
 
-		if (posToGo != null) {
+		if (posToGo != null)
 			followPathBehaviour = new FollowPathBehaviour(soldier, posToGo);
-			exploring = true;
-		}
 	}
 
 	@Override
