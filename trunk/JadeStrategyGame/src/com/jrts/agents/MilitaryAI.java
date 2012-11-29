@@ -167,10 +167,10 @@ public class MilitaryAI extends GoalBasedAI {
 				// Stabilisco il numero minimo di unità che deve avere il battaglione
 				int minSize = 12;
 				if(nature == Nature.DEFENSIVE) minSize = 5;
-				else if(nature == Nature.DEFENSIVE) minSize = 8;
+				else if(nature == Nature.AVERAGE) minSize = 8;
 				
 				// Se ci sono abbastanza soldati disponibili li mando all'attacco
-				if(soldiers.size() >= minSize){
+				if(soldiers.size() >= minSize || Utils.random.nextInt(4) == 0){
 					for (AID aid : soldiers) {
 						//System.out.println(getTeamName() + ": " + "ORDER: " + aid.getLocalName() + " GO TO ATTACK " + posToAttack);
 						Order order = new Order(AgentStatus.GO_FIGHTING);
