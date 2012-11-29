@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
+import java.util.concurrent.locks.ReentrantLock;
 
 import com.jrts.common.Utils;
 
@@ -20,6 +21,8 @@ public class Floor implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
+	ReentrantLock lock = new ReentrantLock();
+	
 	public int rows;
 
 	public int cols;
@@ -127,7 +130,9 @@ public class Floor implements Serializable {
 	 * @param st
 	 *            the Cell's state
 	 */
-	public boolean set(int i, int j, Cell newCell) {
+	public synchronized boolean set(int i, int j, Cell setCell) {
+		lock.lock();
+		Cell newCell = new Cell(setCell);
 		Position position = new Position(i, j);
 		if (isValid(position)) {
 			CellType newType = newCell.getType();
@@ -142,10 +147,19 @@ public class Floor implements Serializable {
 			if (isTypeWalkable(currType) && !isTypeWalkable(newType) && busyCells.contains(position))
 				busyCells.remove(position);
 			floor[i][j] = newCell;
+			lock.unlock();
 			return true;
 		} else {
+			lock.unlock();
 			return false;
 		}
+	}
+	
+	public synchronized void move(Position start, Position end) {
+		lock.lock();
+		floor[end.getRow()][end.getCol()] = this.get(start);
+		floor[start.getRow()][start.getCol()] = new Cell(CellType.FREE);
+		lock.unlock();
 	}
 
 	public boolean set(Position p, Cell cell) {
@@ -169,24 +183,14 @@ public class Floor implements Serializable {
 	}
 
 	@Override
-	public Floor clone() {
+	public synchronized Floor clone() {
 		Floor newFloor = new Floor(rows, cols);
+		lock.lock();
 		for (int i = 0; i < rows; i++)
 			for (int j = 0; j < cols; j++)
 				newFloor.set(i, j, floor[i][j]);
+		lock.unlock();
 		return newFloor;
-	}
-
-	public void mergeWith(Floor info) {
-		if (rows == info.rows && cols == info.cols) {
-			for (int i = 0; i < rows; i++) {
-				for (int j = 0; j < cols; j++) {
-					Cell current = info.get(i, j);
-					if (!current.isUnknown())
-						set(i, j, current);
-				}
-			}
-		}
 	}
 
 	@Override

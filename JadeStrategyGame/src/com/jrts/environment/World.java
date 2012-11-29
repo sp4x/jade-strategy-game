@@ -68,10 +68,8 @@ public class World {
 	 */
 	public synchronized boolean move(Position source, Direction d) {
 		Position destination = source.step(d);
-		Cell srcCell = floor.get(source);
 		if (isAvailable(destination)) {
-			clear(source);
-			floor.set(destination, srcCell);
+			floor.move(source, destination);
 			return true;
 		}
 		return false;
@@ -93,10 +91,8 @@ public class World {
 			return null;
 		}
 		Position destination = source.step(d);
-		Cell srcCell = floor.get(source);
 		if (isAvailable(destination)) {
-			clear(source);
-			floor.set(destination, srcCell);
+			floor.move(source, destination);
 			return destination;
 		}
 		return null;
@@ -334,7 +330,7 @@ public class World {
 	 * @return
 	 */
 	public synchronized Floor getFloorSnapshot() {
-		return new Floor(floor);
+		return floor.clone();
 	}
 
 	/**
