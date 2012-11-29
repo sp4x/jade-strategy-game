@@ -27,7 +27,7 @@ public class WorldViewPanel extends JPanel {
 	CellLabel[][] labelMatrix;
 
 	public WorldViewPanel(Floor floor) {
-		this.floor = floor;
+		this.floor = floor.clone();
 
 		init();
 		update();
