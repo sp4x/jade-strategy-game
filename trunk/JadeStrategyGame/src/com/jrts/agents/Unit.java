@@ -126,10 +126,32 @@ public abstract class Unit extends JrtsAgent implements IUnit {
 		}
 	}
 
+//	public boolean move(Direction dir) {
+//		if (World.getInstance().move(position, dir)) {
+//			position = position.step(dir);
+//			logger.log(logLevel, id + ":moved into " + position);
+//			
+//			Position wp = World.getInstance().getPosition(id);
+//			if (position == null || wp == null || !position.equals(wp)) {
+//				System.out.println(id + " : POSIZIONE NON SINCRONIZZATA: " + position + " != " + wp); 
+//			}
+//			
+//			return true;
+//		}
+//		return false;
+//	}
+	
 	public boolean move(Direction dir) {
-		if (World.getInstance().move(position, dir)) {
-			position = position.step(dir);
+		Position newPosition = World.getInstance().move(id, dir);
+		if (newPosition != null) {
+			position = newPosition;
 			logger.log(logLevel, id + ":moved into " + position);
+			
+			Position wp = World.getInstance().getPosition(id);
+			if (position == null || wp == null || !position.equals(wp)) {
+				System.out.println(id + " : POSIZIONE NON SINCRONIZZATA: " + position + " != " + wp); 
+			}
+			
 			return true;
 		}
 		return false;

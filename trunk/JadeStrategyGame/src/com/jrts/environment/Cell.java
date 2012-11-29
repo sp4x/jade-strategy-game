@@ -13,7 +13,6 @@ public class Cell implements Serializable {
 	private CellType type;
 	private String id;
 	private IUnit unit;
-	
 	int energy = 0;
 	
 	public Cell(CellType t) {

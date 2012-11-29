@@ -8,10 +8,10 @@ import java.util.LinkedList;
 import com.jrts.common.Utils;
 
 /**
- *  This class implement a Floor built of a Cell matrix where the agent acts.
+ * This class implement a Floor built of a Cell matrix where the agent acts.
  * 
- * @see Cell	 
- *
+ * @see Cell
+ * 
  */
 public class Floor implements Serializable {
 
@@ -24,26 +24,27 @@ public class Floor implements Serializable {
 
 	public int cols;
 
-	private Cell [][] floor;
-	
+	private Cell[][] floor;
+
 	ArrayList<Position> busyCells = new ArrayList<Position>();
-	
-	public Floor(int rows, int cols, CellType defaultCell){
+
+	public Floor(int rows, int cols, CellType defaultCell) {
 		this.rows = rows;
 		this.cols = cols;
 		floor = new Cell[rows][cols];
 		setAll(new Cell(defaultCell));
 	}
-	
+
 	/**
 	 * 
-	 * @param rows		length of the floor
-	 * @param cols			width of the floor
+	 * @param rows
+	 *            length of the floor
+	 * @param cols
+	 *            width of the floor
 	 */
 	public Floor(int rows, int cols) {
 		this(rows, cols, CellType.FREE);
 	}
-
 
 	public Floor(Floor floor) {
 		rows = floor.getRows();
@@ -51,26 +52,29 @@ public class Floor implements Serializable {
 		this.floor = new Cell[rows][cols];
 		for (int i = 0; i < rows; i++)
 			for (int j = 0; j < cols; j++)
-				set(i, j, new Cell(floor.get(i, j)));
+				this.floor[i][j] = new Cell(floor.get(i, j));
 	}
 
-	private void setAll(Cell objectsType) {
+	private void setAll(Cell cell) {
 		for (int i = 0; i < rows; i++)
 			for (int j = 0; j < cols; j++)
-				set(i, j, objectsType);
+				floor[i][j] = cell;
 	}
-	
+
 	/**
 	 * Generates randomly a floor scenario
 	 * 
-	 * @param numDirtySquares	quantity of dirty squares
-	 * @param numObstacles		quantity of obstacles
+	 * @param numDirtySquares
+	 *            quantity of dirty squares
+	 * @param numObstacles
+	 *            quantity of obstacles
 	 */
-	void generateObject(int numObjects, Cell objectsType){
+	void generateObject(int numObjects, Cell objectsType) {
 
 		class Square {
 			int x, y;
-			public Square(int x, int y){
+
+			public Square(int x, int y) {
 				this.x = x;
 				this.y = y;
 			}
@@ -80,7 +84,7 @@ public class Floor implements Serializable {
 
 		for (int i = 0; i < getRows(); i++)
 			for (int j = 0; j < getCols(); j++)
-				if(floor[i][j].isFree())
+				if (floor[i][j].isFree())
 					cells.add(new Square(i, j));
 
 		Collections.shuffle(cells);
@@ -88,10 +92,9 @@ public class Floor implements Serializable {
 
 		if (numObjects > size)
 			numObjects = size;
-		
+
 		if (numObjects < 0)
 			numObjects = 0;
-		
 
 		for (int i = 0; i < numObjects; i++) {
 			int random = Math.abs(Utils.random.nextInt()) % cells.size();
@@ -102,12 +105,14 @@ public class Floor implements Serializable {
 
 	/**
 	 * 
-	 * @param i the row position of the Cell
-	 * @param j the column position of the Cell
+	 * @param i
+	 *            the row position of the Cell
+	 * @param j
+	 *            the column position of the Cell
 	 * @return the type of the Cell
 	 */
-	public Cell get(int i, int j){
-		if(i<0 || j<0 || i>=rows || j>=cols)
+	public Cell get(int i, int j) {
+		if (i < 0 || j < 0 || i >= rows || j >= cols)
 			return new Cell(CellType.UNKNOWN);
 		return floor[i][j];
 	}
@@ -115,9 +120,12 @@ public class Floor implements Serializable {
 	/**
 	 * Set the state of a Cell in the position (i,j).
 	 * 
-	 * @param i		the Cell's row
-	 * @param j 	the Cell's column
-	 * @param st	the Cell's state
+	 * @param i
+	 *            the Cell's row
+	 * @param j
+	 *            the Cell's column
+	 * @param st
+	 *            the Cell's state
 	 */
 	public boolean set(int i, int j, Cell newCell) {
 		Position position = new Position(i, j);
@@ -131,8 +139,7 @@ public class Floor implements Serializable {
 			if (!newCell.isWalkable() && !busyCells.contains(position))
 				busyCells.add(position);
 			// se sto per liberare una cella occupata
-			if (isTypeWalkable(currType) && !isTypeWalkable(newType)
-					&& busyCells.contains(position))
+			if (isTypeWalkable(currType) && !isTypeWalkable(newType) && busyCells.contains(position))
 				busyCells.remove(position);
 			floor[i][j] = newCell;
 			return true;
@@ -140,7 +147,7 @@ public class Floor implements Serializable {
 			return false;
 		}
 	}
-	
+
 	public boolean set(Position p, Cell cell) {
 		return set(p.getRow(), p.getCol(), cell);
 	}
@@ -160,7 +167,7 @@ public class Floor implements Serializable {
 	public void setCols(int cols) {
 		this.cols = cols;
 	}
-	
+
 	@Override
 	public Floor clone() {
 		Floor newFloor = new Floor(rows, cols);
@@ -169,7 +176,7 @@ public class Floor implements Serializable {
 				newFloor.set(i, j, floor[i][j]);
 		return newFloor;
 	}
-	
+
 	public void mergeWith(Floor info) {
 		if (rows == info.rows && cols == info.cols) {
 			for (int i = 0; i < rows; i++) {
@@ -181,13 +188,13 @@ public class Floor implements Serializable {
 			}
 		}
 	}
-	
+
 	@Override
-	public String toString(){
+	public String toString() {
 		String out = "";
-		for (int i = 0; i < rows; i++){
+		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < cols; j++)
-				out += get(i,j) + "\t";
+				out += get(i, j) + "\t";
 			out += "\n";
 		}
 		return out;
@@ -196,21 +203,24 @@ public class Floor implements Serializable {
 	public Cell get(Position p) {
 		return get(p.row, p.col);
 	}
-	
-	
+
 	/**
-	 * return the position of a cell of the specified type next to the specified position
-	 * @param p the source position
-	 * @param type the cell type to look for
-	 * @param maxDistance the maximum distance admissible from the source position
+	 * return the position of a cell of the specified type next to the specified
+	 * position
+	 * 
+	 * @param p
+	 *            the source position
+	 * @param type
+	 *            the cell type to look for
+	 * @param maxDistance
+	 *            the maximum distance admissible from the source position
 	 * @return the position of the closest matching cell, if any. otherwise null
 	 */
 	public Position nextTo(Position p, CellType type, int maxDistance) {
 		return nextTo(null, p, type, maxDistance);
 	}
-	
-	public Position nextTo(Position source, Position target, CellType type,
-			int maxDistance) {
+
+	public Position nextTo(Position source, Position target, CellType type, int maxDistance) {
 		if (!isValid(target))
 			return null;
 		if (maxDistance == 0 && get(target).getType() == type)
@@ -225,7 +235,7 @@ public class Floor implements Serializable {
 		}
 		return null;
 	}
-	
+
 	private LinkedList<Position> frameWithType(Position center, CellType type, int d) {
 		LinkedList<Position> frame = new LinkedList<Position>();
 		int i, j;
@@ -255,19 +265,19 @@ public class Floor implements Serializable {
 		}
 		return frame;
 	}
-	
+
 	public Cell getCopy(Position p) {
 		return new Cell(get(p));
 	}
-	
+
 	public boolean isValid(Position p) {
-		return p != null && p.row >= 0 && p.col >= 0 && p.row < rows && p.col < cols; 
+		return p != null && p.row >= 0 && p.col >= 0 && p.row < rows && p.col < cols;
 	}
-	
+
 	public boolean isWalkable(Position p) {
 		return isValid(p) && get(p).isWalkable();
 	}
-	
+
 	public boolean isTypeWalkable(CellType type) {
 		return type == CellType.FREE || type == CellType.UNKNOWN;
 	}

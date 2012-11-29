@@ -105,6 +105,7 @@ public class UnitFactory extends Thread {
 						IUnit o2a = agentController.getO2AInterface(IUnit.class);
 						// wait until the unit is not added to the floor
 						while (!World.getInstance().addUnit(unitPosition, unitId, o2a)) {
+//							System.out.println("unitFactory : " + unitPosition + " not yet available, waiting..");
 							try {
 								Thread.sleep(100);
 							} catch (InterruptedException e) {}
