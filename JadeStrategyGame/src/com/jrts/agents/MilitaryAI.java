@@ -226,12 +226,15 @@ public class MilitaryAI extends GoalBasedAI {
 		logger.log(logLevel, getTeamName() + " city center under attack!");
 		
 		long times = GregorianCalendar.getInstance().getTimeInMillis();
-		if((times - lastSoldiersRecall) < 5000){
+		if((times - lastSoldiersRecall) > 5000){
 			Collection<AID> soldiers = unitTable.getSoldiers();
 			for (AID aid : soldiers) {
-				Order order = new Order(AgentStatus.FREE);
+				//Order order = new Order(AgentStatus.FREE);
+				Order order = new Order(AgentStatus.GO_FIGHTING);
+				order.setPosition(myCityCenter.step(Direction.UP));
 				giveOrder(aid, order);
 			}
+			
 			this.lastSoldiersRecall = times;
 		}
 	}
