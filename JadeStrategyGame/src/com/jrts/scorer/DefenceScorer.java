@@ -47,9 +47,9 @@ public class DefenceScorer extends GoalScorer {
 				if(nature == Nature.DEFENSIVE)
 					return MAX_SCORE;
 				if(nature == Nature.AVERAGE)
-					return MAX_SCORE / 3 * 2;
+					return MAX_SCORE / 2;
 
-				return MAX_SCORE /  2;
+				return 0;
 			}
 		});
 		

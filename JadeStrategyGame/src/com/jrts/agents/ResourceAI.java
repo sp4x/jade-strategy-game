@@ -5,6 +5,7 @@ import jade.core.behaviours.TickerBehaviour;
 
 import java.util.logging.Level;
 
+import com.jrts.agents.MasterAI.Nature;
 import com.jrts.behaviours.UpdateUnitTable;
 import com.jrts.common.AgentStatus;
 import com.jrts.common.GameConfig;
@@ -102,9 +103,12 @@ public class ResourceAI extends GoalBasedAI {
 		// heuristic based on costs and population
 		int population = getTeamDF().countUnits() - unitFactory.getQueuedUnitsCount();
 		//overestimate needed units
-		int neededUnits = 2*goalLevels.extimateNeededUnits() - population;
+		int neededUnits = goalLevels.extimateNeededUnits() - population;
+		int freeWorkers = unitTable.getFreeUnits().size();
+		int freeWorkersAllowed = (nature == Nature.AGGRESSIVE ? 1 : nature == Nature.AVERAGE ? 2 : 3);
 		boolean train = neededUnits > 0
 				&& population < GameConfig.POPULATION_LIMIT
+				&& freeWorkers <= freeWorkersAllowed
 				&& unitFactory.getQueueWorkerCount() == 0
 				&& resourcesContainer.isThereEnoughFood(GameConfig.WORKER_FOOD_COST)
 				&& resourcesContainer.isThereEnoughWood(GameConfig.WORKER_WOOD_COST);
