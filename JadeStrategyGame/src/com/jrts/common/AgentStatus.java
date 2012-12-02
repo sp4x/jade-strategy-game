@@ -10,15 +10,15 @@ public class AgentStatus {
 	
 	public static final String FREE = "free";
 
-	public static final String WOOD_CUTTING = "wood-cutting";
-	public static final String FOOD_COLLECTING = "food-collecting";
+	public static final String WOOD_CUTTING = "Wood Cutting";
+	public static final String FOOD_COLLECTING = "Food Collecting";
 
-	public static final String PATROLING = "patroling";
-	public static final String EXPLORING = "exploring";
+	public static final String PATROLING = "Patroling";
+	public static final String EXPLORING = "Exploring";
 
-	public static final String GO_UPGRADING = "go_upgrading";
-	public static final String GO_FIGHTING = "go_fighting";
-	public static final String FIGHTING = "fighting";
-	public static final String DYING = "dying";
+	public static final String GO_UPGRADING = "Go  Upgrading";
+	public static final String GO_FIGHTING = "Go Fighting";
+	public static final String FIGHTING = "Fighting";
+	public static final String DYING = "Dying";
 
 }

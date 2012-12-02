@@ -78,7 +78,7 @@ public class Utils {
 	 */
 	public static Position getRandomUnknownCellPosition(WorldMap map, Direction d)
 	{
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 20; i++) {
 
 			int w = 0;
 			int h = 0;

@@ -18,21 +18,5 @@ public class ResourceScorer extends GoalScorer {
 				return GoalScorer.MAX_SCORE*100/avg;
 			}
 		});
-		
-		
-		addRule(new Rule() {
-			
-			@Override
-			public double value() {
-				switch (nature) {
-				case AGGRESSIVE:
-					return 0;
-				case AVERAGE:
-					return MAX_SCORE/2;
-				default:
-					return MAX_SCORE;
-				}
-			}
-		});
 	}
 }

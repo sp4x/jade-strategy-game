@@ -98,14 +98,14 @@ public class Soldier extends Unit {
 				|| (nature == Nature.AVERAGE && Utils.random.nextBoolean());
 		
 		//cannot fight with another if it's already fighting
-		boolean forbidden = getStatus().equals(AgentStatus.FIGHTING);
+		boolean forbidden = getStatus().equals(AgentStatus.FIGHTING) || 
+							getStatus().equals(AgentStatus.EXPLORING);
 		
 		boolean nearCityCenter = getPosition().distance(getCityCenter()) < 10;
 		
 		boolean aggressiveStatus = getStatus().equals(AgentStatus.PATROLING)
 				|| getStatus().equals(AgentStatus.GO_FIGHTING);
 
-		
 		if (!forbidden && (natureCase || nearCityCenter || aggressiveStatus)) {
 			String target = enemies.getEnemies().iterator().next().getId();
 			attack(target);

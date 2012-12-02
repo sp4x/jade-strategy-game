@@ -23,12 +23,12 @@ public class AttackScorer extends GoalScorer {
 				//int watingSoldiers = teamDF.searchByUnitStatus(Soldier.class, AgentStatus.WAIT_TO_FIGHT).length;
 				
 				//return (freeSoldiers + watingSoldiers) * 10;
-				return (freeSoldiers) * 10;
+				return (freeSoldiers) * 20;
 			}
 		});
-		
 
 		//higher with high resources
+		/*
 		addRule(new Rule() {
 			@Override
 			public double value() {
@@ -42,7 +42,7 @@ public class AttackScorer extends GoalScorer {
 				return (foodPercentage + woodPercentage) / 2;
 			}
 		});
-		
+		*/
 		//TODO valutare avvistamenti nemici
 		
 		//nature
@@ -69,11 +69,13 @@ public class AttackScorer extends GoalScorer {
 						Worker.class, AgentStatus.WOOD_CUTTING).length;
 				int foodCollectors = perception.getTeamDF().searchByUnitStatus(
 						Worker.class, AgentStatus.FOOD_COLLECTING).length;
-				double value = 0;
+				
+				double value = MAX_SCORE/2;
 				if (woodCutters == 0)
-					value += MAX_SCORE/2;
+					value += MAX_SCORE;
 				if (foodCollectors == 0)
-					value += MAX_SCORE/2;
+					value += MAX_SCORE;
+				
 				return value;
 			}
 		});
