@@ -224,7 +224,6 @@ public class MilitaryAI extends GoalBasedAI {
 	private void underAttack() {
 		sendNotification(Notification.CITYCENTER_UNDER_ATTACK, myCityCenter, getMasterAID());
 		logger.log(logLevel, getTeamName() + " city center under attack!");
-		// TODO handle it
 		
 		long times = GregorianCalendar.getInstance().getTimeInMillis();
 		if((times - lastSoldiersRecall) < 5000){

@@ -62,12 +62,13 @@ public class DefenceScorer extends GoalScorer {
 			public double value() {
 				
 				long times = GregorianCalendar.getInstance().getTimeInMillis();
+
 				if(times - perception.getLastCityCenterUnderAttack() < 60000)
 					return MAX_SCORE * 100;
 				else if(times - perception.getLastCityCenterUnderAttack() < 900000)
 					return MAX_SCORE;
-				
-				return MAX_SCORE / 2;
+
+				return 0;
 			}
 		});
 
