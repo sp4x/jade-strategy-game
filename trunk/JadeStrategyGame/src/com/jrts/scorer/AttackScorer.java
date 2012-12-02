@@ -60,7 +60,7 @@ public class AttackScorer extends GoalScorer {
 		});
 		
 		
-		//if there arent resource to harvest
+		//if there aren't resource to harvest
 		addRule(new Rule() {
 			
 			@Override
