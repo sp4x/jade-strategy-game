@@ -138,7 +138,6 @@ public class ResourceAI extends GoalBasedAI {
 		else
 			foodRatio = (double) wood / (double) food;
 		
-
 		int woodCutters = unitTable
 				.getUnitsWithStatus(AgentStatus.WOOD_CUTTING).size();
 		int foodCollectors = unitTable.getUnitsWithStatus(

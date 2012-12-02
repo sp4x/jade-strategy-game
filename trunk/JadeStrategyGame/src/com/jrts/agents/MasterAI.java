@@ -223,7 +223,7 @@ public class MasterAI extends JrtsAgent implements Team {
 
 		} else if (n.getSubject().equals(Notification.CITYCENTER_UNDER_ATTACK)) {
 			perception.setLastCityCenterUnderAttack(GregorianCalendar.getInstance().getTimeInMillis());
-			
+		
 		} else if (n.getSubject().equals(Notification.TEAM_DECEASED)) {
 			teamDeceasedNum++;
 			if (teamDeceasedNum >= 2) {

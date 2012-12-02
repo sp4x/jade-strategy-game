@@ -1,12 +1,10 @@
 package com.jrts.environment;
 
 import java.util.Collection;
-import java.util.GregorianCalendar;
 import java.util.LinkedList;
 
 import com.jrts.common.ResourcesContainer;
 import com.jrts.common.TeamDF;
-import com.jrts.common.Utils;
 import com.jrts.messages.EnemySighting;
 
 public class MasterPerception {
@@ -19,7 +17,7 @@ public class MasterPerception {
 	TeamDF teamDF;
 	
 	boolean alertNoMoreResources = false;
-	long lastCityCenterUnderAttack = GregorianCalendar.getInstance().getTimeInMillis();
+	long lastCityCenterUnderAttack = 0;
 	
 	int numTeams;
 	

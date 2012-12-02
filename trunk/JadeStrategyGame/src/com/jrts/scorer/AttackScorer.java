@@ -61,6 +61,7 @@ public class AttackScorer extends GoalScorer {
 		
 		
 		//if there aren't resource to harvest
+		/*
 		addRule(new Rule() {
 			
 			@Override
@@ -79,6 +80,7 @@ public class AttackScorer extends GoalScorer {
 				return value;
 			}
 		});
+		*/
 	}
 
 	
