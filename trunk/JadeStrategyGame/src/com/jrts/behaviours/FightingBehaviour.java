@@ -39,7 +39,7 @@ public class FightingBehaviour extends UnitBehaviour {
 			//if it's close attack
 			if (soldierPosition.isNextTo(targetPosition)) {
 				Direction dir = soldier.getPosition().getDirectionTo(targetPosition);
-				if (dir != null)
+				if (!this.soldier.isFriend(targetCell.getId()) && dir != null)
 					soldier.sendHit(dir);
 			} else {
 				//walk until it's in range

@@ -149,7 +149,7 @@ public class World {
 
 	private void explode(Position p) {
 		Cell explosion = new Cell(CellType.EXPLOSION);
-		explosion.setEnergy(99);
+		explosion.setEnergy(199);
 		floor.set(p, explosion);
 	}
 
