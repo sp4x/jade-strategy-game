@@ -35,7 +35,7 @@ public class TeamResourcePanel extends JPanel{
 		
 		if(team.getTeamName().equals("team1"))
 		{
-			border.setTitleColor(Color.WHITE);
+			border.setTitleColor(Color.GREEN);
 			this.workers = new JLabel(ImageLoader.workerIcon1);
 			this.soldiers = new JLabel(ImageLoader.soldierIcon1);
 		} else if(team.getTeamName().equals("team2")) {

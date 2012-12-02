@@ -1,10 +1,12 @@
 package com.jrts.environment;
 
 import java.util.Collection;
+import java.util.GregorianCalendar;
 import java.util.LinkedList;
 
 import com.jrts.common.ResourcesContainer;
 import com.jrts.common.TeamDF;
+import com.jrts.common.Utils;
 import com.jrts.messages.EnemySighting;
 
 public class MasterPerception {
@@ -17,7 +19,7 @@ public class MasterPerception {
 	TeamDF teamDF;
 	
 	boolean alertNoMoreResources = false;
-	boolean alertCityCenterUnderAttack = false;
+	long lastCityCenterUnderAttack = GregorianCalendar.getInstance().getTimeInMillis();
 	
 	int numTeams;
 	
@@ -84,19 +86,18 @@ public class MasterPerception {
 	public void setAlertNoMoreResources(boolean alertNoMoreResources) {
 		this.alertNoMoreResources = alertNoMoreResources;
 	}
-	
-	public boolean isAlertCityCenterUnderAttack() {
-		return alertCityCenterUnderAttack;
+
+	public long getLastCityCenterUnderAttack() {
+		return lastCityCenterUnderAttack;
 	}
-	public void setAlertCityCenterUnderAttack(boolean alertCityCenterUnderAttack) {
-		this.alertCityCenterUnderAttack = alertCityCenterUnderAttack;
+	public void setLastCityCenterUnderAttack(long lastCityCenterUnderAttack) {
+		this.lastCityCenterUnderAttack = lastCityCenterUnderAttack;
 	}
-	
+
 	public void clean() {
 		enemySightings.clear();
 		threats.clear();
 		deaths.clear();
-		alertCityCenterUnderAttack = false;
 	}
 	
 	public int getNumTeams() {

@@ -1,7 +1,6 @@
 package com.jrts.scorer;
 
-import java.util.Collection;
-import java.util.LinkedList;
+import java.util.GregorianCalendar;
 
 import com.jrts.agents.MasterAI.Nature;
 import com.jrts.common.GameConfig;
@@ -20,22 +19,25 @@ public class DefenceScorer extends GoalScorer {
 			public double value() {
 				int numEnemySighted = 0;
 				int numThreats = 0;
-						
+
+				/*
 				int bound = GameConfig.DEFENCE_NATURE_AVERAGE_BOUND;
 				if(nature == Nature.DEFENSIVE)
 					bound = GameConfig.DEFENCE_NATURE_DEFENSIVE_BOUND;
 				else if(nature == Nature.AGGRESSIVE)
 					bound = GameConfig.DEFENCE_NATURE_AGGRESSIVE_BOUND;
+				*/
 				
+				int bound = GameConfig.CITY_CENTER_SIGHT;
 				for (EnemySighting es : perception.getEnemySightings())
-					if(perception.getCityCenter().distance(es.getSightingPosition()) < bound)
+					if(perception.getCityCenter().distance(es.getSightingPosition()) <= bound)
 							numEnemySighted += es.getSoldierNumber();
 				
 				for (Position pos : perception.getThreats())
-					if(perception.getCityCenter().distance(pos) < bound)
-							numThreats += 2;
+					if(perception.getCityCenter().distance(pos) <= bound)
+							numThreats++;
 				
-				return (numEnemySighted + numThreats) * 10;
+				return (numEnemySighted + numThreats*2) * 10;
 			}
 		});
 
@@ -47,9 +49,9 @@ public class DefenceScorer extends GoalScorer {
 				if(nature == Nature.DEFENSIVE)
 					return MAX_SCORE;
 				if(nature == Nature.AVERAGE)
-					return MAX_SCORE / 2;
+					return MAX_SCORE / 3 * 2;
 
-				return 0;
+				return MAX_SCORE / 2;
 			}
 		});
 		
@@ -58,29 +60,35 @@ public class DefenceScorer extends GoalScorer {
 			
 			@Override
 			public double value() {
-				if (perception.isAlertCityCenterUnderAttack())
+				
+				long times = GregorianCalendar.getInstance().getTimeInMillis();
+				if(times - perception.getLastCityCenterUnderAttack() < 60000)
+					return MAX_SCORE * 100;
+				else if(times - perception.getLastCityCenterUnderAttack() < 900000)
 					return MAX_SCORE;
-				return MIN_SCORE;
+				
+				return MAX_SCORE / 2;
 			}
 		});
-		
+
+		/*
 		addRule(new Rule() {
-			
 			@Override
 			public double value() {
 				if (perception.getEnemySightings().isEmpty())
-					return MIN_SCORE;
+					return MAX_SCORE / 2;
+				
 				Position cityCenter = perception.getCityCenter();
 				Collection<Position> enemyPositions = new LinkedList<Position>();
 				for (EnemySighting e : perception.getEnemySightings()) {
 					enemyPositions.add(e.getSightingPosition());
 				}
+				
 				Position closest = cityCenter.nearest(enemyPositions);
 				return MAX_SCORE - closest.distance(cityCenter)*4;
 			}
 		});
-		
-		
+		*/
 	}
 
 }

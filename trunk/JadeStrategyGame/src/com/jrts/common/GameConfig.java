@@ -17,7 +17,7 @@ public class GameConfig {
 	public static final int WORKER_FOOD_COST = 30;
 	public static final int WORKER_WOOD_COST = 10;
 
-	public static final int SOLDIER_FOOD_COST = 40;
+	public static final int SOLDIER_FOOD_COST = 10;
 	public static final int SOLDIER_WOOD_COST = 30;
 	
 	public static final int WORKER_SIGHT = 1;
@@ -49,11 +49,11 @@ public class GameConfig {
 	public static final int ICON_SIZE = 15;
 	
 	public static final int TREE_ENERGY = 500;
-	public static final int FARM_ENERGY = 500;
+	public static final int FARM_ENERGY = 5000;
 	
 	public static final boolean STATISTICS = true;
 	public static final long GOALS_UPDATE = 1000;
-	public static final int POPULATION_LIMIT = 2500;
+	public static final int POPULATION_LIMIT = 25000;
 	public static final int RUNAWAY_DISTANCE = 10;
 	
 	public static final int ATTACKS_SLEEP_TIME = 600;
@@ -79,8 +79,8 @@ public class GameConfig {
 	public static final int MEETING_POINT_MIN_DISTANCE = 3;
 	public static final int MEETING_POINT_MAX_DISTANCE = 4;
 	
-	public static final int DEFENCE_NATURE_DEFENSIVE_BOUND = 15;
-	public static final int DEFENCE_NATURE_AVERAGE_BOUND = 10;
+	public static final int DEFENCE_NATURE_DEFENSIVE_BOUND = 12;
+	public static final int DEFENCE_NATURE_AVERAGE_BOUND = 8;
 	public static final int DEFENCE_NATURE_AGGRESSIVE_BOUND = 5;
 	
 	public static int BUILDING_ENERGY = 100; //1000;

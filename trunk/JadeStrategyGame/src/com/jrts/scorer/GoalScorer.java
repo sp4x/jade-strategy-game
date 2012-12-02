@@ -37,7 +37,7 @@ public class GoalScorer {
 		for (Rule r : rules) {
 			double localScore = r.value();
 			if(localScore < MIN_SCORE) localScore = 0;
-			if(localScore > MAX_SCORE || Double.isNaN(localScore)) localScore = MAX_SCORE;
+			//if(localScore > MAX_SCORE || Double.isNaN(localScore)) localScore = MAX_SCORE;
 			/*
 			score += (localScore < MIN_SCORE ? 0 : localScore > MAX_SCORE
 					|| Double.isNaN(localScore) ? MAX_SCORE : localScore);

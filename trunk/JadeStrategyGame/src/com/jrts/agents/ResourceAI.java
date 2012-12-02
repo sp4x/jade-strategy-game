@@ -9,7 +9,6 @@ import com.jrts.agents.MasterAI.Nature;
 import com.jrts.behaviours.UpdateUnitTable;
 import com.jrts.common.AgentStatus;
 import com.jrts.common.GameConfig;
-import com.jrts.common.GoalPriority;
 import com.jrts.common.UnitTable;
 import com.jrts.environment.CellType;
 import com.jrts.environment.Position;
@@ -132,8 +131,12 @@ public class ResourceAI extends GoalBasedAI {
 			return null;
 
 		double foodRatio = 1, woodRatio = 1;
-		if (goalLevels.getResources() == GoalPriority.HIGH)
-			foodRatio = 3;
+		int food = resourcesContainer.getFood(), wood = resourcesContainer.getWood();
+		
+		if (food > wood)
+			woodRatio = (double) food / (double) wood;
+		else
+			foodRatio = (double) wood / (double) food;
 		
 
 		int woodCutters = unitTable

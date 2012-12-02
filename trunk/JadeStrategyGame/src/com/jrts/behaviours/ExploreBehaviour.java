@@ -38,6 +38,7 @@ public class ExploreBehaviour extends UnitBehaviour {
 		directions.add(Direction.RIGHT_UP);
 		directions.add(Direction.RIGHT_DOWN);
 		directions.remove(Utils.getMapAnglePosition(this.soldier.getPosition()));
+		
 		Direction dir = directions.get(Utils.random.nextInt(3));
 		Position posToGo = Utils.getRandomUnknownCellPosition(this.soldier.requestMap(), dir);
 

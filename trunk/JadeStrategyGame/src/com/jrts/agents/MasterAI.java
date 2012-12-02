@@ -6,6 +6,7 @@ import jade.wrapper.AgentController;
 import jade.wrapper.ControllerException;
 import jade.wrapper.PlatformController;
 
+import java.util.GregorianCalendar;
 import java.util.logging.Level;
 
 import com.jrts.O2Ainterfaces.Team;
@@ -221,7 +222,7 @@ public class MasterAI extends JrtsAgent implements Team {
 			perception.getThreats().add(where);
 
 		} else if (n.getSubject().equals(Notification.CITYCENTER_UNDER_ATTACK)) {
-			perception.setAlertCityCenterUnderAttack(true);
+			perception.setLastCityCenterUnderAttack(GregorianCalendar.getInstance().getTimeInMillis());
 			
 		} else if (n.getSubject().equals(Notification.TEAM_DECEASED)) {
 			teamDeceasedNum++;
